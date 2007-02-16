@@ -1,7 +1,10 @@
-﻿
-// require Programica
 
+// Сборник обстранктных классов
+
+
+//——————————————————————————————————————————————————————————————————————————————
 // «объектно ориентированные» «именованные» таймеры
+
 Programica.Abstract.Timer = function () {/*пока пусто*/}
 
 Programica.Abstract.Timer.prototype =
@@ -58,10 +61,8 @@ Programica.Abstract.Timer.prototype =
 
 
 
-
 //——————————————————————————————————————————————————————————————————————————————
-
-
+// Простая событийная модель
 
 
 Programica.Abstract.EventedObject  = function (prms)
@@ -131,4 +132,3 @@ extend (Programica.Abstract.EventedObject.prototype,
 		return false
 	}
 })
-
