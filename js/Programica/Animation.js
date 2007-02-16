@@ -155,7 +155,7 @@ extend (Programica.Animation.prototype,
 		
 		this.dispatchEvent('step')
 		
-		if (this.frame >= this.totalFrames)
+		if (this.frame > this.totalFrames)
 		{
 			this.stop()
 			this.paused = false
