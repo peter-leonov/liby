@@ -1,6 +1,17 @@
 
 // require Programica
 
+var hashRightTest =
+{
+	input1: "input1 value",
+	input2: "input2 value",
+	textArea: "textArea value",
+	checkBox1: "chk1 val",
+	checkBox2: "chk2 val",
+	radio: "r2",
+	select: "select2"
+};
+
 var hashRight =
 {
 	input1: "input1 value",
@@ -8,7 +19,7 @@ var hashRight =
 	textArea: "textArea value",
 	checkBox1: true,
 	checkBox2: true,
-	radio: 'r2',
+	radio: "r2",
 	select: 2
 };
 
@@ -47,8 +58,8 @@ function fillTest(testForm, hash)
 // Преобразование данных формы в хеш
 function form2hash(f)
 {
-	var elem;
-	var hash = {};
+	var elem
+	var hash = {}
 	
 	for (var i = 0; i < f.length; i++)
 	{
@@ -82,6 +93,7 @@ function form2hash(f)
 				hash[elem.name].push(val)
 			else
 				hash[elem.name] = [hash[elem.name], val]
+
 	}
 
 	return hash;
@@ -111,6 +123,7 @@ function checkHash(inputHash, cHash)
 			else
 				result[i] = false;
 		}
+		//alert(result[i]);
 	}
 	//alert(result.toString());
 	return result;
@@ -120,6 +133,7 @@ function resDrawer(cHash, type)
 {
 	var id = {};
 	var a = 0;
+	var error = false;
 	//switch (type)
 	//{
 	//	case "style"  :	alert("style"); break; // меняем стиль объекта
@@ -135,6 +149,7 @@ function resDrawer(cHash, type)
 			{
 				id[a] = document.getElementById('baloon' + a);
 				id[a].style.display = 'block';
+				error = true;
 			}
 			else
 			{
@@ -154,7 +169,9 @@ function resDrawer(cHash, type)
 			//document.forms[0].elements[i].className = "error";
 			//alert(document.forms[0].elements[i]);
 		}
-	}	
+	}
+	
+	if (error) return false;
 }
 
 function main(form, maskHash, mType)
@@ -165,7 +182,7 @@ function main(form, maskHash, mType)
 	//alert(maskHash);
 	//alert(check);
 	
-	resDrawer(check, mType);
+	return resDrawer(check, mType);
 	//alert(form2hash(form));
 }
 
