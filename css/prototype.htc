@@ -1,0 +1,57 @@
+<public:component>
+<!--<public:attach event="onpropertychange" onevent="pmcPropertyChanged()" />-->
+<script>
+
+
+function makeIt (el)
+{
+	//window.status = el.tagName
+	if (el.tagName)
+		someProtoFixes(el)
+	
+	var cn  = el.childNodes
+	for (var i = 0; i < cn.length; i++)
+		makeIt(cn[i])
+}
+
+makeIt(element)
+
+
+function someProtoFixes (el)
+{
+	extend(el, HTMLElement.prototype)
+	
+	if (el.disabled)
+		el.style.filter = "alpha(opacity=75,style=0)"
+	
+	// прозрачность
+	if (el.style.opacity != null)
+		setOpacity(el)
+	
+	el.onpropertychange = pmcPropertyChanged
+}
+
+// запускается при изменении
+// любого свойства
+function pmcPropertyChanged()
+{
+	switch (event.propertyName)
+	{
+		case "style.opacity":
+			setOpacity(this)
+			break
+	}
+}
+
+// фиксим прозрачноить
+function setOpacity (elem)
+{
+	if (elem.style.opacity == null)
+		elem.style.filter = null
+	else
+		elem.style.filter = "alpha(opacity=" + elem.style.opacity*100 + ",style=0)"
+}
+
+
+</script>
+</public:component>

@@ -1,0 +1,251 @@
+
+// require Programica
+
+// наш «свежий» взгляд на пресловутый аякс
+
+
+Programica.Request = function (prms)
+{
+	extend(this,prms)
+	
+	// в this.transport кладем реальный дескриптор запроса
+	
+	if(window.XMLHttpRequest) // Mozilla, Safari, ...
+	{
+		try
+		{
+			this.transport = new XMLHttpRequest()
+			if(this.transport.overrideMimeType) this.transport.overrideMimeType('text/xml')
+		}
+		catch (E) {}
+	}
+	else if(window.ActiveXObject) // MSIE
+	{
+		// microсиво? — а что поделать
+		try { this.transport = new ActiveXObject("Msxml2.XMLHTTP") }
+		catch(E)
+		{
+			try { this.transport = new ActiveXObject("Microsoft.XMLHTTP") }
+			catch(E2) { log("Can`t create neither Msxml2.XMLHTTP nor Microsoft.XMLHTTP: " + E.messageText  + ", " + E2.messageText ) }
+		}
+	}
+	
+	if (this.transport)
+	{
+		var t = this
+		this.transport.onreadystatechange = function ()
+		{
+			t.onreadystatechange()
+		}
+	}
+	else log('Can`t create an instatce of the XMLHTTP')
+	
+	
+	this.lastRequestObject = null
+}
+
+Programica.Request.paramDelimiter = ";"
+
+Programica.Request.urlEncode = function (data)
+{
+	if (!data) return data
+	
+	switch (data.constructor)
+	{
+		case Array:
+			return data.join(Programica.Request.paramDelimiter)
+		
+		case Object:
+			var arr = []
+			for (var i in data)
+				switch (data[i].constructor)
+				{
+					case Array:
+						for (var j in data[i])
+							arr.push(encodeURI(i) + "=" + encodeURI(data[i][j]))
+						break
+					case String:
+						arr.push(encodeURI(i) + "=" + encodeURI(data[i]))
+						break
+				}
+			return arr.join(Programica.Request.paramDelimiter)
+		
+		default: return ""
+	}
+}
+
+Programica.Request.prototype =
+{
+	onLoad:					function ()					{},
+	onError: function ()
+	{
+		var errstr = this.getResponseHeader('X-Server-Error')
+		log("Во время запроса (" + this.lastRequest().uri + ") возникла проблема (" + this.status() + "):\n" + errstr)
+		return true
+	},
+	
+	// если след. методы возвращают истину, то будет вызвана также и onLoad()
+	onInformation:			function () { return true },
+	onSuccess:				function () { return true },
+	onRedirect:				function () { return true },
+	
+	// а здесь — onError()
+	onClientError:			function () { return true },
+	onServerError:			function () { return true },
+	
+	
+	//——————————————————————————————————————————————————————————————————————————
+	// обертки методов XMLHttpRequest
+	
+	open: function (method, uri, async, user, password)
+	{
+		this.lastRequestObject = {method:method,uri:uri,async:async,user:user,password:password}
+		return this.transport.open(method, uri, async, user, password)
+	},
+	
+	send:					function (data)				{ return this.transport.send(Programica.Request.urlEncode(data)) },
+	lastRequest:			function ()					{ return this.lastRequestObject },
+	setRequestHeader:		function (header, value)	{ return this.transport.setRequestHeader(header,value) },
+	abort:					function ()					{ return this.transport.abort() },
+	getAllResponseHeaders:	function ()					{ return this.transport.getAllResponseHeaders() },
+	getResponseHeader:		function (header)			{ return this.transport.getResponseHeader(header) },
+	status:					function ()					{ return this.transport.status },
+	statusText:				function ()					{ return this.transport.statusText },
+	
+	
+	//——————————————————————————————————————————————————————————————————————————
+	// обертки свойств XMLHttpRequest
+	
+	readyState:				function () { return this.transport.readyState },
+	responseText:			function () { return this.transport.responseText },
+	responseXML:			function ()
+	{
+		var result = this.transport.responseXML
+		
+		// MSIE
+		if(!result.documentElement && this.transport.responseStream)
+		{
+			result.load(this.transport.responseStream)
+		}
+		return result
+	},
+	
+	onreadystatechange: function ()
+	{
+		switch (this.readyState())
+		{
+			case 4:
+				switch (Math.floor(this.status() / 100))
+				{
+					case 1:
+						this.onInformation()	&& this.onLoad()
+						break
+					
+					case 2:
+						this.onSuccess()		&& this.onLoad()
+						break
+					
+					case 3:
+						this.onRedirect()		&& this.onLoad()
+						break
+					
+					case 4:
+						this.onClientError()	&& this.onError() && this.onLoad()
+						break
+					
+					case 5:
+						this.onServerError()	&& this.onError() && this.onLoad()
+						break
+					
+					default:
+						log("Strange response status: " + this.status())
+				}
+		}
+		
+		return false
+	}
+}
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// «шоткаты», известные также под псевдонимом «алиасы» :)
+
+function aPost (url, params, onLoad)
+{
+	var r = new Programica.Request()
+	if (!r) return null
+	
+	r.open('POST', url, true)
+	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+	r.setRequestHeader("Content-length", params.length)
+	r.send(params)
+	if (onLoad) r.onLoad = onLoad
+	
+	return r
+}
+
+function sPost (url, params)
+{
+	var r = new Programica.Request()
+	
+	if (!r) return false
+	
+	r.open('POST', url, false)
+	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+	r.setRequestHeader("Content-length", params.length)
+	r.send(params)
+	
+	return r
+}
+
+
+
+function aGet (url, onLoad)
+{
+	var r = new Programica.Request()
+	if (!r) return null
+	
+	r.open('GET', url, true)
+	r.send(null)
+	if (onLoad) r.onLoad = onLoad
+	
+	return r
+}
+
+function sGet (url)
+{
+	var r = new Programica.Request()
+	
+	if (!r) return false
+	
+	r.open('GET', url, false)
+	r.send(null)
+	
+	return r
+}
+
+
+
+function aHead (url, onLoad)
+{
+	var r = new Programica.Request()
+	if (!r) return null
+	
+	r.open('HEAD', url, true)
+	r.send(null)
+	if (onLoad) r.onLoad = onLoad
+	
+	return r
+}
+
+function sHead (url)
+{
+	var r = new Programica.Request()
+	
+	if (!r) return false
+	
+	r.open('HEAD', url, false)
+	r.send(null)
+	
+	return r
+}

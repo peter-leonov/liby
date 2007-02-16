@@ -1,0 +1,8 @@
+<public:component>
+<script>
+
+if (this.tagName == "LABEL" && this["for"] == null && this.firstChild)
+	this.onclick = function () {this.firstChild.click()}
+
+</script>
+</public:component>
