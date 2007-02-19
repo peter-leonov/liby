@@ -93,9 +93,13 @@ function form2hash(f)
 				hash[elem.name].push(val)
 			else
 				hash[elem.name] = [hash[elem.name], val]
-
 	}
 
+//	var hz;
+//	for (var z in hash)
+//		hz += z + " : " + hash[z] + "\n";
+//	alert(hz);
+	
 	return hash;
 }
 
@@ -123,9 +127,18 @@ function checkHash(inputHash, cHash)
 			else
 				result[i] = false;
 		}
-		//alert(result[i]);
+		
+		//alert(inputHash[i] + " : " + result[i]);
 	}
 	//alert(result.toString());
+
+	var hz;
+	for (var z in result)
+		hz += z + " : " + result[z] + "\n";
+	alert(hz);
+	
+
+
 	return result;
 }
 
