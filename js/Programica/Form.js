@@ -1,6 +1,9 @@
 
 // require Programica
 
+var debug = 0;
+
+
 var hashRightTest =
 {
 	input1: "input1 value",
@@ -14,24 +17,24 @@ var hashRightTest =
 
 var hashRight =
 {
-	input1: "input1 value",
+	input1: "1",
 	input2: "input2 value",
 	textArea: "textArea value",
-	checkBox1: true,
-	checkBox2: true,
-	radio: "r2",
-	select: 2
+//	checkBox1: true,
+//	checkBox2: true,
+//	radio: "r2",
+//	select: 2
 };
 
 var hashWrong =
 {
-	input1: "",
+	input1: "input wrong value",
 	input2: "",
-	textArea: "",
-	checkBox1: false,
-	checkBox2: false,
-	radio: false,
-	select: 0
+	textArea: "textArea wrong value",
+//	checkBox1: false,
+//	checkBox2: false,
+//	radio: false,
+//	select: 0
 };
 
 
@@ -95,10 +98,13 @@ function form2hash(f)
 				hash[elem.name] = [hash[elem.name], val]
 	}
 
-//	var hz;
-//	for (var z in hash)
-//		hz += z + " : " + hash[z] + "\n";
-//	alert(hz);
+	if(debug == 1)
+	{
+		var hz = "";
+		for (var z in hash)
+			hz += z + " : " + hash[z] + "\n";
+		alert("form2hash:\n\n" + hz);
+	}
 	
 	return hash;
 }
@@ -198,4 +204,74 @@ function main(form, maskHash, mType)
 	return resDrawer(check, mType);
 	//alert(form2hash(form));
 }
+
+
+//----------------------------------------------------------------------
+
+var rulesArr =
+[
+	{ // rule1
+		name: "input1",
+		test: function() { return /\d/.test(document.getElementById('input1').value) },
+		ok: function() { document.getElementById("baloon1").style.display = 'none' },
+		error: function() { document.getElementById("baloon1").style.display = 'block' }
+	},
+	
+	{ // rule2
+		name: "input2",
+		test: /\S/,
+		ok: function() { alert("input2 OK") },
+		error: function() { alert("input2 ERROR!") }
+	}
+]
+
+
+function runRules(rules, hash)
+{	
+
+	for(var rule in rules)
+	{
+		// Если правило - RegExp
+		if(rules[rule].test.constructor == RegExp)
+		{
+			//alert("regexp");
+			if(rules[rule].test.test(hash[rules[rule].name]))
+				rules[rule].ok()
+			else
+				rules[rule].error()
+		}
+		
+		// Если правило - функция, то просто выполним ее с учетом имени правила
+		if(rules[rule].test.constructor == Function)
+		{
+			if(hash[rules[rule].name])
+			{
+				if(rules[rule].test())
+					rules[rule].ok()
+				else
+					rules[rule].error()
+			}
+		}
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
