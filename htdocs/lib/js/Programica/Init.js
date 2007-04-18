@@ -68,3 +68,4 @@ function extend (to, from)
 
 Function.prototype.toString = function () {return "function()"}
 
+function $(id) { return document.getElementById(id) }
