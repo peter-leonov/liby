@@ -7,38 +7,44 @@ var Programica = {}
 Programica.Abstract = {}
 
 
-function log (str)
-{
-	if (!isDebug) return
-	//log.elem.innerHTML += "<p>" + str + "</p><hr/>"
-	log.elem.innerHTML += str + "\n"
-	
-	if (document.body)
-		document.body.appendChild(log.elem)
-}
+//——————————————————————————————————————————————————————————————————————————————
+// Логи
 
 log.elem = document.createElement("pre")
 log.elem.id = "log-elem"
 
+function log (str)
+{
+	if (!isDebug) return str
+	
+	if (console && console.log) return console.log(str)
+	
+	log.elem.innerHTML += str + "\n"
+	
+	if (document.body)
+		document.body.appendChild(log.elem)
+	
+	return str
+}
 
-if (isDebug) log("Programica.js loaded")
 
 
-//if (!window.HTMLElement) window.HTMLElement = window["[[DOMElement.prototype]]"] || {}
 if (!window.HTMLElement) window.HTMLElement = {}
 if (!HTMLElement.prototype) HTMLElement.prototype = window["[[DOMElement.prototype]]"] || {}
 
 
 //——————————————————————————————————————————————————————————————————————————————
+// Типа, прототип :)
 
-
-Error.prototype.toString = function ()
-{
-	var arr = new Array()
-	for (var i in this) arr.push(i + ':' + this[i])
-	return this.message + ': {' + arr.join(', ') + '}'
-}
-
+//Error.prototype.toString = function ()
+//{
+//	var arr = new Array()
+//	for (var i in this) arr.push(i + ':' + this[i])
+//	return this.message + ': {' + arr.join(', ') + '}'
+//}
+//
+//Function.prototype.toString = function () {return "function()"}
+//
 //Object.prototype.toString = function ()
 //{
 //	var arr = new Array()
@@ -58,14 +64,38 @@ Error.prototype.toString = function ()
 //	return '"' + str + '"'
 //}
 
-
+// расширяем напрямик
 function extend (to, from)
 {
+	if (!to || !from) return null
+	
 	for (var p in from)
 		if (to[p] == undefined)
 			to[p] = from[p]
+	
+	return to
 }
 
-Function.prototype.toString = function () {return "function()"}
+// "наследуем", играясь с прототипом
+function inherit (to, from)
+{
+	if (!to || !from) return null
+	
+	var newp = {}
+	newp.prototype = to.prototype
+	to.prototype = newp
+	
+	for (var p in from)
+		if (to.prototype[p] == undefined)
+			to[p] = from[p]
+	
+	return to
+}
 
 function $(id) { return document.getElementById(id) }
+
+
+//——————————————————————————————————————————————————————————————————————————————
+
+
+log("Programica.js loaded")
