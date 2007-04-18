@@ -74,10 +74,8 @@ Programica.Request.urlEncode = function (data)
 				}
 			return arr.join(Programica.Request.paramDelimiter)
 		
-		case String:
-			return data
-		
-		default: return ""
+		default:
+			return data.toUrlEncode && data.toUrlEncode.constructor == Function ? data.toUrlEncode() : data
 	}
 }
 
@@ -116,7 +114,7 @@ Programica.Request.prototype =
 	abort:					function ()					{ return this.transport.abort() },
 	getAllResponseHeaders:	function ()					{ return this.transport.getAllResponseHeaders() },
 	getResponseHeader:		function (header)			{ return this.transport.getResponseHeader(header) },
-	status:					function ()					{ return this.transport.status },
+	status:					function ()					{ return this.transport.status || 0 }, // || 0 для загрузок напрямую из файла без HTTP
 	statusText:				function ()					{ return this.transport.statusText },
 	
 	
@@ -142,7 +140,7 @@ Programica.Request.prototype =
 		switch (this.readyState())
 		{
 			case 4:
-				switch (Math.floor((this.status() ? this.status() : 0) / 100))
+				switch (Math.floor(this.status() / 100))
 				{
 					case 1:
 						this.onInformation()	&& this.onLoad()
@@ -150,7 +148,7 @@ Programica.Request.prototype =
 					
 					case 0:
 					case 2:
-						this.onSuccess()		&& this.onLoad( this )
+						this.onSuccess()		&& this.onLoad()
 						break
 					
 					case 3:
@@ -178,18 +176,17 @@ Programica.Request.prototype =
 //——————————————————————————————————————————————————————————————————————————————
 // «шоткаты», известные также под псевдонимом «алиасы» :)
 
-function aPost (url, params, onLoad)
+function aPost (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
 	
-	params = Programica.Request.urlEncode(params)
+	var data = Programica.Request.urlEncode(params)
 	
 	r.open('POST', url, true)
 	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-	r.setRequestHeader("Content-length", params.length)
-	r.send(params)
-	if (onLoad) r.onLoad = onLoad
+	r.setRequestHeader("Content-length", data.length)
+	r.send(data)
 	
 	return r
 }
@@ -197,62 +194,73 @@ function aPost (url, params, onLoad)
 function sPost (url, params)
 {
 	var r = new Programica.Request()
+	if (!r) return null
 	
-	if (!r) return false
+	var data = Programica.Request.urlEncode(params)
 	
 	r.open('POST', url, false)
 	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-	r.setRequestHeader("Content-length", params.length)
-	r.send(params)
+	r.setRequestHeader("Content-length", data.length)
+	r.send(data)
 	
 	return r
 }
 
 
 
-function aGet (url, onLoad)
-{
-	var r = new Programica.Request()
-	if (!r) return null
-	if (onLoad) r.onLoad = onLoad
-	r.open('GET', url, true)
-	r.send(null)
-	return r
-}
-
-function sGet (url)
-{
-	var r = new Programica.Request()
-	
-	if (!r) return false
-	
-	r.open('GET', url, false)
-	r.send(null)
-	
-	return r
-}
-
-
-
-function aHead (url, onLoad)
+function aGet (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
 	
-	r.open('HEAD', url, true)
+	var data = Programica.Request.urlEncode(params)
+	var delim = data ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
+	
+	r.open('GET', url + delim + data, true)
 	r.send(null)
-	if (onLoad) r.onLoad = onLoad
 	
 	return r
 }
 
-function sHead (url)
+function sGet (url, params)
 {
 	var r = new Programica.Request()
+	if (!r) return null
 	
+	var data = Programica.Request.urlEncode(params)
+	var delim = data ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
+	
+	r.open('GET', url + delim + data, false)
+	r.send(null)
+	
+	return r
+}
+
+
+
+function aHead (url, params)
+{
+	var r = new Programica.Request()
+	if (!r) return null
+	
+	var data = Programica.Request.urlEncode(params)
+	var delim = data ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
+	
+	r.open('HEAD', url + delim + data, true)
+	r.send(null)
+	
+	return r
+}
+
+function sHead (url, params)
+{
+	var r = new Programica.Request()
 	if (!r) return false
 	
-	r.open('HEAD', url, false)
+	var data = Programica.Request.urlEncode(params)
+	var delim = data ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
+	
+	r.open('HEAD', url + delim + data, false)
 	r.send(null)
 	
 	return r
