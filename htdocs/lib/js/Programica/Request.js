@@ -25,8 +25,14 @@ Programica.Request = function (prms)
 		try { this.transport = new ActiveXObject("Msxml2.XMLHTTP") }
 		catch(E)
 		{
-			try { this.transport = new ActiveXObject("Microsoft.XMLHTTP") }
-			catch(E2) { log("Can`t create neither Msxml2.XMLHTTP nor Microsoft.XMLHTTP: " + E.messageText  + ", " + E2.messageText ) }
+			try 
+			{ 
+				this.transport = new ActiveXObject("Microsoft.XMLHTTP") 
+			}
+			catch(E2) 
+			{ 
+				log("Can`t create neither Msxml2.XMLHTTP nor Microsoft.XMLHTTP: " + E.messageText  + ", " + E2.messageText ) 
+			}
 		}
 	}
 	
@@ -40,7 +46,6 @@ Programica.Request = function (prms)
 	}
 	else log('Can`t create an instatce of the XMLHTTP')
 	
-	
 	this.lastRequestObject = null
 }
 
@@ -49,7 +54,6 @@ Programica.Request.paramDelimiter = ";"
 Programica.Request.urlEncode = function (data)
 {
 	if (!data) return data
-	
 	switch (data.constructor)
 	{
 		case Array:
@@ -69,6 +73,9 @@ Programica.Request.urlEncode = function (data)
 						break
 				}
 			return arr.join(Programica.Request.paramDelimiter)
+		
+		case String:
+			return data
 		
 		default: return ""
 	}
@@ -135,14 +142,15 @@ Programica.Request.prototype =
 		switch (this.readyState())
 		{
 			case 4:
-				switch (Math.floor(this.status() / 100))
+				switch (Math.floor((this.status() ? this.status() : 0) / 100))
 				{
 					case 1:
 						this.onInformation()	&& this.onLoad()
 						break
 					
+					case 0:
 					case 2:
-						this.onSuccess()		&& this.onLoad()
+						this.onSuccess()		&& this.onLoad( this )
 						break
 					
 					case 3:
@@ -175,6 +183,8 @@ function aPost (url, params, onLoad)
 	var r = new Programica.Request()
 	if (!r) return null
 	
+	params = Programica.Request.urlEncode(params)
+	
 	r.open('POST', url, true)
 	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 	r.setRequestHeader("Content-length", params.length)
@@ -204,11 +214,9 @@ function aGet (url, onLoad)
 {
 	var r = new Programica.Request()
 	if (!r) return null
-	
+	if (onLoad) r.onLoad = onLoad
 	r.open('GET', url, true)
 	r.send(null)
-	if (onLoad) r.onLoad = onLoad
-	
 	return r
 }
 

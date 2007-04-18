@@ -4,40 +4,6 @@
 var debug = 0;
 
 
-var hashRightTest =
-{
-	input1: "input1 value",
-	input2: "input2 value",
-	textArea: "textArea value",
-	checkBox1: "chk1 val",
-	checkBox2: "chk2 val",
-	radio: "r2",
-	select: "select2"
-};
-
-var hashRight =
-{
-	input1: "1",
-	input2: "input2 value",
-	textArea: "textArea value",
-//	checkBox1: true,
-//	checkBox2: true,
-//	radio: "r2",
-//	select: 2
-};
-
-var hashWrong =
-{
-	input1: "input wrong value",
-	input2: "",
-	textArea: "textArea wrong value",
-//	checkBox1: false,
-//	checkBox2: false,
-//	radio: false,
-//	select: 0
-};
-
-
 // Тестовая функция заполнения формы
 function fillTest(testForm, hash)
 {
@@ -191,6 +157,8 @@ function resDrawer(cHash, type)
 	}
 	
 	if (error) return false;
+	
+	return true;
 }
 
 function main(form, maskHash, mType)
