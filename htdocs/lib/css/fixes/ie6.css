@@ -1,0 +1,66 @@
+/*
+ * © 2007 http://www.markup.ru/
+ * Author - Kornilov Pavel
+ */
+
+/* делает кликабельными метки */
+*
+{
+	behavior: expression(Programica.Fixes.all.apply(this));
+	/*behavior: expression(
+		this.attachEvent("onclick", function () {alert(123)},
+		runtimeStyle.behavior = 'none'
+	);*/
+}
+
+
+img
+{
+	/*behavior	: expression(
+		/\.png/.test(this.src) && (runtimeStyle.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+src+"', sizingMethod='image')", src = "/base/img/dot.gif", window.status++), runtimeStyle.behavior = 'none'
+	);*/
+	
+	/*onpropertychange*/
+	
+	
+	/*behavior: expression(Programica.Fixes.fixPng.apply(this));*/
+}
+
+/***/
+/*{*/
+/*	png-bg-fix	: expression*/
+/*	(*/
+/*		(runtimeStyle.filter == '') ? runtimeStyle.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src='+currentStyle.backgroundImage.split('\"')[1]+', sizingMethod=crop)' : runtimeStyle.filter,*/
+/*		runtimeStyle.backgroundImage = 'none'*/
+/*	);*/
+/*}*/
+
+/***/
+/*{*/
+/*	filter	: expression*/
+/*	(*/
+/*		(runtimeStyle.backgroundImage != 'none') ? runtimeStyle.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src='+currentStyle.backgroundImage.split('\"')[1]+', sizingMethod=scale)' : runtimeStyle.filter,*/
+/*		runtimeStyle.backgroundImage = 'none'*/
+/*	);*/
+/*}*/
+
+/*.top .cal .days li.nondate   { background-image: none !important; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='base/i/cal/bg_nondate.png', sizingMethod='scale'; }*/
+
+
+/***/
+/*{*/
+/*	position		: relative;*/
+/*	behavior		: expression(*/
+/*						onmouseover = function() {this.className += ' hover'},*/
+/*						onmouseout = function() {this.className = this.className.replace(/ hover/g, "")},*/
+/*						runtimeStyle.behavior = 'none'*/
+/*					);*/
+/*}*/
+
+
+/* position: fixed */
+/*#products-content*/
+/*{*/
+/*	position		: absolute;*/
+/*	top				: expression(parseInt(document.documentElement.scrollTop, 10) + "px");*/
+/*}*/
