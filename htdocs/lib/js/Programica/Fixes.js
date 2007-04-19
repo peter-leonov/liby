@@ -4,26 +4,23 @@ Programica.Fixes =
 	all: function ()
 	{
 		this.runtimeStyle.behavior = 'none'
-		//Programica.Fixes.fixTitle.apply(this)
-		//Programica.Fixes.fixPrototype.apply(this)
 		
-		//alert(/MSIE (5\.5)|[6789]/.test(navigator.userAgent))
-	},
-	
-	ie6: function ()
-	{
-		this.runtimeStyle.behavior = 'none'
-		//Programica.Fixes.fixPng.apply(this)
-		Programica.Fixes.fixTitle.apply(this)
-		Programica.Fixes.fixLabel.apply(this)
-		Programica.Fixes.fixPrototype.apply(this)
-	},
-	
-	ie7: function ()
-	{
-		this.runtimeStyle.behavior = 'none'
 		Programica.Fixes.fixTitle.apply(this)
 		Programica.Fixes.fixPrototype.apply(this)
+		
+		if (/MSIE 6/.test(navigator.userAgent))
+		{
+			//Programica.Fixes.fixPng.apply(this)
+			Programica.Fixes.fixTitle.apply(this)
+			Programica.Fixes.fixLabel.apply(this)
+			Programica.Fixes.fixPrototype.apply(this)
+		}
+		
+		if (/MSIE 7/.test(navigator.userAgent))
+		{
+			Programica.Fixes.fixTitle.apply(this)
+			Programica.Fixes.fixPrototype.apply(this)
+		}
 	},
 	
 	//——————————————————————————————————————————————————————————————————————————
