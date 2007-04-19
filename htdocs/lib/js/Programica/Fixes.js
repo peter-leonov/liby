@@ -1,11 +1,13 @@
 
 Programica.Fixes =
 {
-	ieAll: function ()
+	all: function ()
 	{
 		this.runtimeStyle.behavior = 'none'
-		Programica.Fixes.fixTitle.apply(this)
-		Programica.Fixes.fixPrototype.apply(this)
+		//Programica.Fixes.fixTitle.apply(this)
+		//Programica.Fixes.fixPrototype.apply(this)
+		
+		//alert(/MSIE (5\.5)|[6789]/.test(navigator.userAgent))
 	},
 	
 	ie6: function ()
