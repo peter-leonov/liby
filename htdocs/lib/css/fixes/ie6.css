@@ -6,7 +6,6 @@
 /* делает кликабельными метки */
 *
 {
-	behavior: expression(Programica.Fixes.all.apply(this));
 	/*behavior: expression(
 		this.attachEvent("onclick", function () {alert(123)},
 		runtimeStyle.behavior = 'none'

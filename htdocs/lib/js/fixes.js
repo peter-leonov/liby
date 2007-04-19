@@ -1,13 +1,30 @@
 
 Programica.Fixes =
 {
-	all: function ()
+	ieAll: function ()
 	{
 		this.runtimeStyle.behavior = 'none'
-		Programica.Fixes.fixPng.apply(this)
 		Programica.Fixes.fixTitle.apply(this)
 		Programica.Fixes.fixPrototype.apply(this)
 	},
+	
+	ie6: function ()
+	{
+		this.runtimeStyle.behavior = 'none'
+		//Programica.Fixes.fixPng.apply(this)
+		Programica.Fixes.fixTitle.apply(this)
+		Programica.Fixes.fixLabel.apply(this)
+		Programica.Fixes.fixPrototype.apply(this)
+	},
+	
+	ie7: function ()
+	{
+		this.runtimeStyle.behavior = 'none'
+		Programica.Fixes.fixTitle.apply(this)
+		Programica.Fixes.fixPrototype.apply(this)
+	},
+	
+	//——————————————————————————————————————————————————————————————————————————
 	
 	fixPng: function ()
 	{
@@ -19,6 +36,11 @@ Programica.Fixes =
 	fixTitle: function ()
 	{
 		if (!this.title) this.title = ''
+	},
+	
+	fixLabel: function ()
+	{
+		//this.attachEvent("onclick", function () {this.getElementsByTagName('input')[0] && this.getElementsByTagName('input')[0].click()})
 	},
 	
 	fixPrototype: function ()
