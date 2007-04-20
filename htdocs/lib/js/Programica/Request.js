@@ -53,7 +53,7 @@ Programica.Request.paramDelimiter = ";"
 
 Programica.Request.urlEncode = function (data)
 {
-	if (!data) return data
+	if (!data) return ''
 	switch (data.constructor)
 	{
 		case Array:

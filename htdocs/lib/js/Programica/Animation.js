@@ -33,7 +33,7 @@ Programica.Animation = function (prms)
 
 Programica.Animation.fps = 50
 
-
+//.animate('linearTween', {marginTop: [0,-50]}, 1).start()
 HTMLElement.prototype.animate = function (motion, props, duration, unit)
 {
 	var trans = []
@@ -182,7 +182,7 @@ extend (Programica.Animation.prototype,
 						t.property,
 						Math[t.motion || this.motion]
 						(
-							this.frame,
+							this.frame - 1,
 							t.begin,
 							t.end - t.begin,
 							this.totalFrames
@@ -196,9 +196,17 @@ extend (Programica.Animation.prototype,
 		return true
 	},
 	
-	getIntegerStyleProperty: function (stylePropertyName)
+	getIntegerStyleProperty: function (p)
 	{
-		return parseInt( this.obj.style[ stylePropertyName ] )
+		if (p == "top" && !this.obj.style[p]) return this.obj.offsetTop
+		if (p == "left" && !this.obj.style[p]) return this.obj.offsetLeft
+		
+		if (/scroll/.test(p))
+		{
+			return this.obj[p]
+		}
+		else
+			return parseInt( this.obj.style[p] ) || 0
 	},
 	
 	setIntegerStyleProperty: function (stylePropertyName, value)
@@ -208,14 +216,18 @@ extend (Programica.Animation.prototype,
 		{
 			this.obj.style[ stylePropertyName ] = 'rgb('+parseInt(value)+','+parseInt(value)+','+parseInt(value)+')'
 		}
-		else if (stylePropertyName == "opacity")
+		else if (/scroll/.test(stylePropertyName))
+		{
+			this.obj[ stylePropertyName ] = Math.round( value )
+		}
+		/*else if (stylePropertyName == "opacity")
 		{
 			this.obj.style[ stylePropertyName ] = value
 		}
 		else if (!this.unit)
 		{
 			this.obj.style[ stylePropertyName ] = value
-		}
+		}*/
 		else
 		{
 			this.obj.style[ stylePropertyName ] = Math.round( value ) + this.unit
