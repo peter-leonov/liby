@@ -108,9 +108,20 @@ Programica.Request.prototype =
 		return this.transport.open(method, uri, async, user, password)
 	},
 	
-	send:					function (data)				{ return this.transport.send(Programica.Request.urlEncode(data)) },
+	/* transport.send() обернута в таймер из-за #97 */
+	send:					function (data)
+	{
+		if (this.lastRequestObject.async)
+		{
+			var t = this
+			setTimeout(function () { t.transport.send(data) }, 0)
+		}
+		else
+			t.transport.send(data)
+	},
+	
 	lastRequest:			function ()					{ return this.lastRequestObject },
-	setRequestHeader:		function (header, value)	{ return this.transport.setRequestHeader(header,value) },
+	setRequestHeader:		function (header, value)	{ return this.transport.setRequestHeader(header, value) },
 	abort:					function ()					{ return this.transport.abort() },
 	getAllResponseHeaders:	function ()					{ return this.transport.getAllResponseHeaders() },
 	getResponseHeader:		function (header)			{ return this.transport.getResponseHeader(header) },
@@ -217,7 +228,7 @@ function aGet (url, params)
 	var delim = data ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
 	
 	r.open('GET', url + delim + data, true)
-	setTimeout(function () { r.send(null) }, 10)
+	r.send(null)
 	
 	return r
 }
