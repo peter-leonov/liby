@@ -217,7 +217,7 @@ function aGet (url, params)
 	var delim = data ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
 	
 	r.open('GET', url + delim + data, true)
-	r.send(null)
+	setTimeout(function () { r.send(null) }, 10)
 	
 	return r
 }
