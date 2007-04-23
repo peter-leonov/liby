@@ -1,4 +1,6 @@
 
+if (!window.Programica) Programica = {}
+
 Programica.Fixes =
 {
 	all: function ()
