@@ -1,8 +1,0 @@
-<public:component>
-<script>
-
-if (element.alt && !element.title)
-	element.title = ""
-
-</script>
-</public:component>

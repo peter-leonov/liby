@@ -1,9 +1,0 @@
-div.content table.price { width: 502px; }
-div.content table.case { width: 502px; }
-div.content div.tab div.overflow { height: 400px; width: 522px; }
-
-/* убирает подсказку при alt="..." */
-img { behavior: url(base/css/imgfix.htc); }
-
-/* наследование свойств у Object */
-* {behavior: url(base/css/prototype.htc)}

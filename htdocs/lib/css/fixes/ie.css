@@ -8,10 +8,3 @@ html
 	/* фиксит округление em */
 	font-size		: 101%;
 }
-
-
-img
-{
-	/* убирает подсказку при alt */
-	/*color		: expression( (alt && !title) ? title = '' : '', runtimeStyle.color = 'none', window.status++ );*/
-}
