@@ -282,10 +282,9 @@ Programica.Animation.time = function ()
 //——————————————————————————————————————————————————————————————————————————————
 // Математика трансформаций
 
-
-Math.linearTween	=	function(t, b, c, d)		{ return c*t/d + b }
-Math.easeInQuad		=	function(t, b, c, d)		{ return c*(t/=d)*t + b }
-Math.easeOutQuad	=	function(t, b, c, d)		{ return -c *(t/=d)*(t-2) + b }
+Math.linearTween	=	function (t, b, c, d)		{ return c*t/d + b }
+Math.easeInQuad		=	function (t, b, c, d)		{ return c*(t/=d)*t + b }
+Math.easeOutQuad	=	function (t, b, c, d)		{ return -c *(t/=d)*(t-2) + b }
 Math.easeInOutQuad	=	function (t, b, c, d)		{ return ((t/=d/2) < 1) ? c/2*t*t + b : -c/2 * ((--t)*(t-2) - 1) + b }
 Math.easeInCubic	=	function (t, b, c, d)		{ return c*(t/=d)*t*t + b }
 Math.easeOutCubic	=	function (t, b, c, d)		{ return c*((t=t/d-1)*t*t + 1) + b }

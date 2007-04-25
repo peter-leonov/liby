@@ -12,11 +12,11 @@ Programica.RollingImages =
 	
 	Handler: function (node)
 	{
-		this.node = node
+		this.mainNode = node
 		var t = this
 		
 		this.viewport = node.getElementsByClassName('viewport')[0]
-		this.images = node.getElementsByClassName('point')
+		this.points = node.getElementsByClassName('point')
 		this.current = 0
 		
 		var as = node.getElementsByTagName('a')
@@ -38,45 +38,57 @@ Programica.RollingImages =
 
 Programica.RollingImages.Handler.prototype =
 {
-	goPrev: function () { if (this.current > 0) this.go((this.images.length + this.current - 1) % this.images.length) },
-	goNext: function () { if (this.current < this.images.length - 1) this.go((this.current + 1) % this.images.length) },
+	goPrev: function () { if (this.current > 0) this.go((this.points.length + this.current - 1) % this.points.length) },
+	goNext: function () { if (this.current < this.points.length - 1) this.go((this.current + 1) % this.points.length) },
 	
-	animationType: function () { return this.node.getAttribute('animation-type') || 'easeOutBack' }, //easeOutBounce
+	defaultAnimationType: function () { return this.mainNode.getAttribute('animation-type') || 'easeOutBack' }, //easeOutBounce
 	
 	goInit: function (n)
 	{
-		n = n || 0
-		var img = this.images[n]
-		if (!img) return 0;
-		if (!this.viewport) log('Viewport is undefined!');
+		var node = this.mainNode.getElementsByClassName('selected-node')[0]
+		if (node)
+			this.goToNode(node, 'directJump')
+		else
+			this.go(0, 'directJump')
 		
-		this.viewport.scrollTop = img.offsetTop
-		this.viewport.scrollLeft = img.offsetLeft
-		
-		this.current = n
-		this.updateNavigation()
 		return n
 	},
 	
-	go: function (n)
+	go: function (n, anim)
 	{
-		var img = this.images[n]
-		if (!img) return 0
-		if (!this.viewport) log('Viewport is undefined!');
-		
-		log(n + ': offsetTop = ' + img.offsetTop + ', offsetLeft = ' + img.offsetLeft)
-		
-		this.viewport.animate(this.animationType(), {scrollTop:  [img.offsetTop], scrollLeft: [img.offsetLeft]},  1).start()
+		n = n || 0
+		this.goToNode(this.points[n], anim)
 		
 		this.current = n
 		this.updateNavigation()
+		
 		return n
+	},
+	
+	goToNode: function (node, anim)
+	{
+		if (!node) return
+		anim = anim || this.defaultAnimationType()
+		
+		for (var i = 0, il = this.points.length; i < il; i++)
+			if (this.points[i] == node) this.current = i
+		
+		log(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
+		if (!this.viewport) log('Viewport is undefined!');
+		if (!this.viewport.animate) log('Viewport can`t be animated!');
+		
+		if (anim == 'directJump')
+			this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
+		else
+			this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft]},  1).start()
+		
+		this.updateNavigation()
 	},
 	
 	updateNavigation: function ()
 	{
 		!this.current ? this.aPrev.className += ' disabled' : this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
-		this.current == this.images.length - 1 ? this.aNext.className += ' disabled' : this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
-		if (!this.current && this.current == this.images.length - 1) this.aPrev.className += ' disabled', this.aNext.className += ' disabled'
+		this.current == this.points.length - 1 ? this.aNext.className += ' disabled' : this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
+		//if (!this.current && this.current == this.points.length - 1) this.aPrev.className += ' disabled', this.aNext.className += ' disabled'
 	}
 }
