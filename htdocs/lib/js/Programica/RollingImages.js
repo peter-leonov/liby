@@ -41,7 +41,8 @@ Programica.RollingImages.Handler.prototype =
 	goPrev: function () { if (this.current > 0) this.go((this.points.length + this.current - 1) % this.points.length) },
 	goNext: function () { if (this.current < this.points.length - 1) this.go((this.current + 1) % this.points.length) },
 	
-	defaultAnimationType: function () { return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
+	animationType: function () { return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
+	getDuration: function () { return this.mainNode.getAttribute('animation-duration') || 1 },
 	
 	goInit: function (n)
 	{
@@ -68,7 +69,7 @@ Programica.RollingImages.Handler.prototype =
 	goToNode: function (node, anim)
 	{
 		if (!node) return
-		anim = anim || this.defaultAnimationType()
+		anim = anim || this.animationType()
 		
 		for (var i = 0, il = this.points.length; i < il; i++)
 			if (this.points[i] == node) this.current = i
@@ -78,7 +79,7 @@ Programica.RollingImages.Handler.prototype =
 		if (!this.viewport.animate) log('Viewport can`t be animated!')
 		
 		//this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
-		this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft]},  1).start()
+		this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft]},  this.getDuration()).start()
 		
 		this.updateNavigation()
 	},

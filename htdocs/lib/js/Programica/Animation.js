@@ -44,7 +44,7 @@ Programica.Animation = function (prms)
 	return this
 }
 
-Programica.Animation.fps = 50
+Programica.Animation.fps = 40
 
 //.animate('linearTween', {marginTop: [0,-50]}, 1).start()
 HTMLElement.prototype.animate = function (motion, props, duration, unit)
