@@ -1,23 +1,21 @@
 
-var isDebug = 0
-
 // заранее объявляем «пространства имен»
 
 if (!window.Programica) var Programica = {}
 if (!window.Programica.Abstract) Programica.Abstract = {}
 if (!window.Programica.DOM) Programica.DOM = {}
 
-
 //——————————————————————————————————————————————————————————————————————————————
 // Логи
+
+Programica.debugLevel = 1
 
 log.elem = document.createElement("pre")
 log.elem.id = "log-elem"
 
 function log (str)
 {
-	if (!isDebug) return str
-	
+	if (Programica.debugLevel <= 0) return false
 	if (console && console.log) return console.log(str)
 	
 	log.elem.innerHTML += str + "\n"
@@ -28,6 +26,8 @@ function log (str)
 	return str
 }
 
+function log3 () { if (Programica.debugLevel >= 3) log.apply(this, arguments) }
+function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 
 
 if (!window.HTMLElement) window.HTMLElement = {}
@@ -61,7 +61,7 @@ Programica.DOM.getElementsByClassName = function (strClass, strTag)
 			for (var m = 0, mlen = arrClass.length; m < mlen; m++)
 			{
 				if (arrClass[m] == arrObjClass[k]) c++;
-				if (( delim == '|' && c == 1) || (delim == ' ' && c == arrClass.length))
+				if (( delim == '|' && c == 1) || (delim == ' ' && c == mlen))
 				{
 					arr.push(objColl[i]);
 					break comparisonLoop;

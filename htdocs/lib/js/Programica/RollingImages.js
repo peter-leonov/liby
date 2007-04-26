@@ -5,7 +5,7 @@ Programica.RollingImages =
 {
 	bind: function (node)
 	{
-		node.pmc || (node.pmc = {});
+		node.pmc || (node.pmc = {})
 		node.pmc.imageRoller = new Programica.RollingImages.Handler(node)
 		node.pmc.imageRoller.goInit()
 	},
@@ -41,7 +41,7 @@ Programica.RollingImages.Handler.prototype =
 	goPrev: function () { if (this.current > 0) this.go((this.points.length + this.current - 1) % this.points.length) },
 	goNext: function () { if (this.current < this.points.length - 1) this.go((this.current + 1) % this.points.length) },
 	
-	defaultAnimationType: function () { return this.mainNode.getAttribute('animation-type') || 'easeOutBack' }, //easeOutBounce
+	defaultAnimationType: function () { return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
 	
 	goInit: function (n)
 	{
@@ -74,13 +74,11 @@ Programica.RollingImages.Handler.prototype =
 			if (this.points[i] == node) this.current = i
 		
 		log(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
-		if (!this.viewport) log('Viewport is undefined!');
-		if (!this.viewport.animate) log('Viewport can`t be animated!');
+		if (!this.viewport) log('Viewport is undefined!')
+		if (!this.viewport.animate) log('Viewport can`t be animated!')
 		
-		if (anim == 'directJump')
-			this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
-		else
-			this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft]},  1).start()
+		//this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
+		this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft]},  1).start()
 		
 		this.updateNavigation()
 	},
@@ -92,6 +90,5 @@ Programica.RollingImages.Handler.prototype =
 		
 		!this.current ? this.aPrev.className += ' disabled' : this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
 		this.current == this.points.length - 1 ? this.aNext.className += ' disabled' : this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
-		//if (!this.current && this.current == this.points.length - 1) this.aPrev.className += ' disabled', this.aNext.className += ' disabled'
 	}
 }
