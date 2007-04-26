@@ -87,6 +87,9 @@ Programica.RollingImages.Handler.prototype =
 	
 	updateNavigation: function ()
 	{
+		this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
+		this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
+		
 		!this.current ? this.aPrev.className += ' disabled' : this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
 		this.current == this.points.length - 1 ? this.aNext.className += ' disabled' : this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
 		//if (!this.current && this.current == this.points.length - 1) this.aPrev.className += ' disabled', this.aNext.className += ' disabled'
