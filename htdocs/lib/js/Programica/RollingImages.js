@@ -13,18 +13,21 @@ Programica.RollingImages =
 	Handler: function (node)
 	{
 		this.mainNode = node
+		
+		this.ns					= this.mainNode.getAttribute('animation-namespace')
+		this.viewport			= this.my('viewport')[0]
+		this.points				= this.my('point')
+		this.buttons			= this.my('button')
+		this.aPrev				= this.my('prev')[0]
+		this.aNext				= this.my('next')[0]
+		this.current			= 0
+		
 		var t = this
-		
-		this.viewport = node.getElementsByClassName('viewport')[0]
-		this.points = node.getElementsByClassName('point')
-		this.current = 0
-		
-		var as = node.getElementsByTagName('a')
-		this.aPrev = node.getElementsByClassName('prev')[0]
-		this.aNext = node.getElementsByClassName('next')[0]
-		this.aPrev.onclick = function () { t.goPrev() }
-		this.aNext.onclick = function () { t.goNext() }
-		
+		if (this.aPrev) this.aPrev.onmousedown = function () { t.goPrev() }
+		if (this.aNext) this.aNext.onmousedown = function () { t.goNext() }
+		for (var i = 0, il = this.buttons.length; i < il; i++)
+			//да, в жабаскрипте приходится так изголяться с замыканиями
+			this.buttons[i].onmousedown = (function (fi) { return function () { t.goToFrame(fi) } })(i)
 	},
 	
 	onLoader: function ()
@@ -38,24 +41,25 @@ Programica.RollingImages =
 
 Programica.RollingImages.Handler.prototype =
 {
-	goPrev: function () { if (this.current > 0) this.go((this.points.length + this.current - 1) % this.points.length) },
-	goNext: function () { if (this.current < this.points.length - 1) this.go((this.current + 1) % this.points.length) },
+	goPrev:			function ()		{ if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
+	goNext:			function ()		{ if (this.current < this.points.length - 1) this.goToFrame((this.current + 1) % this.points.length) },
 	
-	animationType: function () { return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
-	getDuration: function () { return this.mainNode.getAttribute('animation-duration') || 1 },
+	animationType:	function ()		{ return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
+	getDuration:	function ()		{ return this.mainNode.getAttribute('animation-duration') || 1 },
+	my:				function (cn)	{ return this.mainNode.getElementsByClassName(this.ns ? this.ns + "-" + cn : cn) },
 	
 	goInit: function (n)
 	{
-		var node = this.mainNode.getElementsByClassName('selected-node')[0]
+		var node = this.my('selected')[0]
 		if (node)
 			this.goToNode(node, 'directJump')
 		else
-			this.go(0, 'directJump')
+			this.goToFrame(0, 'directJump')
 		
 		return n
 	},
 	
-	go: function (n, anim)
+	goToFrame: function (n, anim)
 	{
 		n = n || 0
 		this.goToNode(this.points[n], anim)
@@ -86,10 +90,16 @@ Programica.RollingImages.Handler.prototype =
 	
 	updateNavigation: function ()
 	{
-		this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
-		this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
+		if (this.aPrev)
+		{
+			this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
+			!this.current ? this.aPrev.className += ' disabled' : this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
+		}
 		
-		!this.current ? this.aPrev.className += ' disabled' : this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
-		this.current == this.points.length - 1 ? this.aNext.className += ' disabled' : this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
+		if (this.aNext)
+		{
+			this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
+			this.current == this.points.length - 1 ? this.aNext.className += ' disabled' : this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
+		}
 	}
 }

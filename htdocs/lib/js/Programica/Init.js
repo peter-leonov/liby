@@ -40,6 +40,7 @@ if (!HTMLElement.prototype) HTMLElement.prototype = window["[[DOMElement.prototy
 // took from http://muffinresearch.co.uk/archives/2006/04/29/getelementsbyclassname-deluxe-edition/
 Programica.DOM.getElementsByClassName = function (strClass, strTag)
 {
+	if (!strClass) return []
 	strTag = strTag || "*";
 	
 	var objColl = this.getElementsByTagName(strTag);
