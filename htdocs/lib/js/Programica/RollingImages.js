@@ -26,7 +26,7 @@ Programica.RollingImages =
 		if (this.aPrev) this.aPrev.onmousedown = function () { t.goPrev() }
 		if (this.aNext) this.aNext.onmousedown = function () { t.goNext() }
 		for (var i = 0, il = this.buttons.length; i < il; i++)
-			//да, в жабаскрипте приходится так изголяться с замыканиями
+			//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
 			this.buttons[i].onmousedown = (function (fi) { return function () { t.goToFrame(fi) } })(i)
 	},
 	
@@ -46,7 +46,7 @@ Programica.RollingImages.Handler.prototype =
 	
 	animationType:	function ()		{ return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
 	getDuration:	function ()		{ return this.mainNode.getAttribute('animation-duration') || 1 },
-	my:				function (cn)	{ return this.mainNode.getElementsByClassName(this.ns ? this.ns + "-" + cn : cn) },
+	my:				function (cn)	{ return this.mainNode.getElementsByClassName(this.ns ? (this.ns + "-" + cn) : cn) },
 	
 	goInit: function (n)
 	{
@@ -82,14 +82,53 @@ Programica.RollingImages.Handler.prototype =
 		if (!this.viewport) log('Viewport is undefined!')
 		if (!this.viewport.animate) log('Viewport can`t be animated!')
 		
+		// поиграем в CSS
+		switch (this.mainNode.getAttribute('animation-align') || 'center')
+		{
+			case 'center':
+			case 'middle':
+				// наводим на центр выбранной ноды
+				var left = Math.round( node.offsetLeft + (node.offsetWidth  / 2) - (this.viewport.offsetWidth  / 2) )
+				var top  = Math.round( node.offsetTop  + (node.offsetHeight / 2) - (this.viewport.offsetHeight / 2) )
+				break
+			
+			case 'left-top':
+				// лево верх
+				var left = node.offsetLeft
+				var top  = node.offsetTop
+				break
+			
+			case 'right-buttom':
+				// право низ
+				var left = node.offsetLeft + node.offsetWidth  - this.viewport.offsetWidth
+				var top  = node.offsetTop  + node.offsetHeight - this.viewport.offsetHeight
+				break
+			
+			default:
+				log('Unknown animation-align type: ' + this.mainNode.getAttribute('animation-align'))
+		}
+		
 		//this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
-		this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft]},  this.getDuration()).start()
+		this.viewport.animate(anim, {scrollTop:  [top], scrollLeft: [left]},  this.getDuration()).start()
 		
 		this.updateNavigation()
 	},
 	
 	updateNavigation: function ()
 	{
+		var button
+		
+		for (var i = 0, il = this.buttons.length; i < il; i++)
+			button = this.buttons[i],
+			button.className = button.className.replace(/ selected-button/g, '')
+		
+		button = this.buttons[this.current]
+		if (button)
+		{
+			button.className = button.className.replace(/ selected-button/g, '')
+			button.className += ' selected-button'
+		}
+		
 		if (this.aPrev)
 		{
 			this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')

@@ -62,7 +62,7 @@ Programica.DOM.getElementsByClassName = function (strClass, strTag)
 			for (var m = 0, mlen = arrClass.length; m < mlen; m++)
 			{
 				if (arrClass[m] == arrObjClass[k]) c++;
-				if (( delim == '|' && c == 1) || (delim == ' ' && c == mlen))
+				if ( (delim == '|' && c == 1) || (delim == ' ' && c == mlen) )
 				{
 					arr.push(objColl[i]);
 					break comparisonLoop;
