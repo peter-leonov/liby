@@ -104,6 +104,20 @@ Programica.DOM.getElementsByName = function (strName, strTag)
 	return arr;
 }
 
+Programica.DOM.addClassName = function (cn)
+{
+	this.remClassName(cn)
+	this.className += ' ' + cn
+	return cn
+}
+
+Programica.DOM.remClassName = function (cn)
+{
+	this.className = this.className.replace(new RegExp(' +' + cn, "g"), "")
+	return cn
+}
+
+
 
 if (!HTMLElement.prototype.getElementsByClassName)
 	HTMLElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
@@ -117,11 +131,17 @@ if (!HTMLElement.prototype.getElementsByName)
 if (!document.getElementsByName)
 	document.getElementsByName = Programica.DOM.getElementsByName
 
+
 /* кривоватый фикс addEventListener(...) для IE */
 if (!window.addEventListener)
 	HTMLElement.prototype.addEventListener = function (type, func, dir) { this.attachEvent('on' + type, func) },
 	window.addEventListener = document.addEventListener = HTMLElement.prototype.addEventListener
 
+if (!HTMLElement.prototype.addClassName)
+	HTMLElement.prototype.addClassName = Programica.DOM.addClassName
+
+if (!HTMLElement.prototype.remClassName)
+	HTMLElement.prototype.remClassName = Programica.DOM.remClassName
 
 //——————————————————————————————————————————————————————————————————————————————
 // Типа, прототип :)
