@@ -23,8 +23,14 @@ Programica.RollingImages =
 		this.current			= 0
 		
 		var t = this
-		if (this.aPrev) this.aPrev.onmousedown = function () { t.goPrev() }
-		if (this.aNext) this.aNext.onmousedown = function () { t.goNext() }
+		if (this.aPrev)
+			this.aPrev.onmousedown = function () { t.goPrev() },
+			this.aPrev.onselectstart = function () { return false }
+		
+		if (this.aNext)
+			this.aNext.onmousedown = function () { t.goNext() },
+			this.aNext.onselectstart = function () { return false }
+		
 		for (var i = 0, il = this.buttons.length; i < il; i++)
 			//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
 			this.buttons[i].onmousedown = (function (fi) { return function () { t.goToFrame(fi) } })(i)
