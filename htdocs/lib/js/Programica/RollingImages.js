@@ -83,7 +83,7 @@ Programica.RollingImages.Handler.prototype =
 		if (!this.viewport.animate) log('Viewport can`t be animated!')
 		
 		// поиграем в CSS
-		switch (this.mainNode.getAttribute('animation-align') || 'center')
+		switch (this.mainNode.getAttribute('animation-align') || 'left-top')
 		{
 			case 'center':
 			case 'middle':
