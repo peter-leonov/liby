@@ -64,7 +64,7 @@ Programica.FunnyBlock.Handler.prototype =
 	goToNode: function (node, anim)
 	{
 		if (!node) return null
-		anim = anim || this.defaultAnimationType()
+		anim = anim || node.getAttribute('animation-type') || this.defaultAnimationType()
 		
 		if (!this.viewport) log('Viewport is undefined!')
 		if (!this.viewport.animate) log('Viewport can`t be animated!')
