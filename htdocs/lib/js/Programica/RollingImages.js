@@ -6,8 +6,8 @@ Programica.RollingImages =
 	bind: function (node)
 	{
 		node.pmc || (node.pmc = {})
-		node.pmc.imageRoller = new Programica.RollingImages.Handler(node)
-		node.pmc.imageRoller.goInit()
+		node.pmc.RollingImages = new this.Handler(node)
+		node.pmc.RollingImages.goInit()
 	},
 	
 	Handler: function (node)
@@ -114,8 +114,20 @@ Programica.RollingImages.Handler.prototype =
 				log('Unknown animation-align type: ' + this.mainNode.getAttribute('animation-align'))
 		}
 		
+		var trans = {scrollTop:  [top], scrollLeft: [left]}
+		
+		{
+			var scale = this.viewport.getAttribute("scale")
+			
+			if (/all|height/.test(scale))
+				trans.height = [node.offsetHeight]
+				
+			if (/all|width/.test(scale))	
+				trans.wifth  = [node.offsetWidth]
+		}
+		
 		//this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
-		this.viewport.animate(anim, {scrollTop:  [top], scrollLeft: [left]},  this.getDuration()).start()
+		this.viewport.animate(anim, trans,  this.getDuration()).start()
 		
 		this.updateNavigation()
 	},

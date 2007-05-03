@@ -6,8 +6,8 @@ Programica.FunnyBlock =
 	bind: function (node)
 	{
 		node.pmc || (node.pmc = {})
-		node.pmc.imageRoller = new Programica.FunnyBlock.Handler(node)
-		node.pmc.imageRoller.goInit()
+		node.pmc.FunnyBlock = new this.Handler(node)
+		node.pmc.FunnyBlock.goInit()
 	},
 	
 	Handler: function (node)
