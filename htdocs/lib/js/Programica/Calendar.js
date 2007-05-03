@@ -1,31 +1,12 @@
 
-window.addEventListener('load', function () { Programica.Calendar.onLoader() }, false)
+Programica.Calendar = function () {}
 
-Programica.Calendar =
+Programica.Calendar.prototype.Handler = function (node)
 {
-	bind: function (node)
-	{
-		node.pmc || (node.pmc = {})
-		node.pmc.Calendar = new this.Handler(node)
-		node.pmc.Calendar.init()
-	},
-	
-	Handler: function (node)
-	{
-		this.mainNode = node
-		
-	},
-	
-	onLoader: function ()
-	{
-		var all = document.getElementsByClassName('programica-calendar')
-		
-		for (var i = 0; i < all.length; i++)
-			this.bind(all[i])
-	}
+	this.mainNode = node
 }
 
-Programica.Calendar.Handler.prototype =
+Programica.Calendar.prototype.Handler.prototype =
 {
 	init: function ()
 	{
@@ -47,6 +28,19 @@ Programica.Calendar.Handler.prototype =
 	draw: function ()
 	{
 		var data = this.parce(this.request.responseXML())
+		
+		with (this.mainNode)
+			for (var ul = 0; ul < 6; ul++)
+				with(appendChild(document.createElement('ul')))
+				{
+					className = 'days point'
+					//setAttribute('class', 'point')
+					for (var li = 1; li <= 42; li++)
+					{
+						with(appendChild(document.createElement('li')))
+							innerHTML = li
+					}
+				}
 		
 		log(data)
 	},

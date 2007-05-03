@@ -1,52 +1,37 @@
 
-window.addEventListener('load', function () { Programica.RollingImages.onLoader() }, false)
+Programica.RollingImages = function () {}
 
-Programica.RollingImages =
+Programica.RollingImages.prototype = new Programica.Widget()
+Programica.RollingImages.prototype.mainNodeClassName = 'programica-rolling-images'
+Programica.RollingImages.prototype.Handler = function (node)
 {
-	bind: function (node)
-	{
-		node.pmc || (node.pmc = {})
-		node.pmc.RollingImages = new this.Handler(node)
-		node.pmc.RollingImages.goInit()
-	},
+	this.mainNode = node
 	
-	Handler: function (node)
-	{
-		this.mainNode = node
-		
-		this.ns					= this.mainNode.getAttribute('animation-namespace')
-		this.viewport			= this.my('viewport')[0]
-		this.points				= this.my('point')
-		this.buttons			= this.my('button')
-		this.aPrev				= this.my('prev')[0]
-		this.aNext				= this.my('next')[0]
-		this.current			= 0
-		
-		var t = this
-		if (this.aPrev)
-			this.aPrev.onmousedown = function () { t.goPrev() },
-			this.aPrev.onselectstart = function () { return false }
-		
-		if (this.aNext)
-			this.aNext.onmousedown = function () { t.goNext() },
-			this.aNext.onselectstart = function () { return false }
-		
-		for (var i = 0, il = this.buttons.length; i < il; i++)
-			//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
-			this.buttons[i].onmousedown = (function (fi) { return function () { t.goToFrame(fi) } })(i)
-	},
+	this.ns					= this.mainNode.getAttribute('animation-namespace')
+	this.viewport			= this.my('viewport')[0]
+	this.points				= this.my('point')
+	this.buttons			= this.my('button')
+	this.aPrev				= this.my('prev')[0]
+	this.aNext				= this.my('next')[0]
+	this.current			= 0
 	
-	onLoader: function ()
-	{
-		var all = document.getElementsByClassName('programica-rolling-images')
-		
-		for (var i = 0; i < all.length; i++)
-			this.bind(all[i])
-	}
+	var t = this
+	if (this.aPrev)
+		this.aPrev.onmousedown = function () { t.goPrev() },
+		this.aPrev.onselectstart = function () { return false }
+	
+	if (this.aNext)
+		this.aNext.onmousedown = function () { t.goNext() },
+		this.aNext.onselectstart = function () { return false }
+	
+	for (var i = 0, il = this.buttons.length; i < il; i++)
+		//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
+		this.buttons[i].onmousedown = (function (fi) { return function () { t.goToFrame(fi) } })(i)
 }
 
-Programica.RollingImages.Handler.prototype =
+Programica.RollingImages.prototype.Handler.prototype =
 {
+	init:			function ()		{ this.goInit() },
 	goPrev:			function ()		{ if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
 	goNext:			function ()		{ if (this.current < this.points.length - 1) this.goToFrame((this.current + 1) % this.points.length) },
 	
@@ -160,3 +145,5 @@ Programica.RollingImages.Handler.prototype =
 		}
 	}
 }
+
+Programica.Widget.register(new Programica.RollingImages())

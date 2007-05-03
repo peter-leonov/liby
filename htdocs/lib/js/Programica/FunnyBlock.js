@@ -1,42 +1,29 @@
 
-window.addEventListener('load', function () { Programica.FunnyBlock.onLoader() }, false)
+Programica.FunnyBlock = function () {}
 
-Programica.FunnyBlock =
+Programica.FunnyBlock.prototype = new Programica.Widget()
+Programica.FunnyBlock.prototype.mainNodeClassName = 'programica-funny-block'
+Programica.FunnyBlock.prototype.Handler = function (node)
 {
-	bind: function (node)
-	{
-		node.pmc || (node.pmc = {})
-		node.pmc.FunnyBlock = new this.Handler(node)
-		node.pmc.FunnyBlock.goInit()
-	},
+	this.mainNode = node
+	this.viewport = node
+	var t = this
 	
-	Handler: function (node)
-	{
-		this.mainNode = node
-		this.viewport = node
-		var t = this
-		
-		this.toogler = node.getElementsByClassName('funny-toogler')[0]
-		this.begin = node.getElementsByClassName('funny-begin')[0]
-		this.end = node.getElementsByClassName('funny-end')[0]
-		
-		this.current = 0
-		
-		this.toogler.onclick = function () { t.toggle() }
-	},
+	this.toogler = node.getElementsByClassName('funny-toogler')[0]
+	this.begin = node.getElementsByClassName('funny-begin')[0]
+	this.end = node.getElementsByClassName('funny-end')[0]
 	
-	onLoader: function ()
-	{
-		var all = document.getElementsByClassName('programica-funny-block')
-		
-		for (var i = 0; i < all.length; i++)
-			this.bind(all[i])
-	}
+	this.current = 0
+	
+	this.toogler.onclick = function () { t.toggle() }
 }
 
-Programica.FunnyBlock.Handler.prototype =
+
+Programica.FunnyBlock.prototype.Handler.prototype =
 {
 	defaultAnimationType: function () { return this.mainNode.getAttribute('animation-type') || 'easeOutBack' }, //easeOutBounce
+	
+	init: function () { this.goInit() },
 	
 	goInit: function (n)
 	{
@@ -72,3 +59,5 @@ Programica.FunnyBlock.Handler.prototype =
 		return this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft], height:  [node.offsetHeight], width: [node.offsetWidth]},  1).start()
 	}
 }
+
+Programica.Widget.register(new Programica.FunnyBlock())
