@@ -111,9 +111,9 @@ Programica.Request.prototype =
 	/* transport.send() обернута в таймер из-за #97 */
 	send:					function (data)
 	{
+		var t = this
 		if (this.lastRequestObject.async)
 		{
-			var t = this
 			setTimeout(function () { t.transport.send(data) }, 0)
 		}
 		else

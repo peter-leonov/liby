@@ -1,6 +1,8 @@
 
 Programica.Calendar = function () {}
 
+Programica.Calendar.prototype = new Programica.Widget()
+Programica.Calendar.prototype.mainNodeClassName = 'programica-calendar'
 Programica.Calendar.prototype.Handler = function (node)
 {
 	this.mainNode = node
@@ -10,11 +12,8 @@ Programica.Calendar.prototype.Handler.prototype =
 {
 	init: function ()
 	{
-		var t = this
-		aGet(this.mainNode.getAttribute('calendar-href')).onLoad = function ()
-		{
-			t.dataLoaded(this)
-		}
+		var r = sGet(this.mainNode.getAttribute('calendar-href'))
+		this.dataLoaded(r)
 	},
 	
 	dataLoaded: function (r)
@@ -80,6 +79,9 @@ Programica.Calendar.prototype.Handler.prototype =
 		return data
 	}
 }
+
+Programica.Widget.register(new Programica.Calendar())
+
 
 Date.prototype.fixZ = function (d) { if (d == 0) return "00"; if (d < 10) return "0" + d; return d }
 

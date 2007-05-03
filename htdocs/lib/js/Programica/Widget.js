@@ -15,7 +15,7 @@ extend (Programica.Widget,
 	
 	sortby:
 	{
-		pri: function () {  }
+		pri: function (a,b) { a.pri - b.pri }
 	},
 	
 	// ищет ноды для виджетов, ранжирует и вызывает bind для каждой
@@ -26,8 +26,8 @@ extend (Programica.Widget,
 		for (var i = 0; i < all.length; i++)
 			this.bind(all[i])*/
 		
+		// ищем все ноды в stack
 		var stack = [];
-		
 		for (var wi in this.registered)
 		{
 			var w = this.registered[wi]
@@ -37,7 +37,15 @@ extend (Programica.Widget,
 				stack.push({w:w, node:nodes[ni], pri:(nodes[ni].getAttribute('widget-priority') || 0)})
 		}
 		
-		log(stack.sort(this.sortby.pri))
+		// ранжируем
+		this.sorted = stack.sort(this.sortby.pri)
+		
+		// биндим
+		for (var ni = 0; ni < this.sorted.length; ni++)
+		{
+			var n = this.sorted[ni]
+			n.w.bind(n.node)
+		}
 	}
 })
 
