@@ -20,29 +20,63 @@ Programica.Calendar.prototype.Handler.prototype =
 	dataLoaded: function (r)
 	{
 		this.request = r
-		
-		var t = this
-		setTimeout(function () { t.draw() }, 10)
+		this.draw()
+		//var t = this
+		//setTimeout(function () { t.draw() }, 10)
 	},
 	
 	draw: function ()
 	{
 		var data = this.parce(this.request.responseXML())
 		
-		with (this.mainNode)
-			for (var ul = 0; ul < 6; ul++)
-				with(appendChild(document.createElement('ul')))
-				{
-					className = 'days point'
-					//setAttribute('class', 'point')
-					for (var li = 1; li <= 42; li++)
-					{
-						with(appendChild(document.createElement('li')))
-							innerHTML = li
-					}
-				}
+		var now = new Date(0)
+		now.setFullYear(2007,4-1)
+		var end = new Date(0)
+		end.setFullYear(2008,2-1)
 		
-		log(data)
+		var last = new Date(now)// - 86200000
+		last.setDate(last.getDate() - 1)
+		//alert(now + ":" + last)
+		
+		while (now <= end)
+		{
+			var ul = document.createElement('ul')
+			ul.className = 'days point'
+			this.mainNode.appendChild(ul)
+			
+			var i
+			
+			for (i = 0; i < last.getDay(); i++)
+			{
+				var li = ul.appendChild(document.createElement('li'))
+				li.innerHTML = '&nbsp;'
+			}
+			
+			do
+			{
+				i++
+				var li = ul.appendChild(document.createElement('li'))
+				li.innerHTML = now.getDate()
+				
+				last = now
+				now = new Date(now)// * 1 + 86200000
+				now.setDate(now.getDate() + 1)
+				//log(now + ":::" + last)
+				//now.setDate(now.getDate() + 1)
+			}
+			while (last.getMonth() == now.getMonth())
+			
+			for (i = 0; i < 7 - last.getDay(); i++)
+			{
+				var li = ul.appendChild(document.createElement('li'))
+				li.innerHTML = '&nbsp;'
+			}
+			
+			//now.setMonth(now.getMonth() + 1)
+			//log("month: " + now + " " + end)
+		}
+		
+		//log(data)
 	},
 	
 	parce: function (root)
@@ -77,7 +111,15 @@ Programica.Calendar.prototype.Handler.prototype =
 			}
 		}
 		
-		return data
+		/*var options = root.getElementsByTagName('options')[0]
+		
+		var begin_str = new String(options.getAttribute('begin'))
+		var begin_arr = begin_str.split();
+		
+		var begin = new Date(0)
+		var end = new Date(0)*/
+		
+		return data /*{data:data, begin:begin, end:end}*/
 	}
 }
 

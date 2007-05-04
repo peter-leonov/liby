@@ -37,15 +37,17 @@ extend (Programica.Widget,
 		// ранжируем
 		this.sorted = stack.sort(this.sortby.pri)
 		
+		/*for (var ni = 0; ni < this.sorted.length; ni++)
+			this.sorted[ni].w.bind(this.sorted[ni].node)*/
+		
 		// Пришлось усложнить механизм инициализации.
 		// Суть в том, что брузеры (фф, ие) не создают ноды в дереве
 		// до тех пор, пока яваскрипт не выполнится до конца.
 		// Некоторые скрипты могут создавать ноды, на которые потом
 		// рассчитывают другие скрипты
-		this.sorted_rinning = this.sorted
-		var t = this
 		// таймер нас спасет
-		this.initInterval = setInterval(function () { t.initThread() }, 50)
+		var t = this
+		this.initInterval = setInterval(function () { t.initThread() }, 10)
 	},
 	
 	// поиграем в треды?
@@ -55,9 +57,25 @@ extend (Programica.Widget,
 		for (var ni = 0; ni < this.sorted.length; ni++)
 		{
 			var n = this.sorted[ni]
-			if (n.bint) continue
+			if (n.bint || n.error) continue
 			log("Binding widget ", n.w, " to ", n.node)
-			n.w.bind(n.node)
+			
+			// блокировки не организовываем в рассчете на то,
+			// что в яваскриптах нет многопоточночти и события
+			// прийдут точно одно за другим
+			
+			try
+			{
+				n.w.bind(n.node)
+			}
+			catch (ex)
+			{
+				n.bint = false
+				n.error = true
+				
+				throw ex
+			}
+			
 			n.bint = true
 			log("... bint")
 			return // мы же в "треде" :)

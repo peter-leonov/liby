@@ -15,7 +15,7 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.aPrev				= this.my('prev')[0]
 	this.aNext				= this.my('next')[0]
 	this.current			= 0
-	log(this.points)
+	
 	var t = this
 	if (this.aPrev)
 		this.aPrev.onmousedown = function () { t.goPrev() },
