@@ -10,21 +10,12 @@ if (!window.Programica.DOM) Programica.DOM = {}
 
 Programica.debugLevel = 1
 
-log.elem = document.createElement("pre")
-log.elem.id = "log-elem"
-
 function log ()
 {
 	if (Programica.debugLevel <= 0) return false
 	if (console && console.log) return console.log.apply(console, arguments)
 	
 	var str = arguments.join('')
-	
-	log.elem.innerHTML += str + "\n"
-	
-	if (document.body)
-		document.body.appendChild(log.elem)
-	
 	return str
 }
 

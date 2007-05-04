@@ -44,7 +44,7 @@ extend (Programica.Widget,
 		// рассчитывают другие скрипты
 		this.sorted_rinning = this.sorted
 		var t = this
-		// интервал на спасет
+		// таймер нас спасет
 		this.initInterval = setInterval(function () { t.initThread() }, 50)
 	},
 	
@@ -62,6 +62,7 @@ extend (Programica.Widget,
 			log("... bint")
 			return // мы же в "треде" :)
 		}
+		clearInterval(this.initInterval)
 	}
 })
 
