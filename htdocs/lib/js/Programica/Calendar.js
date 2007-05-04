@@ -116,6 +116,7 @@ Programica.Calendar.prototype.Handler.prototype =
 				{
 					var li = ul.appendChild(document.createElement('li'))
 					li.innerHTML = '&nbsp;'
+					li.className = 'nondate'
 				}
 			
 			//now.setMonth(now.getMonth() + 1)
