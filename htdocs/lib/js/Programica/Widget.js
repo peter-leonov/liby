@@ -15,17 +15,12 @@ extend (Programica.Widget,
 	
 	sortby:
 	{
-		pri: function (a,b) { a.pri - b.pri }
+		pri: function (a,b) { return a.pri - b.pri }
 	},
 	
 	// ищет ноды для виджетов, ранжирует и вызывает bind для каждой
 	onLoader: function ()
 	{
-		/*var all = document.getElementsByClassName('programica-rolling-images')
-		
-		for (var i = 0; i < all.length; i++)
-			this.bind(all[i])*/
-		
 		// ищем все ноды в stack
 		var stack = [];
 		for (var wi in this.registered)
@@ -37,14 +32,35 @@ extend (Programica.Widget,
 				stack.push({w:w, node:nodes[ni], pri:(nodes[ni].getAttribute('widget-priority') || 0)})
 		}
 		
+		log("Registered widgets: ", this.registered)
+		
 		// ранжируем
 		this.sorted = stack.sort(this.sortby.pri)
 		
+		// Пришлось усложнить механизм инициализации.
+		// Суть в том, что брузеры (фф, ие) не создают ноды в дереве
+		// до тех пор, пока яваскрипт не выполнится до конца.
+		// Некоторые скрипты могут создавать ноды, на которые потом
+		// рассчитывают другие скрипты
+		this.sorted_rinning = this.sorted
+		var t = this
+		// интервал на спасет
+		this.initInterval = setInterval(function () { t.initThread() }, 50)
+	},
+	
+	// поиграем в треды?
+	initThread: function ()
+	{
 		// биндим
 		for (var ni = 0; ni < this.sorted.length; ni++)
 		{
 			var n = this.sorted[ni]
+			if (n.bint) continue
+			log("Binding widget ", n.w, " to ", n.node)
 			n.w.bind(n.node)
+			n.bint = true
+			log("... bint")
+			return // мы же в "треде" :)
 		}
 	}
 })
@@ -54,6 +70,8 @@ extend (Programica.Widget,
 
 Programica.Widget.prototype =
 {
+	klass: 'Programica.Widget',
+	
 	bind: function (node)
 	{
 		/*node.pmc || (node.pmc = {})
@@ -61,5 +79,7 @@ Programica.Widget.prototype =
 		node.pmc[this] = new this.Handler(node);
 		node.pmc[this].init()*/
 		(new this.Handler(node)).init()
-	}
+	},
+	
+	toString: function () { return '[object ' + this.klass + ']' }
 }

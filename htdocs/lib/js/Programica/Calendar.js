@@ -3,6 +3,7 @@ Programica.Calendar = function () {}
 
 Programica.Calendar.prototype = new Programica.Widget()
 Programica.Calendar.prototype.mainNodeClassName = 'programica-calendar'
+Programica.Calendar.prototype.klass = 'Programica.Calendar'
 Programica.Calendar.prototype.Handler = function (node)
 {
 	this.mainNode = node

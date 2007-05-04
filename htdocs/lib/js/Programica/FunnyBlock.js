@@ -3,6 +3,7 @@ Programica.FunnyBlock = function () {}
 
 Programica.FunnyBlock.prototype = new Programica.Widget()
 Programica.FunnyBlock.prototype.mainNodeClassName = 'programica-funny-block'
+Programica.FunnyBlock.prototype.klass = 'Programica.FunnyBlock'
 Programica.FunnyBlock.prototype.Handler = function (node)
 {
 	this.mainNode = node

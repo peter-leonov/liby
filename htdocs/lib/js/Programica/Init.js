@@ -13,10 +13,12 @@ Programica.debugLevel = 1
 log.elem = document.createElement("pre")
 log.elem.id = "log-elem"
 
-function log (str)
+function log ()
 {
 	if (Programica.debugLevel <= 0) return false
-	if (console && console.log) return console.log(str)
+	if (console && console.log) return console.log.apply(console, arguments)
+	
+	var str = arguments.join('')
 	
 	log.elem.innerHTML += str + "\n"
 	

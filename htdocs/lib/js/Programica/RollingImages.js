@@ -3,6 +3,7 @@ Programica.RollingImages = function () {}
 
 Programica.RollingImages.prototype = new Programica.Widget()
 Programica.RollingImages.prototype.mainNodeClassName = 'programica-rolling-images'
+Programica.RollingImages.prototype.klass = 'Programica.RollingImages'
 Programica.RollingImages.prototype.Handler = function (node)
 {
 	this.mainNode = node
@@ -14,7 +15,7 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.aPrev				= this.my('prev')[0]
 	this.aNext				= this.my('next')[0]
 	this.current			= 0
-	
+	log(this.points)
 	var t = this
 	if (this.aPrev)
 		this.aPrev.onmousedown = function () { t.goPrev() },
