@@ -13,9 +13,13 @@ Programica.Calendar.prototype.Handler.prototype =
 {
 	init: function ()
 	{
+		this.curDateNode = $('calendarMonth');//this.my('current-date')[0]
+		
 		var r = sGet(this.mainNode.getAttribute('calendar-href'))
 		this.dataLoaded(r)
 	},
+	
+	my: function (cn) { return this.mainNode.getElementsByClassName(this.ns ? (this.ns + "-" + cn) : cn) },
 	
 	dataLoaded: function (r)
 	{
@@ -40,7 +44,7 @@ Programica.Calendar.prototype.Handler.prototype =
 		
 		var last = new Date(now)
 		last.setDate(last.getDate() - 1)
-		//alert(now + ":" + last)
+		
 		
 		while (now <= end)
 		{
@@ -50,6 +54,9 @@ Programica.Calendar.prototype.Handler.prototype =
 			
 			if (now.getYear() == today.getYear() && now.getMonth() == today.getMonth())
 				ul.className += ' selected'
+			
+			// и снова гемор с замыканиями
+			ul.onselect = (function (t, d) { return function () { t.curDateNode.innerHTML = d.rusMY() } })(this, now)
 			
 			var i = 0
 			
@@ -104,11 +111,12 @@ Programica.Calendar.prototype.Handler.prototype =
 			}
 			while (last.getMonth() == now.getMonth())
 			
-			for (i = 0; i < 7 - last.getDay(); i++)
-			{
-				var li = ul.appendChild(document.createElement('li'))
-				li.innerHTML = '&nbsp;'
-			}
+			if (last.getDay())
+				for (i = 0; i < 7 - last.getDay(); i++)
+				{
+					var li = ul.appendChild(document.createElement('li'))
+					li.innerHTML = '&nbsp;'
+				}
 			
 			//now.setMonth(now.getMonth() + 1)
 			//log("month: " + now + " " + end)
@@ -167,3 +175,9 @@ Programica.Calendar.prototype.Handler.prototype =
 
 Programica.Widget.register(new Programica.Calendar())
 
+Date.rusMonths = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+
+Date.prototype.rusMY = function ()
+{
+	return Date.rusMonths[this.getMonth()] + ", " + this.getFullYear()
+}

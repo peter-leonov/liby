@@ -38,8 +38,8 @@ Programica.Animation = function (prms)
 			if (prms.transformations[i])
 				this.setTransformation(prms.transformations[i])
 	
-	log("new Programica.Animation prms: " + prms)
-	log("new Programica.Animation this: " + this)
+	log2("new Programica.Animation prms: " + prms)
+	log2("new Programica.Animation this: " + this)
 	
 	return this
 }
@@ -108,7 +108,7 @@ extend (Programica.Animation.prototype,
 			if (this.obj.animation) this.obj.animation.stop()
 			this.obj.animation = this
 			
-			log('Programica.Animation.start()')
+			log2('Programica.Animation.start()')
 			
 			this.running = true
 			this.complete = false

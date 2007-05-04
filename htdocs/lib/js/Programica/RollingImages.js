@@ -70,9 +70,9 @@ Programica.RollingImages.prototype.Handler.prototype =
 		for (var i = 0, il = this.points.length; i < il; i++)
 			if (this.points[i] == node) this.current = i
 		
-		log(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
-		if (!this.viewport) log('Viewport is undefined!')
-		if (!this.viewport.animate) log('Viewport can`t be animated!')
+		log2(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
+		if (!this.viewport) log2('Viewport is undefined!')
+		if (!this.viewport.animate) log2('Viewport can`t be animated!')
 		
 		// поиграем в CSS
 		switch (this.mainNode.getAttribute('animation-align') || 'left-top')
@@ -114,6 +114,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		//this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
 		this.viewport.animate(anim, trans,  this.getDuration()).start()
+		
+		if (node.onselect) node.onselect()
 		
 		this.updateNavigation()
 	},

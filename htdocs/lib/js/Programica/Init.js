@@ -5,6 +5,7 @@ if (!window.Programica) var Programica = {}
 if (!window.Programica.Abstract) Programica.Abstract = {}
 if (!window.Programica.DOM) Programica.DOM = {}
 
+
 //——————————————————————————————————————————————————————————————————————————————
 // Логи
 
