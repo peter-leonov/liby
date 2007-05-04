@@ -25,9 +25,13 @@ Programica.Calendar.prototype.Handler.prototype =
 		//setTimeout(function () { t.draw() }, 10)
 	},
 	
+	
+	// наполняет базовую ноду юлками и лишками
 	draw: function ()
 	{
 		var data = this.parce(this.request.responseXML())
+		
+		var today = new Date();
 		
 		var now = new Date(0)
 		now.setFullYear(2007,3,1)
@@ -44,9 +48,12 @@ Programica.Calendar.prototype.Handler.prototype =
 			ul.className = 'days point'
 			this.mainNode.appendChild(ul)
 			
-			var i
+			if (now.getYear() == today.getYear() && now.getMonth() == today.getMonth())
+				ul.className += ' selected'
 			
-			for (i = 0; i < last.getDay(); i++)
+			var i = 0
+			
+			for (i; i < last.getDay(); i++)
 			{
 				var li = ul.appendChild(document.createElement('li'))
 				li.innerHTML = '&nbsp;'
@@ -57,11 +64,34 @@ Programica.Calendar.prototype.Handler.prototype =
 				i++
 				var li = ul.appendChild(document.createElement('li'))
 				li.innerHTML = now.getDate()
-				li.title = now
 				
-				if (data[now])
+				if (today < now) // будущее
 				{
-					li.className = 'private'
+					if (data[now])
+					{
+						li.className = 'private'
+						li.onmousedown = function () { content.show('#content-event') }
+					}
+					else
+					{
+						li.className = "freeday"
+						li.onmousedown = function () { content.show('#content-freeday') }
+					}
+				}
+				else if (today == now) // настоящее
+				{
+					
+				}
+				else if (today > now) // прошлое
+				{
+					if (data[now])
+					{
+						li.className = 'private'
+					}
+					else
+					{
+						li.className = "freeday"
+					}
 				}
 				
 				last = now
@@ -85,23 +115,27 @@ Programica.Calendar.prototype.Handler.prototype =
 		//log(data)
 	},
 	
+	
+	// разбирает XML в хеш
 	parce: function (root)
 	{
 		var data = {}
 		
-		// руками раскладываем XML в хеш
+		// года
 		var years = root.getElementsByTagName('year')
 		for (var yi = 0; yi < years.length; yi++)
 		{
 			var y = years[yi]
 			var ynum = y.getAttribute('num')
 			
+			// месяца
 			var months = y.getElementsByTagName('month')
 			for (var mi = 0; mi < months.length; mi++)
 			{
 				m = months[mi]
 				var mnum = m.getAttribute('num')
 				
+				// дни
 				var days = m.getElementsByTagName('day')
 				for (var di = 0; di < days.length; di++)
 				{
@@ -131,19 +165,3 @@ Programica.Calendar.prototype.Handler.prototype =
 
 Programica.Widget.register(new Programica.Calendar())
 
-
-Date.prototype.fixZ = function (d) { if (d == 0) return "00"; if (d < 10) return "0" + d; return d }
-
-Date.prototype.iso = function ()
-{
-	// тупо, но быстро :)
-	with (this)
-		return (1900 + getYear()) + "-" + fixZ(getMonth()+1) + "-" + fixZ(getDate()) + " " + fixZ(getHours()) + ":" + fixZ(getMinutes()) + ":" + fixZ(getSeconds())
-}
-
-Date.prototype.isoDate = function ()
-{
-	// тупо, но быстро :)
-	with (this)
-		return (1900 + getYear()) + "-" + fixZ(getMonth()+1) + "-" + fixZ(getDate())
-}
