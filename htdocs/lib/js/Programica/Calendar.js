@@ -65,6 +65,8 @@ Programica.Calendar.prototype.Handler.prototype =
 				var li = ul.appendChild(document.createElement('li'))
 				li.innerHTML = now.getDate()
 				
+				
+				// пока раскрашиваем ноды тут, но надо вынесли логику
 				if (today < now) // будущее
 				{
 					if (data[now])
