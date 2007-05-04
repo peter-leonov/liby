@@ -30,11 +30,11 @@ Programica.Calendar.prototype.Handler.prototype =
 		var data = this.parce(this.request.responseXML())
 		
 		var now = new Date(0)
-		now.setFullYear(2007,4-1)
+		now.setFullYear(2007,3,1)
 		var end = new Date(0)
-		end.setFullYear(2008,2-1)
+		end.setFullYear(2008,1,1)
 		
-		var last = new Date(now)// - 86200000
+		var last = new Date(now)
 		last.setDate(last.getDate() - 1)
 		//alert(now + ":" + last)
 		
@@ -57,6 +57,12 @@ Programica.Calendar.prototype.Handler.prototype =
 				i++
 				var li = ul.appendChild(document.createElement('li'))
 				li.innerHTML = now.getDate()
+				li.title = now
+				
+				if (data[now])
+				{
+					li.className = 'private'
+				}
 				
 				last = now
 				now = new Date(now)// * 1 + 86200000
@@ -133,4 +139,11 @@ Date.prototype.iso = function ()
 	// тупо, но быстро :)
 	with (this)
 		return (1900 + getYear()) + "-" + fixZ(getMonth()+1) + "-" + fixZ(getDate()) + " " + fixZ(getHours()) + ":" + fixZ(getMinutes()) + ":" + fixZ(getSeconds())
+}
+
+Date.prototype.isoDate = function ()
+{
+	// тупо, но быстро :)
+	with (this)
+		return (1900 + getYear()) + "-" + fixZ(getMonth()+1) + "-" + fixZ(getDate())
 }
