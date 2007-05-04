@@ -79,12 +79,12 @@ Programica.Calendar.prototype.Handler.prototype =
 				{
 					if (data[now])
 					{
-						li.className = 'private'
+						li.className = 'future private'
 						li.onmousedown = function () { content.show('#content-event') }
 					}
 					else
 					{
-						li.className = "freeday"
+						li.className = "future freeday"
 						li.onmousedown = function () { content.show('#content-freeday') }
 					}
 				}
@@ -96,19 +96,17 @@ Programica.Calendar.prototype.Handler.prototype =
 				{
 					if (data[now])
 					{
-						li.className = 'private'
+						li.className = 'past private'
 					}
 					else
 					{
-						li.className = "freeday"
+						li.className = "past freeday"
 					}
 				}
 				
 				last = now
-				now = new Date(now)// * 1 + 86200000
+				now = new Date(now)
 				now.setDate(now.getDate() + 1)
-				//log(now + ":::" + last)
-				//now.setDate(now.getDate() + 1)
 			}
 			while (last.getMonth() == now.getMonth())
 			
