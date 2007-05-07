@@ -94,6 +94,8 @@ Programica.Calendar.prototype.Handler.prototype =
 				}
 				else if (today > now) // прошлое
 				{
+					li.onmousedown = function () { content.show('#content-past') }
+					
 					if (data[now])
 					{
 						li.className = 'past private'
