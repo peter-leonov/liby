@@ -32,33 +32,45 @@ extend (Programica.Widget,
 				stack.push({w:w, node:nodes[ni], pri:(nodes[ni].getAttribute('widget-priority') || 0)})
 		}
 		
+		
 		log("Registered widgets: ", this.registered)
 		
 		// ранжируем
 		this.sorted = stack.sort(this.sortby.pri)
 		
-		/*for (var ni = 0; ni < this.sorted.length; ni++)
-			this.sorted[ni].w.bind(this.sorted[ni].node)*/
-		
-		// Пришлось усложнить механизм инициализации.
-		// Суть в том, что брузеры (фф, ие) не создают ноды в дереве
-		// до тех пор, пока яваскрипт не выполнится до конца.
-		// Некоторые скрипты могут создавать ноды, на которые потом
-		// рассчитывают другие скрипты
-		// таймер нас спасет
-		var t = this
-		this.initInterval = setInterval(function () { t.initThread() }, 10)
+		if (this.asyncBind)
+		{
+			// Пришлось усложнить механизм инициализации.
+			// Суть в том, что брузеры (фф, ие) не создают ноды в дереве
+			// до тех пор, пока яваскрипт не выполнится до конца.
+			// Некоторые скрипты могут создавать ноды, на которые потом
+			// рассчитывают другие скрипты
+			// таймер нас спасет
+			var t = this
+			this.initInterval = setInterval(function () { t.initJob() }, 10)
+		}
+		else
+		{
+			for (var ni = 0; ni < this.sorted.length; ni++)
+			{
+				var n = this.sorted[ni]
+				
+				log("Binding sync widget ", n.w, " to ", n.node)
+				n.w.bind(n.node)
+				log("... bint")
+			}
+		}
 	},
 	
 	// поиграем в треды?
-	initThread: function ()
+	initJob: function ()
 	{
 		// биндим
 		for (var ni = 0; ni < this.sorted.length; ni++)
 		{
 			var n = this.sorted[ni]
 			if (n.bint || n.error) continue
-			log("Binding widget ", n.w, " to ", n.node)
+			log("Binding async widget ", n.w, " to ", n.node)
 			
 			// блокировки не организовываем в рассчете на то,
 			// что в яваскриптах нет многопоточночти и события

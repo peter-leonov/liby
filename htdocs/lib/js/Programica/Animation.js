@@ -260,32 +260,35 @@ extend (Programica.Animation.prototype,
 
 Programica.Animation.addTimer = function (func)
 {
-	if (!Programica.Animation.timer)
-		Programica.Animation.timer = setInterval (Programica.Animation.time, 1000 / Programica.Animation.fps)
+	if (!this.timer)
+	{
+		var t = this
+		this.timer = setInterval (function () { t.time() }, 1000 / this.fps)
+	}
 	
-	return Programica.Animation.timers.push(func)
+	return this.timers.push(func)
 }
 
 Programica.Animation.delTimer = function (num)
 {
-	delete Programica.Animation.timers[num - 1]
+	delete this.timers[num - 1]
 	
-	while (Programica.Animation.timers.length && Programica.Animation.timers[Programica.Animation.timers.length-1] == null)
-		Programica.Animation.timers.pop()
+	while (this.timers.length && this.timers[this.timers.length-1] == null)
+		this.timers.pop()
 	
-	if (!Programica.Animation.timers.length)
-		clearInterval(Programica.Animation.timer),
-		Programica.Animation.timer = null
+	if (!this.timers.length)
+		clearInterval(this.timer),
+		this.timer = null
 }
 
 Programica.Animation.timers = []
 
 Programica.Animation.time = function ()
 {
-	for (var i in Programica.Animation.timers)
+	for (var i in this.timers)
 	{
-		Programica.Animation.timers[i]()
-		//try { Programica.Animation.timers[i]() } catch (x) { log3(x) }
+		this.timers[i]()
+		//try { this.timers[i]() } catch (x) { log3(x) }
 	}
 }
 

@@ -11,22 +11,39 @@ if (!window.Programica.DOM) Programica.DOM = {}
 
 Programica.debugLevel = 1
 
-function log ()
-{
-	if (Programica.debugLevel <= 0) return false
-	if (console && console.log) return console.log.apply(console, arguments)
-	
-	var str = arguments.join('')
-	return str
-}
+if (window.console && console.firebug)
+	// для Firebug
+	log = console.log
+//else if (window.console && window.console.log)
+//	// для Сафари и компании
+//	log = function () { return console.log(arguments) }
+else if (window.opera && opera.postError)
+	// для Оперов
+	log = function () { return opera.postError(arguments) }
+else
+	// для "всИЕх"
+	log = function () { return false }
+
+
+//alert(log)
+//function log ()
+//{
+//	if (Programica.debugLevel <= 0) return false
+//	if (console && console.log) return console.log(arguments)
+//	
+//	var str = arguments.join('')
+//	return str
+//}
 
 function log3 () { if (Programica.debugLevel >= 3) log.apply(this, arguments) }
 function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 
 
-if (!window.HTMLElement) window.HTMLElement = {}
-if (!HTMLElement.prototype) HTMLElement.prototype = window["[[DOMElement.prototype]]"] || {}
+//——————————————————————————————————————————————————————————————————————————————
+// Ближе к прототипу
 
+if (!window.HTMLElement) window.HTMLElement = {}
+if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('a').__proto__ || {}
 
 //——————————————————————————————————————————————————————————————————————————————
 // DOM для всех
@@ -197,8 +214,6 @@ function inherit (to, from)
 }
 
 function $ (id) { return document.getElementById(id) }
-
-if (!window.console) console = { log: function () {} }
 
 
 //——————————————————————————————————————————————————————————————————————————————
