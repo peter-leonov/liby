@@ -45,6 +45,15 @@ function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 if (!window.HTMLElement) window.HTMLElement = {}
 if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('a').__proto__ || {}
 
+
+//——————————————————————————————————————————————————————————————————————————————
+// Еще ближе к прототипу
+
+HTMLElement.prototype.hide = function () { this.style.display = 'none' }
+HTMLElement.prototype.show = function () { this.style.display = 'block' }
+
+
+
 //——————————————————————————————————————————————————————————————————————————————
 // DOM для всех
 
@@ -57,6 +66,45 @@ Programica.DOM.getElementsByClassName = function (strClass, strTag)
 	var objColl = this.getElementsByTagName(strTag);
 	if (!objColl.length && strTag == "*" && this.all) objColl = this.all;
 	
+	var arr = new Array();
+	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
+	var arrClass = strClass.split(delim);
+	
+	for (var i = 0, ilen = objColl.length; i < ilen; i++)
+	{
+		var arrObjClass = objColl[i].className.split(' ');
+		if (delim == ' ' && arrClass.length > arrObjClass.length) continue;
+		
+		var c = 0;
+		comparisonLoop:
+		for (var k = 0, klen = arrObjClass.length; k < klen; k++)
+		{
+			for (var m = 0, mlen = arrClass.length; m < mlen; m++)
+			{
+				if (arrClass[m] == arrObjClass[k]) c++;
+				if ( (delim == '|' && c == 1) || (delim == ' ' && c == mlen) )
+				{
+					arr.push(objColl[i]);
+					break comparisonLoop;
+				}
+			}
+		}
+	}
+	return arr;
+}
+
+Programica.DOM.getParentsByClassName = function (strClass, strTag)
+{
+	if (!strClass) return []
+	strTag = strTag || "*";
+	
+	var objColl = []
+	
+	var node = this
+	while ((node = node.parentNode) && node.nodeType != 9)
+		if (strTag == '*' || node.nodeName == strTag)
+			objColl.push(node)
+	log(objColl)
 	var arr = new Array();
 	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
 	var arrClass = strClass.split(delim);
@@ -141,6 +189,10 @@ if (!HTMLElement.prototype.getElementsByName)
 
 if (!document.getElementsByName)
 	document.getElementsByName = Programica.DOM.getElementsByName
+
+
+if (!HTMLElement.prototype.getParentsByClassName)
+	HTMLElement.prototype.getParentsByClassName = Programica.DOM.getParentsByClassName
 
 
 /* кривоватый фикс addEventListener(...) для IE */
