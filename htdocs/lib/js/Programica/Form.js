@@ -224,22 +224,3 @@ function runRules(rules, hash)
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -60,11 +60,13 @@ HTMLElement.prototype.show = function () { this.style.display = 'block' }
 // took from http://muffinresearch.co.uk/archives/2006/04/29/getelementsbyclassname-deluxe-edition/
 Programica.DOM.getElementsByClassName = function (strClass, strTag)
 {
-	if (!strClass) return []
 	strTag = strTag || "*";
+	strClass = strClass || "*";
 	
 	var objColl = this.getElementsByTagName(strTag);
 	if (!objColl.length && strTag == "*" && this.all) objColl = this.all;
+	
+	if (strClass == "*") return objColl
 	
 	var arr = new Array();
 	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
@@ -104,7 +106,7 @@ Programica.DOM.getParentsByClassName = function (strClass, strTag)
 	while ((node = node.parentNode) && node.nodeType != 9)
 		if (strTag == '*' || node.nodeName == strTag)
 			objColl.push(node)
-	log(objColl)
+	
 	var arr = new Array();
 	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
 	var arrClass = strClass.split(delim);
@@ -197,7 +199,16 @@ if (!HTMLElement.prototype.getParentsByClassName)
 
 /* кривоватый фикс addEventListener(...) для IE */
 if (!window.addEventListener)
-	HTMLElement.prototype.addEventListener = function (type, func, dir) { this.attachEvent('on' + type, func) },
+	HTMLElement.prototype.addEventListener = function (type, func, dir)
+	{
+		var t = this
+		var newh = function (e)
+		{
+			e.preventDefault = function () { this.returnValue = false; return true }
+			func.apply(t,[e])
+		}
+		this.attachEvent('on' + type, newh)
+	},
 	window.addEventListener = document.addEventListener = HTMLElement.prototype.addEventListener
 
 if (!HTMLElement.prototype.addClassName)
@@ -208,34 +219,6 @@ if (!HTMLElement.prototype.remClassName)
 
 //——————————————————————————————————————————————————————————————————————————————
 // Типа, прототип :)
-
-//Error.prototype.toString = function ()
-//{
-//	var arr = new Array()
-//	for (var i in this) arr.push(i + ':' + this[i])
-//	return this.message + ': {' + arr.join(', ') + '}'
-//}
-//
-//Function.prototype.toString = function () {return "function()"}
-//
-//Object.prototype.toString = function ()
-//{
-//	var arr = new Array()
-//	for (var i in this) arr.push(i + ':' + this[i])
-//	return '{' + arr.join(', ') + '}'
-//}
-//
-//Array.prototype.toString = function ()
-//{
-//	return '[' + this.join(', ') + ']'
-//}
-//
-//String.prototype.toString = function ()
-//{
-//	var str = this.replace(/\\/,'\\\\')
-//	str = str.replace(/"/,'\\"')
-//	return '"' + str + '"'
-//}
 
 // расширяем напрямик
 function extend (to, from)
@@ -259,8 +242,7 @@ function inherit (to, from)
 	to.prototype = newp
 	
 	for (var p in from)
-		if (to.prototype[p] == undefined)
-			to[p] = from[p]
+		newp[p] = from[p]
 	
 	return to
 }

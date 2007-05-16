@@ -27,7 +27,8 @@ extend (Programica.Widget,
 		{
 			var w = this.registered[wi]
 			
-			var nodes = document.getElementsByClassName(w.mainNodeClassName)
+			var nodes = document.getElementsByClassName(w.mainNodeClassName, w.mainNodeTagName)
+			
 			for (var ni = 0; ni < nodes.length; ni++)
 				stack.push({w:w, node:nodes[ni], pri:(nodes[ni].getAttribute('widget-priority') || 0)})
 		}
@@ -41,7 +42,7 @@ extend (Programica.Widget,
 		if (this.asyncBind)
 		{
 			// Пришлось усложнить механизм инициализации.
-			// Суть в том, что брузеры (фф, ие) не создают ноды в дереве
+			// Суть в том, что иногда брузеры (фф, ие) не создают ноды в дереве
 			// до тех пор, пока яваскрипт не выполнится до конца.
 			// Некоторые скрипты могут создавать ноды, на которые потом
 			// рассчитывают другие скрипты
