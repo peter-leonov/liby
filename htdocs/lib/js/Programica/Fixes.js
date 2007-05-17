@@ -53,6 +53,8 @@ Programica.Fixes =
 	/* добавляет методы и свойства из HTMLElement.prototype */
 	fixPrototype: function ()
 	{
-		if (window.extend && window.HTMLElement) extend(this, HTMLElement.prototype)
+		if (!window.extend) return
+		if (window.HTMLElement) extend(this, HTMLElement.prototype)
+		if (window.HTMLFormElement && this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
 	}
 }

@@ -20,7 +20,7 @@ Programica.FormPoster.prototype.Handler = function (node)
 		Programica.FormPoster.bakeEvents(this, ["onload", "onsuccess", "onerror"])
 		
 		// собственно отправляем данные
-		with (aPost(this.action, form2hash(this)))
+		with (aPost(this.action, this.data()))
 		{
 			onLoad		= function () { form.onload({request:this}) }
 			onSuccess	= function () { form.onsuccess({request:this}) }

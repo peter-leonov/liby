@@ -42,9 +42,11 @@ function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 //——————————————————————————————————————————————————————————————————————————————
 // Ближе к прототипу
 
-if (!window.HTMLElement) window.HTMLElement = {}
-if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('a').__proto__ || {}
+if (!window.HTMLElement) HTMLElement = {}
+if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('div').__proto__ || {}
 
+if (!window.HTMLFormElement) HTMLFormElement = {}
+if (!HTMLFormElement.prototype) HTMLFormElement.prototype = document.createElement('form').__proto__ || {}
 
 //——————————————————————————————————————————————————————————————————————————————
 // Еще ближе к прототипу
