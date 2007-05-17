@@ -9,21 +9,21 @@ Programica.FormPoster.prototype.Handler = function (node)
 	this.mainNode = node
 	var t = this
 	
+	// поиграем
+	Programica.FormPoster.bakeEvents(node, ["onload", "onsuccess", "onerror"])
+	
 	var submit_listener = function (e)
 	{
 		// проверим, нужно ли ловить эту форму
 		if (!/^ajax$/i.test(this.getAttribute("target"))) return
 		
-		form = this
-		
-		// поиграем
-		Programica.FormPoster.bakeEvents(this, ["onload", "onsuccess", "onerror"])
+		var form = this
 		
 		// собственно отправляем данные
 		with (aPost(this.action, this.data()))
 		{
 			onLoad		= function () { form.onload({request:this}) }
-			onSuccess	= function () { form.onsuccess({request:this}) }
+			onSuccess	= function () { form.reset(); form.onsuccess({request:this}) }
 			onError		= function () { form.onerror({request:this}) }
 		}
 		
@@ -45,7 +45,7 @@ Programica.FormPoster.prototype.Handler.prototype =
 Programica.FormPoster.bakeEvents = function (node, events)
 {
 	for (var i = 0; i < events.length; i++)
-		node[events[i]] = eval("[function (event) { " + form.getAttribute(events[i]) + " }]")[0]
+		node[events[i]] = eval("[function (event) { " + node.getAttribute(events[i]) + " }]")[0]
 }
 
 
