@@ -9,14 +9,20 @@ Programica.FormPoster.prototype.Handler = function (node)
 	this.mainNode = node
 	var t = this
 	
-	// поиграем
+	// проверим, нужно ли ловить эту форму
+	if (!/^ajax$/i.test(node.getAttribute("target"))) return
+	
+	// поиграем в события
 	Programica.FormPoster.bakeEvents(node, ["onload", "onsuccess", "onerror"])
 	
-	var submit_listener = function (e)
+	/*var check_listener = function (e)
 	{
-		// проверим, нужно ли ловить эту форму
-		if (!/^ajax$/i.test(this.getAttribute("target"))) return
-		
+		//alert("check_listener")
+		e.stopPropagation()
+	}*/
+	
+	var send_listener = function (e)
+	{
 		var form = this
 		
 		// собственно отправляем данные
@@ -31,7 +37,8 @@ Programica.FormPoster.prototype.Handler = function (node)
 		e.preventDefault()
 	}
 	
-	node.addEventListener('submit', submit_listener, false)
+	//node.addEventListener('submit', check_listener, false)
+	node.addEventListener('submit', send_listener,  false)
 }
 
 
