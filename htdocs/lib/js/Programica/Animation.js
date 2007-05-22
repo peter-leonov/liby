@@ -148,11 +148,9 @@ extend (Programica.Animation.prototype,
 				this.running = false
 				Programica.Animation.delTimer(this.timer)
 			}
-			
-			return true
 		}
-		else
-			return false
+		
+		return this
 	},
 	
 	step: function ()
