@@ -1,4 +1,4 @@
-
+// example: $('form').data()
 HTMLFormElement.prototype.data = function () { return Programica.Form.form2hash(this) }
 
 Programica.Form = {}
