@@ -7,7 +7,6 @@ Programica.Animation = function (prms)
 	
 	// Дефолтные значения
 	this.transformations	= []
-	this.timeouts			= []
 	this.duration			= prms.duration || 1,
 	this.unit				= prms.unit != null ? prms.unit: 'px'
 	this.motion				= prms.motion
@@ -15,8 +14,6 @@ Programica.Animation = function (prms)
 	this.paused				= false
 	this.complete			= false
 	this.obj				= prms.obj || false
-	this.intervals			= {}
-	this.timeouts			= {}
 	this.pmcEvents			= []
 	this.forceLast			= false
 	this.animationTypes		= Programica.Animation.Types
@@ -83,71 +80,55 @@ HTMLElement.prototype.animate = function (motion, props, duration, unit)
 	})
 }
 
-Programica.Animation.prototype = new Programica.Abstract.EventedObject ()
+Programica.Abstract.Events = function () { /* пусто */ }
+
+Programica.Animation.prototype = new Programica.Abstract.Events ()
 
 extend (Programica.Animation.prototype,
 {
-	start: function (delay)
+	start: function ()
 	{
 		// Если анимация уже запущена
 		if (this.isRunning() && !this.isPaused())
 			return false
 		
-		this.clearTimeout('start')
+		if (!this.dispatchEvent('beforeStart')) return false
 		
-		if (delay)
+		// пока по одной анимации на объект
+		if (this.obj.animation) this.obj.animation.stop()
+		this.obj.animation = this
+		
+		log2('Programica.Animation.start()')
+		
+		this.running = true
+		this.complete = false
+		this.frame = 0
+		
+		this.totalFrames = this.duration * Programica.Animation.fps
+		
+		for (var i in this.transformations)
 		{
-			var o = this
-			this.setTimeout('start',  function () { o.start() }, delay)
+			var t = this.transformations[i]
+			if (t.begin == null) t.begin = this.getIntegerStyleProperty(t.property)
+			t.step = ( t.end - t.begin ) / this.totalFrames
 		}
-		else
-		{
-			if (!this.dispatchEvent('beforeStart')) return false
-			
-			// пока по одной анимации на объект
-			if (this.obj.animation) this.obj.animation.stop()
-			this.obj.animation = this
-			
-			log2('Programica.Animation.start()')
-			
-			this.running = true
-			this.complete = false
-			this.frame = 0
-			
-			this.totalFrames = this.duration * Programica.Animation.fps
-			
-			for (var i in this.transformations)
-			{
-				var t = this.transformations[i]
-				if (t.begin == null) t.begin = this.getIntegerStyleProperty(t.property)
-				t.step = ( t.end - t.begin ) / this.totalFrames
-			}
-			
-			var o = this
-			this.timer = Programica.Animation.addTimer(function () { o.step() })
-			
-			this.dispatchEvent('start')
-		}
+		
+		var o = this
+		this.timer = Programica.Animation.addTimer( function () { o.step() } )
+		
+		this.dispatchEvent('start')
 		
 		return this
 	},
 
-	stop: function (delay)
+	stop: function ()
 	{
 		if (this.isRunning())
 		{
-			if (delay)
-			{
-				var o = this
-				this.setTimeout('stop', function () { o.stop() }, delay)
-			}
-			else
-			{
-				this.obj.animation = null
-				this.paused = true
-				this.running = false
-				Programica.Animation.delTimer(this.timer)
-			}
+			this.obj.animation = null
+			this.paused = true
+			this.running = false
+			Programica.Animation.delTimer(this.timer)
 		}
 		
 		return this
@@ -435,3 +416,69 @@ Programica.Animation.Types =
 			return Math.easeOutBounce (t*2-d, 0, c, d) * .5 + c*.5 + b
 	}
 }
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Простая событийная модель
+
+
+// событийная модель
+extend (Programica.Abstract.Events.prototype,
+{
+	// распространяем событие
+	dispatchEvent: function (eventName)
+	{
+		if (this.pmcEvents[eventName])
+			for (var i in this.pmcEvents[eventName])
+				if (this.pmcEvents[eventName][i])
+					if (!this.pmcEvents[eventName][i].call(this,eventName))
+						return false
+		
+		return true
+	},
+	
+	// параметр capture сейчас везде всего лишь декорация
+	
+	// добавляем обработчик
+	addEventListener: function (eventName, handler, capture)
+	{
+		if (this.searchEventListenerIndex(eventName, handler, capture) >= 0) return handler
+		
+		if (this.pmcEvents[eventName])
+			this.pmcEvents[eventName].push(handler)
+		else
+			this.pmcEvents[eventName] = [handler]
+		
+		return handler
+	},
+	
+	// ищем индекс обработчика
+	searchEventListenerIndex: function (eventName, handler, capture)
+	{
+		if (this.pmcEvents[eventName])
+			for (var i in this.pmcEvents[eventName])
+				if (this.pmcEvents[eventName][i] == handler)
+					return i
+		
+		return -1
+	},
+	
+	// ищем функцию обработчика
+	searchEventListener: function (eventName, handler, capture)
+	{
+		var n = this.searchEventListenerIndex(eventName, handler, capture)
+		if (n < 0) return null
+		
+		return this.pmcEvents[eventName][n]
+	},
+	
+	// удаляем обработчик
+	removeEventListener: function (eventName, handler, capture)
+	{
+		var n = this.searchEventListenerIndex(eventName, handler, capture)
+		if (n < 0) return false
+		
+		delete this.pmcEvents[eventName][n]
+		return false
+	}
+})

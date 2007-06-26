@@ -7,21 +7,21 @@
 	
 	<script type="text/javaScript" src="/lib/Programica.js"></script>
 	
-	<script type="text/javaScript" src="/lib/js/Programica/Init.js"></script>
-	<script type="text/javaScript" src="/lib/js/Programica/Abstract.js"></script>
-	<script type="text/javaScript" src="/lib/js/Programica/Animation.js"></script>
-	<script type="text/javaScript" src="/lib/js/Programica/Request.js"></script>
-	<script type="text/javaScript" src="/lib/js/Programica/Form.js"></script>
-	<script type="text/javaScript" src="/lib/js/Programica/Widget.js"></script>
+	<script type="text/javaScript" src="/lib/Programica/Init.js"></script>
+	<script type="text/javaScript" src="/lib/Programica/Abstract.js"></script>
+	<script type="text/javaScript" src="/lib/Programica/Animation.js"></script>
+	<script type="text/javaScript" src="/lib/Programica/Request.js"></script>
+	<script type="text/javaScript" src="/lib/Programica/Form.js"></script>
+	<script type="text/javaScript" src="/lib/Programica/Widget.js"></script>
 	
 	<!-- ну, типа, виджеты -->
-	<script src="/lib/js/Programica/RollingImages.js"  type="text/javaScript"></script>
-	<script src="/lib/js/Programica/Calendar.js"       type="text/javaScript"></script>
-	<script src="/lib/js/Programica/FormPoster.js"     type="text/javaScript"></script>
+	<script src="/lib/Programica/RollingImages.js"  type="text/javaScript"></script>
+	<script src="/lib/Programica/Calendar.js"       type="text/javaScript"></script>
+	<script src="/lib/Programica/FormPoster.js"     type="text/javaScript"></script>
 	
 	
 	<!--[if IE]>
-		<script type="text/javascript" src="/lib/js/Programica/Fixes.js"></script>
+		<script type="text/javascript" src="/lib/Programica/Fixes.js"></script>
 		<style>* { behavior: expression(Programica.Fixes.all.apply(this)) }</style>
 	<![endif]-->
 	<style>
@@ -32,8 +32,8 @@
 	.prev, .next { cursor: pointer; color: red;  /*для сафари { */ position: relative; z-index: 1; /* } */ }
 	.disabled { cursor: default !important; color: silver !important }
 	
-	.photos { width: 420px; background-color: silver; }
-	.photos .viewport { width: 420px; height: 200px; overflow: hidden; position: relative; }
+	.photos { width: 420px; }
+	.photos .viewport { background-color: silver; width: 420px; height: 200px; overflow: hidden; position: relative; }
 	.photos img { width: 420px; height: 200px; margin: 0 2px 2px 0; float: left; }
 	
 	
