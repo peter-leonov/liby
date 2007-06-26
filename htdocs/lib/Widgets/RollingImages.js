@@ -1,4 +1,6 @@
 
+//require('/lib/Programica/Widget.js', '/lib/Programica/Animaion.js')
+
 Programica.RollingImages = function () {}
 
 Programica.RollingImages.prototype = new Programica.Widget()
@@ -150,3 +152,6 @@ Programica.RollingImages.prototype.Handler.prototype =
 }
 
 Programica.Widget.register(new Programica.RollingImages())
+
+
+log2("Widget/RollingImages.js loaded")

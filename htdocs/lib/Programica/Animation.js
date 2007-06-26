@@ -80,6 +80,7 @@ HTMLElement.prototype.animate = function (motion, props, duration, unit)
 	})
 }
 
+if (!window.Programica.Abstract) Programica.Abstract = {}
 Programica.Abstract.Events = function () { /* пусто */ }
 
 Programica.Animation.prototype = new Programica.Abstract.Events ()
@@ -482,3 +483,6 @@ extend (Programica.Abstract.Events.prototype,
 		return false
 	}
 })
+
+
+log2("Programica/Animation.js loaded")

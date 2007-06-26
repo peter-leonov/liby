@@ -58,3 +58,22 @@ Programica.Fixes =
 		if (window.HTMLFormElement && this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
 	}
 }
+
+
+/* кривоватый фикс addEventListener(...) и preventDefault() для IE */
+if (!window.addEventListener && window.attachEvent)
+{
+	HTMLElement.prototype.addEventListener = function (type, func, dir)
+	{
+		var t = this
+		var newh = function (e)
+		{
+			e.preventDefault = function () { this.returnValue = false; return true }
+			func.apply(t,[e])
+		}
+		this.attachEvent('on' + type, newh)
+	},
+	window.addEventListener = document.addEventListener = HTMLElement.prototype.addEventListener
+}
+
+document.write('<style> * { behavior: expression(Programica.Fixes.all.apply(this)) } </style>')

@@ -276,3 +276,6 @@ function sHead (url, params)
 	
 	return r
 }
+
+
+log2("Programica/Request.js loaded")

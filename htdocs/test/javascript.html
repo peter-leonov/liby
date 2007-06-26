@@ -3,20 +3,10 @@
 
 	<head>
 		<title></title>
+		
+		<script type="text/javaScript" src="/lib/Programica.js"></script>
+		
 		<script>
-			
-			function require ()
-			{
-				for (var i = 0; i < arguments.length; i++)
-				{
-					if (!require.sripts[arguments[i]])
-					{
-						document.write('<script src="' + arguments[i] + '"></scr'+'ipt>');
-						require.sripts[arguments[i]] = 1
-					}
-				}
-			}
-			require.sripts = []
 			
 			function ok (res, str, out)
 			{
@@ -39,6 +29,9 @@
 			
 		</script>
 		
+		<!--<script type="text/javaScript" src="require-external.js"></script>-->
+		<script type="text/javaScript" src="external.js"></script>
+		
 		<script script-param="value">
 			
 			var arr = [0]
@@ -46,6 +39,8 @@
 			require('require-2.js')
 			require('require-3.js')
 			arr[4] = 4
+			
+			ok( (arr[0] == 0) && (arr[1] == 1) && (arr[2] == 2) && (arr[3] == 3) && (arr[4] == 4), 'head require must be synch', arr)
 			
 			var once = [0]
 			require('require-once.js')
@@ -62,7 +57,9 @@
 		
 		//ok(script_param == 'script-param', '&lt;script script-param="value"&gt;', script_param)
 		
-		ok( (arr[0] == 0) && (arr[1] == 1) && (arr[2] == 2) && (arr[3] == 3) && (arr[4] == 4), 'head require must be synch', arr)
+		//ok( (exarr[0] == 0) && (exarr[1] == 1) && (exarr[2] == 2) && (exarr[3] == 3) && (exarr[4] == 4), 'external head require must be synch', exarr)
+		
+		
 		
 		var arr = [0]
 		require('require-1.js')

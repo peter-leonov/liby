@@ -34,7 +34,7 @@ extend (Programica.Widget,
 		}
 		
 		
-		log("Registered widgets: ", this.registered)
+		log2("Registered widgets: ", this.registered)
 		
 		// ранжируем
 		this.sorted = stack.sort(this.sortby.pri)
@@ -115,3 +115,5 @@ Programica.Widget.prototype =
 	
 	toString: function () { return '[object ' + this.klass + ']' }
 }
+
+log2("Programica/Widget.js loaded")

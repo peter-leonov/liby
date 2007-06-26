@@ -1,9 +1,26 @@
 
 // заранее объявляем «пространства имен»
 
-if (!window.Programica) var Programica = {}
-if (!window.Programica.Abstract) Programica.Abstract = {}
+if (!window.Programica) window.Programica = {}
 if (!window.Programica.DOM) Programica.DOM = {}
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Безобидные полезности
+
+function require ()
+{
+	for (var i = 0; i < arguments.length; i++)
+	{
+		if (!require.sripts[arguments[i]])
+		{
+			log2('require "' + arguments[i] + '"')
+			document.write('<script type="text/javascript" src="' + arguments[i] + '"></scr'+'ipt>');
+			require.sripts[arguments[i]] = 1
+		}
+	}
+}
+require.sripts = []
 
 
 //——————————————————————————————————————————————————————————————————————————————
@@ -25,16 +42,6 @@ else
 	log = function () { return false }
 
 
-//alert(log)
-//function log ()
-//{
-//	if (Programica.debugLevel <= 0) return false
-//	if (console && console.log) return console.log(arguments)
-//	
-//	var str = arguments.join('')
-//	return str
-//}
-
 function log3 () { if (Programica.debugLevel >= 3) log.apply(this, arguments) }
 function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 
@@ -48,181 +55,11 @@ if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('div'
 if (!window.HTMLFormElement) HTMLFormElement = {}
 if (!HTMLFormElement.prototype) HTMLFormElement.prototype = document.createElement('form').__proto__ || {}
 
-//——————————————————————————————————————————————————————————————————————————————
-// Еще ближе к прототипу
-
+// Еще ближе
 HTMLElement.prototype.hide = function () { this.style.display = 'none' }
 HTMLElement.prototype.show = function () { this.style.display = 'block' }
 
-
-
-//——————————————————————————————————————————————————————————————————————————————
-// DOM для всех
-
-// took from http://muffinresearch.co.uk/archives/2006/04/29/getelementsbyclassname-deluxe-edition/
-Programica.DOM.getElementsByClassName = function (strClass, strTag)
-{
-	strTag = strTag || "*";
-	strClass = strClass || "*";
-	
-	var objColl = this.getElementsByTagName(strTag);
-	if (!objColl.length && strTag == "*" && this.all) objColl = this.all;
-	
-	if (strClass == "*") return objColl
-	
-	var arr = new Array();
-	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
-	var arrClass = strClass.split(delim);
-	
-	for (var i = 0, ilen = objColl.length; i < ilen; i++)
-	{
-		var arrObjClass = objColl[i].className.split(' ');
-		if (delim == ' ' && arrClass.length > arrObjClass.length) continue;
-		
-		var c = 0;
-		comparisonLoop:
-		for (var k = 0, klen = arrObjClass.length; k < klen; k++)
-		{
-			for (var m = 0, mlen = arrClass.length; m < mlen; m++)
-			{
-				if (arrClass[m] == arrObjClass[k]) c++;
-				if ( (delim == '|' && c == 1) || (delim == ' ' && c == mlen) )
-				{
-					arr.push(objColl[i]);
-					break comparisonLoop;
-				}
-			}
-		}
-	}
-	return arr;
-}
-
-Programica.DOM.getParentsByClassName = function (strClass, strTag)
-{
-	if (!strClass) return []
-	strTag = strTag || "*";
-	
-	var objColl = []
-	
-	var node = this
-	while ((node = node.parentNode) && node.nodeType != 9)
-		if (strTag == '*' || node.nodeName == strTag)
-			objColl.push(node)
-	
-	var arr = new Array();
-	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
-	var arrClass = strClass.split(delim);
-	
-	for (var i = 0, ilen = objColl.length; i < ilen; i++)
-	{
-		var arrObjClass = objColl[i].className.split(' ');
-		if (delim == ' ' && arrClass.length > arrObjClass.length) continue;
-		
-		var c = 0;
-		comparisonLoop:
-		for (var k = 0, klen = arrObjClass.length; k < klen; k++)
-		{
-			for (var m = 0, mlen = arrClass.length; m < mlen; m++)
-			{
-				if (arrClass[m] == arrObjClass[k]) c++;
-				if ( (delim == '|' && c == 1) || (delim == ' ' && c == mlen) )
-				{
-					arr.push(objColl[i]);
-					break comparisonLoop;
-				}
-			}
-		}
-	}
-	return arr;
-}
-
-Programica.DOM.getElementsByName = function (strName, strTag)
-{
-	strTag = strTag || "*";
-	
-	var objColl = this.getElementsByTagName(strTag);
-	if (!objColl.length && strTag == "*" && this.all) objColl = this.all;
-	
-	var arr = new Array();
-	var delim = strName.indexOf('|') != -1  ? '|' : ' ';
-	var arrName = strName.split(delim);
-	
-	for (var i = 0, ilen = objColl.length; i < ilen; i++)
-	{
-		var objName = objColl[i].getAttribute('name');
-		if (!objName) continue;
-		
-		var c = 0;
-		comparisonLoop:
-		for (var m = 0, mlen = arrName.length; m < mlen; m++)
-		{
-			if (arrName[m] == objName) c++;
-			if (( delim == '|' && c == 1) || (delim == ' ' && c == arrName.length))
-			{
-				arr.push(objColl[i]);
-				break comparisonLoop;
-			}
-		}
-	}
-	return arr;
-}
-
-Programica.DOM.addClassName = function (cn)
-{
-	this.remClassName(cn)
-	this.className += ' ' + cn
-	return cn
-}
-
-Programica.DOM.remClassName = function (cn)
-{
-	this.className = this.className.replace(new RegExp(' +' + cn, "g"), "")
-	return cn
-}
-
-
-
-if (!HTMLElement.prototype.getElementsByClassName)
-	HTMLElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
-
-if (!document.getElementsByClassName)
-	document.getElementsByClassName = Programica.DOM.getElementsByClassName
-
-if (!HTMLElement.prototype.getElementsByName)
-	HTMLElement.prototype.getElementsByName = Programica.DOM.getElementsByName
-
-if (!document.getElementsByName)
-	document.getElementsByName = Programica.DOM.getElementsByName
-
-
-if (!HTMLElement.prototype.getParentsByClassName)
-	HTMLElement.prototype.getParentsByClassName = Programica.DOM.getParentsByClassName
-
-
-/* кривоватый фикс addEventListener(...) для IE */
-if (!window.addEventListener)
-	HTMLElement.prototype.addEventListener = function (type, func, dir)
-	{
-		var t = this
-		var newh = function (e)
-		{
-			e.preventDefault = function () { this.returnValue = false; return true }
-			func.apply(t,[e])
-		}
-		this.attachEvent('on' + type, newh)
-	},
-	window.addEventListener = document.addEventListener = HTMLElement.prototype.addEventListener
-
-if (!HTMLElement.prototype.addClassName)
-	HTMLElement.prototype.addClassName = Programica.DOM.addClassName
-
-if (!HTMLElement.prototype.remClassName)
-	HTMLElement.prototype.remClassName = Programica.DOM.remClassName
-
-//——————————————————————————————————————————————————————————————————————————————
-// Типа, прототип :)
-
-// расширяем напрямик
+// Напрямик
 function extend (to, from)
 {
 	if (!to || !from) return null
@@ -249,10 +86,19 @@ function inherit (to, from)
 	return to
 }
 
-function $ (id) { return document.getElementById(id) }
+function $  (id) { return document.getElementById(id) }
+function $$ (cn) { return document.getElementsByClassName(cn) }
 
 
 //——————————————————————————————————————————————————————————————————————————————
 
+if (/MSIE/.test(navigator.userAgent))
+	require('/lib/Programica/IEFixes.js')
 
-log("Programica.js loaded")
+require('/lib/Programica/DOM.js')
+require('/lib/Programica/Animation.js')
+require('/lib/Programica/Request.js')
+require('/lib/Programica/Form.js')
+require('/lib/Programica/Widget.js')
+
+log2("Programica.js loaded")
