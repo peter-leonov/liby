@@ -37,6 +37,7 @@
 	.photos .viewport { background-color: silver; width: 420px; height: 200px; overflow: hidden; position: relative; }
 	.photos img { width: 420px; height: 200px; margin: 0 2px 2px 0; float: left; }
 	
+	.opacity-gradient img { width: 100px; float: left; }
 	
 	</style>
 </head>
@@ -62,9 +63,9 @@
 	<br/>
 	
 	<p>Горизонтально:</p>
-	<div class="photos programica-rolling-images" animation-type="easeOutBounce">
+	<div class="photos programica-rolling-images" animation-type="">
 		<div class="viewport">
-			<div style="width:10000px">
+			<div style="width:10000px; padding:0 1000px;">
 				<img class="point" src="i/1.jpg" alt="" />
 				<img class="point" src="i/2.jpg" alt="" />
 				<img class="point" src="i/3.jpg" alt="" />
@@ -102,11 +103,26 @@
 	
 	
 	<fieldset><legend>Прозрачность</legend>
-		<img class="point" src="i/9.jpg" alt="" onclick="this.animate('linearTween', {opacity: [1,0]}, 0.5).start()" style="cursor:pointer"/>
+		<img style="cursor:pointer" src="i/9.jpg" alt="" onclick="this.animate('linearTween', {opacity: [1,0]}, 2).start()" />
 		
 		<br/>
 		
-		<h2 style="opacity:0.2">Превед!</h2>
+		<h2 style="cursor:pointer; opacity:0.5; background-color: white" onclick="this.animate('linearTween', {opacity: [0]}, 0.5).start()">Полупрозрачный превед!</h2>
+		
+		<br/>
+		<div class="opacity-gradient">
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.0" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.1" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.2" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.3" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.4" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.5" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.6" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.7" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.8" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.9" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:1.0" />
+		</div>
 	</fieldset>
 	<br/>
 	

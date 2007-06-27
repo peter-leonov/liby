@@ -84,10 +84,14 @@ if (!window.addEventListener && window.attachEvent)
 {
 	HTMLElement.prototype.addEventListener = function (type, func, dir)
 	{
+		if (type == 'DOMMouseScroll')
+			type = 'mousewheel'
+		
 		var t = this
 		var newh = function (e)
 		{
 			e.preventDefault = function () { this.returnValue = false; return true }
+			e.detail = -e.wheelDelta
 			func.apply(t,[e])
 		}
 		this.attachEvent('on' + type, newh)

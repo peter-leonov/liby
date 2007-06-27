@@ -204,7 +204,7 @@ extend (Programica.Animation.prototype,
 			return this.obj[p]
 		}
 		else
-			return parseInt( this.obj.style[p] ) || 0
+			return parseFloat(this.obj.style[p]) || 0
 	},
 	
 	setIntegerStyleProperty: function (stylePropertyName, value)
