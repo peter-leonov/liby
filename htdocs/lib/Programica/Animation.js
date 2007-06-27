@@ -218,14 +218,10 @@ extend (Programica.Animation.prototype,
 		{
 			this.obj[ stylePropertyName ] = Math.round( value )
 		}
-		/*else if (stylePropertyName == "opacity")
+		else if (stylePropertyName == "opacity")
 		{
 			this.obj.style[ stylePropertyName ] = value
 		}
-		else if (!this.unit)
-		{
-			this.obj.style[ stylePropertyName ] = value
-		}*/
 		else if ( this.unit == 'em' )
 		{
 			this.obj.style[ stylePropertyName ] = Math.round( value*100 )/100 + this.unit

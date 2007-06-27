@@ -26,6 +26,10 @@
 	
 	br { clear: both; margin: 1.5em;}
 	
+	img { opacity: 0.5 }
+	
+	fieldset { float: left; width: 40%; margin: 2%; padding: 1%; }
+	
 	.prev { float: left; }
 	.next { float: right; }
 	.prev, .next { cursor: pointer; color: red;  /*для сафари { */ position: relative; z-index: 1; /* } */ }
@@ -39,6 +43,7 @@
 	</style>
 </head>
 <body>
+	<fieldset><legend>RollingImages</legend>
 	<p>Вертикально:</p>
 	<div class="photos programica-rolling-images" animation-type="easeOutBounce">
 		<div class="viewport">
@@ -95,7 +100,11 @@
 		<a class="prev">← предыдущая</a>
 		<a class="next">следующая →</a>
 	</div>
-	
+	</fieldset>
+	<fieldset><legend>Прозрачность</legend>
+	<img class="point" src="i/9.jpg" alt="" onclick="this.animate('linearTween', {opacity: [1,0]}, 0.5).start()" style="cursor:pointer"/>
+	</fieldset>
 	<br/>
+	
 </body>
 </html>

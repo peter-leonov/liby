@@ -7,6 +7,9 @@ Programica.Fixes =
 	{
 		this.runtimeStyle.behavior = 'none'
 		
+		this.onpropertychange = Programica.Fixes.onpropertychange
+		
+		Programica.Fixes.fixOpacity.apply(this)
 		Programica.Fixes.fixPrototype.apply(this)
 		Programica.Fixes.fixTitle.apply(this)
 		
@@ -24,8 +27,23 @@ Programica.Fixes =
 		}
 	},
 	
+	onpropertychange: function (e)
+	{
+		
+		if (event.propertyName == 'style.opacity')
+		{
+			//var str; for (var i in this) str += i + ' ' + this[i] + "\n"; alert(str)
+			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity*100) + ",style=0)"
+		}
+	},
+	
 	//——————————————————————————————————————————————————————————————————————————
 	
+	fixOpacity: function ()
+	{
+		if (this.currentStyle.opacity)
+			this.style.opacity = this.currentStyle.opacity
+	},
 	
 	fixPng: function ()
 	{
