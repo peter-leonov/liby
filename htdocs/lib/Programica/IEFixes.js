@@ -32,8 +32,7 @@ Programica.Fixes =
 		
 		if (event.propertyName == 'style.opacity')
 		{
-			//var str; for (var i in this) str += i + ' ' + this[i] + "\n"; alert(str)
-			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity*100) + ",style=0)"
+			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
 			this.style.zoom = 1
 		}
 	},
@@ -91,7 +90,7 @@ if (!window.addEventListener && window.attachEvent)
 		var newh = function (e)
 		{
 			e.preventDefault = function () { this.returnValue = false; return true }
-			e.detail = -e.wheelDelta
+			e.detail = - e.wheelDelta / 120
 			func.apply(t,[e])
 		}
 		this.attachEvent('on' + type, newh)
