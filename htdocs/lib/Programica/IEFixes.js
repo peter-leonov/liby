@@ -34,6 +34,7 @@ Programica.Fixes =
 		{
 			//var str; for (var i in this) str += i + ' ' + this[i] + "\n"; alert(str)
 			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity*100) + ",style=0)"
+			this.style.zoom = 1
 		}
 	},
 	
