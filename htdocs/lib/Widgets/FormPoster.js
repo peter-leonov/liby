@@ -26,7 +26,7 @@ Programica.FormPoster.prototype.Handler = function (node)
 		var form = this
 		
 		// собственно отправляем данные
-		with (aPost(this.action, this.data()))
+		with (aPost(this.getAttribute('action'), this.data()))
 		{
 			onLoad		= function () { form.onload({request:this}) }
 			onSuccess	= function () { form.reset(); form.onsuccess({request:this}) }
