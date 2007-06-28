@@ -24,14 +24,14 @@ Programica.RollingImages.prototype.Handler = function (node)
 	
 	if (this.aPrev)
 	{
-		this.aPrev.onmousedown		= function () { t.goPrev(); t.prevInt = setInterval(function () { t.goPrev() }, t.getDuration() * 1000 * 0.5 + 150) }
+		this.aPrev.onmousedown		= function () { clearInterval(t.nextInt); clearInterval(t.prevInt); t.goPrev(); t.prevInt = setInterval(function () { t.goPrev() }, t.getDuration() * 1000 * 0.5 + 150) }
 		this.aPrev.onmouseup		= function () { clearInterval(t.prevInt) }
 		this.aPrev.onselectstart	= function () { return false }
 	}
 	
 	if (this.aNext)
 	{
-		this.aNext.onmousedown		= function () { t.goNext(); t.nextInt = setInterval(function () { t.goNext() }, t.getDuration() * 1000 * 0.5 + 150) }
+		this.aNext.onmousedown		= function () { clearInterval(t.prevInt); clearInterval(t.nextInt); t.goNext(); t.nextInt = setInterval(function () { t.goNext() }, t.getDuration() * 1000 * 0.5 + 150) }
 		this.aNext.onmouseup		= function () { clearInterval(t.nextInt) }
 		this.aNext.onselectstart	= function () { return false }
 	}
