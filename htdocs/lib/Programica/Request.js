@@ -49,7 +49,7 @@ Programica.Request = function (prms)
 	this.lastRequestObject = null
 }
 
-Programica.Request.paramDelimiter = ";"
+Programica.Request.paramDelimiter = "&"
 
 Programica.Request.urlEncode = function (data)
 {
@@ -68,7 +68,7 @@ Programica.Request.urlEncode = function (data)
 						for (var j in data[i])
 							arr.push(encodeURI(i) + "=" + encodeURI(data[i][j]))
 						break
-					case String:
+					default:
 						arr.push(encodeURI(i) + "=" + encodeURI(data[i]))
 						break
 				}
