@@ -44,7 +44,7 @@ Programica.Animation = function (prms)
 Programica.Animation.fps = 40
 
 //.animate('linearTween', {marginTop: [0,-50]}, 1).start()
-HTMLElement.prototype.animate = function (motion, props, duration, unit)
+XULElement.prototype.animate = HTMLElement.prototype.animate = function (motion, props, duration, unit)
 {
 	var trans = []
 	

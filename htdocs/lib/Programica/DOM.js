@@ -94,21 +94,21 @@ Programica.DOM.remClassName = function (cn)
 
 
 
+if (!XULElement.prototype.getElementsByClassName)
+	XULElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
+
 if (!HTMLElement.prototype.getElementsByClassName)
 	HTMLElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
 
 if (!document.getElementsByClassName)
 	document.getElementsByClassName = Programica.DOM.getElementsByClassName
 
-if (!HTMLElement.prototype.getElementsByName)
-	HTMLElement.prototype.getElementsByName = Programica.DOM.getElementsByName
-
-if (!document.getElementsByName)
-	document.getElementsByName = Programica.DOM.getElementsByName
-
 
 if (!HTMLElement.prototype.getParentsByClassName)
 	HTMLElement.prototype.getParentsByClassName = Programica.DOM.getParentsByClassName
+
+
+
 
 
 if (!HTMLElement.prototype.addClassName)

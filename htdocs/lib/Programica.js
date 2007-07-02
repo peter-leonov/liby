@@ -66,6 +66,7 @@ require.sripts = []
 // Ближе к прототипу
 
 if (!window.HTMLElement) HTMLElement = {}
+if (!window.XULElement) XULElement = {}
 if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('div').__proto__ || {}
 
 if (!window.HTMLFormElement) HTMLFormElement = {}
