@@ -12,20 +12,20 @@
 	<script type="text/javascript" src="/lib/Widgets/RollingImages.js"></script>
 	
 	
-	<vbox xmlns="http://www.w3.org/1999/xhtml" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" class="photos programica-rolling-images" animation-type="easeOutBounce">
-		<div class="viewport">
-			<img class="point" src="i/1.jpg" alt="" />
-			<img class="point" src="i/2.jpg" alt="" />
-			<img class="point" src="i/3.jpg" alt="" />
-			<img class="point" src="i/4.jpg" alt="" />
-			<img class="point" src="i/5.jpg" alt="" />
-			<img class="point" src="i/6.jpg" alt="" />
-			<img class="point" src="i/7.jpg" alt="" />
-			<img class="point" src="i/8.jpg" alt="" />
-			<img class="point" src="i/9.jpg" alt="" />
-		</div>
-		<xul:button class="prev" label="← предыдущая" />
-		<xul:button class="next" label="следующая →" />
+	<vbox class="photos programica-rolling-images" animation-type="easeOutBounce">
+		<scrollbox id="sb" class="viewport">
+			<image class="point" src="i/1.jpg" alt="" />
+			<image class="point" src="i/2.jpg" alt="" />
+			<image class="point" src="i/3.jpg" alt="" style="height:600px" flex="0" />
+			<image class="point" src="i/4.jpg" alt="" />
+			<image class="point" src="i/5.jpg" alt="" />
+			<image class="point" src="i/6.jpg" alt="" />
+			<image class="point" src="i/7.jpg" alt="" />
+			<image class="point" src="i/8.jpg" alt="" />
+			<image class="point" src="i/9.jpg" alt="" />
+		</scrollbox>
+		<button class="prev" label="← предыдущая" />
+		<button class="next" label="следующая →" />
 	</vbox>
 	
 </window>

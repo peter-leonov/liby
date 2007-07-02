@@ -29,6 +29,9 @@ Programica.Animation = function (prms)
 			this.motion = null
 	}
 	
+	if (this.obj.boxObject)
+		this.boxInterface = this.obj.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
+	
 	// Трансформации, если заданы
 	if (prms.transformations)
 		for (var i in prms.transformations)
@@ -199,36 +202,56 @@ extend (Programica.Animation.prototype,
 		if (p == "top" && !this.obj.style[p]) return this.obj.offsetTop
 		if (p == "left" && !this.obj.style[p]) return this.obj.offsetLeft
 		
-		if (/scroll/.test(p))
+		if (p == 'scrollTop' && this.boxInterface)
 		{
-			return this.obj[p]
+			var h = {}
+			this.boxInterface.getPosition({},h)
+			return h.value
 		}
+		else if (p == 'scrollLeft' && this.boxInterface)
+		{
+			var w = {}
+			this.boxInterface.getPosition(w,{})
+			return w.value
+		}
+		else if (/scroll/.test(p))
+			return this.obj[p]
 		else
 			return parseFloat(this.obj.style[p]) || 0
 	},
 	
-	setIntegerStyleProperty: function (stylePropertyName, value)
+	setIntegerStyleProperty: function (p, value)
 	{
-		log3("setIntegerStyleProperty("+stylePropertyName+","+value+")")
-		if (/color/.test(stylePropertyName))
+		log3("setIntegerStyleProperty(" + p + "," + value + ")")
+		
+		if (/color/.test(p))
 		{
-			this.obj.style[ stylePropertyName ] = 'rgb('+parseInt(value)+','+parseInt(value)+','+parseInt(value)+')'
+			this.obj.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
 		}
-		else if (/scroll/.test(stylePropertyName))
+		else if (p == 'scrollTop' && this.boxInterface)
 		{
-			this.obj[ stylePropertyName ] = Math.round( value )
+			this.boxInterface.scrollTo(0,Math.round(value))
 		}
-		else if (stylePropertyName == "opacity")
+		else if (p == 'scrollLeft' && this.boxInterface)
 		{
-			this.obj.style[ stylePropertyName ] = value
+			this.boxInterface.scrollTo(Math.round(value),0)
+		}
+		else if (/scroll/.test(p))
+		{
+			// //Math.round(value)
+			this.obj[p] = Math.round(value)
+		}
+		else if (p == "opacity")
+		{
+			this.obj.style[p] = value
 		}
 		else if ( this.unit == 'em' )
 		{
-			this.obj.style[ stylePropertyName ] = Math.round( value*100 )/100 + this.unit
+			this.obj.style[p] = Math.round( value*100 )/100 + this.unit
 		}
 		else
 		{
-			this.obj.style[ stylePropertyName ] = Math.round( value ) + this.unit
+			this.obj.style[p] = Math.round( value ) + this.unit
 		}
 	},
 	

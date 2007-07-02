@@ -97,11 +97,11 @@ Programica.RollingImages.prototype.Handler.prototype =
 			
 			case 'left-top':
 				// лево верх
-				var left = node.offsetLeft
-				var top  = node.offsetTop
+				var left = node.boxObject ? node.boxObject.x : node.offsetLeft
+				var top  = node.boxObject ? node.boxObject.y : node.offsetTop
 				break
 			
-			case 'right-buttom':
+			case 'right-bottom':
 				// право низ
 				var left = node.offsetLeft + node.offsetWidth  - this.viewport.offsetWidth
 				var top  = node.offsetTop  + node.offsetHeight - this.viewport.offsetHeight
@@ -111,7 +111,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 				log('Unknown animation-align type: ' + this.mainNode.getAttribute('animation-align'))
 		}
 		
-		var trans = {scrollTop:  [top], scrollLeft: [left]}
+		var trans = {scrollTop: [top], scrollLeft: [left]}
 		
 		{
 			var scale = this.viewport.getAttribute("scale")
