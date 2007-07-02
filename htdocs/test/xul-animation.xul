@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+    id="findfile-window"
+    title="Немножко тестов анимации"
+    orient="horizontal"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="text/javascript" src="/lib/Programica.js"></script>
+	<script type="text/javascript" src="/lib/Widgets/RollingImages.js"></script>
+	
+	<style>
+	/*body
+	{
+		background: url('/n.gif') no-repeat;
+		background-attachment: fixed;
+	}*/
+	
+	br { clear: both; margin: 1.5em;}
+	
+	fieldset { float: left; width: 40%; margin: 2%; padding: 1%; }
+	
+	.prev { float: left; }
+	.next { float: right; }
+	.prev, .next { cursor: pointer; color: red;  /*для сафари { */ position: relative; z-index: 1; /* } */ }
+	.disabled { cursor: default !important; color: silver !important }
+	
+	.photos { width: 420px; }
+	.photos .viewport { background-color: silver; width: 420px; height: 200px; overflow: hidden; position: relative; }
+	.photos img { width: 420px; height: 200px; margin: 0 2px 2px 0; float: left; }
+	
+	.opacity-gradient img { width: 100px; float: left; }
+	
+	</style>
+	
+	
+	<div class="photos programica-rolling-images" animation-type="easeOutBounce">
+		<div class="viewport">
+			<img class="point" src="i/1.jpg" alt="" />
+			<img class="point" src="i/2.jpg" alt="" />
+			<img class="point" src="i/3.jpg" alt="" />
+			<img class="point" src="i/4.jpg" alt="" />
+			<img class="point" src="i/5.jpg" alt="" />
+			<img class="point" src="i/6.jpg" alt="" />
+			<img class="point" src="i/7.jpg" alt="" />
+			<img class="point" src="i/8.jpg" alt="" />
+			<img class="point" src="i/9.jpg" alt="" />
+		</div>
+		<a class="prev">← предыдущая</a>
+		<a class="next">следующая →</a>
+	</div>
+	
+	<!--<fieldset><legend>Прозрачность</legend>
+		<img style="cursor:pointer" src="i/9.jpg" alt="" onclick="this.animate('linearTween', {opacity: [1,0]}, 2).start()" />
+		
+		<br/>
+		
+		<h2 style="cursor:pointer; opacity:0.5; background-color: white" onclick="this.animate('linearTween', {opacity: [0]}, 0.5).start()">Полупрозрачный превед!</h2>
+		
+		<br/>
+		<div class="opacity-gradient">
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.0" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.1" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.2" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.3" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.4" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.5" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.6" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.7" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.8" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:0.9" />
+			<img class="point" src="i/8.jpg" alt="" style="opacity:1.0" />
+		</div>
+	</fieldset>-->
+	
+</window>

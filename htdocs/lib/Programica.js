@@ -6,24 +6,6 @@ if (!window.Programica.DOM) Programica.DOM = {}
 
 
 //——————————————————————————————————————————————————————————————————————————————
-// Безобидные полезности
-
-function require ()
-{
-	for (var i = 0; i < arguments.length; i++)
-	{
-		if (!require.sripts[arguments[i]])
-		{
-			log2('require "' + arguments[i] + '"')
-			document.write('<script type="text/javascript" src="' + arguments[i] + '"></scr'+'ipt>');
-			require.sripts[arguments[i]] = 1
-		}
-	}
-}
-require.sripts = []
-
-
-//——————————————————————————————————————————————————————————————————————————————
 // Логи
 
 Programica.debugLevel = 1
@@ -44,6 +26,40 @@ else
 
 function log3 () { if (Programica.debugLevel >= 3) log.apply(this, arguments) }
 function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
+
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Безобидные полезности
+
+Programica.get = function (url) { var r = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Msxml2.XMLHTTP")); r.open('GET', url, false); r.send(null); return r.responseText }
+
+function require ()
+{
+	for (var i = 0; i < arguments.length; i++)
+	{
+		if (!require.sripts[arguments[i]])
+		{
+			log2('require "' + arguments[i] + '"')
+			
+			if (document.write)
+				document.write('<script type="text/javascript" src="' + arguments[i] + '"></script>');
+			else
+			{
+				/*var script = document.createElement('script')
+				script.type = 'text/javascript'
+				script.src = arguments[i]
+				log(script)
+				document.getElementsByTagName('window')[0].appendChild(script)*/
+				eval(Programica.get(arguments[i]))
+			}
+			
+			require.sripts[arguments[i]] = 1
+		}
+	}
+}
+require.sripts = []
+
 
 
 //——————————————————————————————————————————————————————————————————————————————

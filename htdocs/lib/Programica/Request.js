@@ -44,7 +44,7 @@ Programica.Request = function (prms)
 			t.onreadystatechange()
 		}
 	}
-	else log('Can`t create an instatce of the XMLHTTP')
+	else log('Can`t create an instatce of the XHR')
 	
 	this.lastRequestObject = null
 }
