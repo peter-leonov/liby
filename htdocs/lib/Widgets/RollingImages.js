@@ -110,7 +110,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 			default:
 				log('Unknown animation-align type: ' + this.mainNode.getAttribute('animation-align'))
 		}
-		
+		//log(left, top)
 		var trans = {scrollTop: [top], scrollLeft: [left]}
 		
 		{
@@ -120,7 +120,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 				trans.height = [node.offsetHeight]
 				
 			if (/all|width/.test(scale))	
-				trans.wifth  = [node.offsetWidth]
+				trans.width  = [node.offsetWidth]
 		}
 		
 		//this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft

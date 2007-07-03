@@ -8,12 +8,28 @@
     orient="horizontal"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-	<script type="text/javascript" src="/lib/Programica.js"></script>
-	<script type="text/javascript" src="/lib/Widgets/RollingImages.js"></script>
+	<script type="application/x-javascript" src="/lib/Programica.js"></script>
+	<script type="application/x-javascript" src="/lib/Widgets/RollingImages.js"></script>
 	
 	
 	<vbox class="photos programica-rolling-images" animation-type="easeOutBounce">
 		<scrollbox id="sb" class="viewport">
+			<image class="point" src="i/1.jpg" alt="" />
+			<image class="point" src="i/2.jpg" alt="" />
+			<image class="point" src="i/3.jpg" alt="" style="height:600px" flex="0" />
+			<image class="point" src="i/4.jpg" alt="" />
+			<image class="point" src="i/5.jpg" alt="" />
+			<image class="point" src="i/6.jpg" alt="" />
+			<image class="point" src="i/7.jpg" alt="" />
+			<image class="point" src="i/8.jpg" alt="" />
+			<image class="point" src="i/9.jpg" alt="" />
+		</scrollbox>
+		<button class="prev" label="← предыдущая" />
+		<button class="next" label="следующая →" />
+	</vbox>
+	
+	<vbox class="photos programica-rolling-images" animation-type="easeOutBounce">
+		<scrollbox id="sb" class="viewport" orient="vertical">
 			<image class="point" src="i/1.jpg" alt="" />
 			<image class="point" src="i/2.jpg" alt="" />
 			<image class="point" src="i/3.jpg" alt="" style="height:600px" flex="0" />

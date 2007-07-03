@@ -47,9 +47,9 @@ function require ()
 			else
 			{
 				/*var script = document.createElement('script')
-				script.type = 'text/javascript'
-				script.src = arguments[i]
-				log(script)
+				script.setAttribute('type', 'application/x-javascript')
+				script.setAttribute('src', arguments[i])
+				//log(script)
 				document.getElementsByTagName('window')[0].appendChild(script)*/
 				eval(Programica.get(arguments[i]))
 			}
@@ -66,7 +66,7 @@ require.sripts = []
 // Ближе к прототипу
 
 if (!window.HTMLElement) HTMLElement = {}
-if (!window.XULElement) XULElement = {}
+if (!window.XULElement) XULElement = { prototype: {} }
 if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('div').__proto__ || {}
 
 if (!window.HTMLFormElement) HTMLFormElement = {}

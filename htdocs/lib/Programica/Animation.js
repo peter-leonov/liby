@@ -30,7 +30,23 @@ Programica.Animation = function (prms)
 	}
 	
 	if (this.obj.boxObject)
+	{
 		this.boxInterface = this.obj.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
+		
+		this.boxInterface.scrollTop = function ()
+		{
+			var h = {}
+			this.getPosition({},h)
+			return h.value
+		}
+		
+		this.boxInterface.scrollLeft = function ()
+		{
+			var w = {}
+			this.getPosition(w,{})
+			return w.value
+		}
+	}
 	
 	// Трансформации, если заданы
 	if (prms.transformations)
@@ -204,15 +220,11 @@ extend (Programica.Animation.prototype,
 		
 		if (p == 'scrollTop' && this.boxInterface)
 		{
-			var h = {}
-			this.boxInterface.getPosition({},h)
-			return h.value
+			return this.boxInterface.scrollTop()
 		}
 		else if (p == 'scrollLeft' && this.boxInterface)
 		{
-			var w = {}
-			this.boxInterface.getPosition(w,{})
-			return w.value
+			return this.boxInterface.scrollLeft()
 		}
 		else if (/scroll/.test(p))
 			return this.obj[p]
@@ -228,14 +240,17 @@ extend (Programica.Animation.prototype,
 		{
 			this.obj.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
 		}
+		
+		/* for XUL elements */
 		else if (p == 'scrollTop' && this.boxInterface)
 		{
-			this.boxInterface.scrollTo(0,Math.round(value))
+			this.boxInterface.scrollTo(this.boxInterface.scrollLeft(), Math.round(value))
 		}
 		else if (p == 'scrollLeft' && this.boxInterface)
 		{
-			this.boxInterface.scrollTo(Math.round(value),0)
+			this.boxInterface.scrollTo(Math.round(value), this.boxInterface.scrollTop())
 		}
+		
 		else if (/scroll/.test(p))
 		{
 			// //Math.round(value)
