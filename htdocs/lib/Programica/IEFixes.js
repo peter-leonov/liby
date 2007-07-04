@@ -1,33 +1,51 @@
 
 if (!window.Programica) Programica = {}
 
+var alli = {}
+var all = []
+setInterval(function () { window.status = all; alli = {}; all = [] }, 3000)
 Programica.Fixes =
 {
 	all: function ()
 	{
 		this.runtimeStyle.behavior = 'none'
 		
-		this.onpropertychange = Programica.Fixes.onpropertychange
 		
-		Programica.Fixes.fixOpacity.apply(this)
 		Programica.Fixes.fixPrototype.apply(this)
-		Programica.Fixes.fixTitle.apply(this)
 		
 		if (/MSIE 6/.test(navigator.userAgent))
 		{
+			this.onpropertychange = Programica.Fixes.onpropertychange6
+			
+			Programica.Fixes.fixOpacity.apply(this)
 			Programica.Fixes.fixPng.apply(this)
 			Programica.Fixes.fixTitle.apply(this)
 			Programica.Fixes.fixLabel.apply(this)
-			
+			Programica.Fixes.fixTitle.apply(this)
 		}
 		
 		if (/MSIE 7/.test(navigator.userAgent))
 		{
+			this.onpropertychange = Programica.Fixes.onpropertychange7
+			
+			Programica.Fixes.fixOpacity.apply(this)
 			Programica.Fixes.fixTitle.apply(this)
 		}
 	},
 	
-	onpropertychange: function (e)
+	onpropertychange6: function ()
+	{
+		if (!alli[event.propertyName+':'+event.type]) all.push(event.propertyName+':'+event.type), alli[event.propertyName+':'+event.type] = true
+		if (event.propertyName == 'style.opacity')
+		{
+			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
+			this.style.zoom = 1
+		}
+		else if (event.propertyName == 'disabled')
+			Programica.Fixes.fixDisabled.apply(this)
+	},
+	
+	onpropertychange7: function ()
 	{
 		
 		if (event.propertyName == 'style.opacity')
@@ -43,6 +61,12 @@ Programica.Fixes =
 	{
 		if (this.currentStyle.opacity)
 			this.style.opacity = this.currentStyle.opacity
+	},
+	
+	fixDisabled: function ()
+	{
+		this.addClassName('disabled')
+		this.disabled ? this.addClassName('disabled') : this.remClassName('disabled')
 	},
 	
 	fixPng: function ()
@@ -75,6 +99,19 @@ Programica.Fixes =
 		if (window.HTMLElement) extend(this, HTMLElement.prototype)
 		if (window.HTMLFormElement && this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
 	}
+}
+
+
+HTMLElement.prototype.disable = function ()
+{
+	this.setAttribute('disabled', true)
+	this.addClassName('disabled')
+}
+
+HTMLElement.prototype.enable = function ()
+{
+	this.removeAttribute('disabled')
+	this.remClassName('disabled')
 }
 
 

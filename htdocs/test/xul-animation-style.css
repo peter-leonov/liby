@@ -2,7 +2,7 @@
 .prev { float: left; }
 .next { float: right; }
 .prev, .next { cursor: pointer; color: red;  /*для сафари { */ position: relative; z-index: 1; /* } */ }
-.disabled { cursor: default !important; color: silver !important }
+button[disabled] { cursor: default !important; color: silver !important }
 
 .photos { width: 420px; }
 .photos .viewport { background-color: silver; width: 420px; height: 200px; overflow: hidden; position: relative; }

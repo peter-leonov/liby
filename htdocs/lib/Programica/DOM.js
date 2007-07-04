@@ -92,6 +92,16 @@ Programica.DOM.remClassName = function (cn)
 	return cn
 }
 
+Programica.DOM.disable = function ()
+{
+	this.setAttribute('disabled', true)
+}
+
+Programica.DOM.enable = function ()
+{
+	this.removeAttribute('disabled')
+}
+
 
 
 if (!XULElement.prototype.getElementsByClassName)
@@ -116,5 +126,18 @@ if (!HTMLElement.prototype.addClassName)
 
 if (!HTMLElement.prototype.remClassName)
 	HTMLElement.prototype.remClassName = Programica.DOM.remClassName
+
+
+if (!HTMLElement.prototype.disable)
+	HTMLElement.prototype.disable = Programica.DOM.disable
+
+if (!HTMLElement.prototype.enable)
+	HTMLElement.prototype.enable = Programica.DOM.enable
+
+if (!XULElement.prototype.disable)
+	XULElement.prototype.disable = Programica.DOM.disable
+
+if (!XULElement.prototype.enable)
+	XULElement.prototype.enable = Programica.DOM.enable
 
 log2("Programica/DOM.js loaded")

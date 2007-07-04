@@ -31,21 +31,25 @@ Programica.Animation = function (prms)
 	
 	if (this.obj.boxObject)
 	{
-		this.boxInterface = this.obj.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
-		
-		this.boxInterface.scrollTop = function ()
+		try
 		{
-			var h = {}
-			this.getPosition({},h)
-			return h.value
+			this.boxInterface = this.obj.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
+			
+			this.boxInterface.scrollTop = function ()
+			{
+				var h = {}
+				this.getPosition({},h)
+				return h.value
+			}
+			
+			this.boxInterface.scrollLeft = function ()
+			{
+				var w = {}
+				this.getPosition(w,{})
+				return w.value
+			}
 		}
-		
-		this.boxInterface.scrollLeft = function ()
-		{
-			var w = {}
-			this.getPosition(w,{})
-			return w.value
-		}
+		catch(ex) {}
 	}
 	
 	// Трансформации, если заданы

@@ -147,16 +147,10 @@ Programica.RollingImages.prototype.Handler.prototype =
 		}
 		
 		if (this.aPrev)
-		{
-			this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
-			!this.current ? this.aPrev.className += ' disabled' : this.aPrev.className = this.aPrev.className.replace(/ disabled/g, '')
-		}
+			this.current ? this.aPrev.enable() : this.aPrev.disable()
 		
 		if (this.aNext)
-		{
-			this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
-			this.current == this.points.length - 1 ? this.aNext.className += ' disabled' : this.aNext.className = this.aNext.className.replace(/ disabled/g, '')
-		}
+			this.current < this.points.length - 1 ? this.aNext.enable() : this.aNext.disable()
 	}
 }
 
