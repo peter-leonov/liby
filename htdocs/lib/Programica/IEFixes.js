@@ -102,26 +102,20 @@ Programica.Fixes =
 }
 
 
-HTMLElement.prototype.disable = function ()
-{
-	this.setAttribute('disabled', true)
-	this.addClassName('disabled')
-}
-
-HTMLElement.prototype.enable = function ()
-{
-	this.removeAttribute('disabled')
-	this.remClassName('disabled')
-}
-
-
 /* кривоватый фикс addEventListener(...) и preventDefault() для IE */
 if (!window.addEventListener && window.attachEvent)
 {
 	HTMLElement.prototype.addEventListener = function (type, func, dir)
 	{
-		if (type == 'DOMMouseScroll')
-			type = 'mousewheel'
+		switch (type)
+		{
+			case 'DOMMouseScroll':
+				type = 'mousewheel'
+				break
+			case 'DOMContentLoaded':
+				type = 'load' // хотелось бы oncontentready
+				break
+		}
 		
 		var t = this
 		var newh = function (e)

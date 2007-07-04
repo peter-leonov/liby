@@ -1,4 +1,5 @@
 
+window.addEventListener('DOMContentLoaded', function () { Programica.Widget.onLoader() }, false)
 window.addEventListener('load', function () { Programica.Widget.onLoader() }, false)
 
 // спомогательный интерфейс для организации виджетов
@@ -21,6 +22,9 @@ extend (Programica.Widget,
 	// ищет ноды для виджетов, ранжирует и вызывает bind для каждой
 	onLoader: function ()
 	{
+		if (this.thinkLoaded) return
+		this.thinkLoaded = true
+		
 		// ищем все ноды в stack
 		var stack = [];
 		for (var wi in this.registered)

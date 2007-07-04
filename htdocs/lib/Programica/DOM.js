@@ -95,11 +95,13 @@ Programica.DOM.remClassName = function (cn)
 Programica.DOM.disable = function ()
 {
 	this.setAttribute('disabled', true)
+	this.addClassName('disabled')
 }
 
 Programica.DOM.enable = function ()
 {
 	this.removeAttribute('disabled')
+	this.remClassName('disabled')
 }
 
 
