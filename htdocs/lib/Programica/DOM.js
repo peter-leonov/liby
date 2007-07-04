@@ -129,6 +129,13 @@ if (!HTMLElement.prototype.addClassName)
 if (!HTMLElement.prototype.remClassName)
 	HTMLElement.prototype.remClassName = Programica.DOM.remClassName
 
+if (!XULElement.prototype.addClassName)
+	XULElement.prototype.addClassName = Programica.DOM.addClassName
+
+if (!XULElement.prototype.remClassName)
+	XULElement.prototype.remClassName = Programica.DOM.remClassName
+
+
 
 if (!HTMLElement.prototype.disable)
 	HTMLElement.prototype.disable = Programica.DOM.disable
