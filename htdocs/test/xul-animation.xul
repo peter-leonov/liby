@@ -5,7 +5,7 @@
 <window
     id="animation-tests-window"
     title="Немножко тестов анимации"
-    orient="vertival"
+    orient="vertical"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 	<script type="application/x-javascript" src="/lib/Programica.js"></script>

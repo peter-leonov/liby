@@ -32,8 +32,11 @@ function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 //——————————————————————————————————————————————————————————————————————————————
 // Безобидные полезности
 
+
+// малюсенькая реализация запроса
 Programica.get = function (url) { var r = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Msxml2.XMLHTTP")); r.open('GET', url, false); r.send(null); return r.responseText }
 
+// типа инклуды с реквайрами
 function require ()
 {
 	for (var i = 0; i < arguments.length; i++)
@@ -46,12 +49,8 @@ function require ()
 				document.write('<script type="text/javascript" src="' + arguments[i] + '"></script>');
 			else
 			{
-				/*var script = document.createElement('script')
-				script.setAttribute('type', 'application/x-javascript')
-				script.setAttribute('src', arguments[i])
-				//log(script)
-				document.getElementsByTagName('window')[0].appendChild(script)*/
-				eval(Programica.get(arguments[i]))
+				var code = Programica.get(arguments[i])
+				window.eval ? window.eval(code) : eval(code)
 			}
 			
 			require.sripts[arguments[i]] = 1
@@ -103,8 +102,9 @@ function inherit (to, from)
 	return to
 }
 
-function $  (id) { return document.getElementById(id) }
-function $$ (cn) { return document.getElementsByClassName(cn) }
+function $  (id)   { return document.getElementById(id) }
+function $$ (cn)   { return document.getElementsByClassName(cn) }
+function $E (type) { return document.createElement(type) }
 
 
 //——————————————————————————————————————————————————————————————————————————————
