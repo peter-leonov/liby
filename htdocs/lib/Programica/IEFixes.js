@@ -43,7 +43,6 @@ Programica.Fixes =
 	
 	onpropertychange7: function ()
 	{
-		
 		if (event.propertyName == 'style.opacity')
 		{
 			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
@@ -55,7 +54,7 @@ Programica.Fixes =
 	
 	fixOpacity: function ()
 	{
-		if (this.currentStyle.opacity)
+		if (this.currentStyle && this.currentStyle.opacity)
 			this.style.opacity = this.currentStyle.opacity
 	},
 	
@@ -84,6 +83,7 @@ Programica.Fixes =
 	/* делает кликабельными метки */
 	fixLabel: function ()
 	{
+		if (this.tagName != 'LABEL') return
 		var t = this
 		this.attachEvent("onclick", function () { var node = t.getElementsByTagName('input')[0]; if (node) node.click() })
 	},

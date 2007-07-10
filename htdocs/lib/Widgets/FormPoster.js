@@ -8,6 +8,8 @@ Programica.FormPoster.prototype.Handler = function (node)
 {
 	this.mainNode = node
 	
+	if (typeof node.getAttribute('action') != 'string') throw new Error('Form element with name "action" masks form own attribute.')
+	
 	var send_listener = function (e)
 	{
 		// проверим, нужно ли ловить эту форму
@@ -20,9 +22,10 @@ Programica.FormPoster.prototype.Handler = function (node)
 		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
 		
 		var form = this
+		var met = /^post$/i.test(this.getAttribute('method')) ? aPost : aGet
 		
 		// собственно отправляем данные
-		with (aPost(this.getAttribute('action'), this.data()))
+		with (met(this.getAttribute('action'), this.data()))
 		{
 			onLoad		= function () { form.onload({request:this}) }
 			onSuccess	= function () { form.reset(); form.onsuccess({request:this}) }
