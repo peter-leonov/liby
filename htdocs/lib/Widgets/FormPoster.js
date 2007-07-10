@@ -7,22 +7,18 @@ Programica.FormPoster.prototype.klass = 'Programica.FormPoster'
 Programica.FormPoster.prototype.Handler = function (node)
 {
 	this.mainNode = node
-	var t = this
-	
-	// проверим, нужно ли ловить эту форму
-	if (!/^ajax$/i.test(node.getAttribute("target"))) return
-	
-	// поиграем в события
-	Programica.FormPoster.bakeEvents(node, ["onload", "onsuccess", "onerror"])
-	
-	/*var check_listener = function (e)
-	{
-		//alert("check_listener")
-		e.stopPropagation()
-	}*/
 	
 	var send_listener = function (e)
 	{
+		// проверим, нужно ли ловить эту форму
+		if (!/^ajax$/i.test(this.getAttribute('target'))) return
+		
+		// не даем форме отправиться (кое-как работает в ИЕ нашими стараниями)
+		e.preventDefault()
+		
+		// поиграем в события
+		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
+		
 		var form = this
 		
 		// собственно отправляем данные
@@ -32,9 +28,6 @@ Programica.FormPoster.prototype.Handler = function (node)
 			onSuccess	= function () { form.reset(); form.onsuccess({request:this}) }
 			onError		= function () { form.onerror({request:this}) }
 		}
-		
-		// не даем форме отправиться (кое-как работает в ИЕ нашими стараниями)
-		e.preventDefault()
 	}
 	
 	//node.addEventListener('submit', check_listener, false)
@@ -52,7 +45,8 @@ Programica.FormPoster.prototype.Handler.prototype =
 Programica.FormPoster.bakeEvents = function (node, events)
 {
 	for (var i = 0; i < events.length; i++)
-		node[events[i]] = eval("[function (event) { " + node.getAttribute(events[i]) + " }]")[0]
+		if (!node[events[i]] || node[events[i]].constructor == String)
+			node[events[i]] = eval("[function (event) { " + node.getAttribute(events[i]) + " }]")[0]
 }
 
 

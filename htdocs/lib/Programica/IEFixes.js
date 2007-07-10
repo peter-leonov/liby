@@ -1,9 +1,6 @@
 
 if (!window.Programica) Programica = {}
 
-var alli = {}
-var all = []
-setInterval(function () { window.status = all; alli = {}; all = [] }, 3000)
 Programica.Fixes =
 {
 	all: function ()
@@ -35,7 +32,6 @@ Programica.Fixes =
 	
 	onpropertychange6: function ()
 	{
-		if (!alli[event.propertyName+':'+event.type]) all.push(event.propertyName+':'+event.type), alli[event.propertyName+':'+event.type] = true
 		if (event.propertyName == 'style.opacity')
 		{
 			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
