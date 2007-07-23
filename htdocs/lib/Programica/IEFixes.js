@@ -116,7 +116,8 @@ if (!window.addEventListener && window.attachEvent)
 		var t = this
 		var newh = function (e)
 		{
-			e.preventDefault = function () { this.returnValue = false; return true }
+			e.preventDefault  = function () { var old = this.returnValue;  this.returnValue = false; return old }
+			e.stopPropogation = function () { var old = this.cancelBubble; this.cancelBubble = true; return old }
 			e.detail = - e.wheelDelta / 120
 			func.apply(t,[e])
 		}

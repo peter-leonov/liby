@@ -71,10 +71,6 @@ if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('div'
 if (!window.HTMLFormElement) HTMLFormElement = {}
 if (!HTMLFormElement.prototype) HTMLFormElement.prototype = document.createElement('form').__proto__ || {}
 
-// Еще ближе
-HTMLElement.prototype.hide = function () { this.style.display = 'none' }
-HTMLElement.prototype.show = function () { this.style.display = 'block' }
-
 // Напрямик
 function extend (to, from)
 {
@@ -102,9 +98,10 @@ function inherit (to, from)
 	return to
 }
 
-function $  (id)   { return document.getElementById(id) }
-function $$ (cn)   { return document.getElementsByClassName(cn) }
-function $E (type) { return document.createElement(type) }
+function $   (id)   { return document.getElementById(id) }
+function $$  (cn)   { return document.getElementsByClassName(cn) }
+function $$$ (cn)   { return document.getElementsByTagName(cn) }
+function $E  (type) { return document.createElement(type) }
 
 
 //——————————————————————————————————————————————————————————————————————————————

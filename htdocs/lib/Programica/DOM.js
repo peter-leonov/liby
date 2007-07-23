@@ -104,49 +104,97 @@ Programica.DOM.enable = function ()
 	this.remClassName('disabled')
 }
 
+Programica.DOM.hide = function ()
+{
+	this.style.display = 'none'
+}
+
+Programica.DOM.show = function (t)
+{
+	if (t)
+	{
+		if (this.animate)
+		{
+			// если прятали жестко превратим display:none в opacity:0
+			if (this.style.display == 'none')
+				this.style.opacity = 0
+			
+			this.style.display = 'block'
+			
+			this.animate('linearTween', {opacity:[1]}, t).start()
+		}
+		else
+			setTimeout(function () { this.style.display = 'block' }, t * 1000)
+	}
+	else
+		this.style.display = 'block'
+}
+
+Programica.DOM.$$ = function (cn)
+{
+	return this.getElementsByClassName(cn)
+}
+
+Programica.DOM.$$$ = function (cn)
+{
+	return this.getElementsByTagName(cn)
+}
+
+//Programica.DOM.getComputedStyle = function (prop)
+//{
+//	return document.defaultView.getComputedStyle(this, null).getPropertyValue(prop)
+//}
 
 
-if (!XULElement.prototype.getElementsByClassName)
-	XULElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
-
-if (!HTMLElement.prototype.getElementsByClassName)
-	HTMLElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
+{
+	var interfaces = [XULElement, HTMLElement]
+	
+	for (var ii = 0; ii < interfaces.length; ii++)
+		for (var m in Programica.DOM)
+			interfaces[ii].prototype[m] = Programica.DOM[m]
+}
 
 if (!document.getElementsByClassName)
 	document.getElementsByClassName = Programica.DOM.getElementsByClassName
 
-
-if (!HTMLElement.prototype.getParentsByClassName)
-	HTMLElement.prototype.getParentsByClassName = Programica.DOM.getParentsByClassName
-
-
-
-
-
-if (!HTMLElement.prototype.addClassName)
-	HTMLElement.prototype.addClassName = Programica.DOM.addClassName
-
-if (!HTMLElement.prototype.remClassName)
-	HTMLElement.prototype.remClassName = Programica.DOM.remClassName
-
-if (!XULElement.prototype.addClassName)
-	XULElement.prototype.addClassName = Programica.DOM.addClassName
-
-if (!XULElement.prototype.remClassName)
-	XULElement.prototype.remClassName = Programica.DOM.remClassName
-
-
-
-if (!HTMLElement.prototype.disable)
-	HTMLElement.prototype.disable = Programica.DOM.disable
-
-if (!HTMLElement.prototype.enable)
-	HTMLElement.prototype.enable = Programica.DOM.enable
-
-if (!XULElement.prototype.disable)
-	XULElement.prototype.disable = Programica.DOM.disable
-
-if (!XULElement.prototype.enable)
-	XULElement.prototype.enable = Programica.DOM.enable
+//if (!XULElement.prototype.getElementsByClassName)
+//	XULElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
+//
+//if (!HTMLElement.prototype.getElementsByClassName)
+//	HTMLElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
+//
+//
+//if (!HTMLElement.prototype.getParentsByClassName)
+//	HTMLElement.prototype.getParentsByClassName = Programica.DOM.getParentsByClassName
+//
+//
+//
+//
+//
+//if (!HTMLElement.prototype.addClassName)
+//	HTMLElement.prototype.addClassName = Programica.DOM.addClassName
+//
+//if (!HTMLElement.prototype.remClassName)
+//	HTMLElement.prototype.remClassName = Programica.DOM.remClassName
+//
+//if (!XULElement.prototype.addClassName)
+//	XULElement.prototype.addClassName = Programica.DOM.addClassName
+//
+//if (!XULElement.prototype.remClassName)
+//	XULElement.prototype.remClassName = Programica.DOM.remClassName
+//
+//
+//
+//if (!HTMLElement.prototype.disable)
+//	HTMLElement.prototype.disable = Programica.DOM.disable
+//
+//if (!HTMLElement.prototype.enable)
+//	HTMLElement.prototype.enable = Programica.DOM.enable
+//
+//if (!XULElement.prototype.disable)
+//	XULElement.prototype.disable = Programica.DOM.disable
+//
+//if (!XULElement.prototype.enable)
+//	XULElement.prototype.enable = Programica.DOM.enable
 
 log2("Programica/DOM.js loaded")

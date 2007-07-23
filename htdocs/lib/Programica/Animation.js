@@ -8,7 +8,7 @@ Programica.Animation = function (prms)
 	// Дефолтные значения
 	this.transformations	= []
 	this.duration			= prms.duration || 1,
-	this.unit				= prms.unit != null ? prms.unit: 'px'
+	this.unit				= prms.unit != null ? prms.unit : Programica.Animation.defaults.unit
 	this.motion				= prms.motion
 	this.running			= false
 	this.paused				= false
@@ -65,6 +65,7 @@ Programica.Animation = function (prms)
 }
 
 Programica.Animation.fps = 40
+Programica.Animation.defaults = { unit: 'px' }
 
 //.animate('linearTween', {marginTop: [0,-50]}, 1).start()
 XULElement.prototype.animate = HTMLElement.prototype.animate = function (motion, props, duration, unit)
@@ -88,7 +89,7 @@ XULElement.prototype.animate = HTMLElement.prototype.animate = function (motion,
 			({
 				property:	i,
 				begin:		null,
-				end:		props[i][0]
+				end:		props[i][0] || props[i]
 			})
 		}
 	}
@@ -460,6 +461,10 @@ Programica.Animation.Types =
 //——————————————————————————————————————————————————————————————————————————————
 // Простая событийная модель
 
+with(Programica.Abstract.Events.Event = function () {})
+{
+	prototype.stopPropogation = function () { return this.cancelBubble = true }
+}
 
 // событийная модель
 extend (Programica.Abstract.Events.prototype,
@@ -467,11 +472,15 @@ extend (Programica.Abstract.Events.prototype,
 	// распространяем событие
 	dispatchEvent: function (eventName)
 	{
-		if (this.pmcEvents[eventName])
+		if (this['on' + eventName]) this['on' + eventName].call(this, eventName)
+		
+		if (this.pmcEvents && this.pmcEvents[eventName])
 			for (var i in this.pmcEvents[eventName])
 				if (this.pmcEvents[eventName][i])
-					if (!this.pmcEvents[eventName][i].call(this,eventName))
-						return false
+				{
+					if (this.cancelBubble) return true
+					this.pmcEvents[eventName][i].call(this, eventName)
+				}
 		
 		return true
 	},
