@@ -104,30 +104,68 @@ Programica.DOM.enable = function ()
 	this.remClassName('disabled')
 }
 
-Programica.DOM.hide = function ()
+Programica.DOM.hide = function (t)
 {
-	this.style.display = 'none'
-}
-
-Programica.DOM.show = function (t)
-{
+	if (!this.visible()) return false
+	
 	if (t)
 	{
 		if (this.animate)
 		{
-			// если прятали жестко превратим display:none в opacity:0
-			if (this.style.display == 'none')
-				this.style.opacity = 0
+			// если показывали жестко, превратим display:block в opacity:1
+			if (this.style.display == 'block' || !this.style.opacity)
+				this.style.opacity = 0.999
 			
-			this.style.display = 'block'
-			
-			this.animate('linearTween', {opacity:[1]}, t).start()
+			var ani = this.animate('linearTween', {opacity:[0]}, t)
+			ani.addEventListener
+			(
+				'complete',
+				function ()
+				{
+					this.obj.style.display = 'none'
+				}
+			)
+			ani.start()
+			return ani
 		}
 		else
-			setTimeout(function () { this.style.display = 'block' }, t * 1000)
+			setTimeout(function () { this.style.display = 'none' }, t * 1000)
 	}
 	else
+		this.style.display = 'none'
+	
+	return true
+}
+
+Programica.DOM.show = function (t)
+{
+	if (this.visible()) return false
+	
+	if (t)
+	{
+		if (this.animate)
+		{
+			this.style.opacity = this.style.opacity || 0
+			this.style.display = 'block'
+			
+			return this.animate('linearTween', {opacity:[0.999]}, t).start()
+		}
+		else
+			setTimeout(function () { this.style.display = 'block'; this.style.opacity = 1 }, t * 1000)
+	}
+	else
+	{
 		this.style.display = 'block'
+		this.style.opacity = 1
+	}
+	
+	return true
+}
+
+Programica.DOM.visible = function ()
+{
+	log(this.style.opacity + ': ' + parseFloat(this.style.opacity))
+	return this.offsetWidth && this.style.display != 'none' && parseFloat(this.style.opacity) != 0
 }
 
 Programica.DOM.$$ = function (cn)
