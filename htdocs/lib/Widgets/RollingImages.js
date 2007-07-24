@@ -14,12 +14,42 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.ns					= this.mainNode.getAttribute('animation-namespace')
 	this.viewport			= this.my('viewport')[0]
 	this.points				= this.my('point')
-	this.buttons			= this.my('button')
+	this.buttons			= []
 	this.aPrev				= this.my('prev')[0]
 	this.aNext				= this.my('next')[0]
 	this.current			= 0
 	
+	{
+		var bstr = this.mainNode.getAttribute('rolling-images-buttons')
+		if (bstr)
+		{
+			var ids = bstr.split(/\s+/)
+			for (var ii = 0; ii < ids.length; ii++)
+			{
+				var n = $(ids[ii])
+				if (n)
+				{
+					var btns = this.my('button',n)
+					//log(btns)
+					this.buttons = this.buttons.concat(btns)
+				}
+			}
+		}
+	}
+	
+	this.buttons = this.buttons.concat(this.my('button'))
+	
+	for (var i in this.buttons)
+		node.button_num = node.getAttribute('button-num') * 100 || i
+	
+	//this.buttons = this.buttons.sort(function (a, b) { a.button_num - b.button_num })
+	log(this.buttons)
+	
+	
 	var t = this
+	
+	this.viewport.onmousedown		= function (e) { t.dragstart(e); return false; }
+	document.onmouseup		 		= function (e) { t.dragstop(e);  return false; }
 	
     this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
 	
@@ -50,7 +80,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	animationType:	function ()		{ return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
 	getDuration:	function ()		{ return this.mainNode.getAttribute('animation-duration') || 1 },
-	my:				function (cn)	{ return this.mainNode.getElementsByClassName(this.ns ? (this.ns + "-" + cn) : cn) },
+	my:				function (cn,n)	{ return (n || this.mainNode).getElementsByClassName(this.ns ? (this.ns + "-" + cn) : cn) },
 	
 	goInit: function (n)
 	{
@@ -152,6 +182,27 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		if (this.aNext)
 			this.current < this.points.length - 1 ? this.aNext.enable() : this.aNext.disable()
+	},
+	
+	dragging: function (e)
+	{
+		//log(e)
+		this.viewport.scrollLeft = this.di.sx + this.di.mx - e.clientX
+		this.viewport.scrollTop  = this.di.sy + this.di.my - e.clientY
+	},
+	
+	dragstart: function (e)
+	{
+		this.di = {mx:e.clientX, my:e.clientY, sx:this.viewport.scrollLeft, sy:this.viewport.scrollTop}
+		
+		var t = this
+		document.onmousemove = function (e) { t.dragging(e) }
+	},
+	
+	dragstop: function (e)
+	{
+		this.di = null
+		document.onmousemove = function () {}
 	}
 }
 
