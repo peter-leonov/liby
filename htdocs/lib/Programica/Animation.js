@@ -134,7 +134,7 @@ extend (Programica.Animation.prototype,
 		for (var i in this.transformations)
 		{
 			var t = this.transformations[i]
-			if (t.begin == null) t.begin = this.getIntegerStyleProperty(t.property)
+			if (t.begin == null) t.begin = this.getStyleProperty(t.property)
 			t.step = ( t.end - t.begin ) / this.totalFrames
 		}
 		
@@ -192,22 +192,22 @@ extend (Programica.Animation.prototype,
 			for (var i in this.transformations)
 			{
 				var t = this.transformations[i]
-				this.setIntegerStyleProperty(t.property, t.end)
+				this.setStyleProperty(t.property, t.end)
 			}
 		else
 			for (var i in this.transformations)
 			{
 				var t = this.transformations[i]
 				if ( t.property != null && t.begin != null && t.end != null  )
-					this.setIntegerStyleProperty
+					this.setStyleProperty
 					(
 						t.property,
 						this.motion
 						(
-							this.frame,
+							this.frame + 1,
 							t.begin,
 							t.end - t.begin,
-							this.totalFrames - 1
+							this.totalFrames
 						)
 					), log3("OK transformation: " + t)
 				else log3("Corupted transformation: " + t)
@@ -218,28 +218,35 @@ extend (Programica.Animation.prototype,
 		return true
 	},
 	
-	getIntegerStyleProperty: function (p)
+	getStyleProperty: function (p)
 	{
-		if (p == "top" && !this.obj.style[p]) return this.obj.offsetTop
-		if (p == "left" && !this.obj.style[p]) return this.obj.offsetLeft
+		if (p == "top" && !this.obj.style[p])
+			return this.obj.offsetTop
+		
+		if (p == "left" && !this.obj.style[p])
+			return this.obj.offsetLeft
+		
+		
+		if (p == "opacity" && isNaN(parseFloat(this.obj.style[p])))
+			return 0.999
+		
 		
 		if (p == 'scrollTop' && this.boxInterface)
-		{
 			return this.boxInterface.scrollTop()
-		}
-		else if (p == 'scrollLeft' && this.boxInterface)
-		{
+		
+		if (p == 'scrollLeft' && this.boxInterface)
 			return this.boxInterface.scrollLeft()
-		}
-		else if (/scroll/.test(p))
+		
+		
+		if (/scroll/.test(p))
 			return this.obj[p]
-		else
-			return parseFloat(this.obj.style[p]) || 0
+		
+		return parseFloat(this.obj.style[p]) || 0
 	},
 	
-	setIntegerStyleProperty: function (p, value)
+	setStyleProperty: function (p, value)
 	{
-		log3("setIntegerStyleProperty(" + p + "," + value + ")")
+		log3("setStyleProperty(" + p + "," + value + ")")
 		
 		if (/color/.test(p))
 		{

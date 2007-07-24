@@ -106,16 +106,10 @@ Programica.DOM.enable = function ()
 
 Programica.DOM.hide = function (t)
 {
-	if (!this.visible()) return false
-	
 	if (t)
 	{
 		if (this.animate)
 		{
-			// если показывали жестко, превратим display:block в opacity:1
-			if (this.style.display == 'block' || !this.style.opacity)
-				this.style.opacity = 0.999
-			
 			var ani = this.animate('linearTween', {opacity:[0]}, t)
 			ani.addEventListener
 			(
@@ -139,15 +133,13 @@ Programica.DOM.hide = function (t)
 
 Programica.DOM.show = function (t)
 {
-	if (this.visible()) return false
-	
 	if (t)
 	{
 		if (this.animate)
 		{
-			this.style.opacity = this.style.opacity || 0
+			if (!this.visible()) this.style.opacity = 0
 			this.style.display = 'block'
-			
+			this.style.visibility = 'visible'
 			return this.animate('linearTween', {opacity:[0.999]}, t).start()
 		}
 		else
@@ -155,8 +147,8 @@ Programica.DOM.show = function (t)
 	}
 	else
 	{
+		this.style.visibility = 'visible'
 		this.style.display = 'block'
-		this.style.opacity = 1
 	}
 	
 	return true
@@ -164,7 +156,7 @@ Programica.DOM.show = function (t)
 
 Programica.DOM.visible = function ()
 {
-	log(this.style.opacity + ': ' + parseFloat(this.style.opacity))
+	//log(this.style.opacity + ': ' + parseFloat(this.style.opacity))
 	return this.offsetWidth && this.style.display != 'none' && parseFloat(this.style.opacity) != 0
 }
 
@@ -178,10 +170,10 @@ Programica.DOM.$$$ = function (cn)
 	return this.getElementsByTagName(cn)
 }
 
-//Programica.DOM.getComputedStyle = function (prop)
-//{
-//	return document.defaultView.getComputedStyle(this, null).getPropertyValue(prop)
-//}
+Programica.DOM.getComputedStyle = function (prop)
+{
+	return document.defaultView.getComputedStyle(this, null).getPropertyValue(prop)
+}
 
 
 {
@@ -195,44 +187,5 @@ Programica.DOM.$$$ = function (cn)
 if (!document.getElementsByClassName)
 	document.getElementsByClassName = Programica.DOM.getElementsByClassName
 
-//if (!XULElement.prototype.getElementsByClassName)
-//	XULElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
-//
-//if (!HTMLElement.prototype.getElementsByClassName)
-//	HTMLElement.prototype.getElementsByClassName = Programica.DOM.getElementsByClassName
-//
-//
-//if (!HTMLElement.prototype.getParentsByClassName)
-//	HTMLElement.prototype.getParentsByClassName = Programica.DOM.getParentsByClassName
-//
-//
-//
-//
-//
-//if (!HTMLElement.prototype.addClassName)
-//	HTMLElement.prototype.addClassName = Programica.DOM.addClassName
-//
-//if (!HTMLElement.prototype.remClassName)
-//	HTMLElement.prototype.remClassName = Programica.DOM.remClassName
-//
-//if (!XULElement.prototype.addClassName)
-//	XULElement.prototype.addClassName = Programica.DOM.addClassName
-//
-//if (!XULElement.prototype.remClassName)
-//	XULElement.prototype.remClassName = Programica.DOM.remClassName
-//
-//
-//
-//if (!HTMLElement.prototype.disable)
-//	HTMLElement.prototype.disable = Programica.DOM.disable
-//
-//if (!HTMLElement.prototype.enable)
-//	HTMLElement.prototype.enable = Programica.DOM.enable
-//
-//if (!XULElement.prototype.disable)
-//	XULElement.prototype.disable = Programica.DOM.disable
-//
-//if (!XULElement.prototype.enable)
-//	XULElement.prototype.enable = Programica.DOM.enable
 
 log2("Programica/DOM.js loaded")

@@ -9,6 +9,7 @@ Programica.RollingImages.prototype.klass = 'Programica.RollingImages'
 Programica.RollingImages.prototype.Handler = function (node)
 {
 	this.mainNode = node
+	this.mainNode.RollingImages = this
 	
 	this.ns					= this.mainNode.getAttribute('animation-namespace')
 	this.viewport			= this.my('viewport')[0]
