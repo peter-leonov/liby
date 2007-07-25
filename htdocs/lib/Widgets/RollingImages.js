@@ -46,8 +46,13 @@ Programica.RollingImages.prototype.Handler = function (node)
 	
 	var t = this
 	
+	this.mousedown_listener = function (e) { t.dragstart(e), e.preventDefault() }
+	this.mousemove_listener = function (e) { t.dragging(e), e.preventDefault() }
+	this.mouseup_listener   = function (e) { t.dragstop(e), e.preventDefault() }
+	
+	
 	if (/^(yes|magnify)$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
-		this.viewport.onmousedown		= function (e) { t.dragstart(e); return false; }
+		this.viewport.addEventListener('mousedown', this.mousedown_listener, true)
 	
 	
     this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
@@ -113,6 +118,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 	{
 		if (!node) return
 		anim = anim || this.animationType()
+		
+		this.drop_magnify()
 		
 		for (var i = 0, il = this.points.length; i < il; i++)
 			if (this.points[i] == node) this.current = i
@@ -201,9 +208,17 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	dragging: function (e)
 	{
-		//log(e)
-		this.viewport.scrollLeft = this.di.sx + this.di.mx - e.clientX
-		this.viewport.scrollTop  = this.di.sy + this.di.my - e.clientY
+		// не тащим, если потеряны начальные координаты
+		if (!this.di)
+			return
+		
+		// считаем вектор перетаскивания
+		this.drag_vector_x = this.di.mx - e.clientX
+		this.drag_vector_y = this.di.my - e.clientY
+		
+		// перемещаем под мышку ;)
+		this.viewport.scrollLeft = this.di.sx + this.drag_vector_x
+		this.viewport.scrollTop  = this.di.sy + this.drag_vector_y
 		
 		// центр окошка
 		var vc_x = this.viewport.scrollLeft + this.viewport.offsetWidth / 2
@@ -250,15 +265,12 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (this.viewport.animation)
 			this.viewport.animation.stop()
 		
-		if (this.magnify_timeout)
-			clearTimeout(this.magnify_timeout),
-			this.magnify_timeout = null
+		this.drop_magnify()
 		
 		this.di = {mx:e.clientX, my:e.clientY, sx:this.viewport.scrollLeft, sy:this.viewport.scrollTop}
 		
-		var t = this
-		document.onmousemove	= function (e) { t.dragging(e) }
-		document.onmouseup		= function (e) { t.dragstop(e);  return false; }
+		document.addEventListener('mousemove', this.mousemove_listener, true)
+		document.addEventListener('mouseup', this.mouseup_listener, true)
 		
 		this.viewport.addClassName('grabbing')
 	},
@@ -266,15 +278,28 @@ Programica.RollingImages.prototype.Handler.prototype =
 	dragstop: function (e)
 	{
 		this.di = null
-		document.onmousemove = document.onmouseup = function () {}
+		document.removeEventListener('mousemove', this.mousemove_listener, true);
+		document.removeEventListener('mouseup', this.mouseup_listener, true);
 		
 		if (/^magnify$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
-		{
-			var t = this
-			this.magnify_timeout = setTimeout(function () { t.goToFrame(t.current, 'easeInOutQuad') }, 750)
-		}
+			this.magnify()
 		
 		this.viewport.remClassName('grabbing')
+	},
+	
+	magnify: function ()
+	{
+		var t = this
+		this.magnify_timeout = setTimeout(function () { t.goToFrame(t.current, 'easeInOutQuad') }, 750)
+	},
+	
+	drop_magnify: function ()
+	{
+		if (this.magnify_timeout)
+		{
+			clearTimeout(this.magnify_timeout)
+			this.magnify_timeout = null
+		}
 	}
 }
 

@@ -36,7 +36,9 @@
 	
 	.photos { width: 420px; }
 	.photos .viewport { background-color: silver; width: 420px; height: 200px; overflow: hidden; position: relative; }
-	.photos img { width: 420px; height: 200px; margin: 0 2px 2px 0; float: left; }
+	.photos img { width: 420px; height: 200px; float: left; }
+	.vertical img { margin-bottom: 2px; }
+	.horizontal img { margin-right: 2px; }
 	
 	.opacity-gradient img { width: 100px; float: left; }
 	
@@ -45,7 +47,7 @@
 <body>
 	<fieldset><legend>RollingImages</legend>
 	<p>Вертикально:</p>
-	<div class="photos programica-rolling-images" animation-type="easeOutBounce">
+	<div class="photos programica-rolling-images vertical" animation-type="easeOutBounce">
 		<div class="viewport">
 			<img class="point" src="i/1.jpg" alt="" />
 			<img class="point" src="i/2.jpg" alt="" />
@@ -64,7 +66,7 @@
 	<br/>
 	
 	<p>Горизонтально:</p>
-	<div class="photos programica-rolling-images" animation-type="">
+	<div class="photos programica-rolling-images horizontal" animation-type="" rolling-images-grab="magnify">
 		<div class="viewport">
 			<div style="width:10000px; padding:0 1000px;">
 				<img class="point" src="i/1.jpg" alt="" />
@@ -85,7 +87,7 @@
 	<br/>
 	
 	<p>По двум осям:</p>
-	<div class="photos programica-rolling-images" animation-type="easeOutBounce" rolling-images-grab="yes" animation-duration="3">
+	<div class="photos programica-rolling-images vertical" animation-type="easeOutBounce" rolling-images-grab="yes" animation-duration="3">
 		<div class="viewport">
 			<img class="point" src="i/1.jpg" alt="" style="margin-left:0px"/>
 			<img class="point" src="i/2.jpg" alt="" style="margin-left:100px" />

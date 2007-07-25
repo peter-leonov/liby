@@ -113,17 +113,37 @@ if (!window.addEventListener && window.attachEvent)
 				break
 		}
 		
+		// JavaScript — сила! Какаво: сохранить функцию-обертку в свойстве оборачиваемой функции
 		var t = this
-		var newh = function (e)
+		func.IEwrapper = func.IEwrapper || function (e)
 		{
 			e.preventDefault  = function () { var old = this.returnValue;  this.returnValue = false; return old }
 			e.stopPropogation = function () { var old = this.cancelBubble; this.cancelBubble = true; return old }
 			e.detail = - e.wheelDelta / 120
 			func.apply(t,[e])
 		}
-		this.attachEvent('on' + type, newh)
+		this.attachEvent('on' + type, func.IEwrapper)
 	},
 	window.addEventListener = document.addEventListener = HTMLElement.prototype.addEventListener
+}
+
+if (!window.removeEventListener && window.detachEvent)
+{
+	HTMLElement.prototype.removeEventListener = function (type, func, dir)
+	{
+		switch (type)
+		{
+			case 'DOMMouseScroll':
+				type = 'mousewheel'
+				break
+			case 'DOMContentLoaded':
+				type = 'load' // хотелось бы oncontentready
+				break
+		}
+		
+		this.detachEvent('on' + type, func.IEwrapper)
+	},
+	window.removeEventListener = document.removeEventListener = HTMLElement.prototype.removeEventListener
 }
 
 document.write('<style> * { behavior: expression(Programica.Fixes.all.apply(this)) } </style>')
