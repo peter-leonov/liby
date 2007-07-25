@@ -26,18 +26,16 @@ Programica.RollingImages.prototype.Handler = function (node)
 			var ids = bstr.split(/\s+/)
 			for (var ii = 0; ii < ids.length; ii++)
 			{
-				var n = $(ids[ii])
-				if (n)
-				{
-					var btns = this.my('button',n)
-					//log(btns)
-					this.buttons = this.buttons.concat(btns)
-				}
+				if (/^this$/i.test(ids[ii]))
+					this.addButtonsFrom(this.mainNode)
+				else
+					this.addButtonsFrom($(ids[ii]))
 			}
 		}
+		else
+			this.addButtonsFrom(this.mainNode)
 	}
 	
-	this.buttons = this.buttons.concat(this.my('button'))
 	
 	for (var i in this.buttons)
 		node.button_num = node.getAttribute('button-num') * 100 || i
@@ -48,8 +46,9 @@ Programica.RollingImages.prototype.Handler = function (node)
 	
 	var t = this
 	
-	this.viewport.onmousedown		= function (e) { t.dragstart(e); return false; }
-	document.onmouseup		 		= function (e) { t.dragstop(e);  return false; }
+	if (/^(yes|magnify)$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
+		this.viewport.onmousedown		= function (e) { t.dragstart(e); return false; }
+	
 	
     this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
 	
@@ -80,7 +79,13 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	animationType:	function ()		{ return this.mainNode.getAttribute('animation-type') || 'easeOutBack' },
 	getDuration:	function ()		{ return this.mainNode.getAttribute('animation-duration') || 1 },
-	my:				function (cn,n)	{ return (n || this.mainNode).getElementsByClassName(this.ns ? (this.ns + "-" + cn) : cn) },
+	
+	my: function (cn, node)
+	{
+		var root = (node || this.mainNode)
+		cn = this.ns ? (this.ns + "-" + cn) : cn
+		return root.getElementsByClassName ? root.getElementsByClassName(cn) : []
+	},
 	
 	goInit: function (n)
 	{
@@ -184,25 +189,92 @@ Programica.RollingImages.prototype.Handler.prototype =
 			this.current < this.points.length - 1 ? this.aNext.enable() : this.aNext.disable()
 	},
 	
+	addButtonsFrom: function (node)
+	{
+		if (node)
+		{
+			var btns = this.my('button', node)
+			//log(btns)
+			this.buttons = this.buttons.concat(btns)
+		}
+	},
+	
 	dragging: function (e)
 	{
 		//log(e)
 		this.viewport.scrollLeft = this.di.sx + this.di.mx - e.clientX
 		this.viewport.scrollTop  = this.di.sy + this.di.my - e.clientY
+		
+		// центр окошка
+		var vc_x = this.viewport.scrollLeft + this.viewport.offsetWidth / 2
+		var vc_y = this.viewport.scrollTop  + this.viewport.offsetHeight / 2
+		
+		// минимальное расстояние
+		var min = Infinity
+		// нода с минимальным расстоянием
+		var min_node = null
+		// номер минимальной ноды
+		var min_i = null
+		
+		//log(vc)
+		for (var i = 0; i < this.points.length; i++)
+		{
+			// точка
+			var node = this.points[i]
+			
+			// центр точки
+			var pc_x = node.offsetLeft + node.offsetWidth / 2
+			var pc_y = node.offsetTop  + node.offsetHeight / 2
+			
+			// ищем расcтояние (гипотинузу — c)
+			var c = Math.sqrt( (vc_x - pc_x) * (vc_x - pc_x) + (vc_y - pc_y) * (vc_y - pc_y) )
+			
+			//log(d)
+			
+			if (c < min)
+			{
+				min = c
+				min_node = node
+				min_i = i
+			}
+		}
+		
+		//log(min_i)
+		
+		this.current = min_i
+		this.updateNavigation()
 	},
 	
 	dragstart: function (e)
 	{
+		if (this.viewport.animation)
+			this.viewport.animation.stop()
+		
+		if (this.magnify_timeout)
+			clearTimeout(this.magnify_timeout),
+			this.magnify_timeout = null
+		
 		this.di = {mx:e.clientX, my:e.clientY, sx:this.viewport.scrollLeft, sy:this.viewport.scrollTop}
 		
 		var t = this
-		document.onmousemove = function (e) { t.dragging(e) }
+		document.onmousemove	= function (e) { t.dragging(e) }
+		document.onmouseup		= function (e) { t.dragstop(e);  return false; }
+		
+		this.viewport.addClassName('grabbing')
 	},
 	
 	dragstop: function (e)
 	{
 		this.di = null
-		document.onmousemove = function () {}
+		document.onmousemove = document.onmouseup = function () {}
+		
+		if (/^magnify$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
+		{
+			var t = this
+			this.magnify_timeout = setTimeout(function () { t.goToFrame(t.current, 'easeInOutQuad') }, 750)
+		}
+		
+		this.viewport.remClassName('grabbing')
 	}
 }
 
