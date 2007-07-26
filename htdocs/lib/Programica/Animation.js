@@ -247,38 +247,36 @@ extend (Programica.Animation.prototype,
 	setStyleProperty: function (p, value)
 	{
 		log3("setStyleProperty(" + p + "," + value + ")")
-		
-		if (/color/.test(p))
+		try
 		{
-			this.obj.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
+			if (/color/.test(p))
+				return this.obj.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
+			
+			/* for XUL elements */
+			if (p == 'scrollTop' && this.boxInterface)
+				return this.boxInterface.scrollTo(this.boxInterface.scrollLeft(), Math.round(value))
+			
+			if (p == 'scrollLeft' && this.boxInterface)
+				return this.boxInterface.scrollTo(Math.round(value), this.boxInterface.scrollTop())
+			
+			if (/scroll/.test(p))
+				return this.obj[p] = Math.round(value)
+			
+			if (p == "opacity")
+				return this.obj.style[p] = value
+			
+			if ((p == 'width' || p == 'height') && value < 0)
+				value = 0
+			
+			if (this.unit == 'em')
+				return this.obj.style[p] = Math.round(value * 100) / 100 + this.unit
+			
+			return this.obj.style[p] = Math.round(value) + this.unit
 		}
-		
-		/* for XUL elements */
-		else if (p == 'scrollTop' && this.boxInterface)
+		catch (ex)
 		{
-			this.boxInterface.scrollTo(this.boxInterface.scrollLeft(), Math.round(value))
-		}
-		else if (p == 'scrollLeft' && this.boxInterface)
-		{
-			this.boxInterface.scrollTo(Math.round(value), this.boxInterface.scrollTop())
-		}
-		
-		else if (/scroll/.test(p))
-		{
-			// //Math.round(value)
-			this.obj[p] = Math.round(value)
-		}
-		else if (p == "opacity")
-		{
-			this.obj.style[p] = value
-		}
-		else if ( this.unit == 'em' )
-		{
-			this.obj.style[p] = Math.round( value*100 )/100 + this.unit
-		}
-		else
-		{
-			this.obj.style[p] = Math.round( value ) + this.unit
+			log(ex + p + value)
+			return value
 		}
 	},
 	

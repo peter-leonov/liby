@@ -184,6 +184,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 	{
 		var button
 		
+		Programica.RollingImages.active = this
+		
 		for (var i = 0, il = this.buttons.length; i < il; i++)
 			button = this.buttons[i],
 			button.className = button.className.replace(/ selected-button/g, '')
@@ -311,5 +313,26 @@ Programica.RollingImages.prototype.Handler.prototype =
 
 Programica.Widget.register(new Programica.RollingImages())
 
+
+document.addEventListener
+(
+	'keydown',
+	function (e)
+	{
+		if (!Programica.RollingImages.active) return
+		
+		if (e.ctrlKey)
+			switch (e.keyCode)
+			{
+				case 37:
+					Programica.RollingImages.active.goPrev()
+					break
+				case 39:
+					Programica.RollingImages.active.goNext()
+					break
+			}
+	},
+	true
+)
 
 log2("Widget/RollingImages.js loaded")
