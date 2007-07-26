@@ -41,7 +41,7 @@ Programica.RollingImages.prototype.Handler = function (node)
 		node.button_num = node.getAttribute('button-num') * 100 || i
 	
 	//this.buttons = this.buttons.sort(function (a, b) { a.button_num - b.button_num })
-	log(this.buttons)
+	//log(this.buttons)
 	
 	
 	var t = this
@@ -52,10 +52,16 @@ Programica.RollingImages.prototype.Handler = function (node)
 	
 	
 	if (/^(yes|magnify)$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
+	{
+		var power = this.mainNode.getAttribute('rolling-images-grab-power')
+		power = power ? power.split(/\s+/) : []
+		this.scrollXpower = (power[0] || 1)
+		this.scrollYpower = power[1] || this.scrollXpower
 		this.viewport.addEventListener('mousedown', this.mousedown_listener, true)
+	}
 	
-	
-    this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
+	if (/^yes$/i.test(this.mainNode.getAttribute('rolling-images-scroll')))
+		this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
 	
 	if (this.aPrev)
 	{
@@ -217,8 +223,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.drag_vector_y = this.di.my - e.clientY
 		
 		// перемещаем под мышку ;)
-		this.viewport.scrollLeft = this.di.sx + this.drag_vector_x
-		this.viewport.scrollTop  = this.di.sy + this.drag_vector_y
+		this.viewport.scrollLeft = this.di.sx + this.drag_vector_x * this.scrollXpower
+		this.viewport.scrollTop  = this.di.sy + this.drag_vector_y * this.scrollYpower
 		
 		// центр окошка
 		var vc_x = this.viewport.scrollLeft + this.viewport.offsetWidth / 2
