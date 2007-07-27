@@ -46,19 +46,12 @@ Programica.RollingImages.prototype.Handler = function (node)
 	
 	var t = this
 	
-	this.mousedown_listener = function (e) { t.dragstart(e), e.preventDefault() }
-	this.mousemove_listener = function (e) { t.dragging(e), e.preventDefault() }
-	this.mouseup_listener   = function (e) { t.dragstop(e), e.preventDefault() }
+	this.mousedown_listener = function (e) { t.dragstart(e) }
+	this.mousemove_listener = function (e) { t.dragging(e) }
+	this.mouseup_listener   = function (e) { t.dragstop(e) }
 	
 	
-	if (/^(yes|magnify)$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
-	{
-		var power = this.mainNode.getAttribute('rolling-images-grab-power')
-		power = power ? power.split(/\s+/) : []
-		this.scrollXpower = (power[0] || 1)
-		this.scrollYpower = power[1] || this.scrollXpower
-		this.viewport.addEventListener('mousedown', this.mousedown_listener, true)
-	}
+	this.viewport.addEventListener('mousedown', this.mousedown_listener, true)
 	
 	if (/^yes$/i.test(this.mainNode.getAttribute('rolling-images-scroll')))
 		this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
@@ -162,10 +155,10 @@ Programica.RollingImages.prototype.Handler.prototype =
 			var scale = this.viewport.getAttribute("scale")
 			
 			if (/^(all|height)$/.test(scale))
-				trans.height = [node.offsetHeight]
+				height = node.offsetHeight
 				
 			if (/^(all|width)$/.test(scale))	
-				trans.width  = [node.offsetWidth]
+				width  = node.offsetWidth
 		}
 		
 		this.animateTo(left, top, width, height, anim, dur)
@@ -295,6 +288,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	dragging: function (e)
 	{
+		e.preventDefault()
+		
 		// не тащим, если потеряны начальные координаты
 		if (!this.di)
 			return
@@ -316,8 +311,20 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	dragstart: function (e)
 	{
+		if (!/^(yes|magnify)$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
+			return
+		
+		e.preventDefault()
+		
 		if (this.viewport.animation)
 			this.viewport.animation.stop()
+		
+		{
+			var power = this.mainNode.getAttribute('rolling-images-grab-power')
+			power = power ? power.split(/\s+/) : []
+			this.scrollXpower = (power[0] || 1)
+			this.scrollYpower = power[1] || this.scrollXpower
+		}
 		
 		this.drop_magnify()
 		
@@ -337,6 +344,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	dragstop: function (e)
 	{
+		e.preventDefault()
+		
 		document.removeEventListener('mousemove', this.mousemove_listener, true);
 		document.removeEventListener('mouseup', this.mouseup_listener, true);
 		
