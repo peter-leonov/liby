@@ -17,7 +17,7 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.buttons			= []
 	this.aPrev				= this.my('prev')[0]
 	this.aNext				= this.my('next')[0]
-	this.current			= 0
+	this.current			= null
 	
 	{
 		var bstr = this.mainNode.getAttribute('rolling-images-buttons')
@@ -107,9 +107,6 @@ Programica.RollingImages.prototype.Handler.prototype =
 		n = n || 0
 		this.goToNode(this.points[n], anim, dur)
 		
-		this.current = n
-		this.updateNavigation()
-		
 		return n
 	},
 	
@@ -165,11 +162,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		// меняем номер текущей ноды
 		for (var i = 0, il = this.points.length; i < il; i++)
-			if (this.points[i] == node) this.current = i
-		
-		if (node.onselect) node.onselect()
-		
-		this.updateNavigation()
+			if (this.points[i] == node) this.setCurrent(i)
 	},
 	
 	animateTo: function (left, top, width, height, anim, dur)
@@ -207,7 +200,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.viewport.scrollLeft = left
 		this.viewport.scrollTop = top
 		
-		this.findNearest()
+		//this.findNearest()
 	},
 	
 	updateNavigation: function ()
@@ -242,6 +235,17 @@ Programica.RollingImages.prototype.Handler.prototype =
 			//log(btns)
 			this.buttons = this.buttons.concat(btns)
 		}
+	},
+	
+	setCurrent: function (num)
+	{
+		if (num == this.current)
+			return
+		
+		this.current = num
+		this.updateNavigation()
+		
+		if (this.points[this.current].onselect) this.points[this.current].onselect()
 	},
 	
 	findNearest: function ()
@@ -281,9 +285,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		}
 		
 		//log(min_i)
-		
-		this.current = min_i
-		this.updateNavigation()
+		this.setCurrent(min_i)
 	},
 	
 	dragging: function (e)
@@ -346,6 +348,9 @@ Programica.RollingImages.prototype.Handler.prototype =
 	{
 		e.preventDefault()
 		
+		if (this.mouse[6])
+			e.stopPropagation()
+		
 		document.removeEventListener('mousemove', this.mousemove_listener, true);
 		document.removeEventListener('mouseup', this.mouseup_listener, true);
 		
@@ -356,8 +361,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (inertia && this.mouse[3] && new Date() - this.mouse[0].t < 150)
 		{
 			// арифметически усредняем три последних движения мышью
-			var vx = ((this.mouse[1].x - this.mouse[0].x) + (this.mouse[2].x - this.mouse[1].x) + (this.mouse[3].x - this.mouse[2].x))/3
-			var vy = ((this.mouse[1].y - this.mouse[0].y) + (this.mouse[2].y - this.mouse[1].y) + (this.mouse[3].y - this.mouse[2].y))/3
+			var vx = ((this.mouse[1].x - this.mouse[0].x) + (this.mouse[2].x - this.mouse[1].x) + (this.mouse[3].x - this.mouse[2].x)) / 3
+			var vy = ((this.mouse[1].y - this.mouse[0].y) + (this.mouse[2].y - this.mouse[1].y) + (this.mouse[3].y - this.mouse[2].y)) / 3
 			
 			var t = this
 			this.animateTo

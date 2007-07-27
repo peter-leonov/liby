@@ -118,7 +118,7 @@ if (!window.addEventListener && window.attachEvent)
 		func.IEwrapper = func.IEwrapper || function (e)
 		{
 			e.preventDefault  = function () { var old = this.returnValue;  this.returnValue = false; return old }
-			e.stopPropogation = function () { var old = this.cancelBubble; this.cancelBubble = true; return old }
+			e.stopPropagation = function () { var old = this.cancelBubble; this.cancelBubble = true; return old }
 			e.detail = - e.wheelDelta / 120
 			func.apply(t,[e])
 		}

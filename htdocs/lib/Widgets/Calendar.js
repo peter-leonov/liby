@@ -80,12 +80,12 @@ Programica.Calendar.prototype.Handler.prototype =
 					if (data[now])
 					{
 						li.className = 'future private'
-						li.onmousedown = function () { content.show('#content-event') }
+						li.onmouseup = function () { content.show('#content-event') }
 					}
 					else
 					{
 						li.className = "future freeday"
-						li.onmousedown = function () { content.show('#content-freeday') }
+						li.onmouseup = function () { content.show('#content-freeday') }
 					}
 				}
 				else if (today == now) // настоящее
@@ -94,7 +94,7 @@ Programica.Calendar.prototype.Handler.prototype =
 				}
 				else if (today > now) // прошлое
 				{
-					li.onmousedown = function () { content.show('#content-past') }
+					li.onmouseup = function () { content.show('#content-past') }
 					
 					if (data[now])
 					{

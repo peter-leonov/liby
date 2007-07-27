@@ -140,7 +140,7 @@ Programica.DOM.show = function (t)
 			if (!this.visible()) this.style.opacity = 0
 			this.style.display = 'block'
 			this.style.visibility = 'visible'
-			return this.animate('linearTween', {opacity:[0.999]}, t).start()
+			return this.animate('linearTween', {opacity:1}, t).start()
 		}
 		else
 			setTimeout(function () { this.style.display = 'block'; this.style.opacity = 1 }, t * 1000)

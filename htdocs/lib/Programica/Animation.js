@@ -228,7 +228,7 @@ extend (Programica.Animation.prototype,
 		
 		
 		if (p == "opacity" && isNaN(parseFloat(this.obj.style[p])))
-			return 0.999
+			return 1
 		
 		
 		if (p == 'scrollTop' && this.boxInterface)
