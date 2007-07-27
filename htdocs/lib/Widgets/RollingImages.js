@@ -109,10 +109,10 @@ Programica.RollingImages.prototype.Handler.prototype =
 		return n
 	},
 	
-	goToFrame: function (n, anim)
+	goToFrame: function (n, anim, dur)
 	{
 		n = n || 0
-		this.goToNode(this.points[n], anim)
+		this.goToNode(this.points[n], anim, dur)
 		
 		this.current = n
 		this.updateNavigation()
@@ -120,19 +120,13 @@ Programica.RollingImages.prototype.Handler.prototype =
 		return n
 	},
 	
-	goToNode: function (node, anim)
+	goToNode: function (node, anim, dur)
 	{
 		if (!node) return
-		anim = anim || this.animationType()
-		
-		this.drop_magnify()
-		
-		for (var i = 0, il = this.points.length; i < il; i++)
-			if (this.points[i] == node) this.current = i
 		
 		log2(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
-		if (!this.viewport) log2('Viewport is undefined!')
-		if (!this.viewport.animate) log2('Viewport can`t be animated!')
+		
+		var left = top = width = height = null;
 		
 		// поиграем в CSS
 		switch (this.mainNode.getAttribute('animation-align') || 'left-top')
@@ -140,44 +134,85 @@ Programica.RollingImages.prototype.Handler.prototype =
 			case 'center':
 			case 'middle':
 				// наводим на центр выбранной ноды
-				var left = Math.round( node.offsetLeft + (node.offsetWidth  / 2) - (this.viewport.offsetWidth  / 2) )
-				var top  = Math.round( node.offsetTop  + (node.offsetHeight / 2) - (this.viewport.offsetHeight / 2) )
+				left = node.offsetLeft + (node.offsetWidth  / 2) - (this.viewport.offsetWidth  / 2)
+				top  = node.offsetTop  + (node.offsetHeight / 2) - (this.viewport.offsetHeight / 2)
 				break
 			
 			case 'left-top':
 				// лево верх
-				var left = node.boxObject ? node.boxObject.x : node.offsetLeft
-				var top  = node.boxObject ? node.boxObject.y : node.offsetTop
+				left = node.boxObject ? node.boxObject.x : node.offsetLeft
+				top  = node.boxObject ? node.boxObject.y : node.offsetTop
 				break
 			
 			case 'right-bottom':
 				// право низ
-				var left = node.offsetLeft + node.offsetWidth  - this.viewport.offsetWidth
-				var top  = node.offsetTop  + node.offsetHeight - this.viewport.offsetHeight
+				left = node.offsetLeft + node.offsetWidth  - this.viewport.offsetWidth
+				top  = node.offsetTop  + node.offsetHeight - this.viewport.offsetHeight
 				break
 			
 			default:
-				log('Unknown animation-align type: ' + this.mainNode.getAttribute('animation-align'))
+				log('Unknown animation align type: ' + this.mainNode.getAttribute('animation-align'))
 		}
-		//log(left, top)
-		var trans = {scrollTop: [top], scrollLeft: [left]}
+		
 		
 		{
 			var scale = this.viewport.getAttribute("scale")
 			
-			if (/all|height/.test(scale))
+			if (/^(all|height)$/.test(scale))
 				trans.height = [node.offsetHeight]
 				
-			if (/all|width/.test(scale))	
+			if (/^(all|width)$/.test(scale))	
 				trans.width  = [node.offsetWidth]
 		}
 		
-		//this.viewport.scrollTop = node.offsetTop, this.viewport.scrollLeft = node.offsetLeft
-		this.viewport.animate(anim, trans,  this.getDuration()).start()
+		this.animateTo(left, top, width, height, anim, dur)
+		
+		// меняем номер текущей ноды
+		for (var i = 0, il = this.points.length; i < il; i++)
+			if (this.points[i] == node) this.current = i
 		
 		if (node.onselect) node.onselect()
 		
 		this.updateNavigation()
+	},
+	
+	animateTo: function (left, top, width, height, anim, dur)
+	{
+		anim = anim || this.animationType()
+		dur  = dur  || this.getDuration()
+		
+		var trans = {};
+		
+		if (left != null)
+			trans.scrollLeft = left
+		
+		if (top != null)
+			trans.scrollTop = top
+		
+		if (width != null)
+			trans.width = width
+		
+		if (height != null)
+			trans.height = height
+		
+		
+		if (!this.viewport) log2('Viewport is undefined!')
+		if (!this.viewport.animate) log2('Viewport can`t be animated!')
+		
+		this.drop_magnify()
+		return this.viewport.animate(anim, trans, dur).start()
+	},
+	
+	jumpTo: function (left, top)
+	{
+		if (!this.viewport) log2('Viewport is undefined!')
+		if (!this.viewport.animate) log2('Viewport can`t be animated!')
+		
+		//this.drop_magnify()
+		this.viewport.scrollLeft = left
+		this.viewport.scrollTop = top
+		
+		this.findNearest()
 	},
 	
 	updateNavigation: function ()
@@ -214,20 +249,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 		}
 	},
 	
-	dragging: function (e)
+	findNearest: function ()
 	{
-		// не тащим, если потеряны начальные координаты
-		if (!this.di)
-			return
-		
-		// считаем вектор перетаскивания
-		this.drag_vector_x = this.di.mx - e.clientX
-		this.drag_vector_y = this.di.my - e.clientY
-		
-		// перемещаем под мышку ;)
-		this.viewport.scrollLeft = this.di.sx + this.drag_vector_x * this.scrollXpower
-		this.viewport.scrollTop  = this.di.sy + this.drag_vector_y * this.scrollYpower
-		
 		// центр окошка
 		var vc_x = this.viewport.scrollLeft + this.viewport.offsetWidth / 2
 		var vc_y = this.viewport.scrollTop  + this.viewport.offsetHeight / 2
@@ -268,6 +291,27 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.updateNavigation()
 	},
 	
+	dragging: function (e)
+	{
+		// не тащим, если потеряны начальные координаты
+		if (!this.di)
+			return
+		
+		// запоминаем мышку
+		this.mouse.unshift({x:e.clientX, y:e.clientY, t:new Date()})
+		
+		// считаем смещение перетаскивания
+		this.drag_dx = this.di.mx - e.clientX
+		this.drag_dy = this.di.my - e.clientY
+		
+		// перемещаем под мышку ;)
+		this.jumpTo
+		(
+			this.di.sx + this.drag_dx * this.scrollXpower,
+			this.di.sy + this.drag_dy * this.scrollYpower
+		)
+	},
+	
 	dragstart: function (e)
 	{
 		if (this.viewport.animation)
@@ -275,7 +319,13 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		this.drop_magnify()
 		
-		this.di = {mx:e.clientX, my:e.clientY, sx:this.viewport.scrollLeft, sy:this.viewport.scrollTop}
+		// пустой стек позиций мышки
+		this.mouse = []
+		// запоминаем мышку
+		this.mouse.unshift({x:e.clientX, y:e.clientY, t:new Date()})
+		
+		// начальные координвты мышки и скрола
+		this.di = {mx:e.clientX, mx0:e.clientX, my:e.clientY, my0:e.clientY, sx:this.viewport.scrollLeft, sy:this.viewport.scrollTop}
 		
 		document.addEventListener('mousemove', this.mousemove_listener, true)
 		document.addEventListener('mouseup', this.mouseup_listener, true)
@@ -285,19 +335,42 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	dragstop: function (e)
 	{
-		this.di = null
 		document.removeEventListener('mousemove', this.mousemove_listener, true);
 		document.removeEventListener('mouseup', this.mouseup_listener, true);
 		
 		if (/^magnify$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
 			this.magnify()
 		
+		// "энерция"
+		var inertia = this.mainNode.getAttribute('rolling-images-grab-inertia')
+		if (inertia && this.mouse[3])
+		{
+			// энерция
+			
+			
+			// арифметически усредняем три последних движения мышью
+			var vx = ((this.mouse[1].x - this.mouse[0].x) + (this.mouse[2].x - this.mouse[1].x) + (this.mouse[3].x - this.mouse[2].x))/3
+			var vy = ((this.mouse[1].y - this.mouse[0].y) + (this.mouse[2].y - this.mouse[1].y) + (this.mouse[3].y - this.mouse[2].y))/3
+			
+			var t = this
+			this.animateTo
+			(
+				// умножаем движение на 3 и возводим в степерь 1.2
+				this.di.sx + this.drag_dx * this.scrollXpower + (Math.pow(Math.abs(vx * 3 * inertia * this.scrollXpower), 1.2)) * (vx < 0 ? -1 : 1),
+				this.di.sy + this.drag_dy * this.scrollYpower + (Math.pow(Math.abs(vy * 3 * inertia * this.scrollYpower), 1.2)) * (vy < 0 ? -1 : 1),
+				null, null,
+				'easeOutQuad', 0.5 * inertia
+			).oncomplete = function () { t.magnify() }
+		}
+		
+		this.di = null
 		this.viewport.remClassName('grabbing')
 	},
 	
 	magnify: function ()
 	{
 		var t = this
+		this.findNearest()
 		this.magnify_timeout = setTimeout(function () { t.goToFrame(t.current, 'easeInOutQuad') }, 750)
 	},
 	
