@@ -126,7 +126,10 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		log2(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
 		
-		var left = top = width = height = null;
+		var left = null
+		var top = null
+		var width = null
+		var height = null
 		
 		// поиграем в CSS
 		switch (this.mainNode.getAttribute('animation-align') || 'left-top')
@@ -208,7 +211,6 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (!this.viewport) log2('Viewport is undefined!')
 		if (!this.viewport.animate) log2('Viewport can`t be animated!')
 		
-		//this.drop_magnify()
 		this.viewport.scrollLeft = left
 		this.viewport.scrollTop = top
 		
@@ -338,16 +340,12 @@ Programica.RollingImages.prototype.Handler.prototype =
 		document.removeEventListener('mousemove', this.mousemove_listener, true);
 		document.removeEventListener('mouseup', this.mouseup_listener, true);
 		
-		if (/^magnify$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
-			this.magnify()
+		this.magnify()
 		
 		// "энерция"
 		var inertia = this.mainNode.getAttribute('rolling-images-grab-inertia')
-		if (inertia && this.mouse[3])
+		if (inertia && this.mouse[3] && new Date() - this.mouse[0].t < 150)
 		{
-			// энерция
-			
-			
 			// арифметически усредняем три последних движения мышью
 			var vx = ((this.mouse[1].x - this.mouse[0].x) + (this.mouse[2].x - this.mouse[1].x) + (this.mouse[3].x - this.mouse[2].x))/3
 			var vy = ((this.mouse[1].y - this.mouse[0].y) + (this.mouse[2].y - this.mouse[1].y) + (this.mouse[3].y - this.mouse[2].y))/3
@@ -355,7 +353,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 			var t = this
 			this.animateTo
 			(
-				// умножаем движение на 3 и возводим в степерь 1.2
+				// умножаем движение на 3, на инерцию и возводим в степерь 1.2
 				this.di.sx + this.drag_dx * this.scrollXpower + (Math.pow(Math.abs(vx * 3 * inertia * this.scrollXpower), 1.2)) * (vx < 0 ? -1 : 1),
 				this.di.sy + this.drag_dy * this.scrollYpower + (Math.pow(Math.abs(vy * 3 * inertia * this.scrollYpower), 1.2)) * (vy < 0 ? -1 : 1),
 				null, null,
@@ -369,9 +367,16 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	magnify: function ()
 	{
-		var t = this
-		this.findNearest()
-		this.magnify_timeout = setTimeout(function () { t.goToFrame(t.current, 'easeInOutQuad') }, 750)
+		if (/^magnify$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
+		{
+			var t = this
+			this.findNearest()
+			this.magnify_timeout = setTimeout
+			(
+				function () { t.goToFrame(t.current, 'easeInOutQuad') },
+				this.mainNode.getAttribute('rolling-images-grab-inertia') ? 150 : 750
+			)
+		}
 	},
 	
 	drop_magnify: function ()
