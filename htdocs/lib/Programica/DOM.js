@@ -88,7 +88,7 @@ Programica.DOM.addClassName = function (cn)
 
 Programica.DOM.remClassName = function (cn)
 {
-	this.className = this.className.replace(new RegExp(' +' + cn, "g"), "")
+	this.className = this.className.replace(new RegExp('\\s*\\b' + cn + '\\b\\s*', "g"), " ").replace(/^\s+|\s+$/g, "")
 	return cn
 }
 
