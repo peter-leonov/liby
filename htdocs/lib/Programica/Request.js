@@ -10,26 +10,26 @@ Programica.Request = function (prms)
 	
 	// в this.transport кладем реальный дескриптор запроса
 	
-	if(window.XMLHttpRequest) // Mozilla, Safari, ...
+	if (window.XMLHttpRequest) // Mozilla, Safari, ...
 	{
 		try
 		{
 			this.transport = new XMLHttpRequest()
-			if(this.transport.overrideMimeType) this.transport.overrideMimeType('text/xml')
+			if (this.transport.overrideMimeType) this.transport.overrideMimeType('application/xml')
 		}
 		catch (E) {}
 	}
-	else if(window.ActiveXObject) // MSIE
+	else if (window.ActiveXObject) // MSIE
 	{
 		// microсиво? — а что поделать
 		try { this.transport = new ActiveXObject("Msxml2.XMLHTTP") }
-		catch(E)
+		catch (E)
 		{
 			try 
 			{ 
 				this.transport = new ActiveXObject("Microsoft.XMLHTTP") 
 			}
-			catch(E2) 
+			catch (E2) 
 			{ 
 				log("Can`t create neither Msxml2.XMLHTTP nor Microsoft.XMLHTTP: " + E.messageText  + ", " + E2.messageText ) 
 			}
