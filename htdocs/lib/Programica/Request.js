@@ -1,8 +1,5 @@
 
-// require Programica
-
-// наш «свежий» взгляд на пресловутый аякс
-
+// наш "свежийий" взгляд на пресловутый аякс
 
 Programica.Request = function (prms)
 {
@@ -54,6 +51,11 @@ Programica.Request.paramDelimiter = "&"
 Programica.Request.urlEncode = function (data)
 {
 	if (!data) return ''
+	
+	// объекту виднее, как ему отправляться
+	if (data.toUrlEncode && data.toUrlEncode.constructor == Function)
+		return data.toUrlEncode()
+	
 	switch (data.constructor)
 	{
 		case Array:
@@ -65,7 +67,7 @@ Programica.Request.urlEncode = function (data)
 				switch (data[i].constructor)
 				{
 					case Array:
-						for (var j in data[i])
+						for (var j = 0, jl = data[i].length; j < jl; j++)
 							arr.push(encodeURI(i) + "=" + encodeURI(data[i][j]))
 						break
 					default:
@@ -75,7 +77,7 @@ Programica.Request.urlEncode = function (data)
 			return arr.join(Programica.Request.paramDelimiter)
 		
 		default:
-			return data.toUrlEncode && data.toUrlEncode.constructor == Function ? data.toUrlEncode() : data
+			return data
 	}
 }
 
