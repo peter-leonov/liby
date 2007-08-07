@@ -1,5 +1,5 @@
 
-// заранее объявляем «пространства имен»
+// заранее объявляем "пространства имен"
 
 if (!window.Programica) window.Programica = {}
 if (!window.Programica.DOM) Programica.DOM = {}
@@ -101,7 +101,16 @@ function inherit (to, from)
 function $   (id)   { return document.getElementById(id) }
 function $$  (cn)   { return document.getElementsByClassName(cn) }
 function $$$ (cn)   { return document.getElementsByTagName(cn) }
-function $E  (type) { return document.createElement(type) }
+function $E  (type, props)
+{
+	var node = document.createElement(type)
+	
+	if (props)
+		for (var i in props)
+			node.setAttribute(i, props[i])
+	
+	return node
+}
 
 
 //——————————————————————————————————————————————————————————————————————————————

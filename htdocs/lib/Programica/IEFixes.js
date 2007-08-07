@@ -7,7 +7,6 @@ Programica.Fixes =
 	{
 		this.runtimeStyle.behavior = 'none'
 		
-		
 		Programica.Fixes.fixPrototype.apply(this)
 		
 		if (/MSIE 6/.test(navigator.userAgent))
@@ -91,9 +90,12 @@ Programica.Fixes =
 	/* добавляет методы и свойства из HTMLElement.prototype */
 	fixPrototype: function ()
 	{
-		if (!window.extend) return
+		if (!window.extend) return this
 		if (window.HTMLElement) extend(this, HTMLElement.prototype)
+		//if (this.tagName == 'FORM') alert(this['addEventListener'])
 		if (window.HTMLFormElement && this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
+		
+		return this
 	}
 }
 
@@ -147,3 +149,29 @@ if (!window.removeEventListener && window.detachEvent)
 }
 
 document.write('<style> * { behavior: expression(Programica.Fixes.all.apply(this)) } </style>')
+
+document.realCreateElement = document.createElement
+document.createElement = function (type) { return Programica.Fixes.fixPrototype.apply(document.realCreateElement(type)) }
+
+function $E  (type, props)
+{
+	var html = []
+	
+	if (props)
+	{
+		for (var i in props)
+			html.push(i + '="' + encodeURI(props[i]) + '"')
+		
+		html = '<' + type + ' ' + html.join(' ') + '>'
+		//alert(html)
+		var node = document.createElement(html)
+		
+		/*if (props)
+			for (var i in props)
+				node.setAttribute(i, props[i])*/
+		
+		return node
+	}
+	
+	return document.createElement(type)
+}
