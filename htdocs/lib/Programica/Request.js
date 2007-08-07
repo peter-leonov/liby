@@ -83,11 +83,15 @@ Programica.Request.urlEncode = function (data)
 
 Programica.Request.prototype =
 {
-	onLoad:					function ()					{},
+	onLoad:					function ()	{},
+	
+	// дефолтный обработчичек ошибочек
 	onError: function ()
 	{
-		var errstr = this.getResponseHeader('X-Server-Error')
-		log("Во время запроса (" + this.lastRequest().uri + ") возникла проблема (" + this.status() + "):\n" + errstr)
+		var errstr = this.responseText()
+		var stat = this.status()
+		var stattext = this.statusText()
+		log("Request at " + this.lastRequest().uri + " cause an errorr #" + stat + " (" + stattext + ")" + ":\n" + errstr)
 		return true
 	},
 	
@@ -110,7 +114,7 @@ Programica.Request.prototype =
 		return this.transport.open(method, uri, async, user, password)
 	},
 	
-	/* transport.send() обернута в таймер из-за #97 */
+	// transport.send() обернута в таймер из-за #97
 	send:					function (data)
 	{
 		var t = this
@@ -187,7 +191,7 @@ Programica.Request.prototype =
 
 
 //——————————————————————————————————————————————————————————————————————————————
-// «шоткаты», известные также под псевдонимом «алиасы» :)
+// "шоткатыты", известные также под псевдонимом "алиасы" :)
 
 function aPost (url, params)
 {
@@ -197,7 +201,7 @@ function aPost (url, params)
 	var data = Programica.Request.urlEncode(params)
 	
 	r.open('POST', url, true)
-	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded") // ; charset=utf-8
 	r.setRequestHeader("Content-length", data.length)
 	r.send(data)
 	
@@ -212,7 +216,7 @@ function sPost (url, params)
 	var data = Programica.Request.urlEncode(params)
 	
 	r.open('POST', url, false)
-	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded") // ; charset=utf-8
 	r.setRequestHeader("Content-length", data.length)
 	r.send(data)
 	
