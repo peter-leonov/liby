@@ -64,16 +64,20 @@ Programica.Request.urlEncode = function (data)
 		case Object:
 			var arr = []
 			for (var i in data)
-				switch (data[i].constructor)
-				{
-					case Array:
-						for (var j = 0, jl = data[i].length; j < jl; j++)
-							arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i][j]))
-						break
-					default:
-						arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i]))
-						break
-				}
+				if (data[i] != undefined)
+					switch (data[i].constructor)
+					{
+						case Array:
+							for (var j = 0, jl = data[i].length; j < jl; j++)
+								arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i][j]))
+							break
+						default:
+							arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i]))
+							break
+					}
+				//else
+				//	arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i]))
+			
 			return arr.join(Programica.Request.paramDelimiter)
 		
 		default:
