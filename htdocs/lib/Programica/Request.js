@@ -68,10 +68,10 @@ Programica.Request.urlEncode = function (data)
 				{
 					case Array:
 						for (var j = 0, jl = data[i].length; j < jl; j++)
-							arr.push(encodeURI(i) + "=" + encodeURI(data[i][j]))
+							arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i][j]))
 						break
 					default:
-						arr.push(encodeURI(i) + "=" + encodeURI(data[i]))
+						arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i]))
 						break
 				}
 			return arr.join(Programica.Request.paramDelimiter)

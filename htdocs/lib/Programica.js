@@ -13,12 +13,21 @@ Programica.debugLevel = 1
 if (window.console && console.firebug)
 	// для Firebug
 	log = console.log
-//else if (window.console && window.console.log)
-//	// для Сафари и компании
-//	log = function () { return console.log(arguments) }
+	
+else if (window.console && window.console.log)
+	// для Сафари и компании
+	log = function ()
+	{
+		var arr = []
+		for (var i = 0; i < arguments.length; i++)
+			arr.push(arguments[i])
+		return console.log(arr.join(', '))
+	}
+	
 else if (window.opera && opera.postError)
 	// для Оперов
 	log = function () { return opera.postError(arguments) }
+	
 else
 	// для "всИЕх"
 	log = function () { return false }
