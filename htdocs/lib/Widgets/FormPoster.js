@@ -8,12 +8,14 @@ Programica.FormPoster.prototype.Handler = function (node)
 {
 	this.mainNode = node
 	
-	if (typeof node.getAttribute('action') != 'string') throw new Error('Form element with name "action" masks form own attribute.')
+	if (typeof node.getAttribute('action') != 'string')
+		throw new Error('Form element with name "action" masks form own attribute.')
 	
 	var send_listener = function (e)
 	{
 		// проверим, нужно ли ловить эту форму
-		if (!/^ajax$/i.test(this.getAttribute('target'))) return
+		if (!/^ajax$/i.test(this.getAttribute('target')))
+			return
 		
 		// не даем форме отправиться (кое-как работает в ИЕ нашими стараниями)
 		e.preventDefault()
