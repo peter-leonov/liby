@@ -30,7 +30,7 @@ Programica.FormPoster.prototype.Handler = function (node)
 		with (met(this.getAttribute('action'), this.data()))
 		{
 			onLoad		= function () { form.onload({request:this}) }
-			onSuccess	= function () { form.reset(); form.onsuccess({request:this}) }
+			onSuccess	= function () { form.onsuccess({request:this}) } // form.reset();
 			onError		= function () { form.onerror({request:this}) }
 		}
 	}
