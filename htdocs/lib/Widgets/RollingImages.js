@@ -1,6 +1,4 @@
 
-//require('/lib/Programica/Widget.js', '/lib/Programica/Animaion.js')
-
 Programica.RollingImages = function () {}
 
 Programica.RollingImages.prototype = new Programica.Widget()

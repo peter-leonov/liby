@@ -1,2 +1,2 @@
-#AddType 'text/javascript' .js
-#AddHandler server-parsed text/javascript
+Options +Includes
+AddHandler server-parsed .js
