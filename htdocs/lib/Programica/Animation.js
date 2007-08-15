@@ -1,4 +1,4 @@
-﻿
+
 
 Programica.Animation = function (prms)
 {
