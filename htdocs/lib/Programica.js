@@ -40,12 +40,20 @@ function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 //——————————————————————————————————————————————————————————————————————————————
 // Ближе к прототипу
 
-if (!window.HTMLElement) HTMLElement = {}
-if (!window.XULElement) XULElement = { prototype: {} }
-if (!HTMLElement.prototype) HTMLElement.prototype = document.createElement('div').__proto__ || {}
+if (!window.HTMLElement)
+	HTMLElement = {}
 
-if (!window.HTMLFormElement) HTMLFormElement = {}
-if (!HTMLFormElement.prototype) HTMLFormElement.prototype = document.createElement('form').__proto__ || {}
+if (!window.XULElement)
+	XULElement = { prototype: {} }
+
+if (!HTMLElement.prototype)
+	HTMLElement.prototype = document.createElement('div').__proto__ || {}
+
+if (!window.HTMLFormElement)
+	HTMLFormElement = {}
+
+if (!HTMLFormElement.prototype)
+	HTMLFormElement.prototype = document.createElement('form').__proto__ || {}
 
 // Напрямик
 function extend (to, from)
@@ -91,45 +99,6 @@ function $E  (type, props)
 
 //——————————————————————————————————————————————————————————————————————————————
 
-//——————————————————————————————————————————————————————————————————————————————
-// Безобидные полезности
-
-
-//// малюсенькая реализация запроса
-//Programica.get = function (url) { var r = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Msxml2.XMLHTTP")); r.open('GET', url, false); r.send(null); return r.responseText }
-//
-//// типа инклуды с реквайрами
-//function require ()
-//{
-//	for (var i = 0; i < arguments.length; i++)
-//	{
-//		if (!require.sripts[arguments[i]])
-//		{
-//			log2('require "' + arguments[i] + '"')
-//			
-//			if (document.write)
-//				document.write('<script type="text/javascript" src="' + arguments[i] + '"></script>');
-//			else
-//			{
-//				var code = Programica.get(arguments[i])
-//				window.eval ? window.eval(code) : eval(code)
-//			}
-//			
-//			require.sripts[arguments[i]] = 1
-//		}
-//	}
-//}
-//require.sripts = []
-
-
-//if (/MSIE/.test(navigator.userAgent))
-//	require('/lib/Programica/IEFixes.js')
-
-//require('/lib/Programica/DOM.js')
-//require('/lib/Programica/Animation.js')
-//require('/lib/Programica/Request.js')
-//require('/lib/Programica/Form.js')
-//require('/lib/Programica/Widget.js')
 
 <!--#if expr="$HTTP_USER_AGENT=/MSIE/"-->
 	<!--#include virtual="/lib/Programica/IEFixes.js"-->
