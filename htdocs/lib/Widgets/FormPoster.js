@@ -46,7 +46,7 @@ Programica.FormPoster.prototype.Handler = function (node)
 	{
 		frame_name	= ('id_' + (new Date()).getTime() + Math.round(Math.random()*1E+17))
 		
-		var iframe = $E('iframe', {name: frame_name, className: 'empty_iframe', src: 'about:blank'})
+		var iframe = $E('iframe', {name: frame_name, 'class': 'empty_iframe', src: 'about:blank'})
 		//var iframe	= document.createElement('iframe')
 		//iframe.setAttribute('id', frame_name)
 		//iframe.setAttribute('name', frame_name)
@@ -56,8 +56,17 @@ Programica.FormPoster.prototype.Handler = function (node)
 		node.target = frame_name
 		document.body.appendChild(iframe)
 		
-		iframe.onload = function(){ this.onload = function(){ log(this) } }
-		log(node)
+		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
+		
+		//iframe.onload = function(){ this.onload = function(){ node.onsuccess({request:iframe}) } }
+
+			iframe.addEventListener('load',
+				function(){
+					this.addEventListener('load', function(){
+						node.onsuccess({request:iframe})
+					}, false)
+				}, false
+			)
 	}
 	else
 	{
