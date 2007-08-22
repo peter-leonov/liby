@@ -54,7 +54,7 @@ Programica.Fixes =
 	fixOpacity: function ()
 	{
 		if (this.currentStyle && this.currentStyle.opacity)
-			this.runtimeStyle.opacity = this.currentStyle.opacity
+			this.style.opacity = this.currentStyle.opacity
 	},
 	
 	fixDisabled: function ()

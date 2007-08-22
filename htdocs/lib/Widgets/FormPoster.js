@@ -8,35 +8,61 @@ Programica.FormPoster.prototype.Handler = function (node)
 {
 	this.mainNode = node
 	
-	if (typeof node.getAttribute('action') != 'string')
+	// where 'form action="action"' in IE
+	if (node.action && typeof node.action != 'string')
 		throw new Error('Form element with name "action" masks form own attribute.')
+	
+	if (node.enctype && typeof node.enctype != 'string')
+		throw new Error('Form element with name "enctype" masks form own attribute.')
 	
 	var send_listener = function (e)
 	{
 		// проверим, нужно ли ловить эту форму
-		if (!/^ajax$/i.test(this.getAttribute('target')))
+		if (!/^ajax$/i.test(this.target))
 			return
 		
 		// не даем форме отправиться (кое-как работает в ИЕ нашими стараниями)
-		e.preventDefault()
 		
 		// поиграем в события
 		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
 		
-		var form = this
-		var met = /^post$/i.test(this.getAttribute('method')) ? aPost : aGet
+		var t	= this
+		
+
+		e.preventDefault()
+		var met	= /^post$/i.test(this.method) ? aPost : aGet
 		
 		// собственно отправляем данные
-		with (met(this.getAttribute('action'), this.data()))
+		with (met(this.action, this.data()))
 		{
-			onLoad		= function () { form.onload({request:this}) }
-			onSuccess	= function () { form.onsuccess({request:this}) } // form.reset();
-			onError		= function () { form.onerror({request:this}) }
+			onLoad		= function () { t.onload({request:this}) }
+			onSuccess	= function () { t.onsuccess({request:this}) } // t.reset();
+			onError		= function () { t.onerror({request:this}) }
 		}
 	}
 	
-	//node.addEventListener('submit', check_listener, false)
-	node.addEventListener('submit', send_listener,  false)
+	// for Upload
+	if (/^multipart\/form\-data$/i.test(node.getAttribute('enctype')))
+	{
+		frame_name	= ('id_' + (new Date()).getTime() + Math.round(Math.random()*1E+17))
+		
+		var iframe = $E('iframe', {name: frame_name, className: 'empty_iframe', src: 'about:blank'})
+		//var iframe	= document.createElement('iframe')
+		//iframe.setAttribute('id', frame_name)
+		//iframe.setAttribute('name', frame_name)
+		//iframe.setAttribute('class', 'empty_iframe')
+		//iframe.setAttribute('className', 'empty_iframe')
+		//iframe.setAttribute('src', 'about:blank')
+		node.target = frame_name
+		document.body.appendChild(iframe)
+		
+		iframe.onload = function(){ this.onload = function(){ log(this) } }
+		log(node)
+	}
+	else
+	{
+		node.addEventListener('submit', send_listener,  false)
+	}
 }
 
 

@@ -92,6 +92,11 @@ Programica.DOM.remClassName = function (cn)
 	return cn
 }
 
+Programica.DOM.hasClassName = function (cn)
+{
+	return (this.className == cn || this.className.match(new RegExp("(^|\\s)" + cn + "(\\s|$)")))
+}
+
 Programica.DOM.disable = function ()
 {
 	this.setAttribute('disabled', true)
