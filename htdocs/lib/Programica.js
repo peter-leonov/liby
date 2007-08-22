@@ -96,6 +96,10 @@ function $E  (type, props)
 	return node
 }
 
+Math.longRandom = function ()
+{
+	return (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17)
+}
 
 //——————————————————————————————————————————————————————————————————————————————
 
