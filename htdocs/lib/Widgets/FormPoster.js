@@ -44,29 +44,31 @@ Programica.FormPoster.prototype.Handler = function (node)
 	// for Upload
 	if (/^multipart\/form\-data$/i.test(node.getAttribute('enctype')))
 	{
-		frame_name	= ('id_' + (new Date()).getTime() + Math.round(Math.random()*1E+17))
+		var frame_name	= 'id_' + Math.longRandom()
 		
 		var iframe = $E('iframe', {name: frame_name, 'class': 'empty_iframe', src: 'about:blank'})
-		//var iframe	= document.createElement('iframe')
-		//iframe.setAttribute('id', frame_name)
-		//iframe.setAttribute('name', frame_name)
-		//iframe.setAttribute('class', 'empty_iframe')
-		//iframe.setAttribute('className', 'empty_iframe')
-		//iframe.setAttribute('src', 'about:blank')
 		node.target = frame_name
 		document.body.appendChild(iframe)
 		
 		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
 		
-		//iframe.onload = function(){ this.onload = function(){ node.onsuccess({request:iframe}) } }
-
-			iframe.addEventListener('load',
-				function(){
-					this.addEventListener('load', function(){
+		iframe.addEventListener
+		(
+			'load',
+			function ()
+			{
+				this.addEventListener
+				(
+					'load',
+					function ()
+					{
 						node.onsuccess({request:iframe})
-					}, false)
-				}, false
-			)
+					},
+					false
+				)
+			},
+			false
+		)
 	}
 	else
 	{
