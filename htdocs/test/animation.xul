@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xml-stylesheet href="xul-animation-style.css" type="text/css"?>
+<?xml-stylesheet href="animation.xul.css" type="text/css"?>
 
 <window
     id="animation-tests-window"
@@ -12,7 +12,7 @@
 	<script type="application/x-javascript" src="/lib/Widgets/RollingImages.js"></script>
 	
 	<hbox>
-	<vbox class="photos programica-rolling-images" animation-type="easeOutBounce">
+	<vbox class="photos programica-rolling-images" animation-type="easeOutBounce" rolling-images-grab="magnify" rolling-images-grab-inertia="1">
 		<scrollbox id="sb" class="viewport">
 			<image class="point" src="i/1.jpg" alt="" />
 			<image class="point" src="i/2.jpg" alt="" />

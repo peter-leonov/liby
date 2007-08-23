@@ -40,14 +40,11 @@ function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 //——————————————————————————————————————————————————————————————————————————————
 // Ближе к прототипу
 
-if (!window.HTMLElement)
-	HTMLElement = {}
+if (!window.Element)
+	Element = {}
 
-if (!window.XULElement)
-	XULElement = { prototype: {} }
-
-if (!HTMLElement.prototype)
-	HTMLElement.prototype = document.createElement('div').__proto__ || {}
+if (!Element.prototype)
+	Element.prototype = document.createElement('div').__proto__ || {}
 
 if (!window.HTMLFormElement)
 	HTMLFormElement = {}
@@ -115,5 +112,6 @@ Math.longRandom = function ()
 <!--#include virtual="/lib/Programica/Form.js"-->
 <!--#include virtual="/lib/Programica/Widget.js"-->
 
+document.addEventListener('submit', function (e) { e.preventDefault(); alert(e.target) }, false)
 
 log2("Programica.js loaded")

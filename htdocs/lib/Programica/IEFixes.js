@@ -87,11 +87,11 @@ Programica.Fixes =
 		this.attachEvent("onclick", function () { var node = t.getElementsByTagName('input')[0]; if (node) node.click() })
 	},
 	
-	/* добавляет методы и свойства из HTMLElement.prototype */
+	/* добавляет методы и свойства из Element.prototype */
 	fixPrototype: function ()
 	{
 		if (!window.extend) return this
-		if (window.HTMLElement) extend(this, HTMLElement.prototype)
+		if (window.Element) extend(this, Element.prototype)
 		//if (this.tagName == 'FORM') alert(this['addEventListener'])
 		if (window.HTMLFormElement && this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
 		
@@ -103,7 +103,7 @@ Programica.Fixes =
 /* кривоватый фикс addEventListener(...) и preventDefault() для IE */
 if (!window.addEventListener && window.attachEvent)
 {
-	HTMLElement.prototype.addEventListener = function (type, func, dir)
+	Element.prototype.addEventListener = function (type, func, dir)
 	{
 		switch (type)
 		{
@@ -126,12 +126,12 @@ if (!window.addEventListener && window.attachEvent)
 		}
 		this.attachEvent('on' + type, func.IEwrapper)
 	},
-	window.addEventListener = document.addEventListener = HTMLElement.prototype.addEventListener
+	window.addEventListener = document.addEventListener = Element.prototype.addEventListener
 }
 
 if (!window.removeEventListener && window.detachEvent)
 {
-	HTMLElement.prototype.removeEventListener = function (type, func, dir)
+	Element.prototype.removeEventListener = function (type, func, dir)
 	{
 		switch (type)
 		{
@@ -145,7 +145,7 @@ if (!window.removeEventListener && window.detachEvent)
 		
 		this.detachEvent('on' + type, func.IEwrapper)
 	},
-	window.removeEventListener = document.removeEventListener = HTMLElement.prototype.removeEventListener
+	window.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
 }
 
 document.write('<style> * { behavior: expression(Programica.Fixes.all.apply(this)) } </style>')
@@ -155,22 +155,13 @@ document.createElement = function (type) { return Programica.Fixes.fixPrototype.
 
 function $E  (type, props)
 {
-	var html = []
-	
 	if (props)
 	{
+		var html = []
 		for (var i in props)
 			html.push(i + '="' + encodeURI(props[i]) + '"')
 		
-		html = '<' + type + ' ' + html.join(' ') + '>'
-		//alert(html)
-		var node = document.createElement(html)
-		
-		/*if (props)
-			for (var i in props)
-				node.setAttribute(i, props[i])*/
-		
-		return node
+		return document.createElement('<' + type + ' ' + html.join(' ') + '>')
 	}
 	
 	return document.createElement(type)

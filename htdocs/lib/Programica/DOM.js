@@ -18,6 +18,9 @@ Programica.DOM.getElementsByClassName = function (strClass, strTag)
 	
 	for (var i = 0, ilen = objColl.length; i < ilen; i++)
 	{
+		if (!objColl[i].className || !objColl[i].className.split)
+			continue
+		
 		var arrObjClass = objColl[i].className.split(' ');
 		if (delim == ' ' && arrClass.length > arrObjClass.length) continue;
 		
@@ -182,7 +185,7 @@ Programica.DOM.getComputedStyle = function (prop)
 
 
 {
-	var interfaces = [XULElement, HTMLElement]
+	var interfaces = [Element]
 	
 	for (var ii = 0; ii < interfaces.length; ii++)
 		for (var m in Programica.DOM)

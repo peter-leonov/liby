@@ -29,29 +29,6 @@ Programica.Animation = function (prms)
 			this.motion = null
 	}
 	
-	if (this.obj.boxObject)
-	{
-		try
-		{
-			this.boxInterface = this.obj.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
-			
-			this.boxInterface.scrollTop = function ()
-			{
-				var h = {}
-				this.getPosition({},h)
-				return h.value
-			}
-			
-			this.boxInterface.scrollLeft = function ()
-			{
-				var w = {}
-				this.getPosition(w,{})
-				return w.value
-			}
-		}
-		catch(ex) {}
-	}
-	
 	// Трансформации, если заданы
 	if (prms.transformations)
 		for (var i in prms.transformations)
@@ -68,7 +45,7 @@ Programica.Animation.fps = 40
 Programica.Animation.defaults = { unit: 'px' }
 
 //.animate('linearTween', {marginTop: [0,-50]}, 1).start()
-XULElement.prototype.animate = HTMLElement.prototype.animate = function (motion, props, duration, unit)
+Element.prototype.animate = function (motion, props, duration, unit)
 {
 	var trans = []
 	
@@ -252,7 +229,11 @@ extend (Programica.Animation.prototype,
 			if (/color/.test(p))
 				return this.obj.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
 			
-			/* for XUL elements */
+			// for SVG elements
+			if (p == 'r')
+				return this.obj.r.baseVal.value = value
+			
+			// for XUL elements
 			if (p == 'scrollTop' && this.boxInterface)
 				return this.boxInterface.scrollTo(this.boxInterface.scrollLeft(), Math.round(value))
 			
@@ -320,6 +301,37 @@ Programica.Animation.time = function ()
 	}
 }
 
+
+// капелька фиксов для XULElement
+if (/mozilla\.xul/.test(document.contentType))
+{
+	var scrollTopGetter = function () { return 123 }
+	
+	XULElement.prototype.__defineGetter__('scrollTop', scrollTopGetter)
+	
+	if (this.obj.boxObject)
+	{
+		try
+		{
+			this.boxInterface = this.obj.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
+			
+			this.boxInterface.scrollTop = function ()
+			{
+				var h = {}
+				this.getPosition({},h)
+				return h.value
+			}
+			
+			this.boxInterface.scrollLeft = function ()
+			{
+				var w = {}
+				this.getPosition(w,{})
+				return w.value
+			}
+		}
+		catch(ex) {}
+	}
+}
 
 
 
