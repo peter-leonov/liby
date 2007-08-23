@@ -208,13 +208,6 @@ extend (Programica.Animation.prototype,
 			return 1
 		
 		
-		if (p == 'scrollTop' && this.boxInterface)
-			return this.boxInterface.scrollTop()
-		
-		if (p == 'scrollLeft' && this.boxInterface)
-			return this.boxInterface.scrollLeft()
-		
-		
 		if (/scroll/.test(p))
 			return this.obj[p]
 		
@@ -233,12 +226,6 @@ extend (Programica.Animation.prototype,
 			if (p == 'r')
 				return this.obj.r.baseVal.value = value
 			
-			// for XUL elements
-			if (p == 'scrollTop' && this.boxInterface)
-				return this.boxInterface.scrollTo(this.boxInterface.scrollLeft(), Math.round(value))
-			
-			if (p == 'scrollLeft' && this.boxInterface)
-				return this.boxInterface.scrollTo(Math.round(value), this.boxInterface.scrollTop())
 			
 			if (/scroll/.test(p))
 				return this.obj[p] = Math.round(value)
@@ -303,34 +290,65 @@ Programica.Animation.time = function ()
 
 
 // капелька фиксов для XULElement
-if (/mozilla\.xul/.test(document.contentType))
+if (window.XULElement)
 {
-	var scrollTopGetter = function () { return 123 }
-	
-	XULElement.prototype.__defineGetter__('scrollTop', scrollTopGetter)
-	
-	if (this.obj.boxObject)
+	// в XUL нет scrollLeft и scrollTop — имитируем через геттер/сеттер
+	XULElement.prototype.__boxInterfaceGetter = function ()
 	{
 		try
 		{
-			this.boxInterface = this.obj.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
-			
-			this.boxInterface.scrollTop = function ()
-			{
-				var h = {}
-				this.getPosition({},h)
-				return h.value
-			}
-			
-			this.boxInterface.scrollLeft = function ()
-			{
-				var w = {}
-				this.getPosition(w,{})
-				return w.value
-			}
+			this.__boxInterface = this.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject)
 		}
-		catch(ex) {}
+		catch (ex)
+		{
+			//console.error(ex)
+			this.__boxInterface = null
+		}
+		
+		this.__defineGetter__('boxInterface', function () { return this.__boxInterface })
+		
+		return this.__boxInterface
 	}
+	
+	XULElement.prototype.__scrollTopGetter	= function ()
+	{
+		var h = {}
+		try { this.boxInterface.getPosition({},h) } catch (ex) {  }
+		return h.value
+	}
+	
+	XULElement.prototype.__scrollLeftGetter	= function ()
+	{
+		var w = {}
+		try { this.boxInterface.getPosition(w,{}) } catch (ex) {  }
+		return w.value
+	}
+	
+	XULElement.prototype.__scrollTopSetter	= function (v)
+	{
+		try { this.boxInterface.scrollTo(this.scrollLeft, Math.round(v)) } catch (ex) {  }
+		return v
+	}
+	
+	XULElement.prototype.__scrollLeftSetter	= function (v)
+	{
+		try { this.boxInterface.scrollTo(Math.round(v), this.scrollTop) } catch (ex) {  }
+		return v
+	}
+	
+	
+	XULElement.prototype.__defineGetter__('boxInterface',  XULElement.prototype.__boxInterfaceGetter)
+	XULElement.prototype.__defineGetter__('scrollTop',  XULElement.prototype.__scrollTopGetter)
+	XULElement.prototype.__defineGetter__('scrollLeft', XULElement.prototype.__scrollLeftGetter)
+	
+	XULElement.prototype.__defineSetter__('scrollTop',  XULElement.prototype.__scrollTopSetter)
+	XULElement.prototype.__defineSetter__('scrollLeft', XULElement.prototype.__scrollLeftSetter)
+	
+	// в XUL нет offset* — имитируем через геттер/сеттер
+	XULElement.prototype.__defineGetter__('offsetHeight',  function () { return this.boxObject.height })
+	XULElement.prototype.__defineGetter__('offsetWidth', function () { return this.boxObject.width })
+	XULElement.prototype.__defineGetter__('offsetLeft',  function () { return this.boxObject.x })
+	XULElement.prototype.__defineGetter__('offsetTop', function () { return this.boxObject.y })
 }
 
 
