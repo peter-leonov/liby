@@ -41,7 +41,7 @@ Programica.Animation = function (prms)
 	return this
 }
 
-Programica.Animation.fps = 40
+Programica.Animation.fps = 60
 Programica.Animation.defaults = { unit: 'px' }
 
 //.animate('linearTween', {marginTop: [0,-50]}, 1).start()
