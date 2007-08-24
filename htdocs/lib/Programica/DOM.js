@@ -1,85 +1,77 @@
 
 // DOM для всех
 
-// took from http://muffinresearch.co.uk/archives/2006/04/29/getelementsbyclassname-deluxe-edition/
-Programica.DOM.getElementsByClassName = function (strClass, strTag)
+if (!window.Programica.DOM) Programica.DOM = {}
+
+if (document.evaluate)
 {
-	strTag = strTag || "*";
-	strClass = strClass || "*";
-	
-	var objColl = this.getElementsByTagName(strTag);
-	if (!objColl.length && strTag == "*" && this.all) objColl = this.all;
-	
-	if (strClass == "*") return objColl
-	
-	var arr = new Array();
-	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
-	var arrClass = strClass.split(delim);
-	
-	for (var i = 0, ilen = objColl.length; i < ilen; i++)
+	// from prototype 1.5.1.1
+	Programica.DOM.getElementsByXPath = function (expression, ns)
 	{
-		if (!objColl[i].className || !objColl[i].className.split)
-			continue
+		var results = []
+		var query = document.evaluate
+		(
+			expression, this, (ns || null),
+			XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null
+		)
 		
-		var arrObjClass = objColl[i].className.split(' ');
-		if (delim == ' ' && arrClass.length > arrObjClass.length) continue;
+		for (var i = 0, length = query.snapshotLength; i < length; i++)
+			results.push(query.snapshotItem(i));
 		
-		var c = 0;
-		comparisonLoop:
-		for (var k = 0, klen = arrObjClass.length; k < klen; k++)
-		{
-			for (var m = 0, mlen = arrClass.length; m < mlen; m++)
-			{
-				if (arrClass[m] == arrObjClass[k]) c++;
-				if ( (delim == '|' && c == 1) || (delim == ' ' && c == mlen) )
-				{
-					arr.push(objColl[i]);
-					break comparisonLoop;
-				}
-			}
-		}
+		return results;
 	}
-	return arr;
 }
 
-Programica.DOM.getParentsByClassName = function (strClass, strTag)
+// from prototype 1.5.1.1
+Programica.DOM.getElementsByClassName_xpath = function (className, tagName)
 {
-	if (!strClass) return []
-	strTag = strTag || "*";
+	var q = ".//" + (tagName || '*') + "[@class = ' " + className + " ' or contains(concat(' ', @class, ' '), ' " + className + " ')]";
+	return this.getElementsByXPath(q);
+}
+
+// from prototype 1.5.1.1
+Programica.DOM.getElementsByClassName_js = function (className, tagName)
+{
+	// geting elems with native function
+	var children = this.getElementsByTagName(tagName || '*')
+	// predeclaring vars
+	var elements = [], child, l = 0
+	// precompile regexp
+	var rex = new RegExp("\\b" + className + "\\b")
+	// length is constant, so caching its value
+	var len = children.length
 	
-	var objColl = []
-	
-	var node = this
-	while ((node = node.parentNode) && node.nodeType != 9)
-		if (strTag == '*' || node.nodeName == strTag)
-			objColl.push(node)
-	
-	var arr = new Array();
-	var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
-	var arrClass = strClass.split(delim);
-	
-	for (var i = 0, ilen = objColl.length; i < ilen; i++)
+	// memory for elements array allocated only once
+	elements.length = len
+	for (var i = 0; i < len; i++)
 	{
-		var arrObjClass = objColl[i].className.split(' ');
-		if (delim == ' ' && arrClass.length > arrObjClass.length) continue;
-		
-		var c = 0;
-		comparisonLoop:
-		for (var k = 0, klen = arrObjClass.length; k < klen; k++)
+		// even caching the reference for children[i]
+		// gives us some milliseconds
+		child = children[i]
+		// just rely on RegExp engine
+		if (rex.test(child.className))
 		{
-			for (var m = 0, mlen = arrClass.length; m < mlen; m++)
-			{
-				if (arrClass[m] == arrObjClass[k]) c++;
-				if ( (delim == '|' && c == 1) || (delim == ' ' && c == mlen) )
-				{
-					arr.push(objColl[i]);
-					break comparisonLoop;
-				}
-			}
+			// simple assignment
+			elements[l] = child
+			// simple increment
+			l++
 		}
 	}
-	return arr;
+	// truncating garbage length
+	elements.length = l
+	
+	return elements
 }
+
+// lets choose the right way to get elements
+if (document.getElementsByClassName)
+	true
+else if (Programica.DOM.getElementsByXPath)
+	Programica.DOM.getElementsByClassName = Programica.DOM.getElementsByClassName_xpath
+else
+	Programica.DOM.getElementsByClassName = Programica.DOM.getElementsByClassName_js
+
+
 
 
 Programica.DOM.addClassName = function (cn)
@@ -97,7 +89,7 @@ Programica.DOM.remClassName = function (cn)
 
 Programica.DOM.hasClassName = function (cn)
 {
-	return (this.className == cn || this.className.match(new RegExp("(^|\\s)" + cn + "(\\s|$)")))
+	return (this.className == cn || (new RegExp('\\b' + cn + '\\b')).test(this.className))
 }
 
 Programica.DOM.disable = function ()
@@ -194,6 +186,9 @@ Programica.DOM.getComputedStyle = function (prop)
 
 if (!document.getElementsByClassName)
 	document.getElementsByClassName = Programica.DOM.getElementsByClassName
+
+if (!document.getElementsByXPath)
+	document.getElementsByXPath = Programica.DOM.getElementsByXPath
 
 
 log2("Programica/DOM.js loaded")

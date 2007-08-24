@@ -6,45 +6,38 @@
 	<title>Немножко тестов анимации</title>
 	
 	<script type="text/javascript" src="/lib/Programica.js"></script>
-	
-	<!--<script type="text/javaScript" src="/lib/Programica/Animation.js"></script>
-	<script type="text/javaScript" src="/lib/Programica/Request.js"></script>
-	<script type="text/javaScript" src="/lib/Programica/Form.js"></script>
-	<script type="text/javaScript" src="/lib/Programica/Widget.js"></script>-->
-	
-	<!-- ну, типа, виджеты -->
 	<script type="text/javascript" src="/lib/Widgets/RollingImages.js"></script>
-	<!--<script src="/lib/Widgets/Calendar.js"       type="text/javaScript"></script>
-	<script src="/lib/Widgets/FormPoster.js"     type="text/javaScript"></script>-->
 	
 	<style type="text/css">
-	/*body
-	{
-		background: url('/n.gif') no-repeat;
-		background-attachment: fixed;
-	}*/
-	
-	br { clear: both; margin: 1.5em;}
-	
-	fieldset { float: left; width: 40%; margin: 2%; padding: 1%; }
-	
-	.prev { float: left; }
-	.next { float: right; }
-	.prev, .next { cursor: pointer; color: red;  /*для сафари { */ position: relative; z-index: 1; /* } */ }
-	a[disabled] { cursor: default !important; color: silver !important }
-	.disabled { cursor: default !important; color: silver !important }
-	
-	.photos { width: 420px; }
-	.photos .viewport { background-color: silver; width: 420px; height: 200px; overflow: hidden; position: relative; }
-	.photos img { width: 420px; height: 200px; float: left; }
-	.vertical img { margin-bottom: 2px; }
-	.horizontal img { margin-right: 2px; }
-	
-	.opacity-gradient img { width: 100px; float: left; }
-	
+		
+		/*body
+		{
+			background: url('/n.gif') no-repeat;
+			background-attachment: fixed;
+		}*/
+		
+		br { clear: both; margin: 1.5em;}
+		
+		fieldset { float: left; width: 40%; margin: 2%; padding: 1%; }
+		
+		.prev { float: left; }
+		.next { float: right; }
+		.prev, .next { cursor: pointer; color: red;  /*для сафари { */ position: relative; z-index: 1; /* } */ }
+		a[disabled] { cursor: default !important; color: silver !important }
+		.disabled { cursor: default !important; color: silver !important }
+		
+		.photos { width: 420px; }
+		.photos .viewport { background-color: silver; width: 420px; height: 200px; overflow: hidden; position: relative; }
+		.photos img { width: 420px; height: 200px; float: left; }
+		.vertical img { margin-bottom: 2px; }
+		.horizontal img { margin-right: 2px; }
+		
+		.opacity-gradient img { width: 100px; float: left; }
+		
 	</style>
 </head>
 <body>
+	
 	<fieldset><legend>RollingImages</legend>
 	<p>Вертикально:</p>
 	<div class="photos programica-rolling-images vertical" animation-type="easeOutBounce">
@@ -114,17 +107,17 @@
 		
 		<br/>
 		<div class="opacity-gradient">
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.0" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.1" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.2" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.3" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.4" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.5" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.6" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.7" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.8" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:0.9" />
-			<img class="point" src="i/8.jpg" alt="" style="opacity:1.0" />
+			<img src="i/8.jpg" alt="" style="opacity:0.0" />
+			<img src="i/8.jpg" alt="" style="opacity:0.1" />
+			<img src="i/8.jpg" alt="" style="opacity:0.2" />
+			<img src="i/8.jpg" alt="" style="opacity:0.3" />
+			<img src="i/8.jpg" alt="" style="opacity:0.4" />
+			<img src="i/8.jpg" alt="" style="opacity:0.5" />
+			<img src="i/8.jpg" alt="" style="opacity:0.6" />
+			<img src="i/8.jpg" alt="" style="opacity:0.7" />
+			<img src="i/8.jpg" alt="" style="opacity:0.8" />
+			<img src="i/8.jpg" alt="" style="opacity:0.9" />
+			<img src="i/8.jpg" alt="" style="opacity:1.0" />
 		</div>
 	</fieldset>
 	<br/>

@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>Тесты на скорость</title>
+	<script type="text/javascript" src="/lib/Programica.js"></script>
+</head>
+<body>
+	
+	<div id="testcontent" style="display:none">
+		<script>
+			var amount = 1000;
+			var anch = []
+			for (var i = 0; i < amount; i++)
+			anch.push('<a href="" class="' + (i&1 ? 'odd' : 'even') + '">link</a> x')
+			document.write(anch.join(' '))
+		</script>
+	</div>
+	
+	<script>
+		
+		console.time('i++')
+		var arr = []
+		for (var i = 0; i <= 99999; i++)
+			arr[i] = i
+		console.timeEnd('i++')
+		
+		console.time('i--')
+		var arr = []
+		for (var i = 99999; i >= 0; i--)
+			arr[i] = i
+		console.timeEnd('i--')
+		
+		
+		
+		var root = $('testcontent')
+		
+		console.time('document.getElementsByClassName_js')
+		root.getElementsByClassName_js('odd')
+		console.timeEnd('document.getElementsByClassName_js')
+		
+		console.time('document.getElementsByClassName_xpath')
+		root.getElementsByClassName_xpath('odd')
+		console.timeEnd('document.getElementsByClassName_xpath')
+		
+	</script>
+	
+</body>
+</html>

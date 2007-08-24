@@ -2,12 +2,12 @@
 // заранее объявляем "пространства имен"
 
 if (!window.Programica) window.Programica = {}
-if (!window.Programica.DOM) Programica.DOM = {}
 
 
 //——————————————————————————————————————————————————————————————————————————————
 // Логи
 
+Programica.serverType = '<!--#echo var="SERVER_TYPE" -->'
 Programica.debugLevel = 1
 
 if (window.console && console.firebug)
@@ -35,6 +35,8 @@ else
 
 function log3 () { if (Programica.debugLevel >= 3) log.apply(this, arguments) }
 function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
+
+function require (src) { document.write('<script type="text/javascript" src=' + src + '></script>') }
 
 
 //——————————————————————————————————————————————————————————————————————————————
@@ -64,21 +66,6 @@ function extend (to, from)
 	return to
 }
 
-// "наследуем", играясь с прототипом
-function inherit (to, from)
-{
-	if (!to || !from) return null
-	
-	var newp = {}
-	newp.prototype = to.prototype
-	to.prototype = newp
-	
-	for (var p in from)
-		newp[p] = from[p]
-	
-	return to
-}
-
 function $   (id)   { return document.getElementById(id) }
 function $$  (cn)   { return document.getElementsByClassName(cn) }
 function $$$ (cn)   { return document.getElementsByTagName(cn) }
@@ -100,18 +87,47 @@ Math.longRandom = function ()
 
 //——————————————————————————————————————————————————————————————————————————————
 
+//alert('<!--#echo var="HTTP_USER_AGENT" -->')
 
-<!--#if expr="$HTTP_USER_AGENT=/MSIE/"-->
-	<!--#include virtual="/lib/Programica/IEFixes.js"-->
-<!--#endif -->
+<!--#if expr="$SERVER_TYPE=/dev1elopment/" -->
 	
+	log2('Development mode')
+	
+	<!--#if expr="$HTTP_USER_AGENT = /Gecko/" -->
+		require("/lib/Programica/FFFixes.js")
+	<!--#endif -->
+	
+	<!--#if expr="$HTTP_USER_AGENT = /MSIE/" -->
+		require("/lib/Programica/IEFixes.js")
+	<!--#endif -->
+		
+	
+	require("/lib/Programica/DOM.js")
+	require("/lib/Programica/Animation.js")
+	require("/lib/Programica/Request.js")
+	require("/lib/Programica/Form.js")
+	require("/lib/Programica/Widget.js")
 
-<!--#include virtual="/lib/Programica/DOM.js"-->
-<!--#include virtual="/lib/Programica/Animation.js"-->
-<!--#include virtual="/lib/Programica/Request.js"-->
-<!--#include virtual="/lib/Programica/Form.js"-->
-<!--#include virtual="/lib/Programica/Widget.js"-->
+<!--#else -->
+	
+	Programica.debugLevel = 0
+	
+	<!--#if expr="$HTTP_USER_AGENT = /Gecko\//" -->
+		<!--#include virtual="/lib/Programica/FFFixes.js" -->
+	<!--#endif -->
+	
+	<!--#if expr="$HTTP_USER_AGENT = /MSIE/" -->
+		<!--#include virtual="/lib/Programica/IEFixes.js" -->
+	<!--#endif -->
+		
+	
+	<!--#include virtual="/lib/Programica/DOM.js" -->
+	<!--#include virtual="/lib/Programica/Animation.js" -->
+	<!--#include virtual="/lib/Programica/Request.js" -->
+	<!--#include virtual="/lib/Programica/Form.js" -->
+	<!--#include virtual="/lib/Programica/Widget.js" -->
+	
+<!--#endif -->
 
-document.addEventListener('submit', function (e) { e.preventDefault(); alert(e.target) }, false)
 
 log2("Programica.js loaded")
