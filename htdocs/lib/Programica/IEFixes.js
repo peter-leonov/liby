@@ -1,31 +1,31 @@
 
 if (!window.Programica) Programica = {}
 
-Programica.Fixes =
+Programica.IEFixes =
 {
 	all: function ()
 	{
 		this.runtimeStyle.behavior = 'none'
 		
-		Programica.Fixes.fixPrototype.apply(this)
+		Programica.IEFixes.fixPrototype.apply(this)
 		
 		if (/MSIE 6/.test(navigator.userAgent))
 		{
-			this.onpropertychange = Programica.Fixes.onpropertychange6
+			this.onpropertychange = Programica.IEFixes.onpropertychange6
 			
-			Programica.Fixes.fixOpacity.apply(this)
-			Programica.Fixes.fixPng.apply(this)
-			Programica.Fixes.fixTitle.apply(this)
-			Programica.Fixes.fixLabel.apply(this)
-			Programica.Fixes.fixTitle.apply(this)
+			Programica.IEFixes.fixOpacity.apply(this)
+			Programica.IEFixes.fixPng.apply(this)
+			Programica.IEFixes.fixTitle.apply(this)
+			Programica.IEFixes.fixLabel.apply(this)
+			Programica.IEFixes.fixTitle.apply(this)
 		}
 		
 		if (/MSIE 7/.test(navigator.userAgent))
 		{
-			this.onpropertychange = Programica.Fixes.onpropertychange7
+			this.onpropertychange = Programica.IEFixes.onpropertychange7
 			
-			Programica.Fixes.fixOpacity.apply(this)
-			Programica.Fixes.fixTitle.apply(this)
+			Programica.IEFixes.fixOpacity.apply(this)
+			Programica.IEFixes.fixTitle.apply(this)
 		}
 	},
 	
@@ -37,7 +37,7 @@ Programica.Fixes =
 			this.style.zoom = 1
 		}
 		else if (event.propertyName == 'disabled')
-			Programica.Fixes.fixDisabled.apply(this)
+			Programica.IEFixes.fixDisabled.apply(this)
 	},
 	
 	onpropertychange7: function ()
@@ -73,13 +73,13 @@ Programica.Fixes =
 		}
 	},
 	
-	/* убирает лишние подсказки */
+	// убирает лишние подсказки
 	fixTitle: function ()
 	{
 		if (!this.title) this.title = ''
 	},
 	
-	/* делает кликабельными метки */
+	// делает кликабельными метки
 	fixLabel: function ()
 	{
 		if (this.tagName != 'LABEL') return
@@ -87,7 +87,7 @@ Programica.Fixes =
 		this.attachEvent("onclick", function () { var node = t.getElementsByTagName('input')[0]; if (node) node.click() })
 	},
 	
-	/* добавляет методы и свойства из Element.prototype */
+	// добавляет методы и свойства из Element.prototype
 	fixPrototype: function ()
 	{
 		if (!window.extend) return this
@@ -100,58 +100,49 @@ Programica.Fixes =
 }
 
 
-/* кривоватый фикс addEventListener(...) и preventDefault() для IE */
+Programica.IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
+
+// кривоватый фикс addEventListener(...)
 if (!window.addEventListener && window.attachEvent)
 {
 	Element.prototype.addEventListener = function (type, func, dir)
 	{
-		switch (type)
-		{
-			case 'DOMMouseScroll':
-				type = 'mousewheel'
-				break
-			case 'DOMContentLoaded':
-				type = 'load' // хотелось бы oncontentready
-				break
-		}
+		if (Programica.IEFixes.eventConversion[type])
+			type = Programica.IEFixes.eventConversion[type]
 		
 		// JavaScript — сила! Какаво: сохранить функцию-обертку в свойстве оборачиваемой функции
 		var t = this
-		func.IEwrapper = func.IEwrapper || function (e)
+		func.__IEwrapper = func.__IEwrapper || function (e)
 		{
+			e.target = e.srcElement
 			e.preventDefault  = function () { var old = this.returnValue;  this.returnValue = false; return old }
 			e.stopPropagation = function () { var old = this.cancelBubble; this.cancelBubble = true; return old }
 			e.detail = - e.wheelDelta / 120
-			func.apply(t,[e])
+			func.apply(t, [e])
 		}
-		this.attachEvent('on' + type, func.IEwrapper)
-	},
+		
+		this.attachEvent('on' + type, func.__IEwrapper)
+		
+	}
 	window.addEventListener = document.addEventListener = Element.prototype.addEventListener
 }
 
+// кривоватый фикс removeEventListener(...)
 if (!window.removeEventListener && window.detachEvent)
 {
 	Element.prototype.removeEventListener = function (type, func, dir)
 	{
-		switch (type)
-		{
-			case 'DOMMouseScroll':
-				type = 'mousewheel'
-				break
-			case 'DOMContentLoaded':
-				type = 'load' // хотелось бы oncontentready
-				break
-		}
+		if (Programica.IEFixes.eventConversion[type])
+			type = Programica.IEFixes.eventConversion[type]
 		
-		this.detachEvent('on' + type, func.IEwrapper)
-	},
+		this.detachEvent('on' + type, func.__IEwrapper)
+	}
 	window.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
 }
 
-document.write('<style> * { behavior: expression(Programica.Fixes.all.apply(this)) } </style>')
 
-document.realCreateElement = document.createElement
-document.createElement = function (type) { return Programica.Fixes.fixPrototype.apply(document.realCreateElement(type)) }
+document.realIECreateElement = document.createElement
+document.createElement = function (type) { return Programica.IEFixes.fixPrototype.apply(document.realIECreateElement(type)) }
 
 function $E  (type, props)
 {
@@ -166,3 +157,14 @@ function $E  (type, props)
 	
 	return document.createElement(type)
 }
+
+
+document.write('<script id="__ie_onload" defer="defer" src="javascript:void(0)"></script>')
+document.getElementById("__ie_onload").onreadystatechange = function ()
+{
+    if (this.readyState == "complete")
+		window.oncontentready && window.oncontentready()
+}
+
+
+document.write('<style> * { behavior: expression(Programica.IEFixes.all.apply(this)) } </style>')
