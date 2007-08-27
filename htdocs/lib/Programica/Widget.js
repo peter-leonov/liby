@@ -25,20 +25,29 @@ extend (Programica.Widget,
 		if (this.thinkLoaded) return
 		this.thinkLoaded = true
 		
+		log2("Registered widgets: ", this.registered)
+		
 		// ищем все ноды в stack
 		var stack = [];
 		for (var wi in this.registered)
 		{
 			var w = this.registered[wi]
 			
-			var nodes = document.getElementsByClassName(w.mainNodeClassName, w.mainNodeTagName)
+			var nodes = w.mainNodeClassName
+				? document.getElementsByClassName(w.mainNodeClassName, w.mainNodeTagName)
+				: document.getElementsByTagName(w.mainNodeTagName)
 			
 			for (var ni = 0; ni < nodes.length; ni++)
-				stack.push({w:w, node:nodes[ni], pri:(nodes[ni].getAttribute('widget-priority') || 0)})
+				stack.push
+				(
+					{
+						w:w,
+						node:nodes[ni],
+						pri: (nodes[ni].getAttribute('widget-priority') || 0)
+					}
+				)
 		}
 		
-		
-		log2("Registered widgets: ", this.registered)
 		
 		// ранжируем
 		this.sorted = stack.sort(this.sortby.pri)
