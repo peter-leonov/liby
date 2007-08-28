@@ -203,20 +203,14 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	updateNavigation: function ()
 	{
-		var button
-		
 		Programica.RollingImages.active = this
 		
 		for (var i = 0, il = this.buttons.length; i < il; i++)
-			button = this.buttons[i],
-			button.className = button.className.replace(/ selected-button/g, '')
+			this.buttons[i].remClassName('selected-button')
 		
-		button = this.buttons[this.current]
+		var button = this.buttons[this.current]
 		if (button)
-		{
-			button.className = button.className.replace(/ selected-button/g, '')
-			button.className += ' selected-button'
-		}
+			button.addClassName('selected-button')
 		
 		if (this.aPrev)
 			this.current ? this.aPrev.enable() : this.aPrev.disable()
