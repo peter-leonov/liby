@@ -84,7 +84,19 @@ Programica.IEFixes =
 	{
 		if (this.tagName != 'LABEL') return
 		var t = this
-		this.attachEvent("onclick", function () { var node = t.getElementsByTagName('input')[0]; if (node) node.click() })
+		this.attachEvent
+		(
+			'onclick',
+			function ()
+			{
+				var node = (t.getElementsByTagName('input')[0] || this.getElementsByTagName('textarea')[0])
+				if (node)
+				{
+					node.click()
+					node.focus()
+				}
+			}
+		)
 	},
 	
 	// добавляет методы и свойства из Element.prototype

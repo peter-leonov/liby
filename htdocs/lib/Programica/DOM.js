@@ -160,6 +160,11 @@ Programica.DOM.visible = function ()
 	return this.offsetWidth && this.style.display != 'none' && parseFloat(this.style.opacity) != 0
 }
 
+Programica.DOM.toggle = function (t)
+{
+	return this.visible() ? this.hide(t) : this.show(t)
+}
+
 Programica.DOM.$$ = function (cn)
 {
 	return this.getElementsByClassName(cn)

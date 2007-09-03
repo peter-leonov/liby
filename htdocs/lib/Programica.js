@@ -89,7 +89,7 @@ Math.longRandom = function ()
 
 //alert('<!--#echo var="HTTP_USER_AGENT" -->')
 
-<!--#if expr="$SERVER_TYPE=/dev1elopment/" -->
+<!--#if expr="$SERVER_TYPE=/development/" -->
 	
 	log2('Development mode')
 	
@@ -101,6 +101,8 @@ Math.longRandom = function ()
 		require("/lib/Programica/IEFixes.js")
 	<!--#endif -->
 		
+	
+	require("/lib/Programica/Development.js")
 	
 	require("/lib/Programica/DOM.js")
 	require("/lib/Programica/Animation.js")
