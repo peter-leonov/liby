@@ -41,9 +41,9 @@ Programica.RollingImages.prototype.Handler = function (node)
 	//this.buttons = this.buttons.sort(function (a, b) { a.button_num - b.button_num })
 	//log(this.buttons)
 	
-	
 	var t = this
 	
+	this.click_listener = function (e) { t.dragclick(e) }
 	this.mousedown_listener = function (e) { t.dragstart(e) }
 	this.mousemove_listener = function (e) { t.dragging(e) }
 	this.mouseup_listener   = function (e) { t.dragstop(e) }
@@ -86,7 +86,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	{
 		var root = (node || this.mainNode)
 		cn = this.ns ? (this.ns + "-" + cn) : cn
-		return root.getElementsByClassName ? root.getElementsByClassName(cn) : []
+		return (root && root.getElementsByClassName) ? root.getElementsByClassName(cn) : []
 	},
 	
 	goInit: function (n)
@@ -308,6 +308,9 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (!/^(yes|magnify)$/i.test(this.mainNode.getAttribute('rolling-images-grab')))
 			return
 		
+		//if (e.target.nodeName == 'A')
+		//	return
+		
 		e.preventDefault()
 		
 		if (this.viewport.animation)
@@ -332,6 +335,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		document.addEventListener('mousemove', this.mousemove_listener, true)
 		document.addEventListener('mouseup', this.mouseup_listener, true)
+		document.addEventListener('click', this.click_listener, true)
 		
 		this.viewport.addClassName('grabbing')
 	},
@@ -369,6 +373,14 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		this.di = null
 		this.viewport.remClassName('grabbing')
+	},
+	
+	dragclick: function (e)
+	{
+		document.removeEventListener('click', this.click_listener, true)
+		
+		if (this.mouse[1])
+			e.preventDefault()
 	},
 	
 	magnify: function ()
