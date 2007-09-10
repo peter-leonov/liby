@@ -44,7 +44,7 @@ extend (Programica.Widget,
 					{
 						w:w,
 						node:nodes[ni],
-						pri: (nodes[ni].getAttribute('widget-priority') || 0)
+						pri: (nodes[ni].getAttributeNS(Programica.ns070909, 'widget-priority') || 0)
 					}
 				)
 		}

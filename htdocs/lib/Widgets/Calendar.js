@@ -13,9 +13,10 @@ Programica.Calendar.prototype.Handler.prototype =
 {
 	init: function ()
 	{
-		this.curDateNode = $('calendarMonth');//this.my('current-date')[0]
+		this.curDateNode = $(this.mainNode.getAttributeNS(Programica.ns070909, 'calendar-selected-month')) || this.my('selected-month')[0]
+		this.riNs = this.mainNode.getAttributeNS(Programica.ns070909, 'calendar-ri-ns')
 		
-		var r = sGet(this.mainNode.getAttribute('calendar-href'))
+		var r = sGet(this.mainNode.getAttributeNS(Programica.ns070909, 'calendar-href'))
 		this.dataLoaded(r)
 	},
 	
@@ -33,9 +34,13 @@ Programica.Calendar.prototype.Handler.prototype =
 	// наполняет базовую ноду юлками и лишками
 	draw: function ()
 	{
-		var data = this.parce(this.request.responseXML())
+		var data = this.parse(this.request.responseXML())
 		
 		var today = new Date();
+		today.setHours(3)
+		today.setMinutes(0)
+		today.setSeconds(0)
+		today.setMilliseconds(0)
 		
 		var now = new Date(0)
 		now.setFullYear(2007,3,1)
@@ -45,18 +50,16 @@ Programica.Calendar.prototype.Handler.prototype =
 		var last = new Date(now)
 		last.setDate(last.getDate() - 1)
 		
-		
 		while (now <= end)
 		{
 			var ul = document.createElement('ul')
-			ul.className = 'days point'
-			this.mainNode.appendChild(ul)
+			ul.className = 'days ' + (this.riNs ? (this.riNs + '-point') : 'point')
 			
 			if (now.getYear() == today.getYear() && now.getMonth() == today.getMonth())
-				ul.className += ' selected'
+				ul.className += ' ' + (this.riNs ? (this.riNs + '-selected') : 'selected')
 			
 			// и снова гемор с замыканиями
-			ul.onselect = (function (t, d) { return function () { t.curDateNode.innerHTML = d.rusMY() } })(this, now)
+			ul.onselect = function (t, d) { return function () { if (t.curDateNode) t.curDateNode.innerHTML = d.rusMY() } } (this, now)
 			
 			var i = 0
 			
@@ -64,7 +67,7 @@ Programica.Calendar.prototype.Handler.prototype =
 			{
 				var li = ul.appendChild(document.createElement('li'))
 				li.className = 'nondate'
-				li.innerHTML = '&nbsp;'
+				li.innerHTML = ' '
 			}
 			
 			do
@@ -73,28 +76,36 @@ Programica.Calendar.prototype.Handler.prototype =
 				var li = ul.appendChild(document.createElement('li'))
 				li.innerHTML = now.getDate()
 				
-				
 				// пока раскрашиваем ноды тут, но надо вынесли логику
 				if (today < now) // будущее
 				{
 					if (data[now])
 					{
 						li.className = 'future private'
-						li.onmouseup = function () { content.show('#content-event') }
+						//li.onmouseup = function () { content.show('#content-event') }
 					}
 					else
 					{
 						li.className = "future freeday"
-						li.onmouseup = function () { content.show('#content-freeday') }
+						//li.onmouseup = function () { content.show('#content-freeday') }
 					}
 				}
-				else if (today == now) // настоящее
+				else if (today.getTime() == now.getTime()) // настоящее
 				{
-					
+					if (data[now])
+					{
+						li.className = 'curdate private'
+						//li.onmouseup = function () { content.show('#content-event') }
+					}
+					else
+					{
+						li.className = "curdate freeday"
+						//li.onmouseup = function () { content.show('#content-freeday') }
+					}
 				}
 				else if (today > now) // прошлое
 				{
-					li.onmouseup = function () { content.show('#content-past') }
+					//li.onmouseup = function () { content.show('#content-past') }
 					
 					if (data[now])
 					{
@@ -117,8 +128,10 @@ Programica.Calendar.prototype.Handler.prototype =
 				{
 					var li = ul.appendChild(document.createElement('li'))
 					li.className = 'nondate'
-					li.innerHTML = '&nbsp;'
+					li.innerHTML = ' '
 				}
+			
+			this.mainNode.appendChild(ul)
 			
 			//now.setMonth(now.getMonth() + 1)
 			//log("month: " + now + " " + end)
@@ -129,7 +142,7 @@ Programica.Calendar.prototype.Handler.prototype =
 	
 	
 	// разбирает XML в хеш
-	parce: function (root)
+	parse: function (root)
 	{
 		var data = {}
 		

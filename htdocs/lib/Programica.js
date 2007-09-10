@@ -9,6 +9,7 @@ if (!window.Programica) window.Programica = {}
 
 Programica.serverType = '<!--#echo var="SERVER_TYPE" -->'
 Programica.debugLevel = 1
+Programica.ns070909 = 'http://www.programica.ru/2007/09/09'
 
 if (window.console && console.firebug)
 	// для Firebug
@@ -35,8 +36,6 @@ else
 
 function log3 () { if (Programica.debugLevel >= 3) log.apply(this, arguments) }
 function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
-
-function require (src) { document.write('<script type="text/javascript" src=' + src + '></script>') }
 
 
 //——————————————————————————————————————————————————————————————————————————————
@@ -87,28 +86,63 @@ Math.longRandom = function ()
 
 //——————————————————————————————————————————————————————————————————————————————
 
+Programica.get = function (url)
+{
+	var r = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Msxml2.XMLHTTP"))
+	r.open('GET', url, false)
+	r.send(null)
+	return r.responseText
+}
+
+Programica.require = function (src)
+{
+	document.head = document.getElementsByTagName('head')[0]
+	
+	// cecking write() cousre it may be present but trowing an exeption this way
+	var cantWriteScript = !!window.opera
+	try { document.write(' ') }
+	catch (ex) { cantWriteScript = true }
+	
+	if (document.write && !cantWriteScript)
+		document.write('<script type="text/javascript" src=' + src + '></script>')
+	else if (document.head)
+		document.head.appendChild($E('script', {type:"text/javascript", src:src}))
+	else if (Programica.get)
+	{
+		var code = Programica.get(src)
+		//alert(src + '\n' + code)
+		window.eval ? window.eval(code) : eval(code)
+	}
+	else
+		alert('Can`t find the way to require "' + src + '"')
+}
+
 //alert('<!--#echo var="HTTP_USER_AGENT" -->')
 
 <!--#if expr="$SERVER_TYPE=/development/" -->
 	
 	log2('Development mode')
 	
-	<!--#if expr="$HTTP_USER_AGENT = /Gecko/" -->
-		require("/lib/Programica/FFFixes.js")
+	<!--#if expr="$HTTP_USER_AGENT = /Gecko\//" -->
+		Programica.require("/lib/Programica/FFFixes.js")
 	<!--#endif -->
 	
 	<!--#if expr="$HTTP_USER_AGENT = /MSIE/" -->
-		require("/lib/Programica/IEFixes.js")
+		Programica.require("/lib/Programica/IEFixes.js")
+	<!--#endif -->
+	
+	<!--#if expr="$HTTP_USER_AGENT = /AppleWebKit\/4/" -->
+		Programica.require("/lib/Programica/WK4Fixes.js")
 	<!--#endif -->
 		
 	
-	require("/lib/Programica/Development.js")
+	Programica.require("/lib/Programica/Development.js")
 	
-	require("/lib/Programica/DOM.js")
-	require("/lib/Programica/Animation.js")
-	require("/lib/Programica/Request.js")
-	require("/lib/Programica/Form.js")
-	require("/lib/Programica/Widget.js")
+	Programica.require("/lib/Programica/DOM.js")
+	Programica.require("/lib/Programica/Animation.js")
+	Programica.require("/lib/Programica/Request.js")
+	Programica.require("/lib/Programica/Form.js")
+	Programica.require("/lib/Programica/Widget.js")
 
 <!--#else -->
 	
@@ -121,7 +155,10 @@ Math.longRandom = function ()
 	<!--#if expr="$HTTP_USER_AGENT = /MSIE/" -->
 		<!--#include virtual="/lib/Programica/IEFixes.js" -->
 	<!--#endif -->
-		
+	
+	<!--#if expr="$HTTP_USER_AGENT = /AppleWebKit\/4/" -->
+		<!--#include virtual="/lib/Programica/WK4Fixes.js" -->
+	<!--#endif -->
 	
 	<!--#include virtual="/lib/Programica/DOM.js" -->
 	<!--#include virtual="/lib/Programica/Animation.js" -->

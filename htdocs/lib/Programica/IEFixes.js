@@ -1,5 +1,6 @@
 
 if (!window.Programica) Programica = {}
+if (!window.HTMLFormElement) window.HTMLFormElement = {prototype:{}}
 
 Programica.IEFixes =
 {
@@ -65,11 +66,19 @@ Programica.IEFixes =
 	
 	fixPng: function ()
 	{
-		if (this.tagName != 'IMG' || this.runtimeStyle.filter) return
-		if (/\.png$/.test(this.src))
+		if (this.runtimeStyle.filter) return
+		if (this.tagName == 'IMG' && /\.png$/.test(this.src))
 		{
 			this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "', sizingMethod='image')"
 			this.setAttribute('src', '/lib/img/dot.gif')
+		}
+		else if (/url\("(.+\.a\.png)"\)$/.test(this.currentStyle.backgroundImage))
+		{
+			//alert(RegExp.$1)
+			this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + RegExp.$1 + "', sizingMethod='crop')"
+			this.runtimeStyle.backgroundImage = 'none'
+			//this.width = this.width
+			//this.setAttribute('src', '/lib/img/dot.gif')
 		}
 	},
 	
@@ -105,7 +114,7 @@ Programica.IEFixes =
 		if (!window.extend) return this
 		if (window.Element) extend(this, Element.prototype)
 		//if (this.tagName == 'FORM') alert(this['addEventListener'])
-		if (window.HTMLFormElement && this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
+		if (this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
 		
 		return this
 	}
@@ -152,6 +161,11 @@ if (!window.removeEventListener && window.detachEvent)
 	window.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
 }
 
+Programica.IEFixes.NS = {'http://www.programica.ru/2007/09/09':'pmc'}
+
+// опять криво имитируем getAttributeNS(...)
+if (!document.getAttributeNS)
+	Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(Programica.IEFixes.NS[ns] + ':' + attr) }
 
 document.realIECreateElement = document.createElement
 document.createElement = function (type) { return Programica.IEFixes.fixPrototype.apply(document.realIECreateElement(type)) }

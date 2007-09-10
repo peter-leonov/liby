@@ -37,7 +37,7 @@ Programica.DOM.getElementsByClassName_js = function (className, tagName)
 	// predeclaring vars
 	var elements = [], child, l = 0
 	// precompile regexp
-	var rex = new RegExp("\\b" + className + "\\b")
+	var rex = new RegExp("(?:\\s+|^)" + className + "(?:\\s+|$)")
 	// length is constant, so caching its value
 	var len = children.length
 	
@@ -83,13 +83,13 @@ Programica.DOM.addClassName = function (cn)
 
 Programica.DOM.remClassName = function (cn)
 {
-	this.className = this.className.replace(new RegExp('\\s*\\b' + cn + '\\b\\s*', "g"), " ").replace(/^\s+|\s+$/g, "")
+	this.className = this.className.replace(new RegExp('(?:\\s+|^)' + cn + '(?:\\s+|$)', "g"), " ").replace(/^\s+|\s+$/g, "")
 	return cn
 }
 
 Programica.DOM.hasClassName = function (cn)
 {
-	return (this.className == cn || (new RegExp('\\b' + cn + '\\b')).test(this.className))
+	return (this.className == cn || (new RegExp('(?:\\s+|^)' + cn + '(?:\\s+|$)')).test(this.className))
 }
 
 Programica.DOM.disable = function ()
@@ -181,13 +181,12 @@ Programica.DOM.getComputedStyle = function (prop)
 }
 
 
-{
-	var interfaces = [Element]
-	
-	for (var ii = 0; ii < interfaces.length; ii++)
-		for (var m in Programica.DOM)
-			interfaces[ii].prototype[m] = Programica.DOM[m]
-}
+
+// расширяем базовый класс всех элементов (в т.ч. XUL, SVG и иже с ними)
+for (var m in Programica.DOM)
+	Element.prototype[m] = Programica.DOM[m]
+
+
 
 if (!document.getElementsByClassName)
 	document.getElementsByClassName = Programica.DOM.getElementsByClassName

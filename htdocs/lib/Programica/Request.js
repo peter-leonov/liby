@@ -197,7 +197,7 @@ Programica.Request.prototype =
 //——————————————————————————————————————————————————————————————————————————————
 // "шоткатыты", известные также под псевдонимом "алиасы" :)
 
-function aPost (url, params)
+window.aPost = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -212,7 +212,7 @@ function aPost (url, params)
 	return r
 }
 
-function sPost (url, params)
+window.sPost = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -229,7 +229,7 @@ function sPost (url, params)
 
 
 
-function aGet (url, params)
+window.aGet = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -243,7 +243,7 @@ function aGet (url, params)
 	return r
 }
 
-function sGet (url, params)
+window.sGet = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -259,7 +259,7 @@ function sGet (url, params)
 
 
 
-function aHead (url, params)
+window.aHead = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -273,7 +273,7 @@ function aHead (url, params)
 	return r
 }
 
-function sHead (url, params)
+window.sHead = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return false
