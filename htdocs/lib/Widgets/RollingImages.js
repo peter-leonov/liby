@@ -20,6 +20,9 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.aNext				= this.my('next')[0]
 	this.current			= null
 	
+	this.noGrabs			= this.mainNode.getElementsByClassName('no-grab')
+	
+	//this.blocker = this.viewport.appendChild($E('div',{style:'width:100%;height:100%; position:absolute;left:0;top:0;background-color:red;z-index:100;display:none;opacity:0.7'}))
 	
 	{
 		var bstr = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-buttons')
@@ -38,6 +41,16 @@ Programica.RollingImages.prototype.Handler = function (node)
 			this.addButtonsFrom(this.mainNode)
 	}
 	
+	for (var i = 0; i < this.noGrabs.length; i++)
+		this.noGrabs[i].addEventListener
+		(
+			'mousedown',
+			function (e)
+			{
+				e.stopPropagation()
+			},
+			false
+		)
 	
 	for (var i in this.buttons)
 		node.button_num = node.getAttributeNS(Programica.ns070909, 'button-num') * 100 || i
@@ -340,6 +353,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		if (this.viewport.animation)
 			this.viewport.animation.stop()
+		
+		//this.blocker.show()
 		
 		{
 			var power = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-power')

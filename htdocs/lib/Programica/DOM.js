@@ -87,6 +87,17 @@ Programica.DOM.remClassName = function (cn)
 	return cn
 }
 
+Programica.DOM.getClassNameHash = function (cn)
+{
+	var all = this.className.split(/\s+/)
+	var hash = {}
+	for (var i = 0, il = all.length; i < il; i++)
+		if (all[i])
+			hash[all[i]] = all[i]
+	
+	return hash
+}
+
 Programica.DOM.hasClassName = function (cn)
 {
 	return (this.className == cn || (new RegExp('(?:\\s+|^)' + cn + '(?:\\s+|$)')).test(this.className))

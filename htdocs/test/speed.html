@@ -17,6 +17,8 @@
 		</script>
 	</div>
 	
+	<span id="many-classes" class="some class names a b c d e f big-class-name realy-big-class-name-down-here-this-night"></span>
+	
 	<script>
 		
 		console.time('i++')
@@ -42,6 +44,25 @@
 		console.time('document.getElementsByClassName_xpath')
 		root.getElementsByClassName_xpath('odd')
 		console.timeEnd('document.getElementsByClassName_xpath')
+		
+		var manyClasses = $('many-classes')
+		
+		console.time('getClassNameHash()')
+		for (var i = 0; i < 1000; i++)
+		{
+			var cns = manyClasses.getClassNameHash()
+			if (cns.some && cns['class'] && cns.names && cns['realy-big-class-name-down-here-this-night'])
+				true
+		}
+		console.timeEnd('getClassNameHash()')
+		
+		console.time('many hasClassName()')
+		for (var i = 0; i < 1000; i++)
+		{
+			if (manyClasses.hasClassName('some') && manyClasses.hasClassName('class') && manyClasses.hasClassName('names') && manyClasses.hasClassName('realy-big-class-name-down-here-this-night'))
+				true
+		}
+		console.timeEnd('many hasClassName()')
 		
 	</script>
 	

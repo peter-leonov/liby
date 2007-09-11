@@ -36,7 +36,7 @@ Programica.Calendar.prototype.Handler.prototype =
 	{
 		var data = this.parse(this.request.responseXML())
 		
-		var today = new Date();
+		var today = new Date()//new Date() - 10000000000);
 		today.setHours(3)
 		today.setMinutes(0)
 		today.setSeconds(0)
@@ -80,41 +80,23 @@ Programica.Calendar.prototype.Handler.prototype =
 				if (today < now) // будущее
 				{
 					if (data[now])
-					{
 						li.className = 'future private'
-						//li.onmouseup = function () { content.show('#content-event') }
-					}
 					else
-					{
 						li.className = "future freeday"
-						//li.onmouseup = function () { content.show('#content-freeday') }
-					}
 				}
 				else if (today.getTime() == now.getTime()) // настоящее
 				{
 					if (data[now])
-					{
 						li.className = 'curdate private'
-						//li.onmouseup = function () { content.show('#content-event') }
-					}
 					else
-					{
 						li.className = "curdate freeday"
-						//li.onmouseup = function () { content.show('#content-freeday') }
-					}
 				}
 				else if (today > now) // прошлое
 				{
-					//li.onmouseup = function () { content.show('#content-past') }
-					
 					if (data[now])
-					{
 						li.className = 'past private'
-					}
 					else
-					{
 						li.className = "past freeday"
-					}
 				}
 				
 				last = now

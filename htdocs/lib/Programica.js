@@ -12,11 +12,6 @@ Programica.debugLevel = 1
 Programica.ns070909 = 'http://www.programica.ru/2007/09/09'
 
 
-// Mon Sep 10 2007 19:40:44 GMT+0400 (MSD)
-Programica.serverTimeDate = new Date('<!--#config timefmt="%B %d, %Y %H:%M:%S"--><!--#echo var="DATE_LOCAL" -->')
-Programica.serverTimeDiff = new Date() - Programica.serverTimeDate
-Programica.serverTime = function () { return new Date(new Date() - new Date(Programica.serverTimeDiff)) }
-
 if (window.console && console.firebug)
 	// для Firebug
 	log = console.log
