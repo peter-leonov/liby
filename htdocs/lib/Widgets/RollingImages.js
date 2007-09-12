@@ -407,7 +407,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 				this.di.sx + this.drag_dx * this.scrollXpower + (Math.pow(Math.abs(vx * 3 * inertia * this.scrollXpower), 1.2)) * (vx < 0 ? -1 : 1),
 				this.di.sy + this.drag_dy * this.scrollYpower + (Math.pow(Math.abs(vy * 3 * inertia * this.scrollYpower), 1.2)) * (vy < 0 ? -1 : 1),
 				null, null,
-				'easeOutQuad', 0.5 * inertia
+				'easeOutQuad', 0.3 * inertia
 			).oncomplete = function () { t.magnify() }
 		}
 		
