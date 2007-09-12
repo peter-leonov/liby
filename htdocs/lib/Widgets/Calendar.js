@@ -42,10 +42,8 @@ Programica.Calendar.prototype.Handler.prototype =
 		today.setSeconds(0)
 		today.setMilliseconds(0)
 		
-		var now = new Date(0)
-		now.setFullYear(2007,3,1)
-		var end = new Date(0)
-		end.setFullYear(2008,1,1)
+		var now = data.begin
+		var end = data.end
 		
 		var last = new Date(now)
 		last.setDate(last.getDate() - 1)
@@ -158,15 +156,12 @@ Programica.Calendar.prototype.Handler.prototype =
 			}
 		}
 		
-		/*var options = root.getElementsByTagName('options')[0]
+		var opts = root.getElementsByTagName('options')[0]
 		
-		var begin_str = new String(options.getAttribute('begin'))
-		var begin_arr = begin_str.split();
-		
-		var begin = new Date(0)
-		var end = new Date(0)*/
-		
-		return data /*{data:data, begin:begin, end:end}*/
+		data.begin = new Date(opts.getAttribute('begin') + ' 03:00:00')
+		data.end = new Date(opts.getAttribute('end') + ' 03:00:00')
+		//alert(new Date('Sep 12 2007 19:14:52'))
+		return data
 	}
 }
 
