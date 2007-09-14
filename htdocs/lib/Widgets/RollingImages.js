@@ -108,6 +108,8 @@ Programica.RollingImages.prototype.Handler = function (node)
 	for (var i = 0, il = this.buttons.length; i < il; i++)
 		//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
 		this.buttons[i].onmousedown = function (fi) { return function () { t.goToFrame(fi) } } (i)
+	
+	Programica.RollingImages.active = this
 }
 
 Programica.RollingImages.prototype.Handler.prototype =

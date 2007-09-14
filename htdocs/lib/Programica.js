@@ -42,6 +42,9 @@ function log2 () { if (Programica.debugLevel >= 2) log.apply(this, arguments) }
 //——————————————————————————————————————————————————————————————————————————————
 // Ближе к прототипу
 
+window.safari2 = /AppleWebKit\/4/i.test(navigator.userAgent)
+window.safari3 = /AppleWebKit\/5/i.test(navigator.userAgent)
+
 if (!window.Element)
 	Element = {}
 
@@ -99,15 +102,20 @@ Programica.require = function (src)
 {
 	document.head = document.getElementsByTagName('head')[0]
 	
-	// cecking write() cousre it may be present but trowing an exeption this way
+	// cecking write() cousre it may throw an exeption in XHTML
 	var cantWriteScript = !!window.opera
 	try { document.write(' ') }
 	catch (ex) { cantWriteScript = true }
 	
 	if (document.write && !cantWriteScript)
 		document.write('<script type="text/javascript" src=' + src + '></script>')
-	else if (document.head)
-		document.head.appendChild($E('script', {type:"text/javascript", src:src}))
+	else if (document.head && !window.safari3)
+	{
+		//if (document.head.firstChild)
+		//	document.head.insertBefore($E('script', {type:"text/javascript", src:src}), document.head.firstChild)
+		//else
+			document.head.appendChild($E('script', {type:"text/javascript", src:src}))
+	}
 	else if (Programica.get)
 	{
 		var code = Programica.get(src)
@@ -117,8 +125,6 @@ Programica.require = function (src)
 	else
 		alert('Can`t find the way to require "' + src + '"')
 }
-
-//alert('<!--#echo var="HTTP_USER_AGENT" -->')
 
 <!--#if expr="$SERVER_TYPE=/development/" -->
 	
