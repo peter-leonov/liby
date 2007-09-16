@@ -10,6 +10,7 @@ Programica.Trackbar.prototype.Handler = function (node)
 	this.mainNode.Trackbar = this
 	
 	this.dragger = this.my('dragger')[0]
+	this.hint = this.my('hint')[0]
 	this.input = this.mainNode.getElementsByTagName('input')[0]
 	
 	if (!this.dragger)
@@ -31,15 +32,95 @@ Programica.Trackbar.prototype.Handler = function (node)
 	this.mouseup_handler = function (e) { t.stopdrag(e) }
 	
 	this.dragger.addEventListener('mousedown', this.mousedown_handler, false)
+	this.dragger.addEventListener('dragstart', function (e) { e.preventDefault() }, false)
 }
 
 Programica.Trackbar.prototype.Handler.prototype =
 {
-	init:			function ()		{  },
+	init: function ()
+	{
+		this.startUpdater()
+		// пусто
+	},
+	
+	startUpdater: function ()
+	{
+		this.stopUpdater()
+		var t = this
+		this.updaterInterval = setInterval(function () { t.synch() }, 250)
+	},
+	
+	stopUpdater: function ()
+	{
+		clearInterval(this.updaterInterval)
+	},
+	
+	// синхронизилка со значением инпута
+	synch: function ()
+	{
+		var v = this.input.value
+		if (v == this.v)
+			return
+		
+		// угадываем нужное положение перебором
+		// в этом случае не надо писать обратную функцию
+		
+		// обновим фильтр, возможно он уже поменялся
+		this.filter = this.mainNode.valueFilter
+		
+		// немного копипаста
+		var mw = this.mw = this.mainNode.offsetWidth - this.dragger.offsetWidth
+		for (var i = 0; i < mw; i++)
+			if (v <= this.filterValue(i/mw))
+				break
+		
+		this.left = i
+		this.update()
+		this.moveTo(i)
+	},
+	
+	update: function ()
+	{
+		var v = this.left / this.mw
+		
+		// выполняем преобразование
+		v = this.filterValue(v)
+		
+		// запомним значение для таймера
+		this.v = v
+		
+		// обновляем инпут
+		this.input.value = v
+		// и подсказку, если есть
+		if (this.hint)
+			this.hint.innerHTML = v
+	},
+	
+	filterValue: function (v)
+	{
+		// выполняем преобразование
+		if (this.filter)
+			return this.filter(v)
+		else
+			return Math.round(v * 100)
+	},
+	
+	jumpTo: function (left)
+	{
+		this.dragger.style.left = left + 'px'
+	},
+	
+	moveTo: function (left)
+	{
+		this.dragger.animate('easeOutQuad', {left:left}, 0.75).start()
+	},
 	
 	startdrag: function (e)
 	{
 		e.preventDefault()
+		
+		// не за чем обновляться пока таскаем
+		this.stopUpdater()
 		
 		document.addEventListener('mousemove', this.mousemove_handler, false)
 		document.addEventListener('mouseup', this.mouseup_handler, false)
@@ -62,7 +143,6 @@ Programica.Trackbar.prototype.Handler.prototype =
 			return
 		
 		
-		
 		// считаем смещение перетаскивания
 		this.drag_dx = this.di.mx - e.clientX
 		this.drag_dy = this.di.my - e.clientY
@@ -75,38 +155,30 @@ Programica.Trackbar.prototype.Handler.prototype =
 		// границы по горизонтали
 		if (left < 0)
 			left = 0
-		else if (left >= this.mw)
-			left = this.mw
+		else if (left > this.mw)
+			left = this.mw - 1
 		
 		// границы по вертикали
-		if (top < 0)
-			top = 0
-		else if (top >= this.mh)
-			top = this.mh
-		
+		//if (top < 0)
+		//	top = 0
+		//else if (top > this.mh)
+		//	top = this.mh - 1
 		
 		// перемещаем
-		this.dragger.style.left = left + 'px'
-		//this.dragger.style.top = top + 'px'
+		this.jumpTo(left)
 		
-		var v = left / this.mw
-		
-		
-		// выполняем преобразование
-		if (this.filter)
-			v = this.filter(v)
-		else
-			v = Math.round(v*100)
-		
-		
-		// обновляем инпут
-		this.input.value = v
+		// обновляем инпут, подсказку и т.д.
+		this.left = left
+		this.update()
 	},
 	
 	stopdrag: function (e)
 	{
 		document.removeEventListener('mousemove', this.mousemove_handler, false)
 		document.removeEventListener('mouseup', this.mouseup_handler, false)
+		
+		// снова начинаем сверяться со значением инпута
+		this.startUpdater()
 	},
 	
 	my: function (cn, node)
@@ -114,7 +186,7 @@ Programica.Trackbar.prototype.Handler.prototype =
 		var root = (node || this.mainNode)
 		cn = this.ns ? (this.ns + "-" + cn) : cn
 		return (root && root.getElementsByClassName) ? root.getElementsByClassName(cn) : []
-	},
+	}
 }
 
 Programica.Widget.register(new Programica.Trackbar())

@@ -251,6 +251,13 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (button)
 			button.addClassName('selected-button')
 		
+		//var point = this.points[this.current]
+		//if (point)
+		//{
+		//	if (point.id && location.hash != '#' + point.id)
+		//		location.hash = '#' + point.id
+		//}
+		
 		if (this.aPrev)
 			this.current ? this.aPrev.enable() : this.aPrev.disable()
 		
