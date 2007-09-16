@@ -373,7 +373,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.mouse.unshift({x:e.clientX, y:e.clientY, t:new Date()})
 		
 		// начальные координвты мышки и скрола
-		this.di = {mx:e.clientX, mx0:e.clientX, my:e.clientY, my0:e.clientY, sx:this.viewport.scrollLeft, sy:this.viewport.scrollTop}
+		this.di = {mx:e.clientX, my:e.clientY, sx:this.viewport.scrollLeft, sy:this.viewport.scrollTop}
 		
 		document.addEventListener('mousemove', this.mousemove_listener, true)
 		document.addEventListener('mouseup', this.mouseup_listener, true)
