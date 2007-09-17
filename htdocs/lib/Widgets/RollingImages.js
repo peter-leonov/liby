@@ -24,6 +24,17 @@ Programica.RollingImages.prototype.Handler = function (node)
 	
 	//this.blocker = this.viewport.appendChild($E('div',{style:'width:100%;height:100%; position:absolute;left:0;top:0;background-color:red;z-index:100;display:none;opacity:0.7'}))
 	
+	if (!this.viewport)
+	{
+		log(this.mainNode)
+		throw new Error('Viewport is undefined!')
+	}
+	if (!this.viewport.animate)
+	{
+		log(this.mainNode)
+		throw new Error('Viewport can`t be animated!')
+	}
+	
 	{
 		var bstr = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-buttons')
 		if (bstr)
@@ -222,22 +233,14 @@ Programica.RollingImages.prototype.Handler.prototype =
 			trans.height = height
 		
 		
-		if (!this.viewport) log2('Viewport is undefined!')
-		if (!this.viewport.animate) log2('Viewport can`t be animated!')
-		
 		this.drop_magnify()
 		return this.viewport.animate(anim, trans, dur).start()
 	},
 	
 	jumpTo: function (left, top)
 	{
-		if (!this.viewport) log2('Viewport is undefined!')
-		if (!this.viewport.animate) log2('Viewport can`t be animated!')
-		
 		this.viewport.scrollLeft = left
 		this.viewport.scrollTop = top
-		
-		//this.findNearest()
 	},
 	
 	updateNavigation: function ()
@@ -434,6 +437,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	magnify: function ()
 	{
+		this.drop_magnify()
 		if (/^magnify$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab')))
 		{
 			var t = this
