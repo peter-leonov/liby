@@ -109,7 +109,7 @@ Programica.require = function (src)
 	
 	if (document.write && !cantWriteScript)
 		document.write('<script type="text/javascript" src=' + src + '></script>')
-	else if (document.head && !window.safari3)
+	else if (/html/i.test(document.contentType) && document.head && !window.safari3)
 	{
 		//if (document.head.firstChild)
 		//	document.head.insertBefore($E('script', {type:"text/javascript", src:src}), document.head.firstChild)
