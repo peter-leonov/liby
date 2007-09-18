@@ -18,6 +18,8 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.buttons			= []
 	this.aPrev				= this.my('prev')[0]
 	this.aNext				= this.my('next')[0]
+	// — зачем див, если можно было поймать событие на спуске?
+	// — ответ лежит на поверхностИЕ
 	this.blocker			= this.my('blocker')[0]
 	this.current			= null
 	
@@ -383,7 +385,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (this.viewport.animation)
 			this.viewport.animation.stop()
 		
-		this.blockerShow()
+		//this.blockerShow()
 		
 		{
 			var power = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-power')
@@ -428,7 +430,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 			// арифметически усредняем три последних движения мышью
 			var vx = ((this.mouse[1].x - this.mouse[0].x) + (this.mouse[2].x - this.mouse[1].x) + (this.mouse[3].x - this.mouse[2].x)) / 3
 			var vy = ((this.mouse[1].y - this.mouse[0].y) + (this.mouse[2].y - this.mouse[1].y) + (this.mouse[3].y - this.mouse[2].y)) / 3
-			
+			this.blockerShow()
 			
 			var t = this
 			this.animateTo
