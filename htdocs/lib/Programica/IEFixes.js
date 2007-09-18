@@ -98,12 +98,18 @@ Programica.IEFixes =
 			'onclick',
 			function ()
 			{
-				var node = (t.getElementsByTagName('input')[0] || this.getElementsByTagName('textarea')[0])
-				if (node)
+				// трай/кеч нужен, как определить в ИЕ априори,
+				// может ли элемент принять фокус сейчас
+				try
 				{
-					node.click()
-					node.focus()
+					var node = (t.getElementsByTagName('input')[0] || t.getElementsByTagName('textarea')[0] || t.getElementsByTagName('select')[0])
+					if (node)
+					{
+						node.focus()
+						node.click()
+					}
 				}
+				catch (ex) {}
 			}
 		)
 	},
