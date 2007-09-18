@@ -18,11 +18,11 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.buttons			= []
 	this.aPrev				= this.my('prev')[0]
 	this.aNext				= this.my('next')[0]
+	this.blocker			= this.my('blocker')[0]
 	this.current			= null
 	
 	this.noGrabs			= this.mainNode.getElementsByClassName('no-grab')
 	
-	//this.blocker = this.viewport.appendChild($E('div',{style:'width:100%;height:100%; position:absolute;left:0;top:0;background-color:red;z-index:100;display:none;opacity:0.7'}))
 	
 	if (!this.viewport)
 	{
@@ -153,14 +153,13 @@ Programica.RollingImages.prototype.Handler.prototype =
 	goToFrame: function (n, anim, dur)
 	{
 		n = n || 0
-		this.goToNode(this.points[n], anim, dur)
-		
-		return n
+		return this.goToNode(this.points[n], anim, dur)
 	},
 	
 	goToNode: function (node, anim, dur)
 	{
-		if (!node) return
+		if (!node)
+			throw new Error('Trying goToNode without node specified')
 		
 		log2(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
 		
@@ -206,11 +205,11 @@ Programica.RollingImages.prototype.Handler.prototype =
 				width  = node.offsetWidth
 		}
 		
-		this.animateTo(left, top, width, height, anim, dur)
-		
 		// меняем номер текущей ноды
 		for (var i = 0, il = this.points.length; i < il; i++)
 			if (this.points[i] == node) this.setCurrent(i)
+		
+		return this.animateTo(left, top, width, height, anim, dur)
 	},
 	
 	animateTo: function (left, top, width, height, anim, dur)
@@ -352,6 +351,24 @@ Programica.RollingImages.prototype.Handler.prototype =
 		)
 	},
 	
+	blockerShow: function ()
+	{
+		if (!this.blocker || !this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia'))
+			return
+		
+		this.blocker.style.width = this.viewport.scrollWidth + 'px'
+		this.blocker.style.height = this.viewport.scrollHeight + 'px'
+		this.blocker.show()
+	},
+	
+	blockerHide: function ()
+	{
+		if (!this.blocker)
+			return
+		
+		this.blocker.hide()
+	},
+	
 	dragstart: function (e)
 	{
 		if (!/^(yes|magnify)$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab')))
@@ -366,7 +383,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (this.viewport.animation)
 			this.viewport.animation.stop()
 		
-		//this.blocker.show()
+		this.blockerShow()
 		
 		{
 			var power = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-power')
@@ -406,11 +423,12 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		// "энерция"
 		var inertia = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia')
-		if (inertia && this.mouse[3] && new Date() - this.mouse[0].t < 150)
+		if (inertia && this.mouse[3] && new Date() - this.mouse[0].t < 150 && this.di)
 		{
 			// арифметически усредняем три последних движения мышью
 			var vx = ((this.mouse[1].x - this.mouse[0].x) + (this.mouse[2].x - this.mouse[1].x) + (this.mouse[3].x - this.mouse[2].x)) / 3
 			var vy = ((this.mouse[1].y - this.mouse[0].y) + (this.mouse[2].y - this.mouse[1].y) + (this.mouse[3].y - this.mouse[2].y)) / 3
+			
 			
 			var t = this
 			this.animateTo
@@ -444,9 +462,13 @@ Programica.RollingImages.prototype.Handler.prototype =
 			this.findNearest()
 			this.magnify_timeout = setTimeout
 			(
-				function () { t.goToFrame(t.current, 'easeInOutQuad') },
+				function () { t.goToFrame(t.current, 'easeInOutQuad').oncomplete = function () { t.blockerHide() } },
 				this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia') ? 150 : 750
 			)
+		}
+		else
+		{
+			this.blockerHide()
 		}
 	},
 	
