@@ -34,9 +34,11 @@ extend (Programica.Widget,
 		{
 			var w = this.registered[wi]
 			
-			var nodes = w.mainNodeClassName
-				? document.getElementsByClassName(w.mainNodeClassName, w.mainNodeTagName)
-				: document.getElementsByTagName(w.mainNodeTagName)
+			var nodes = []
+			if (w.mainNodeClassName)
+				nodes = document.getElementsByClassName(w.mainNodeClassName)
+			if (w.mainNodeTagName)
+				nodes = document.getElementsByTagName(w.mainNodeTagName)
 			
 			for (var ni = 0; ni < nodes.length; ni++)
 				stack.push

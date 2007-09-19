@@ -39,8 +39,6 @@
 			alert('Can`t find the way to require "' + src + '"')
 	}
 	
-	Programica.require("/lib/Programica/Development.js")
-	
 	<!--#if expr="$HTTP_USER_AGENT = /Gecko\//" -->
 		Programica.require("/lib/Programica/FFFixes.js")
 	<!--#endif -->
@@ -53,6 +51,7 @@
 		Programica.require("/lib/Programica/WK4Fixes.js")
 	<!--#endif -->
 	
+	Programica.require("/lib/Programica/Development.js")
 	
 	Programica.require("/lib/Programica/DOM.js")
 	Programica.require("/lib/Programica/Animation.js")
