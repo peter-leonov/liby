@@ -1,35 +1,10 @@
 
-if (!window.Programica) Programica = {}
-if (!window.HTMLFormElement) window.HTMLFormElement = {prototype:{}}
+if (!self.Programica) Programica = {}
+if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
+if (!self.Element) self.Element = {prototype:{}}
 
 Programica.IEFixes =
 {
-	all: function ()
-	{
-		this.runtimeStyle.behavior = 'none'
-		
-		Programica.IEFixes.fixPrototype.apply(this)
-		
-		if (/MSIE 6/.test(navigator.userAgent))
-		{
-			this.onpropertychange = Programica.IEFixes.onpropertychange6
-			
-			Programica.IEFixes.fixOpacity.apply(this)
-			Programica.IEFixes.fixPng.apply(this)
-			Programica.IEFixes.fixTitle.apply(this)
-			Programica.IEFixes.fixLabel.apply(this)
-			Programica.IEFixes.fixTitle.apply(this)
-		}
-		
-		if (/MSIE 7/.test(navigator.userAgent))
-		{
-			this.onpropertychange = Programica.IEFixes.onpropertychange7
-			
-			Programica.IEFixes.fixOpacity.apply(this)
-			Programica.IEFixes.fixTitle.apply(this)
-		}
-	},
-	
 	onpropertychange6: function ()
 	{
 		if (event.propertyName == 'style.opacity')
@@ -52,61 +27,61 @@ Programica.IEFixes =
 	
 	//——————————————————————————————————————————————————————————————————————————
 	
-	fixOpacity: function ()
+	fixOpacity: function (node)
 	{
-		if (this.currentStyle && this.currentStyle.opacity)
-			this.style.opacity = this.currentStyle.opacity
+		if (node.currentStyle && node.currentStyle.opacity)
+			node.style.opacity = node.currentStyle.opacity
 	},
 	
-	fixDisabled: function ()
+	fixDisabled: function (node)
 	{
-		this.addClassName('disabled')
-		this.disabled ? this.addClassName('disabled') : this.remClassName('disabled')
+		node.addClassName('disabled')
+		node.disabled ? node.addClassName('disabled') : node.remClassName('disabled')
 	},
 	
-	fixPng: function ()
+	fixPng: function (node)
 	{
-		if (this.runtimeStyle.filter) return
-		if (this.tagName == 'IMG' && /\.png$/.test(this.src))
+		if (node.runtimeStyle.filter) return
+		if (node.tagName == 'IMG' && /\.png$/.test(node.src))
 		{
-			this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "', sizingMethod='image')"
-			this.setAttribute('src', '/lib/img/dot.gif')
+			node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + node.src + "', sizingMethod='image')"
+			node.setAttribute('src', '/lib/img/dot.gif')
 		}
-		else if (/url\("(.+\.a\.png)"\)$/.test(this.currentStyle.backgroundImage))
+		else if (/url\("(.+\.a\.png)"\)$/.test(node.currentStyle.backgroundImage))
 		{
 			//alert(RegExp.$1)
-			this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + RegExp.$1 + "', sizingMethod='crop')"
-			this.runtimeStyle.backgroundImage = 'none'
-			//this.width = this.width
-			//this.setAttribute('src', '/lib/img/dot.gif')
+			node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + RegExp.$1 + "', sizingMethod='crop')"
+			node.runtimeStyle.backgroundImage = 'none'
+			//node.width = node.width
+			//node.setAttribute('src', '/lib/img/dot.gif')
 		}
 	},
 	
 	// убирает лишние подсказки
-	fixTitle: function ()
+	fixTitle: function (node)
 	{
-		if (!this.title) this.title = ''
+		if (!node.title) node.title = ''
 	},
 	
 	// делает кликабельными метки
-	fixLabel: function ()
+	fixLabel: function (node)
 	{
-		if (this.tagName != 'LABEL') return
-		var t = this
-		this.attachEvent
+		if (node.tagName != 'LABEL') return
+		
+		node.attachEvent
 		(
 			'onclick',
 			function ()
 			{
-				// трай/кеч нужен, как определить в ИЕ априори,
-				// может ли элемент принять фокус сейчас
+				// трай/кеч нужен, иначе как надежно определить,
+				// может ли элемент принять фокус сейчас или нет
 				try
 				{
-					var node = (t.getElementsByTagName('input')[0] || t.getElementsByTagName('textarea')[0] || t.getElementsByTagName('select')[0])
-					if (node)
+					var n = (node.getElementsByTagName('input')[0] || node.getElementsByTagName('textarea')[0] || node.getElementsByTagName('select')[0])
+					if (n)
 					{
-						node.focus()
-						node.click()
+						n.click()
+						n.focus()
 					}
 				}
 				catch (ex) {}
@@ -115,22 +90,53 @@ Programica.IEFixes =
 	},
 	
 	// добавляет методы и свойства из Element.prototype
-	fixPrototype: function ()
+	fixPrototype: function (node)
 	{
-		if (!window.extend) return this
-		if (window.Element) extend(this, Element.prototype)
-		//if (this.tagName == 'FORM') alert(this['addEventListener'])
-		if (this.tagName == 'FORM') extend(this, HTMLFormElement.prototype)
+		var e = self.Element.prototype
 		
-		return this
+		for (var p in e)
+			node[p] = e[p]
+		
+		if (node.tagName == 'FORM')
+		{
+			e = HTMLFormElement.prototype
+			for (var p in e)
+				node[p] = e[p]
+		}
 	}
 }
 
 
+with (Programica.IEFixes)
+{
+	var fixIE6 = function (node)
+	{
+		node.runtimeStyle.behavior = 'none'
+		
+		fixPrototype(node)
+		node.onpropertychange = onpropertychange6
+		fixOpacity(node)
+		fixPng(node)
+		fixTitle(node)
+		fixLabel(node)
+		fixTitle(node)
+	}
+	
+	var fixIE7 = function (node)
+	{
+		node.runtimeStyle.behavior = 'none'
+		
+		fixPrototype(node)
+		node.onpropertychange = onpropertychange7
+		fixOpacity(node)
+		fixTitle(node)
+	}
+}
+
 Programica.IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
 
 // кривоватый фикс addEventListener(...)
-if (!window.addEventListener && window.attachEvent)
+if (!self.addEventListener && self.attachEvent)
 {
 	Element.prototype.addEventListener = function (type, func, dir)
 	{
@@ -151,11 +157,11 @@ if (!window.addEventListener && window.attachEvent)
 		this.attachEvent('on' + type, func.__IEwrapper)
 		
 	}
-	window.addEventListener = document.addEventListener = Element.prototype.addEventListener
+	self.addEventListener = document.addEventListener = Element.prototype.addEventListener
 }
 
 // кривоватый фикс removeEventListener(...)
-if (!window.removeEventListener && window.detachEvent)
+if (!self.removeEventListener && self.detachEvent)
 {
 	Element.prototype.removeEventListener = function (type, func, dir)
 	{
@@ -164,7 +170,7 @@ if (!window.removeEventListener && window.detachEvent)
 		
 		this.detachEvent('on' + type, func.__IEwrapper)
 	}
-	window.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
+	self.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
 }
 
 Programica.IEFixes.NS = {'http://www.programica.ru/2007/09/09':'pmc'}
@@ -174,7 +180,12 @@ if (!document.getAttributeNS)
 	Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(Programica.IEFixes.NS[ns] + ':' + attr) }
 
 document.realIECreateElement = document.createElement
-document.createElement = function (type) { return Programica.IEFixes.fixPrototype.apply(document.realIECreateElement(type)) }
+document.createElement = function (type)
+{
+	var e = document.realIECreateElement(type)
+	Programica.IEFixes.fixPrototype(e)
+	return e
+}
 
 function $E  (type, props)
 {
@@ -195,8 +206,16 @@ document.write('<script id="__ie_onload" defer="defer" src="javascript:void(0)">
 document.getElementById("__ie_onload").onreadystatechange = function ()
 {
     if (this.readyState == "complete")
-		window.oncontentready && window.oncontentready()
+		self.oncontentready && self.oncontentready()
 }
 
+if (/MSIE 7/.test(navigator.userAgent))
+	document.write('<style> * { behavior: expression(fixIE7(this)) } </style>')
+else if (/MSIE 6/.test(navigator.userAgent))
+	document.write('<style> * { behavior: expression(fixIE6(this)) } </style>')
 
-document.write('<style> * { behavior: expression(Programica.IEFixes.all.apply(this)) } </style>')
+
+//var catcher = document.createElement('div')
+//catcher.onpropertychange = function () { alert(event.propertyName + ' = ' + this[event.propertyName]) }
+//$$$('head')[0].appendChild(node)
+////node.x = undefined
