@@ -13,7 +13,7 @@ Programica.IEFixes =
 			this.style.zoom = 1
 		}
 		else if (event.propertyName == 'disabled')
-			Programica.IEFixes.fixDisabled.apply(this)
+			Programica.IEFixes.fixDisabled(this)
 	},
 	
 	onpropertychange7: function ()
