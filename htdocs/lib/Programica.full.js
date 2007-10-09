@@ -6,6 +6,7 @@
 
 <!--#if expr="$HTTP_USER_AGENT = /MSIE/" -->
 	<!--#include file="Programica/IEFixes.js" -->
+	<!--#include file="Programica/IEXPath.js" -->
 <!--#endif -->
 
 <!--#if expr="$HTTP_USER_AGENT = /AppleWebKit\/4/" -->

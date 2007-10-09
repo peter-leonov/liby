@@ -215,6 +215,12 @@ else if (/MSIE 6/.test(navigator.userAgent))
 	document.write('<style> * { behavior: expression(fixIE6(this)) } </style>')
 
 
+// for oldstyle popups
+if (self.dialogArguments && self.dialogArguments.external)
+	self.extern = self.dialogArguments.external
+else if (self.external)
+	self.extern = self.external
+
 //var catcher = document.createElement('div')
 //catcher.onpropertychange = function () { alert(event.propertyName + ' = ' + this[event.propertyName]) }
 //$$$('head')[0].appendChild(node)

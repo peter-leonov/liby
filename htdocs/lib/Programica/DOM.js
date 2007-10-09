@@ -16,17 +16,17 @@ if (document.evaluate)
 		)
 		
 		for (var i = 0, length = query.snapshotLength; i < length; i++)
-			results.push(query.snapshotItem(i));
+			results.push(query.snapshotItem(i))
 		
-		return results;
+		return results
 	}
 }
 
 // from prototype 1.5.1.1
 Programica.DOM.getElementsByClassName_xpath = function (className, tagName)
 {
-	var q = ".//" + (tagName || '*') + "[@class = ' " + className + " ' or contains(concat(' ', @class, ' '), ' " + className + " ')]";
-	return this.getElementsByXPath(q);
+	var q = ".//" + (tagName || '*') + "[@class = ' " + className + " ' or contains(concat(' ', @class, ' '), ' " + className + " ')]"
+	return this.getElementsByXPath(q)
 }
 
 // from prototype 1.5.1.1

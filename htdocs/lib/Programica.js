@@ -45,6 +45,7 @@
 	
 	<!--#if expr="$HTTP_USER_AGENT = /MSIE/" -->
 		Programica.require("/lib/Programica/IEFixes.js")
+		Programica.require("/lib/Programica/IEXPath.js")
 	<!--#endif -->
 	
 	<!--#if expr="$HTTP_USER_AGENT = /AppleWebKit\/4/" -->
