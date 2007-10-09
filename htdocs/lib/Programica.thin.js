@@ -1,19 +1,19 @@
 
 // объявляем пространство
 
-if (!window.Programica) window.Programica = {}
+if (!self.Programica) self.Programica = {}
 Programica.ns070909 = 'http://www.programica.ru/2007/09/09'
 
 //——————————————————————————————————————————————————————————————————————————————
 // Логи
 
-if (window.console && console.firebug)
+if (self.console && console.firebug)
 	// для Firebug
-	window.log = console.log
+	self.log = console.log
 	
-else if (window.console && window.console.log)
+else if (self.console && self.console.log)
 	// для Сафари и компании
-	window.log = function ()
+	self.log = function ()
 	{
 		var arr = []
 		for (var i = 0; i < arguments.length; i++)
@@ -21,32 +21,32 @@ else if (window.console && window.console.log)
 		return console.log(arr.join(', '))
 	}
 	
-else if (window.opera && opera.postError)
+else if (self.opera && opera.postError)
 	// для Оперов
-	window.log = function () { return opera.postError(arguments) }
+	self.log = function () { return opera.postError(arguments) }
 	
 else
 	// для "всИЕх"
-	window.log = function () { return false }
+	self.log = function () { return false }
 
 
-window.log3 = function () { if (Programica.debugLevel > 2) window.log.apply(this, arguments) }
-window.log2 = function () { if (Programica.debugLevel > 1) window.log.apply(this, arguments) }
+self.log3 = function () { if (Programica.debugLevel > 2) self.log.apply(this, arguments) }
+self.log2 = function () { if (Programica.debugLevel > 1) self.log.apply(this, arguments) }
 
 
 //——————————————————————————————————————————————————————————————————————————————
 // Ближе к прототипу
 
-window.safari2 = /AppleWebKit\/4/i.test(navigator.userAgent)
-window.safari3 = /AppleWebKit\/5/i.test(navigator.userAgent)
+self.safari2 = /AppleWebKit\/4/i.test(navigator.userAgent)
+self.safari3 = /AppleWebKit\/5/i.test(navigator.userAgent)
 
-if (!window.Element)
+if (!self.Element)
 	Element = {}
 
 if (!Element.prototype)
 	Element.prototype = document.createElement('div').__proto__ || {}
 
-if (!window.HTMLFormElement)
+if (!self.HTMLFormElement)
 	HTMLFormElement = {}
 
 if (!HTMLFormElement.prototype)

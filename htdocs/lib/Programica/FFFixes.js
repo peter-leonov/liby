@@ -1,5 +1,5 @@
 //alert('I`m Gecko')
-if (!window.Programica) Programica = {}
+if (!self.Programica) Programica = {}
 
 Programica.Fixes = {}
 
@@ -7,7 +7,7 @@ Programica.Fixes = {}
 //——————————————————————————————————————————————————————————————————————————————
 // капелька фиксов для XULElement
 
-if (window.XULElement)
+if (self.XULElement)
 {
 	// в XUL нет scrollLeft и scrollTop — имитируем через геттер/сеттер
 	XULElement.prototype.__boxInterfaceGetter = function ()

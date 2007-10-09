@@ -5,7 +5,7 @@
 	
 	Programica.get = function (url)
 	{
-		var r = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Msxml2.XMLHTTP"))
+		var r = self.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Msxml2.XMLHTTP"))
 		r.open('GET', url, false)
 		r.send(null)
 		return r.responseText
@@ -16,13 +16,13 @@
 		document.head = document.getElementsByTagName('head')[0]
 		
 		// cecking write() cousre it may throw an exeption in XHTML
-		var cantWriteScript = !!window.opera
+		var cantWriteScript = !!self.opera
 		try { document.write(' ') }
 		catch (ex) { cantWriteScript = true }
 		
 		if (document.write && !cantWriteScript)
 			document.write('<script type="text/javascript" src=' + src + '></script>')
-		else if (/html/i.test(document.contentType) && document.head && !window.safari3)
+		else if (/html/i.test(document.contentType) && document.head && !self.safari3)
 		{
 			//if (document.head.firstChild)
 			//	document.head.insertBefore($E('script', {type:"text/javascript", src:src}), document.head.firstChild)
@@ -33,7 +33,7 @@
 		{
 			var code = Programica.get(src)
 			//alert(src + '\n' + code)
-			window.eval ? window.eval(code) : eval(code)
+			self.eval ? self.eval(code) : eval(code)
 		}
 		else
 			alert('Can`t find the way to require "' + src + '"')

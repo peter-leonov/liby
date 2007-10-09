@@ -1,5 +1,5 @@
-// example: $('form').data()
-HTMLFormElement.prototype.data = function () { return Programica.Form.form2hash(this) }
+// example: $('form').toHash()
+HTMLFormElement.prototype.toHash = function () { return Programica.Form.form2hash(this) }
 
 Programica.Form = {}
 

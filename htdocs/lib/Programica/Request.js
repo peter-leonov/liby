@@ -7,7 +7,7 @@ Programica.Request = function (prms)
 	
 	// в this.transport кладем реальный дескриптор запроса
 	
-	if (window.XMLHttpRequest) // Mozilla, Safari, ...
+	if (self.XMLHttpRequest) // Mozilla, Safari, ...
 	{
 		try
 		{
@@ -16,7 +16,7 @@ Programica.Request = function (prms)
 		}
 		catch (E) {}
 	}
-	else if (window.ActiveXObject) // MSIE
+	else if (self.ActiveXObject) // MSIE
 	{
 		// microсиво? — а что поделать
 		try { this.transport = new ActiveXObject("Msxml2.XMLHTTP") }
@@ -197,7 +197,7 @@ Programica.Request.prototype =
 //——————————————————————————————————————————————————————————————————————————————
 // "шоткатыты", известные также под псевдонимом "алиасы" :)
 
-window.aPost = function (url, params)
+self.aPost = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -212,7 +212,7 @@ window.aPost = function (url, params)
 	return r
 }
 
-window.sPost = function (url, params)
+self.sPost = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -229,7 +229,7 @@ window.sPost = function (url, params)
 
 
 
-window.aGet = function (url, params)
+self.aGet = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -243,7 +243,7 @@ window.aGet = function (url, params)
 	return r
 }
 
-window.sGet = function (url, params)
+self.sGet = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -259,7 +259,7 @@ window.sGet = function (url, params)
 
 
 
-window.aHead = function (url, params)
+self.aHead = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return null
@@ -273,7 +273,7 @@ window.aHead = function (url, params)
 	return r
 }
 
-window.sHead = function (url, params)
+self.sHead = function (url, params)
 {
 	var r = new Programica.Request()
 	if (!r) return false

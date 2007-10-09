@@ -81,7 +81,7 @@ Element.prototype.animate = function (motion, props, duration, unit)
 	})
 }
 
-if (!window.Programica.Abstract) Programica.Abstract = {}
+if (!self.Programica.Abstract) Programica.Abstract = {}
 Programica.Abstract.Events = function () {  }
 
 Programica.Animation.prototype = new Programica.Abstract.Events ()
