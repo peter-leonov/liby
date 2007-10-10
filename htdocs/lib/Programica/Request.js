@@ -287,5 +287,30 @@ self.sHead = function (url, params)
 	return r
 }
 
+Programica.Request.transformFragment = function (xml, xsl, node, doc)
+{
+	doc = doc || document
+	
+	if (!node || !node.nodeName)
+		node = doc.createElement(node)
+	
+	if (typeof xml.transformNode != 'undefined')
+	{
+		var markup = xml.transformNode(xsl)
+		node.innerHTML = markup
+	}
+	else if (self.XSLTProcessor)
+	{
+		var processor = new XSLTProcessor()
+		processor.importStylesheet(xsl)
+		var fragment = processor.transformToFragment(xml, document)
+		node.appendChild(fragment)
+	}
+	else
+		throw new Error('Can`t find way to do XSL transformation')
+	
+	return node
+}
+
 
 log2("Programica/Request.js loaded")

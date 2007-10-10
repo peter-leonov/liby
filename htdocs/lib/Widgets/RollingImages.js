@@ -19,9 +19,6 @@ Programica.RollingImages.prototype.Handler = function (node)
 	this.buttons			= []
 	this.aPrev				= this.my('prev')[0]
 	this.aNext				= this.my('next')[0]
-	// — зачем див, если можно было поймать событие на спуске?
-	// — ответ лежит на поверхностИЕ
-	this.blocker			= this.my('blocker')[0]
 	this.current			= null
 	
 	this.noGrabs			= this.mainNode.getElementsByClassName('no-grab')
@@ -162,7 +159,10 @@ Programica.RollingImages.prototype.Handler.prototype =
 	goToNode: function (node, anim, dur)
 	{
 		if (!node)
-			throw new Error('Trying goToNode without node specified')
+		{
+			log('Trying goToNode without node specified')
+			return null
+		}
 		
 		log2(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
 		
@@ -357,6 +357,10 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	blockerShow: function ()
 	{
+		// — зачем див, если можно было поймать событие на спуске?
+		// — ответ лежит на поверхностИЕ
+		this.blocker			= this.my('blocker')[0]
+		
 		if (!this.blocker || !this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia'))
 			return
 		
@@ -464,11 +468,14 @@ Programica.RollingImages.prototype.Handler.prototype =
 		{
 			var t = this
 			this.findNearest()
-			this.magnify_timeout = setTimeout
-			(
-				function () { t.goToFrame(t.current, 'easeInOutQuad').oncomplete = function () { t.blockerHide() } },
-				this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia') ? 150 : 750
-			)
+			if (t.current)
+				this.magnify_timeout = setTimeout
+				(
+					function () { t.goToFrame(t.current, 'easeInOutQuad').oncomplete = function () { t.blockerHide() } },
+					this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia') ? 150 : 750
+				)
+			else
+				this.blockerHide()
 		}
 		else
 		{
