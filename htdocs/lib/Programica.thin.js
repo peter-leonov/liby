@@ -64,6 +64,15 @@ function extend (to, from)
 	return to
 }
 
+function stringify (obj)
+{
+	var props = []
+	for (var i in obj)
+		props.push(i + ': ' + obj[i])
+	
+	return '{' + props.join(', ') + '}'
+}
+
 function $   (id)   { return document.getElementById(id) }
 function $$  (cn)   { return document.getElementsByClassName(cn) }
 function $$$ (cn)   { return document.getElementsByTagName(cn) }
