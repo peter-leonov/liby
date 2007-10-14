@@ -6,125 +6,129 @@ Programica.RollingImages.prototype.mainNodeClassName = 'programica-rolling-image
 Programica.RollingImages.prototype.klass = 'Programica.RollingImages'
 Programica.RollingImages.prototype.Handler = function (node)
 {
-	this.mainNode = node
-	if (!this.mainNode.RollingImages)
-		this.mainNode.RollingImages = this
-	
-	this.ns					= this.mainNode.getAttributeNS(Programica.ns070909, 'animation-namespace')
-	this.viewport			= this.my('viewport')[0]
-	if (!this.viewport)
-		throw new Error('Can`t find viewport for ' + this.mainNode)
-	
-	this.points				= this.my('point')
-	this.buttons			= []
-	this.aPrev				= this.my('prev')[0]
-	this.aNext				= this.my('next')[0]
 	this.current			= null
 	
-	this.noGrabs			= this.mainNode.getElementsByClassName('no-grab')
-	
-	
-	if (!this.viewport)
-	{
-		log(this.mainNode)
-		throw new Error('Viewport is undefined!')
-	}
-	if (!this.viewport.animate)
-	{
-		log(this.mainNode)
-		throw new Error('Viewport can`t be animated!')
-	}
-	
-	{
-		var bstr = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-buttons')
-		if (bstr)
-		{
-			var ids = bstr.split(/\s+/)
-			for (var ii = 0; ii < ids.length; ii++)
-			{
-				if (/^this$/i.test(ids[ii]))
-					this.addButtonsFrom(this.mainNode)
-				else
-					this.addButtonsFrom($(ids[ii]))
-			}
-		}
-		else
-			this.addButtonsFrom(this.mainNode)
-	}
-	
-	for (var i = 0; i < this.noGrabs.length; i++)
-		this.noGrabs[i].addEventListener
-		(
-			'mousedown',
-			function (e)
-			{
-				e.stopPropagation()
-			},
-			false
-		)
-	
-	for (var i in this.buttons)
-		node.button_num = node.getAttributeNS(Programica.ns070909, 'button-num') * 100 || i
-	
-	//this.buttons = this.buttons.sort(function (a, b) { a.button_num - b.button_num })
-	//log(this.buttons)
-	
-	var t = this
-	
-	this.click_listener = function (e) { t.dragclick(e) }
-	this.mousedown_listener = function (e) { t.dragstart(e) }
-	this.mousemove_listener = function (e) { t.dragging(e) }
-	this.mouseup_listener   = function (e) { t.dragstop(e) }
-	
-	
-	this.viewport.addEventListener('mousedown', this.mousedown_listener, false)
-	
-	if (/^yes$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-scroll')))
-		this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
-	
-	document.addEventListener('mouseup', function () { clearInterval(t.svInt) }, true)
-	
-	if (this.aPrev)
-	{
-		this.aPrev.addEventListener
-		(
-			'mousedown',
-			function ()
-			{
-				clearInterval(t.svInt)
-				t.goPrev()
-				t.svInt = setInterval(function () { t.goPrev() }, t.getDuration() * 1000 * 0.5 + 150)
-			},
-			false
-		)
-		this.aPrev.onselectstart	= function () { return false }
-	}
-	
-	if (this.aNext)
-	{
-		this.aNext.addEventListener
-		(
-			'mousedown',
-			function ()
-			{
-				clearInterval(t.svInt)
-				t.goNext()
-				t.svInt = setInterval(function () { t.goNext() }, t.getDuration() * 1000 * 0.5 + 150)
-			},
-			false
-		)
-		this.aPrev.onselectstart	= function () { return false }
-	}
-	
-	for (var i = 0, il = this.buttons.length; i < il; i++)
-		//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
-		this.buttons[i].onmousedown = function (fi) { return function () { t.goToFrame(fi) } } (i)
+	this.sync(node)
 	
 	Programica.RollingImages.active = this
 }
 
 Programica.RollingImages.prototype.Handler.prototype =
 {
+	sync: function (node)
+	{
+		this.mainNode = this.mainNode || node
+		
+		if (this.mainNode.RollingImages != this)
+			log('Duplicate binding RollingImages to ', this.mainNode)
+			
+		this.mainNode.RollingImages = this
+		
+		this.ns					= this.mainNode.getAttributeNS(Programica.ns070909, 'animation-namespace')
+		
+		this.viewport			= this.my('viewport')[0]
+		if (!this.viewport)
+			throw new Error('Can`t find viewport for ' + this.mainNode)
+		if (!this.viewport.animate)
+			throw new Error('Viewport can`t be animated!')
+		
+		log(this.points				= this.my('point'))
+		this.buttons			= []
+		this.aPrev				= this.my('prev')[0]
+		this.aNext				= this.my('next')[0]
+		
+		this.noGrabs			= this.mainNode.getElementsByClassName('no-grab')
+		
+		{
+			var bstr = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-buttons')
+			if (bstr)
+			{
+				var ids = bstr.split(/\s+/)
+				for (var ii = 0; ii < ids.length; ii++)
+				{
+					if (/^this$/i.test(ids[ii]))
+						this.addButtonsFrom(this.mainNode)
+					else
+						this.addButtonsFrom($(ids[ii]))
+				}
+			}
+			else
+				this.addButtonsFrom(this.mainNode)
+		}
+		
+		for (var i = 0; i < this.noGrabs.length; i++)
+			this.noGrabs[i].addEventListener
+			(
+				'mousedown',
+				function (e)
+				{
+					e.stopPropagation()
+				},
+				false
+			)
+		
+		for (var i in this.buttons)
+			node.button_num = node.getAttributeNS(Programica.ns070909, 'button-num') * 100 || i
+		
+		//this.buttons = this.buttons.sort(function (a, b) { a.button_num - b.button_num })
+		//log(this.buttons)
+		
+		var t = this
+		
+		this.click_listener = function (e) { t.dragclick(e) }
+		this.mousedown_listener = function (e) { t.dragstart(e) }
+		this.mousemove_listener = function (e) { t.dragging(e) }
+		this.mouseup_listener   = function (e) { t.dragstop(e) }
+		
+		
+		this.viewport.addEventListener('mousedown', this.mousedown_listener, false)
+		
+		if (/^yes$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-scroll')))
+			this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
+		
+		document.addEventListener('mouseup', function () { clearInterval(t.svInt) }, true)
+		
+		// if syncing when pushed
+		clearInterval(t.svInt)
+		
+		if (this.aPrev)
+		{
+			this.aPrev.addEventListener
+			(
+				'mousedown',
+				function (e)
+				{
+					e.preventDefault()
+					clearInterval(t.svInt)
+					t.goPrev()
+					t.svInt = setInterval(function () { t.goPrev() }, t.getDuration() * 1000 * 0.5 + 150)
+				},
+				false
+			)
+			this.aPrev.onselectstart	= function () { return false }
+		}
+		
+		if (this.aNext)
+		{
+			this.aNext.addEventListener
+			(
+				'mousedown',
+				function (e)
+				{
+					e.preventDefault()
+					clearInterval(t.svInt)
+					t.goNext()
+					t.svInt = setInterval(function () { t.goNext() }, t.getDuration() * 1000 * 0.5 + 150)
+				},
+				false
+			)
+			this.aPrev.onselectstart	= function () { return false }
+		}
+		
+		for (var i = 0, il = this.buttons.length; i < il; i++)
+			//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
+			this.buttons[i].onmousedown = function (fi) { return function () { t.goToFrame(fi) } } (i)
+	},
 	init:			function ()		{ this.goInit() },
 	goPrev:			function ()		{ if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
 	goNext:			function ()		{ if (this.current < this.points.length - 1) this.goToFrame((this.current + 1) % this.points.length) },
@@ -468,7 +472,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		{
 			var t = this
 			this.findNearest()
-			if (t.current)
+			if (t.current != undefined)
 				this.magnify_timeout = setTimeout
 				(
 					function () { t.goToFrame(t.current, 'easeInOutQuad').oncomplete = function () { t.blockerHide() } },

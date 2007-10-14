@@ -87,6 +87,8 @@ function $E  (type, props)
 	return node
 }
 
+$.onload = function (fn) { return self.addEventListener('load', fn, false) }
+
 Math.longRandom = function ()
 {
 	return (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17)
