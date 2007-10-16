@@ -14,6 +14,8 @@ Programica.IEFixes =
 		}
 		else if (event.propertyName == 'disabled')
 			Programica.IEFixes.fixDisabled(this)
+		/*else if (event.propertyName == 'className')
+			Programica.IEFixes.fixOpacity(this)*/
 	},
 	
 	onpropertychange7: function ()
@@ -23,6 +25,8 @@ Programica.IEFixes =
 			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
 			this.style.zoom = 1
 		}
+		/*else if (event.propertyName == 'className')
+			Programica.IEFixes.fixOpacity(this)*/
 	},
 	
 	//——————————————————————————————————————————————————————————————————————————

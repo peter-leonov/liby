@@ -32,7 +32,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		if (!this.viewport.animate)
 			throw new Error('Viewport can`t be animated!')
 		
-		log(this.points				= this.my('point'))
+		this.points				= this.my('point')
 		this.buttons			= []
 		this.aPrev				= this.my('prev')[0]
 		this.aNext				= this.my('next')[0]
