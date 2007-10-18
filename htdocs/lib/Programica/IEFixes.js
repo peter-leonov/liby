@@ -137,6 +137,11 @@ with (Programica.IEFixes)
 	}
 }
 
+if (/MSIE 7/.test(navigator.userAgent))
+	fixIE = fixIE7
+else if (/MSIE 6/.test(navigator.userAgent))
+	fixIE = fixIE6
+
 Programica.IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
 
 // кривоватый фикс addEventListener(...)
@@ -147,7 +152,7 @@ if (!self.addEventListener && self.attachEvent)
 		if (Programica.IEFixes.eventConversion[type])
 			type = Programica.IEFixes.eventConversion[type]
 		
-		// JavaScript — сила! Какаво: сохранить функцию-обертку в свойстве оборачиваемой функции
+		// JavaScript — сила! Каково: сохранить функцию-обертку в свойстве оборачиваемой функции
 		var t = this
 		func.__IEwrapper = func.__IEwrapper || function (e)
 		{
@@ -209,14 +214,15 @@ function $E  (type, props)
 document.write('<script id="__ie_onload" defer="defer" src="javascript:void(0)"></script>')
 document.getElementById("__ie_onload").onreadystatechange = function ()
 {
-    if (this.readyState == "complete")
-		self.oncontentready && self.oncontentready()
+	if (this.readyState == "complete")
+	{
+		var all = document.all
+		for (var i = 0, il = all.length; i < il; i++)
+			fixIE(all[i])
+	}
 }
 
-if (/MSIE 7/.test(navigator.userAgent))
-	document.write('<style> * { behavior: expression(fixIE7(this)) } </style>')
-else if (/MSIE 6/.test(navigator.userAgent))
-	document.write('<style> * { behavior: expression(fixIE6(this)) } </style>')
+document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
 
 
 // for oldstyle popups
