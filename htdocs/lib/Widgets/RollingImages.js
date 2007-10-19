@@ -36,8 +36,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.buttons			= []
 		this.aPrev				= this.my('prev')[0]
 		this.aNext				= this.my('next')[0]
-		
-		this.noGrabs			= this.mainNode.getElementsByClassName('no-grab')
+		this.ignore				= []
 		
 		{
 			var bstr = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-buttons')
@@ -56,8 +55,17 @@ Programica.RollingImages.prototype.Handler.prototype =
 				this.addButtonsFrom(this.mainNode)
 		}
 		
-		for (var i = 0; i < this.noGrabs.length; i++)
-			this.noGrabs[i].addEventListener
+		var noGrabs	= this.mainNode.getElementsByClassName('no-grab')
+		var aGrabs	= this.mainNode.getElementsByTagName('a')
+		
+		for (var i = 0; i < noGrabs.length; i++)
+			this.ignore.push(noGrabs[i])
+		
+		for (var i = 0; i < aGrabs.length; i++)
+			this.ignore.push(aGrabs[i])
+		
+		for (var i = 0; i < this.ignore.length; i++)
+			this.ignore[i].addEventListener
 			(
 				'mousedown',
 				function (e)
