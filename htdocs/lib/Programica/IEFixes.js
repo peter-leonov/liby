@@ -14,6 +14,8 @@ Programica.IEFixes =
 		}
 		else if (event.propertyName == 'disabled')
 			Programica.IEFixes.fixDisabled(this)
+		else if (event.propertyName == 'innerHTML')
+			Programica.IEFixes.fixThem(this.all)
 		/*else if (event.propertyName == 'className')
 			Programica.IEFixes.fixOpacity(this)*/
 	},
@@ -25,6 +27,8 @@ Programica.IEFixes =
 			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
 			this.style.zoom = 1
 		}
+		else if (event.propertyName == 'innerHTML')
+			Programica.IEFixes.fixThem(this.all)
 		/*else if (event.propertyName == 'className')
 			Programica.IEFixes.fixOpacity(this)*/
 	},
@@ -142,6 +146,12 @@ if (/MSIE 7/.test(navigator.userAgent))
 else if (/MSIE 6/.test(navigator.userAgent))
 	fixIE = fixIE6
 
+Programica.IEFixes.fixThem = function (all)
+{
+	for (var i = 0, il = all.length; i < il; i++)
+		fixIE(all[i])
+}
+
 Programica.IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
 
 // кривоватый фикс addEventListener(...)
@@ -214,12 +224,7 @@ function $E  (type, props)
 document.write('<script id="__ie_onload" defer="defer" src="javascript:void(0)"></script>')
 document.getElementById("__ie_onload").onreadystatechange = function ()
 {
-	if (this.readyState == "complete")
-	{
-		var all = document.all
-		for (var i = 0, il = all.length; i < il; i++)
-			fixIE(all[i])
-	}
+	Programica.IEFixes.fixThem(document.all)
 }
 
 document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
