@@ -1,9 +1,7 @@
 
-self.addEventListener('DOMContentLoaded', function () { Programica.Widget.onLoader() }, false)
 self.addEventListener('load', function () { Programica.Widget.onLoader() }, false)
-//self.oncontentready = function () { Programica.Widget.onLoader() }
 
-// спомогательный интерфейс для организации виджетов
+// вспомогательный интерфейс для организации виджетов
 
 Programica.Widget = function () {}
 extend (Programica.Widget,

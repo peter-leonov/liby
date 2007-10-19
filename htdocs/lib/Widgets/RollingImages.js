@@ -168,6 +168,10 @@ Programica.RollingImages.prototype.Handler.prototype =
 			return null
 		}
 		
+		if (this.mainNode.onjump)
+			if (this.mainNode.onjump(node) === false)
+				return null
+		
 		log2(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
 		
 		var left = null
