@@ -292,8 +292,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 		{
 			var btns = this.my('button', node)
 			
-			if (btns.length)
-				this.buttons = this.buttons.concat(btns)
+			for (var i = 0; i < btns.length; i++)
+				this.buttons.push(btns[i])
 		}
 	},
 	
