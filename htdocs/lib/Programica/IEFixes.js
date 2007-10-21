@@ -7,14 +7,14 @@ Programica.IEFixes =
 {
 	fixOpacity: function (node)
 	{
-		if (node.currentStyle && node.currentStyle.opacity)
+		if ((s = node.style))
 		{
-			if ((op = node.currentStyle.opacity) < 1)
-				node.style.filter = "alpha(opacity=" + Math.round(op * 100) + ")"
+			if (s.opacity < 1)
+				s.filter = 'alpha(opacity=' + Math.round(s.opacity * 100) + ')'
 			else
-				node.style.filter = ''
+				s.filter = ''
 			
-			//node.style.zoom = 1
+			s.zoom = 1
 		}
 	},
 	
@@ -99,7 +99,7 @@ with (Programica.IEFixes)
 		node.runtimeStyle.behavior = 'none'
 		
 		fixPrototype(node)
-		fixOpacity(node)
+		/*fixOpacity(node)*/
 		fixPng(node)
 		fixTitle(node)
 		fixLabel(node)
@@ -121,7 +121,7 @@ with (Programica.IEFixes)
 		node.runtimeStyle.behavior = 'none'
 		
 		fixPrototype(node)
-		fixOpacity(node)
+		/*fixOpacity(node)*/
 		fixTitle(node)
 		
 		node.onpropertychange = function ()
@@ -217,7 +217,8 @@ function $E  (type, props)
 document.write('<script id="__ie_onload" defer="defer" src="javascript:void(0)"></script>')
 document.getElementById("__ie_onload").onreadystatechange = function ()
 {
-	Programica.IEFixes.fixThem(document.all)
+	//if (this.readyState == "complete")
+		Programica.IEFixes.fixThem(document.all)
 }
 
 document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
