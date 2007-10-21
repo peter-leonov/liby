@@ -165,7 +165,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	goToFrame: function (n, anim, dur)
 	{
 		n = n || 0
-		return this.goToNode(this.points[n], anim, dur)
+		return this.points ? this.goToNode(this.points[n], anim, dur) : null
 	},
 	
 	goToNode: function (node, anim, dur)

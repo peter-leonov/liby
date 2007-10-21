@@ -5,40 +5,17 @@ if (!self.Element) self.Element = {prototype:{}}
 
 Programica.IEFixes =
 {
-	onpropertychange6: function ()
-	{
-		if (event.propertyName == 'style.opacity')
-		{
-			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
-			this.style.zoom = 1
-		}
-		else if (event.propertyName == 'disabled')
-			Programica.IEFixes.fixDisabled(this)
-		else if (event.propertyName == 'innerHTML')
-			Programica.IEFixes.fixThem(this.all)
-		/*else if (event.propertyName == 'className')
-			Programica.IEFixes.fixOpacity(this)*/
-	},
-	
-	onpropertychange7: function ()
-	{
-		if (event.propertyName == 'style.opacity')
-		{
-			this.style.filter = "alpha(opacity=" + Math.round(this.style.opacity * 100) + ")"
-			this.style.zoom = 1
-		}
-		else if (event.propertyName == 'innerHTML')
-			Programica.IEFixes.fixThem(this.all)
-		/*else if (event.propertyName == 'className')
-			Programica.IEFixes.fixOpacity(this)*/
-	},
-	
-	//——————————————————————————————————————————————————————————————————————————
-	
 	fixOpacity: function (node)
 	{
 		if (node.currentStyle && node.currentStyle.opacity)
-			node.style.opacity = node.currentStyle.opacity
+		{
+			if ((op = node.currentStyle.opacity) < 1)
+				node.style.filter = "alpha(opacity=" + Math.round(op * 100) + ")"
+			else
+				node.style.filter = ''
+			
+			//node.style.zoom = 1
+		}
 	},
 	
 	fixDisabled: function (node)
@@ -122,12 +99,21 @@ with (Programica.IEFixes)
 		node.runtimeStyle.behavior = 'none'
 		
 		fixPrototype(node)
-		node.onpropertychange = onpropertychange6
 		fixOpacity(node)
 		fixPng(node)
 		fixTitle(node)
 		fixLabel(node)
 		fixTitle(node)
+		
+		node.onpropertychange = function ()
+		{
+			if (event.propertyName == 'style.opacity')
+				fixOpacity(this)
+			else if (event.propertyName == 'disabled')
+				fixDisabled(this)
+			else if (event.propertyName == 'innerHTML')
+				fixThem(this.all)
+		}
 	}
 	
 	var fixIE7 = function (node)
@@ -135,9 +121,16 @@ with (Programica.IEFixes)
 		node.runtimeStyle.behavior = 'none'
 		
 		fixPrototype(node)
-		node.onpropertychange = onpropertychange7
 		fixOpacity(node)
 		fixTitle(node)
+		
+		node.onpropertychange = function ()
+		{
+			if (event.propertyName == 'style.opacity')
+				fixOpacity(this)
+			else if (event.propertyName == 'innerHTML')
+				fixThem(this.all)
+		}
 	}
 }
 
