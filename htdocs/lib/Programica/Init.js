@@ -1,8 +1,8 @@
 
-// объявляем пространство
-
+// объявляем пространства
 if (!self.Programica) self.Programica = {}
 Programica.ns070909 = 'http://www.programica.ru/2007/09/09'
+Programica.XMLNS = {'http://www.programica.ru/2007/09/09':'pmc'}
 
 //——————————————————————————————————————————————————————————————————————————————
 // Логи

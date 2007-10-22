@@ -70,9 +70,9 @@ extend (Programica.Widget,
 			{
 				var n = this.sorted[ni]
 				
-				log("Binding sync widget ", n.w, " to ", n.node)
+				log2("Binding sync widget ", n.w, " to ", n.node)
 				n.w.bind(n.node)
-				log("... bint")
+				log2("... bint")
 			}
 		}
 	},

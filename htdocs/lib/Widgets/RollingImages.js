@@ -19,7 +19,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	{
 		this.mainNode = this.mainNode || node
 		
-		if (this.mainNode.RollingImages != this)
+		if (this.mainNode.RollingImages && this.mainNode.RollingImages != this)
 			log('Duplicate binding RollingImages to ', this.mainNode)
 			
 		this.mainNode.RollingImages = this
@@ -83,17 +83,14 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		var t = this
 		
-		this.click_listener = function (e) { t.dragclick(e) }
-		this.mousedown_listener = function (e) { t.dragstart(e) }
-		this.mousemove_listener = function (e) { t.dragging(e) }
-		this.mouseup_listener   = function (e) { t.dragstop(e) }
-		
+		this.click_listener			= function (e) { t.dragclick(e) }
+		this.mousedown_listener		= function (e) { t.dragstart(e) }
+		this.mousemove_listener		= function (e) { t.dragging(e) }
+		this.mouseup_listener		= function (e) { t.dragstop(e) }
+		this.mousescroll_listener	= function (e) { t.mscroll(e) }
 		
 		this.viewport.addEventListener('mousedown', this.mousedown_listener, false)
-		
-		if (/^yes$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-scroll')))
-			this.viewport.addEventListener('DOMMouseScroll', function (e) { e.detail > 0 ? t.goNext() : t.goPrev(); e.preventDefault(); }, false);
-		
+		this.viewport.addEventListener('DOMMouseScroll', this.mousescroll_listener, false)
 		document.addEventListener('mouseup', function () { clearInterval(t.svInt) }, true)
 		
 		// if syncing when pushed
@@ -136,9 +133,11 @@ Programica.RollingImages.prototype.Handler.prototype =
 		for (var i = 0, il = this.buttons.length; i < il; i++)
 			//да, в жабаскрипте приходится так изголяться с замыканиями (в IE работает)
 			this.buttons[i].onmousedown = function (fi) { return function () { t.goToFrame(fi) } } (i)
+		
+		this.updateNavigation()
 	},
 	init:			function ()		{ this.goInit() },
-	goPrev:			function ()		{ if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
+	goPrev:			function ()		{ log(this.current); if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
 	goNext:			function ()		{ if (this.current < this.points.length - 1) this.goToFrame((this.current + 1) % this.points.length) },
 	
 	animationType:	function ()		{ return this.mainNode.getAttributeNS(Programica.ns070909, 'animation-type') || 'easeOutBack' },
@@ -348,6 +347,23 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.setCurrent(min_i)
 	},
 	
+	mscroll: function (e)
+	{
+		var type = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-scroll')
+		//log(e.detail)
+		if (type)
+		{
+			e.preventDefault()
+			
+			if (/^yes$/i.test(type))
+				e.detail > 0 ? this.goNext() : this.goPrev()
+			else if (/^smooth$/i.test(type))
+			{//alert(e.detail)
+				this.animateTo(this.viewport.scrollLeft, Math.round(this.viewport.scrollTop + this.viewport.offsetHeight * e.detail / 4))
+			}
+		}
+	},
+	
 	dragging: function (e)
 	{
 		e.preventDefault()
@@ -532,5 +548,5 @@ document.addEventListener
 	},
 	true
 )
-
+document.addEv(1)
 log2("Widget/RollingImages.js loaded")

@@ -162,7 +162,7 @@ if (!self.addEventListener && self.attachEvent)
 			e.target = e.srcElement
 			e.preventDefault  = function () { var old = this.returnValue;  this.returnValue = false; return old }
 			e.stopPropagation = function () { var old = this.cancelBubble; this.cancelBubble = true; return old }
-			e.detail = - e.wheelDelta / 120
+			e.detail = - e.wheelDelta / 30
 			func.apply(t, [e])
 		}
 		
@@ -185,11 +185,9 @@ if (!self.removeEventListener && self.detachEvent)
 	self.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
 }
 
-Programica.IEFixes.NS = {'http://www.programica.ru/2007/09/09':'pmc'}
-
 // опять криво имитируем getAttributeNS(...)
 if (!document.getAttributeNS)
-	Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(Programica.IEFixes.NS[ns] + ':' + attr) }
+	Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(Programica.XMLNS[ns] + ':' + attr) }
 
 document.realIECreateElement = document.createElement
 document.createElement = function (type)
