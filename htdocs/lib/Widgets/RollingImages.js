@@ -548,5 +548,5 @@ document.addEventListener
 	},
 	true
 )
-document.addEv(1)
+
 log2("Widget/RollingImages.js loaded")
