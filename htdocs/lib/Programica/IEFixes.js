@@ -3,97 +3,117 @@ if (!self.Programica) Programica = {}
 if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
 if (!self.Element) self.Element = {prototype:{}}
 
-Programica.IEFixes =
+with ({e: self.Element.prototype, hfe: HTMLFormElement.prototype})
 {
-	fixOpacity: function (node)
+	Programica.IEFixes =
 	{
-		if ((s = node.style))
+		fixOpacity: function (node)
 		{
-			if (s.opacity < 1)
-				s.filter = 'alpha(opacity=' + Math.round(s.opacity * 100) + ')'
-			else
-				s.filter = ''
-			
-			s.zoom = 1
-		}
-	},
-	
-	fixDisabled: function (node)
-	{
-		node.addClassName('disabled')
-		node.disabled ? node.addClassName('disabled') : node.remClassName('disabled')
-	},
-	
-	fixPng: function (node)
-	{
-		if (node.runtimeStyle.filter) return
-		if (node.tagName == 'IMG' && /\.png$/.test(node.src))
-		{
-			node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + node.src + "', sizingMethod='image')"
-			node.setAttribute('src', '/lib/img/dot.gif')
-		}
-		else if (/url\("(.+\.a\.png)"\)$/.test(node.currentStyle.backgroundImage))
-		{
-			//alert(RegExp.$1)
-			node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + RegExp.$1 + "', sizingMethod='crop')"
-			node.runtimeStyle.backgroundImage = 'none'
-			//node.width = node.width
-			//node.setAttribute('src', '/lib/img/dot.gif')
-		}
-	},
-	
-	// убирает лишние подсказки
-	fixTitle: function (node)
-	{
-		if (!node.title) node.title = ''
-	},
-	
-	// делает кликабельными метки
-	fixLabel: function (node)
-	{
-		if (node.tagName != 'LABEL') return
-		
-		node.attachEvent
-		(
-			'onclick',
-			function ()
+			if ((s = node.style))
 			{
-				// трай/кеч нужен, иначе как надежно определить,
-				// может ли элемент принять фокус сейчас или нет
-				try
-				{
-					var n = (node.getElementsByTagName('input')[0] || node.getElementsByTagName('textarea')[0] || node.getElementsByTagName('select')[0])
-					if (n)
-					{
-						n.click()
-						n.focus()
-					}
-				}
-				catch (ex) {}
+				if (s.opacity < 1)
+					s.filter = 'alpha(opacity=' + Math.round(s.opacity * 100) + ')'
+				else
+					s.filter = ''
+				
+				s.zoom = 1
 			}
-		)
-	},
-	
-	// добавляет методы и свойства из Element.prototype
-	fixPrototype: function (node)
-	{
-		var e = self.Element.prototype
+		},
 		
-		for (var p in e)
-			node[p] = e[p]
-		
-		if (node.tagName == 'FORM')
+		fixDisabled: function (node)
 		{
-			e = HTMLFormElement.prototype
+			node.addClassName('disabled')
+			node.disabled ? node.addClassName('disabled') : node.remClassName('disabled')
+		},
+		
+		fixPng: function (node)
+		{
+			if (node.runtimeStyle.filter) return
+			if (node.tagName == 'IMG' && /\.png$/.test(node.src))
+			{
+				node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + node.src + "', sizingMethod='image')"
+				node.setAttribute('src', '/lib/img/dot.gif')
+			}
+			else if (/url\("(.+\.a\.png)"\)$/.test(node.currentStyle.backgroundImage))
+			{
+				//alert(RegExp.$1)
+				node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + RegExp.$1 + "', sizingMethod='crop')"
+				node.runtimeStyle.backgroundImage = 'none'
+				//node.width = node.width
+				//node.setAttribute('src', '/lib/img/dot.gif')
+			}
+		},
+		
+		// убирает лишние подсказки
+		fixTitle: function (node)
+		{
+			if (!node.title) node.title = ''
+		},
+		
+		// делает кликабельными метки
+		fixLabel: function (node)
+		{
+			if (node.tagName != 'LABEL') return
+			
+			node.attachEvent
+			(
+				'onclick',
+				function ()
+				{
+					// трай/кеч нужен, иначе как надежно определить,
+					// может ли элемент принять фокус сейчас или нет
+					try
+					{
+						var n = (node.getElementsByTagName('input')[0] || node.getElementsByTagName('textarea')[0] || node.getElementsByTagName('select')[0])
+						if (n)
+						{
+							n.click()
+							n.focus()
+						}
+					}
+					catch (ex) {}
+				}
+			)
+		},
+		
+		// добавляет методы и свойства из Element.prototype
+		fixPrototype: function (node)
+		{
 			for (var p in e)
 				node[p] = e[p]
+			
+			if (node.tagName == 'FORM')
+			{
+				for (var p in hfe)
+					node[p] = hfe[p]
+			}
 		}
 	}
 }
-
-
+//var str = {}
+//document.onclick = function () { alert(stringify(str)) }
 with (Programica.IEFixes)
 {
+	var onpropertychange6 = function ()
+	{
+		//str[event.propertyName] = 1
+		
+		if (event.propertyName == 'style.opacity')
+			fixOpacity(this)
+		else if (event.propertyName == 'disabled')
+			fixDisabled(this)
+		else if (event.propertyName == 'innerHTML')
+			fixThem(this.all)
+	}
+	
+	var onpropertychange7 = function ()
+	{
+		if (event.propertyName == 'style.opacity')
+			fixOpacity(this)
+		else if (event.propertyName == 'innerHTML')
+			fixThem(this.all)
+	}
+	
 	var fixIE6 = function (node)
 	{
 		node.runtimeStyle.behavior = 'none'
@@ -105,15 +125,9 @@ with (Programica.IEFixes)
 		fixLabel(node)
 		fixTitle(node)
 		
-		node.onpropertychange = function ()
-		{
-			if (event.propertyName == 'style.opacity')
-				fixOpacity(this)
-			else if (event.propertyName == 'disabled')
-				fixDisabled(this)
-			else if (event.propertyName == 'innerHTML')
-				fixThem(this.all)
-		}
+		node._pmcfix = true
+		
+		node.onpropertychange = onpropertychange6
 	}
 	
 	var fixIE7 = function (node)
@@ -124,13 +138,9 @@ with (Programica.IEFixes)
 		/*fixOpacity(node)*/
 		fixTitle(node)
 		
-		node.onpropertychange = function ()
-		{
-			if (event.propertyName == 'style.opacity')
-				fixOpacity(this)
-			else if (event.propertyName == 'innerHTML')
-				fixThem(this.all)
-		}
+		node._pmcfix = true
+		
+		node.onpropertychange = onpropertychange7
 	}
 }
 
@@ -187,8 +197,7 @@ if (!self.removeEventListener && self.detachEvent)
 
 // sorry mom, i had to fix this ****** onload call order bug
 {
-	// first handler always fix document.all
-	this['on-load-listeners'] = [ function () { Programica.IEFixes.fixThem(document.all) } ]
+	this['on-load-listeners'] = []
 	
 	self.addEventListenerReal = self.addEventListener
 	self.addEventListener = function (type, func, dir)
@@ -267,7 +276,9 @@ function $E  (type, props)
 //		Programica.IEFixes.fixThem(document.all)
 //}
 
-//document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
+self.addEventListener('load', function () { Programica.IEFixes.fixThem(document.all) })
+
+document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
 
 
 // for oldstyle popups
