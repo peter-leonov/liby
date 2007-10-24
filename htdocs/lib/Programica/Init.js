@@ -7,28 +7,35 @@ Programica.XMLNS = {'http://www.programica.ru/2007/09/09':'pmc'}
 //——————————————————————————————————————————————————————————————————————————————
 // Логи
 
-if (self.console && console.firebug)
-	// для Firebug
-	self.log = console.log
-	
-else if (self.console && self.console.log)
-	// для Сафари и компании
-	self.log = function ()
-	{
-		var arr = []
-		for (var i = 0; i < arguments.length; i++)
-			arr.push(arguments[i])
-		return console.log(arr.join(', '))
-	}
-	
-else if (self.opera && opera.postError)
-	// для Оперов
-	self.log = function () { return opera.postError(arguments) }
-	
-else
-	// для "всИЕх"
+try
+{
+	if (self.console && self.console.firebug)
+		// для Firebug
+		self.log = console.log
+		
+	else if (self.console && self.console.log)
+		// для Сафари и компании
+		self.log = function ()
+		{
+			var arr = []
+			for (var i = 0; i < arguments.length; i++)
+				arr.push(arguments[i])
+			return console.log(arr.join(', '))
+		}
+		
+	else if (self.opera && opera.postError)
+		// для Оперов
+		self.log = function () { return opera.postError(arguments) }
+		
+	else
+		// для "всИЕх"
+		self.log = function () { return false }
+}
+catch (ex)
+{
+	// для глючащих
 	self.log = function () { return false }
-
+}
 
 self.log3 = function () { if (Programica.debugLevel > 2) self.log.apply(this, arguments) }
 self.log2 = function () { if (Programica.debugLevel > 1) self.log.apply(this, arguments) }

@@ -185,6 +185,54 @@ if (!self.removeEventListener && self.detachEvent)
 	self.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
 }
 
+// sorry mom, i had to fix this ****** onload call order bug
+{
+	// first handler always fix document.all
+	this['on-load-listeners'] = [ function () { Programica.IEFixes.fixThem(document.all) } ]
+	
+	self.addEventListenerReal = self.addEventListener
+	self.addEventListener = function (type, func, dir)
+	{
+		if (type == 'load')
+		{
+			this.removeEventListener(type, func, dir)
+			this['on-load-listeners'].push(func)
+		}
+		else
+			this.addEventListenerReal(type, func, dir)
+		
+		return func
+	}
+	
+	self.removeEventListenerReal = self.removeEventListener
+	self.removeEventListener = function (type, func, dir)
+	{
+		if (type == 'load')
+		{
+			var newarr = []
+			for (var i = 0; i < this['on-load-listeners'].length; i++)
+				if (this['on-load-listeners'][i] != func)
+					newarr.push(this['on-load-listeners'][i])
+		}
+		else
+			this.removeEventListenerReal(type, func, dir)
+		
+		return func
+	}
+	
+	// we have already done the wrapper job
+	self.addEventListenerReal
+	(
+		'load',
+		function (e)
+		{
+			for (var i = 0; i < this['on-load-listeners'].length; i++)
+				this['on-load-listeners'][i](e)
+		},
+		true
+	)
+}
+
 // опять криво имитируем getAttributeNS(...)
 if (!document.getAttributeNS)
 	Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(Programica.XMLNS[ns] + ':' + attr) }
@@ -212,14 +260,14 @@ function $E  (type, props)
 }
 
 
-document.write('<script id="__ie_onload" defer="defer" src="javascript:void(0)"></script>')
-document.getElementById("__ie_onload").onreadystatechange = function ()
-{
-	//if (this.readyState == "complete")
-		Programica.IEFixes.fixThem(document.all)
-}
+//document.write('<script id="__ie_onload" defer="defer" src="javascript:void(0)"></script>')
+//document.getElementById("__ie_onload").onreadystatechange = function ()
+//{
+//	if (this.readyState == "complete")
+//		Programica.IEFixes.fixThem(document.all)
+//}
 
-document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
+//document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
 
 
 // for oldstyle popups
