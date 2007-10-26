@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:pmc="http://www.programica.ru/2007/09/09" xml:lang="ru" lang="ru">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	
@@ -34,13 +34,16 @@
 		
 		.opacity-gradient img { width: 100px; float: left; }
 		
+		.grab { cursor: url(grab.ico), -moz-grab; }
+		.grabbing { cursor: url(grabbing.ico), -moz-grabbing; }
+		
 	</style>
 </head>
 <body>
 	
 	<fieldset><legend>RollingImages</legend>
 	<p>Вертикально:</p>
-	<div class="photos programica-rolling-images vertical" animation-type="easeOutBounce">
+	<div class="photos programica-rolling-images vertical" pmc:animation-type="easeOutBounce">
 		<div class="viewport">
 			<img class="point" src="i/1.jpg" alt="" />
 			<img class="point" src="i/2.jpg" alt="" />
@@ -59,7 +62,7 @@
 	<br/>
 	
 	<p>Горизонтально:</p>
-	<div class="photos programica-rolling-images horizontal" animation-type="" rolling-images-grab="magnify" rolling-images-grab-inertia="1">
+	<div class="photos programica-rolling-images horizontal" pmc:rolling-images-grab="magnify" pmc:rolling-images-grab-inertia="2">
 		<div class="viewport">
 			<div style="width:10000px; padding:0 1000px;">
 				<img class="point" src="i/1.jpg" alt="" />
@@ -80,7 +83,7 @@
 	<br/>
 	
 	<p>По двум осям:</p>
-	<div class="photos programica-rolling-images vertical" animation-type="easeOutBounce" rolling-images-grab="yes" rolling-images-grab-power="1.5 1.5" animation-duration="3" rolling-images-scroll="yes">
+	<div class="photos programica-rolling-images vertical" pmc:animation-type="easeOutBounce" pmc:rolling-images-grab="yes" pmc:rolling-images-grab-power="1.5 1.5" pmc:animation-duration="3" pmc:rolling-images-scroll="yes">
 		<div class="viewport">
 			<img class="point" src="i/1.jpg" alt="" style="margin-left:0px"/>
 			<img class="point" src="i/2.jpg" alt="" style="margin-left:100px" />

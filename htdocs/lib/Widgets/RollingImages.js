@@ -38,6 +38,9 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.aNext				= this.my('next')[0]
 		this.ignore				= []
 		
+		if (/^(yes|magnify)$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab')))
+			this.viewport.addClassName('grab')
+		
 		{
 			var bstr = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-buttons')
 			if (bstr)
