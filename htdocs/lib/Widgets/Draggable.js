@@ -31,16 +31,16 @@ Programica.Draggable.bind = function (node, props)
 		var dx = e.clientX - handl.startX
 		var dy = e.clientY - handl.startY
 		
-		e.preventDefault()
 		e.stopPropagation()
+		e.preventDefault()
 		
-		handl.move(dx, dy)
-	}
-	
-	var click = function (e)
-	{
-		e.preventDefault()
-		e.stopPropagation()
+		
+		if (handl.lastDX != dx || handl.lastDY != dy)
+		{
+			handl.lastDX = dx
+			handl.lastDY = dy
+			handl.move(dx, dy)
+		}
 	}
 	
 	var mousedown = function (e)
@@ -54,7 +54,9 @@ Programica.Draggable.bind = function (node, props)
 			document.addEventListener('mouseup', mouseup, true)
 		}
 		
+		e.stopPropagation()
 		e.preventDefault()
+		
 		Programica.Draggable.active = handl
 	}
 	
@@ -63,14 +65,13 @@ Programica.Draggable.bind = function (node, props)
 		document.removeEventListener('mousemove', mousemove, true)
 		document.removeEventListener('mouseup', mouseup, true)
 		
-		e.preventDefault()
 		e.stopPropagation()
+		e.preventDefault()
 		
 		Programica.Draggable.active = null
 	}
 	
 	node.addEventListener('mousedown', mousedown, false)
-	node.addEventListener('click', click, true)
 	
 	return handl
 }
