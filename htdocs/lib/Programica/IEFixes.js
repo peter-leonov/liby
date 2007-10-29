@@ -176,6 +176,7 @@ if (!self.addEventListener && self.attachEvent)
 			func.apply(t, [e])
 		}
 		
+		this.detachEvent('on' + type, func.__IEwrapper)
 		this.attachEvent('on' + type, func.__IEwrapper)
 		
 	}
