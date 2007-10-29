@@ -140,7 +140,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.updateNavigation()
 	},
 	init:			function ()		{ this.goInit() },
-	goPrev:			function ()		{ log(this.current); if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
+	goPrev:			function ()		{ if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
 	goNext:			function ()		{ if (this.current < this.points.length - 1) this.goToFrame((this.current + 1) % this.points.length) },
 	
 	animationType:	function ()		{ return this.mainNode.getAttributeNS(Programica.ns070909, 'animation-type') || 'easeOutBack' },

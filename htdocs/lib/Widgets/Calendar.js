@@ -51,10 +51,11 @@ Programica.Calendar.prototype.Handler.prototype =
 		while (now <= end)
 		{
 			var ul = document.createElement('ul')
-			ul.className = 'days ' + (this.riNs ? (this.riNs + '-point') : 'point')
+			ul.addClassName('days ' + (this.riNs ? (this.riNs + '-point') : 'point'))
+			//ul.setAttribute('className', 'days ' + (this.riNs ? (this.riNs + '-point') : 'point'))
 			
 			if (now.getYear() == today.getYear() && now.getMonth() == today.getMonth())
-				ul.className += ' ' + (this.riNs ? (this.riNs + '-selected') : 'selected')
+				ul.addClassName(this.riNs ? (this.riNs + '-selected') : 'selected')
 			
 			// и снова гемор с замыканиями
 			ul.onselect = function (t, d) { return function () { if (t.curDateNode) t.curDateNode.innerHTML = d.rusMY() } } (this, now)
@@ -64,8 +65,9 @@ Programica.Calendar.prototype.Handler.prototype =
 			for (i; i < last.getDay(); i++)
 			{
 				var li = ul.appendChild(document.createElement('li'))
-				li.className = 'nondate'
-				li.innerHTML = ' '
+				li.addClassName('nondate')
+				li.innerHTML = ' '
+				//li.appendChild(document.createTextNode('asd'))
 			}
 			
 			do
@@ -74,27 +76,27 @@ Programica.Calendar.prototype.Handler.prototype =
 				var li = ul.appendChild(document.createElement('li'))
 				li.innerHTML = now.getDate()
 				
-				// пока раскрашиваем ноды тут, но надо вынесли логику
+				// пока раскрашиваем ноды тут, но логику надо бы вынести
 				if (today < now) // будущее
 				{
 					if (data[now])
-						li.className = 'future private'
+						li.addClassName('future private')
 					else
-						li.className = "future freeday"
+						li.addClassName('future freeday')
 				}
 				else if (today.getTime() == now.getTime()) // настоящее
 				{
 					if (data[now])
-						li.className = 'curdate private'
+						li.addClassName('curdate private')
 					else
-						li.className = "curdate freeday"
+						li.addClassName('curdate freeday')
 				}
 				else if (today > now) // прошлое
 				{
 					if (data[now])
-						li.className = 'past private'
+						li.addClassName('past private')
 					else
-						li.className = "past freeday"
+						li.addClassName('past freeday')
 				}
 				
 				last = now
@@ -107,7 +109,7 @@ Programica.Calendar.prototype.Handler.prototype =
 				for (i = 0; i < 7 - last.getDay(); i++)
 				{
 					var li = ul.appendChild(document.createElement('li'))
-					li.className = 'nondate'
+					li.addClassName('nondate')
 					li.innerHTML = ' '
 				}
 			
@@ -116,6 +118,8 @@ Programica.Calendar.prototype.Handler.prototype =
 			//now.setMonth(now.getMonth() + 1)
 			//log("month: " + now + " " + end)
 		}
+		
+		//log(this.mainNode.innerHTML)
 		
 		//log(data)
 	},
