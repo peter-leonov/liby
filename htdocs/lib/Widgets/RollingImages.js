@@ -119,7 +119,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 			{
 				e.preventDefault()
 				clearInterval(t.svInt)
-				log(t.goNext())
+				t.goNext()
 				t.svInt = setInterval(function () { t.goNext() }, t.getDuration() * 1000 * 0.5 + 150)
 			}
 			

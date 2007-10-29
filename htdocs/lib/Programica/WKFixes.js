@@ -1,9 +1,5 @@
 
-//alert(document.contentType)
-
 Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(Programica.XMLNS[ns] + ':' + attr) }
-
-//alert()
 
 window.addEventListener
 (
