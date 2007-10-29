@@ -101,35 +101,29 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		if (this.aPrev)
 		{
-			this.aPrev.addEventListener
-			(
-				'mousedown',
-				function (e)
-				{
-					e.preventDefault()
-					clearInterval(t.svInt)
-					t.goPrev()
-					t.svInt = setInterval(function () { t.goPrev() }, t.getDuration() * 1000 * 0.5 + 150)
-				},
-				false
-			)
+			this.prevmousedown = this.prevmousedown || function (e)
+			{
+				e.preventDefault()
+				clearInterval(t.svInt)
+				t.goPrev()
+				t.svInt = setInterval(function () { t.goPrev() }, t.getDuration() * 1000 * 0.5 + 150)
+			}
+			
+			this.aPrev.addEventListener('mousedown', this.prevmousedown, false)
 			this.aPrev.onselectstart	= function () { return false }
 		}
 		
 		if (this.aNext)
 		{
-			this.aNext.addEventListener
-			(
-				'mousedown',
-				function (e)
-				{
-					e.preventDefault()
-					clearInterval(t.svInt)
-					t.goNext()
-					t.svInt = setInterval(function () { t.goNext() }, t.getDuration() * 1000 * 0.5 + 150)
-				},
-				false
-			)
+			this.nextmousedown = this.nextmousedown || function (e)
+			{
+				e.preventDefault()
+				clearInterval(t.svInt)
+				log(t.goNext())
+				t.svInt = setInterval(function () { t.goNext() }, t.getDuration() * 1000 * 0.5 + 150)
+			}
+			
+			this.aNext.addEventListener('mousedown', this.nextmousedown, false)
 			this.aPrev.onselectstart	= function () { return false }
 		}
 		
