@@ -355,8 +355,9 @@ Programica.RollingImages.prototype.Handler.prototype =
 			if (/^yes$/i.test(type))
 				e.detail > 0 ? this.goNext() : this.goPrev()
 			else if (/^smooth$/i.test(type))
-			{//alert(e.detail)
-				this.animateTo(this.viewport.scrollLeft, Math.round(this.viewport.scrollTop + this.viewport.offsetHeight * e.detail / 4))
+			{
+				var t = this
+				this.animateTo(this.viewport.scrollLeft, Math.round(this.viewport.scrollTop + this.viewport.offsetHeight * e.detail / 4)).oncomplete = function () { t.findNearest(), t.updateNavigation() }
 			}
 		}
 	},
@@ -532,13 +533,26 @@ document.addEventListener
 	{
 		if (!Programica.RollingImages.active) return
 		
+		switch (e.keyCode)
+		{
+			case 33:
+				Programica.RollingImages.active.goPrev()
+				break
+			case 34:
+			case 32:
+				Programica.RollingImages.active.goNext()
+				break
+		}
+		
 		if (e.ctrlKey)
 			switch (e.keyCode)
 			{
 				case 37:
+				case 38:
 					Programica.RollingImages.active.goPrev()
 					break
 				case 39:
+				case 40:
 					Programica.RollingImages.active.goNext()
 					break
 			}
