@@ -1,6 +1,4 @@
 
-Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(Programica.XMLNS[ns] + ':' + attr) }
-
 window.addEventListener
 (
 	'mousewheel',

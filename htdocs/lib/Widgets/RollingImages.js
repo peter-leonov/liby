@@ -24,7 +24,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 			
 		this.mainNode.RollingImages = this
 		
-		this.ns					= this.mainNode.getAttributeNS(Programica.ns070909, 'animation-namespace')
+		this.ns					= this.mainNode.getAttribute('pmc-animation-namespace')
 		
 		this.viewport			= this.my('viewport')[0]
 		if (!this.viewport)
@@ -38,11 +38,11 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.aNext				= this.my('next')[0]
 		this.ignore				= []
 		
-		if (/^(yes|magnify)$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab')))
+		if (/^(yes|magnify)$/i.test(this.mainNode.getAttribute('pmc-rolling-images-grab')))
 			this.viewport.addClassName('grab')
 		
 		{
-			var bstr = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-buttons')
+			var bstr = this.mainNode.getAttribute('pmc-rolling-images-buttons')
 			if (bstr)
 			{
 				var ids = bstr.split(/\s+/)
@@ -79,7 +79,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 			)
 		
 		for (var i in this.buttons)
-			node.button_num = node.getAttributeNS(Programica.ns070909, 'button-num') * 100 || i
+			node.button_num = node.getAttribute('pmc-button-num') * 100 || i
 		
 		//this.buttons = this.buttons.sort(function (a, b) { a.button_num - b.button_num })
 		//log(this.buttons)
@@ -137,8 +137,8 @@ Programica.RollingImages.prototype.Handler.prototype =
 	goPrev:			function ()		{ if (this.current > 0) this.goToFrame((this.points.length + this.current - 1) % this.points.length) },
 	goNext:			function ()		{ if (this.current < this.points.length - 1) this.goToFrame((this.current + 1) % this.points.length) },
 	
-	animationType:	function ()		{ return this.mainNode.getAttributeNS(Programica.ns070909, 'animation-type') || 'easeOutBack' },
-	getDuration:	function ()		{ return this.mainNode.getAttributeNS(Programica.ns070909, 'animation-duration') || 1 },
+	animationType:	function ()		{ return this.mainNode.getAttribute('pmc-animation-type') || 'easeOutBack' },
+	getDuration:	function ()		{ return this.mainNode.getAttribute('pmc-animation-duration') || 1 },
 	
 	my: function (cn, node)
 	{
@@ -184,7 +184,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		var height = null
 		
 		// поиграем в CSS
-		switch (this.mainNode.getAttributeNS(Programica.ns070909, 'animation-align') || 'left-top')
+		switch (this.mainNode.getAttribute('pmc-animation-align') || 'left-top')
 		{
 			case 'center':
 			case 'middle':
@@ -206,12 +206,12 @@ Programica.RollingImages.prototype.Handler.prototype =
 				break
 			
 			default:
-				log('Unknown animation align type: ' + this.mainNode.getAttributeNS(Programica.ns070909, 'animation-align'))
+				log('Unknown animation align type: ' + this.mainNode.getAttribute('pmc-animation-align'))
 		}
 		
 		
 		{
-			var scale = this.viewport.getAttributeNS(Programica.ns070909, "scale")
+			var scale = this.viewport.getAttribute("pmc-scale")
 			
 			if (/^(all|height)$/.test(scale))
 				height = node.offsetHeight
@@ -346,7 +346,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	mscroll: function (e)
 	{
-		var type = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-scroll')
+		var type = this.mainNode.getAttribute('pmc-rolling-images-scroll')
 		//log(e.detail)
 		if (type)
 		{
@@ -391,7 +391,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		// — ответ лежит на поверхностИЕ
 		this.blocker			= this.my('blocker')[0]
 		
-		if (!this.blocker || !this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia'))
+		if (!this.blocker || !this.mainNode.getAttribute('pmc-rolling-images-grab-inertia'))
 			return
 		
 		this.blocker.style.width = this.viewport.scrollWidth + 'px'
@@ -409,7 +409,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	dragstart: function (e)
 	{
-		if (!/^(yes|magnify)$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab')))
+		if (!/^(yes|magnify)$/i.test(this.mainNode.getAttribute('pmc-rolling-images-grab')))
 			return
 		
 		//if (e.target.nodeName == 'A')
@@ -424,7 +424,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		//this.blockerShow()
 		
 		{
-			var power = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-power')
+			var power = this.mainNode.getAttribute('pmc-rolling-images-grab-power')
 			power = power ? power.split(/\s+/) : []
 			this.scrollXpower = (power[0] || 1)
 			this.scrollYpower = power[1] || this.scrollXpower
@@ -460,7 +460,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.magnify()
 		
 		// "энерция"
-		var inertia = this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia')
+		var inertia = this.mainNode.getAttribute('pmc-rolling-images-grab-inertia')
 		if (inertia && this.mouse[3] && new Date() - this.mouse[0].t < 150 && this.di)
 		{
 			// арифметически усредняем три последних движения мышью
@@ -494,7 +494,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 	magnify: function ()
 	{
 		this.drop_magnify()
-		if (/^magnify$/i.test(this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab')))
+		if (/^magnify$/i.test(this.mainNode.getAttribute('pmc-rolling-images-grab')))
 		{
 			var t = this
 			this.findNearest()
@@ -502,7 +502,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 				this.magnify_timeout = setTimeout
 				(
 					function () { t.goToFrame(t.current, 'easeInOutQuad').oncomplete = function () { t.blockerHide() } },
-					this.mainNode.getAttributeNS(Programica.ns070909, 'rolling-images-grab-inertia') ? 150 : 750
+					this.mainNode.getAttribute('pmc-rolling-images-grab-inertia') ? 150 : 750
 				)
 			else
 				this.blockerHide()
@@ -533,16 +533,6 @@ document.addEventListener
 	{
 		if (!Programica.RollingImages.active) return
 		
-		switch (e.keyCode)
-		{
-			case 33:
-				Programica.RollingImages.active.goPrev()
-				break
-			case 34:
-			case 32:
-				Programica.RollingImages.active.goNext()
-				break
-		}
 		
 		if (e.ctrlKey)
 			switch (e.keyCode)

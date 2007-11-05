@@ -13,10 +13,10 @@ Programica.Calendar.prototype.Handler.prototype =
 {
 	init: function ()
 	{
-		this.curDateNode = $(this.mainNode.getAttributeNS(Programica.ns070909, 'calendar-selected-month')) || this.my('selected-month')[0]
-		this.riNs = this.mainNode.getAttributeNS(Programica.ns070909, 'calendar-ri-ns')
+		this.curDateNode = $(this.mainNode.getAttribute('pmc-calendar-selected-month')) || this.my('selected-month')[0]
+		this.riNs = this.mainNode.getAttribute('pmc-calendar-ri-ns')
 		
-		var r = sGet(this.mainNode.getAttributeNS(Programica.ns070909, 'calendar-href'))
+		var r = sGet(this.mainNode.getAttribute('pmc-calendar-href'))
 		this.dataLoaded(r)
 	},
 	
