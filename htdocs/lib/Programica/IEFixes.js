@@ -114,9 +114,9 @@ with (Programica.IEFixes)
 			fixThem(this.all)
 	}
 	
-	var fixIE6 = function (node)
+	fixIE6 = function (node)
 	{
-		node.runtimeStyle.behavior = 'none'
+		//node.runtimeStyle.behavior = 'none'
 		
 		fixPrototype(node)
 		/*fixOpacity(node)*/
@@ -132,7 +132,7 @@ with (Programica.IEFixes)
 	
 	var fixIE7 = function (node)
 	{
-		node.runtimeStyle.behavior = 'none'
+		//node.runtimeStyle.behavior = 'none'
 		
 		fixPrototype(node)
 		/*fixOpacity(node)*/
@@ -142,17 +142,19 @@ with (Programica.IEFixes)
 		
 		node.onpropertychange = onpropertychange7
 	}
+	
+	if (/MSIE 7/.test(navigator.userAgent))
+		fixIE = fixIE7
+	else if (/MSIE 6/.test(navigator.userAgent))
+		fixIE = fixIE6
 }
 
-if (/MSIE 7/.test(navigator.userAgent))
-	fixIE = fixIE7
-else if (/MSIE 6/.test(navigator.userAgent))
-	fixIE = fixIE6
 
-Programica.IEFixes.fixThem = function (all)
+
+Programica.IEFixes.fixThem = function (nodes)
 {
-	for (var i = 0, il = all.length; i < il; i++)
-		fixIE(all[i])
+	for (var i = 0, il = nodes.length; i < il; i++)
+		fixIE(nodes[i])
 }
 
 Programica.IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
@@ -279,7 +281,8 @@ function $E  (type, props)
 
 self.addEventListener('load', function () { Programica.IEFixes.fixThem(document.all) })
 
-document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
+document.write('<style> html * { scrollbar-face-color: expression((runtimeStyle.scrollbarFaceColor = 0), fixIE(this)) } </style>')
+//document.write('<style> * { behavior: expression(fixIE(this)) } </style>')
 
 
 // for oldstyle popups
