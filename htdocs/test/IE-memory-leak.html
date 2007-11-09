@@ -3,18 +3,16 @@
 <head>
 	<title>Память в IE</title>
 	
-	<!--<script type="text/javascript" src="/lib/Programica.js"></script>-->
-	<script>function fix (node) { window.status++ }</script>
+	<script type="text/javascript" src="/lib/Programica/IEFixes.js"></script>
 	<style type="text/css">
 		
 		div { width: 20px; margin: 1px; background-color: #eee; }
 		
-		html * { scrollbar-face-color: expression((runtimeStyle.scrollbarFaceColor = 0), fix(this)) }
 	</style>
 </head>
 <body>
 	<button onclick="document.body.appendChild(document.createElement('button'))">test</button>
-	
+	<textarea>123</textarea>
 	<div style="width:200px;height:200px;overflow:hidden">
 		<div></div>
 		<div></div>
@@ -3617,7 +3615,13 @@
 		<div></div>
 		<div></div>
 		<div></div>
-		<div></div>
+		<div id="theDiv"></div>
 	</div>
+	<script>
+	self.addEventListener('load', function ()
+	{
+		window.status = typeof document.getElementById('theDiv').addEventListener
+	}, false)
+	</script>
 </body>
 </html>
