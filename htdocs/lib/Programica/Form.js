@@ -1,48 +1,57 @@
 // example: $('form').toHash()
-HTMLFormElement.prototype.toHash = function () { return Programica.Form.form2hash(this) }
+HTMLFormElement.prototype.toHash = function (fa) { return Programica.Form.form2hash(this, fa) }
 
 Programica.Form = {}
 
 // Преобразование данных формы в хеш
 Programica.Form =
 {
-	form2hash: function (f)
+	form2hash: function (f, fa)
 	{
-		var elem
-		var hash = {}
+		var node, val, nn, hash = {}
 		
 		for (var i = 0; i < f.length; i++)
 		{
-			elem = f.elements[i]
-			var val = null
-			switch (elem.type)
+			node = f.elements[i]
+			nn = node.name
+			
+			// skip nodes with exect empty names
+			if (nn === '')
+				continue
+			
+			val = null
+			switch (node.type)
 			{
-				case "checkbox":
-					val = elem.checked ? elem.value : null
+				case 'checkbox':
+					val = node.checked ? node.value : null
 					break
 				
-				case "radio":
-					val = elem.checked ? elem.value : null
+				case 'radio':
+					val = node.checked ? node.value : null
 					break
 				
-				case "select-one":
-					val = elem.options[elem.selectedIndex].value
+				case 'select-one':
+					val = node.options[node.selectedIndex].value
 					break
 				
-				case "submit":
+				case 'submit':
 					break
 				
 				default:
-					val = elem.value
+					val = node.value
 			}
 			
 			if (val != null)
-				if	(hash[elem.name] == null)
-					hash[elem.name] = val
-				else if (hash[elem.name].constructor == Array)
-					hash[elem.name].push(val)
+			{
+				if	(hash[nn] == null)
+					hash[nn] = fa ? [val] : val
+				else if (hash[nn].constructor == Array)
+					hash[nn].push(val)
 				else
-					hash[elem.name] = [hash[elem.name], val]
+					hash[nn] = [hash[nn], val]
+			}
+			else if (fa && !hash[nn])
+				hash[nn] = []
 		}
 		
 		return hash;
