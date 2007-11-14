@@ -309,12 +309,14 @@ with
 	
 	P.IEFixes.CSSBindings =
 	[
-	'label{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),Programica.IEFixes.label(this))}',
 	'input{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),Programica.IEFixes.input(this))}',
 	'img{scrollbar-highlight-color:expression((runtimeStyle.scrollbarHighlightColor="transparent"),(title||(title="")))}',
 	'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),Programica.IEFixes.formProto(this))}'
 	//'*{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),fixIE(this))}'
 	]
+	
+	if (/MSIE 6/.test(navigator.userAgent))
+		P.IEFixes.CSSBindings.push('label{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),Programica.IEFixes.label(this))}')
 	
 	document.write('<style>' + P.IEFixes.CSSBindings.join('\n') + '</style>')
 	
