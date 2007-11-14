@@ -58,18 +58,30 @@ with
 			(
 				'onclick',
 				function ()
-				{
-					// трай/кеч нужен; иначе необходимо определить,
-					// может элемент принять фокус или нет
+				{//alert(event.srcElement)
+					// трай/кеч нужен; иначе необходимо определять,
+					// может элемент принять фокус или не может
 					try
 					{
-						if (n = (this.getElementsByTagName('input')[0] ||
-								this.getElementsByTagName('textarea')[0] ||
-								this.getElementsByTagName('select')[0]))
+						n = (node.getElementsByTagName('input')[0] ||
+								node.getElementsByTagName('textarea')[0] ||
+								node.getElementsByTagName('select')[0])
+						if (n)
+							//n.fireEvent('on' + event.type, event)
 							n.click(), n.focus()
 					}
 					catch (ex) { log(ex.message) }
 				}
+			)
+		},
+		
+		// фиксим всплывание onchange до формы
+		input: function (node)
+		{
+			node.attachEvent
+			(
+				node.type == 'text' ? 'onchange' : 'onclick',
+				function () { try { node.form.onchange() } catch (ex) { log(ex.message) } }
 			)
 		},
 		
@@ -158,6 +170,22 @@ with
 	{
 		Element.prototype.addEventListener = function (type, func, dir)
 		{
+			if (type == 'change' && this.tagName == 'FORM')
+			{
+				if (!this.onchange)
+					this.onchange = function ()
+					{
+						for (var i = 0; i < this.onchange.stack.length; i++)
+							this.onchange.stack[i].apply(this, [window.event])
+					}
+				
+				if (!this.onchange.stack)
+					this.onchange.stack = []
+				
+				this.onchange.stack.push(func)
+				return
+			}
+			
 			type = P.IEFixes.eventConversion[type] || type
 			
 			var key = '__IEEventWrapper:'// + type + ':' + dir + ':' + this.uniqueID
@@ -282,6 +310,7 @@ with
 	P.IEFixes.CSSBindings =
 	[
 	'label{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),Programica.IEFixes.label(this))}',
+	'input{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),Programica.IEFixes.input(this))}',
 	'img{scrollbar-highlight-color:expression((runtimeStyle.scrollbarHighlightColor="transparent"),(title||(title="")))}',
 	'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),Programica.IEFixes.formProto(this))}'
 	//'*{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),fixIE(this))}'
