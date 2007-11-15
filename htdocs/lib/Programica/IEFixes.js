@@ -78,10 +78,11 @@ with
 		// фиксим всплывание onchange до формы
 		input: function (node)
 		{
-			node.attachEvent
+			Element.prototype.addEventListener.apply
 			(
-				node.type == 'text' ? 'onchange' : 'onclick',
-				function () { try { node.form.onchange() } catch (ex) { log(ex.message) } }
+				node,
+				[node.type == 'text' ? 'change' : 'click',
+				function (e) { try { node.form.onchange(e) } catch (ex) {} }]
 			)
 		},
 		
@@ -170,22 +171,6 @@ with
 	{
 		Element.prototype.addEventListener = function (type, func, dir)
 		{
-			if (type == 'change' && this.tagName == 'FORM')
-			{
-				if (!this.onchange)
-					this.onchange = function ()
-					{
-						for (var i = 0; i < this.onchange.stack.length; i++)
-							this.onchange.stack[i].apply(this, [window.event])
-					}
-				
-				if (!this.onchange.stack)
-					this.onchange.stack = []
-				
-				this.onchange.stack.push(func)
-				return
-			}
-			
 			type = P.IEFixes.eventConversion[type] || type
 			
 			var key = '__IEEventWrapper:'// + type + ':' + dir + ':' + this.uniqueID
@@ -209,7 +194,22 @@ with
 				}
 			}
 			
-			this.attachEvent('on' + type, func[key])
+			if (type == 'change' && this.tagName == 'FORM')
+			{
+				if (!this.onchange)
+					this.onchange = function ()
+					{
+						for (var i = 0; i < this.onchange.stack.length; i++)
+							this.onchange.stack[i].apply(this, [window.event])
+					}
+				
+				if (!this.onchange.stack)
+					this.onchange.stack = []
+				
+				this.onchange.stack.push(func[key])
+			}
+			else
+				this.attachEvent('on' + type, func[key])
 		}
 		
 		self.addEventListener = document.addEventListener = Element.prototype.addEventListener
