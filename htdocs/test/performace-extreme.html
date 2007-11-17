@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>Экстремальные тесты на скорость</title>
+	<!--<script type="text/javascript" src="/lib/Programica.js"></script>-->
+</head>
+<body>
+	<script>
+		
+		if (!self.console)
+		{
+			self.console = {}
+			self.console.times = {}
+			self.console.time    = function (s) { this.times[s] = new Date() }
+			self.console.timeEnd = function (s) { var d = new Date(); return d - this.times[s] }
+		}
+		
+		console.info('Empty cycles')
+		
+		console.time('Empty cycle in global')
+		for (i = 0; i <= 100000; i++);
+		console.timeEnd('Empty cycle in global')
+		
+		console.time('Empty cycle; var i')
+		for (var i = 0; i <= 100000; i++);
+		console.timeEnd('Empty cycle; var i')
+		
+		console.time('Empty cycle in with(i)')
+		with ({i:0})
+		{
+			for (i = 0; i <= 100000; i++);
+		}
+		console.timeEnd('Empty cycle in with(i)')
+		
+		console.time('Empty cycle in function(i)');
+		(function (i)
+		{
+			for (i = 0; i <= 100000; i++);
+		}) ()
+		console.timeEnd('Empty cycle in function(i)')
+		
+		console.time('Empty cycle in function test1 (i)')
+		function test1 (i)
+		{
+			for (i = 0; i <= 100000; i++);
+		}
+		test1(0)
+		console.timeEnd('Empty cycle in function test1 (i)')
+		
+		console.time('Empty cycle in function() var i');
+		(function ()
+		{
+			for (var i = 0; i <= 100000; i++);
+		}) ()
+		console.timeEnd('Empty cycle in function() var i')
+		
+		console.time('Empty cycle in function test1 () var i')
+		function test1 ()
+		{
+			for (var i = 0; i <= 100000; i++);
+		}
+		test1(0)
+		console.timeEnd('Empty cycle in function test1 () var i')
+		
+	</script>
+</body>
+</html>
