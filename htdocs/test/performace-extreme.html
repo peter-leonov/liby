@@ -1,22 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" debug="true">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>Экстремальные тесты на скорость</title>
 	<!--<script type="text/javascript" src="/lib/Programica.js"></script>-->
+	<script type="text/javascript" src="/lib/firebug/firebug.js"></script>
 </head>
 <body>
 	<script>
 		
-		if (!self.console)
-		{
-			self.console = {}
-			self.console.times = {}
-			self.console.time    = function (s) { this.times[s] = new Date() }
-			self.console.timeEnd = function (s) { var d = new Date(); return d - this.times[s] }
-		}
-		
-		console.info('Empty cycles')
+		console.info('Vars')
 		
 		console.time('Empty cycle in global')
 		for (i = 0; i <= 100000; i++);
@@ -51,18 +44,138 @@
 		console.time('Empty cycle in function() var i');
 		(function ()
 		{
-			for (var i = 0; i <= 100000; i++);
+			for (var i = 0; i < 100000; i++);
 		}) ()
 		console.timeEnd('Empty cycle in function() var i')
 		
-		console.time('Empty cycle in function test1 () var i')
-		function test1 ()
+		console.time('Empty cycle in function test2 () var i')
+		function test2 ()
 		{
-			for (var i = 0; i <= 100000; i++);
+			for (var i = 0; i < 100000; i++);
 		}
-		test1(0)
-		console.timeEnd('Empty cycle in function test1 () var i')
+		test2(0)
+		console.timeEnd('Empty cycle in function test2 () var i')
 		
+		console.time('Only local var');
+		(function ()
+		{
+			var x = 0
+			for (var i = 0; i < 100000; i++);
+		}) ()
+		console.timeEnd('Only local var')
+		
+		console.time('Many local vars');
+		(function ()
+		{
+			var a,b,c,d,e,f,g,h,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+			var a1,b1,c1,d1,e1,f1,g1,h1,j1,k1,l1,m1,n1,o1,p1,q1,r1,s1,t1,u1,v1,w1,x1,y1,z1
+			var a2,b2,c2,d2,e2,f2,g2,h2,j2,k2,l2,m2,n2,o2,p2,q2,r2,s2,t2,u2,v2,w2,x2,y2,z2
+			var a3,b3,c3,d3,e3,f3,g3,h3,j3,k3,l3,m3,n3,o3,p3,q3,r3,s3,t3,u3,v3,w3,x3,y3,z3
+			for (var i = 0; i < 100000; i++);
+		}) ()
+		console.timeEnd('Many local vars')
+		
+		
+		self.onload = function ()
+		{
+			console.info('compile \\n or ;')
+			{
+				var code = new Array(100000)
+				for (var i = 0; i < 100000; i++)
+					code[i] = '1'
+				
+				var code1 = code.join('\n')
+				console.time('x += 1\\n')
+				eval('[function () {' + code1 + '}]')
+				console.timeEnd('x += 1\\n')
+				
+				
+				var code2 = code.join(';')
+				console.time('x += 1;')
+				eval('[function () {' + code2 + '}]')
+				console.timeEnd('x += 1;')
+			}
+			
+			console.info('arrays')
+			{
+				console.time('dynamic')
+				var arr1 = new Array(0)
+				for (var i = 0; i < 100000; i++)
+					arr1[i] = 1
+				console.timeEnd('dynamic')
+				
+				var arr2 = new Array(100000)
+				console.time('preallocated')
+				for (var i = 0; i < 100000; i++)
+					arr2[i] = 1
+				console.timeEnd('preallocated')
+			}
+			
+			
+			console.info('try/catch')
+			{
+				console.time('clear')
+				for (var i = 0; i < 1000000; i++) { 1; }
+				console.timeEnd('clear')
+				
+				console.time('outer')
+				try
+				{
+					for (var i = 0; i < 1000000; i++) { 1; }
+				} catch (ex) {}
+				console.timeEnd('outer')
+				
+				console.time('inner')
+				for (var i = 0; i < 1000000; i++)
+				{
+					try { 1; } catch (ex) {}
+				}
+				console.timeEnd('inner')
+			}
+			
+			console.info('cycles versus closures (code generation)')
+			{
+				var objs = []
+				for (var i = 0; i < 1000; i++)
+					objs[i] = {prop:i}
+				
+				var sum
+				
+				console.time('cycle')
+				for (var i = 0; i < 1000; i++)
+				{
+					sum = 0
+					for (var j = 0; j < 1000; j++)
+						sum += objs[j].prop
+				}
+				console.timeEnd('cycle')
+				console.log(sum)
+				
+				
+				console.time('compile')
+				
+				var vars = []
+				var calc = []
+				var code = ''
+				
+				for (var j = 0; j < 1000; j++)
+				{
+					vars[j] = 'var v' + j + ' = objs[' + j + '].prop'
+					calc[j] = 'v' + j
+				}
+				
+				code = 'function(){ ' + vars.join(';') + '; for (var i = 0; i < 1000; i++) { var s=' + calc.join('+') + '}; return s}'
+				
+				var func = (eval('['+code+']'))[0]
+				console.timeEnd('compile')
+				
+				
+				console.time('closure')
+				sum = func()
+				console.timeEnd('closure')
+				console.log(sum)
+			}
+		}
 	</script>
 </body>
 </html>
