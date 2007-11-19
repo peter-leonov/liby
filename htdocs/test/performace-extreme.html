@@ -121,6 +121,89 @@
 			
 			function ()
 			{
+				console.info('each with plain for')
+				
+				var sum
+				var arr = []
+				for (var i = 0; i < 100000; i++)
+					arr[i] = i
+				
+				sum = 0
+				console.time('for')
+				for (var i = 0, il = arr.length; i < il; i++)
+					sum += arr[i]
+				console.timeEnd('for')
+				if(sum != 4999950000)
+					console.error('sum != 4999950000: ' + sum)
+				
+				Array.prototype.eachApply1 = function  (func)
+				{
+					for (var i = 0, il = this.length; i < il; i++)
+						func.apply(this, [this[i]])
+				}
+				
+				Array.prototype.eachApply2 = function  (func)
+				{
+					var prms = [0]
+					for (var i = 0, il = this.length; i < il; i++)
+					{
+						prms[0] = this[i]
+						func.apply(this, prms)
+					}
+				}
+				
+				Array.prototype.eachCall = function  (func)
+				{
+					for (var i = 0, il = this.length; i < il; i++)
+					{
+						func.call(this, this[i])
+					}
+				}
+				
+				Array.prototype.each = function  (func)
+				{
+					for (var i = 0, il = this.length; i < il; i++)
+					{
+						func(this[i])
+					}
+				}
+				
+				sum = 0
+				console.time('eachApply1')
+				arr.eachApply1(function(v){sum += v})
+				console.timeEnd('eachApply1')
+				if(sum != 4999950000)
+					console.error('sum != 4999950000: ' + sum)
+				
+				sum = 0
+				console.time('eachApply2')
+				arr.eachApply2(function(v){sum += v})
+				console.timeEnd('eachApply2')
+				if(sum != 4999950000)
+					console.error('sum != 4999950000: ' + sum)
+				
+				sum = 0
+				console.time('eachCall')
+				arr.eachCall(function(v){sum += v})
+				console.timeEnd('eachCall')
+				if(sum != 4999950000)
+					console.error('sum != 4999950000: ' + sum)
+				
+				sum = 0
+				console.time('each')
+				arr.each(function(v){sum += v})
+				console.timeEnd('each')
+				if(sum != 4999950000)
+					console.error('sum != 4999950000: ' + sum)
+				
+				delete Array.prototype.eachApply1
+				delete Array.prototype.eachApply2
+				delete Array.prototype.eachCall
+				delete Array.prototype.each
+			},
+			
+			function ()
+			{
 				console.info('arrays')
 				
 				console.time('dynamic')
@@ -179,7 +262,8 @@
 						sum += objs[j].prop
 				}
 				console.timeEnd('cycle')
-				console.log(sum)
+				if(sum != 499500)
+					console.error('sum != 499500: ' + sum)
 			},
 			
 			function ()
@@ -208,7 +292,8 @@
 				console.time('closure')
 				sum = func()
 				console.timeEnd('closure')
-				console.log(sum)
+				if(sum != 499500)
+					console.error('sum != 499500: ' + sum)
 			}
 		]
 		
