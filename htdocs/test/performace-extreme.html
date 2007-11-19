@@ -26,7 +26,7 @@
 		
 		var thousandObjs = []
 		for (var i = 0; i < 1000; i++)
-			thousandObjs[i] = {prop:i}
+			thousandObjs[i] = {prop:1}
 		
 		
 		var tests =
@@ -126,15 +126,15 @@
 				var sum
 				var arr = []
 				for (var i = 0; i < 100000; i++)
-					arr[i] = i
+					arr[i] = 1
 				
 				sum = 0
 				console.time('for')
 				for (var i = 0, il = arr.length; i < il; i++)
 					sum += arr[i]
 				console.timeEnd('for')
-				if(sum != 4999950000)
-					console.error('sum != 4999950000: ' + sum)
+				if(sum != 100000)
+					console.error('sum != 100000: ' + sum)
 				
 				Array.prototype.eachApply1 = function  (func)
 				{
@@ -172,29 +172,29 @@
 				console.time('eachApply1')
 				arr.eachApply1(function(v){sum += v})
 				console.timeEnd('eachApply1')
-				if(sum != 4999950000)
-					console.error('sum != 4999950000: ' + sum)
+				if(sum != 100000)
+					console.error('sum != 100000: ' + sum)
 				
 				sum = 0
 				console.time('eachApply2')
 				arr.eachApply2(function(v){sum += v})
 				console.timeEnd('eachApply2')
-				if(sum != 4999950000)
-					console.error('sum != 4999950000: ' + sum)
+				if(sum != 100000)
+					console.error('sum != 100000: ' + sum)
 				
 				sum = 0
 				console.time('eachCall')
 				arr.eachCall(function(v){sum += v})
 				console.timeEnd('eachCall')
-				if(sum != 4999950000)
-					console.error('sum != 4999950000: ' + sum)
+				if(sum != 100000)
+					console.error('sum != 100000: ' + sum)
 				
 				sum = 0
 				console.time('each')
 				arr.each(function(v){sum += v})
 				console.timeEnd('each')
-				if(sum != 4999950000)
-					console.error('sum != 4999950000: ' + sum)
+				if(sum != 100000)
+					console.error('sum != 100000: ' + sum)
 				
 				delete Array.prototype.eachApply1
 				delete Array.prototype.eachApply2
@@ -262,8 +262,8 @@
 						sum += objs[j].prop
 				}
 				console.timeEnd('cycle')
-				if(sum != 499500)
-					console.error('sum != 499500: ' + sum)
+				if(sum != 1000)
+					console.error('sum != 1000: ' + sum)
 			},
 			
 			function ()
@@ -292,8 +292,8 @@
 				console.time('closure')
 				sum = func()
 				console.timeEnd('closure')
-				if(sum != 499500)
-					console.error('sum != 499500: ' + sum)
+				if(sum != 1000)
+					console.error('sum != 1000: ' + sum)
 			}
 		]
 		
