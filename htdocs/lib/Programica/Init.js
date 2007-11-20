@@ -71,6 +71,9 @@ function extend (to, from)
 	return to
 }
 
+if (!String.localeCompare)
+	String.localeCompare = function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }
+
 function stringify (obj)
 {
 	var props = []
