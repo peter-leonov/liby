@@ -78,11 +78,12 @@ with
 		// фиксим всплывание onchange до формы
 		input: function (node)
 		{
+			//node.form = p
 			Element.prototype.addEventListener.apply
 			(
 				node,
 				[node.type == 'text' ? 'change' : 'click',
-				function (e) { try { node.form.onchange(e) } catch (ex) {} }]
+				function (e) { try { node.form.onchange(e) } catch (ex) { log(ex.message) } }]
 			)
 		},
 		
@@ -173,8 +174,9 @@ with
 		{
 			type = P.IEFixes.eventConversion[type] || type
 			
-			var key = '__IEEventWrapper:'// + type + ':' + dir + ':' + this.uniqueID
-			
+			this._uniqueID = this._uniqueID || this.uniqueID
+			var key = '__IEEventWrapper:' + type + ':' + dir + ':' + this._uniqueID
+			//alert(key)
 			// JavaScript — сила!
 			// Каково: сохранить функцию-обертку в свойстве оборачиваемой функции
 			if (func[key])
@@ -200,7 +202,7 @@ with
 					this.onchange = function ()
 					{
 						for (var i = 0; i < this.onchange.stack.length; i++)
-							this.onchange.stack[i].apply(this, [window.event])
+							this.onchange.stack[i].call(this, window.event)
 					}
 				
 				if (!this.onchange.stack)
@@ -223,7 +225,9 @@ with
 			if (P.IEFixes.eventConversion[type])
 				type = P.IEFixes.eventConversion[type]
 			
-			var key = '__IEEventWrapper:'// + type + ':' + dir + ':' + this.uniqueID
+			this._uniqueID = this._uniqueID || this.uniqueID
+			var key = '__IEEventWrapper:' + type + ':' + dir + ':' + this._uniqueID
+			//alert(key)
 			if (func[key])
 				this.detachEvent('on' + type, func[key])
 		}
