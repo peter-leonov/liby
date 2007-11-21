@@ -313,7 +313,7 @@ with
 	
 	P.IEFixes.CSSBindings =
 	[
-	'input{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),Programica.IEFixes.input(this))}',
+	'input,textarea,select{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),Programica.IEFixes.input(this))}',
 	'img{scrollbar-highlight-color:expression((runtimeStyle.scrollbarHighlightColor="transparent"),(title||(title="")))}',
 	'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),Programica.IEFixes.formProto(this))}'
 	//'*{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),fixIE(this))}'
