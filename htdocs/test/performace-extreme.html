@@ -29,6 +29,8 @@
 			thousandObjs[i] = {prop:1}
 		
 		
+		function longNamedGlobalFunction () {  }
+		
 		var tests =
 		[
 			function ()
@@ -95,6 +97,60 @@
 					for (var i = 0; i < 100000; i++);
 				}) ()
 				console.timeEnd('Many local vars')
+			},
+			
+			function ()
+			{
+				console.info('simple function call')
+				
+				function a () {}
+				var b = function () {}
+				g = function () {}
+				self.g2 = function () {}
+				
+				console.time('function a')
+				for (var i = 0; i < 100000; i++)
+					a()
+				console.timeEnd('function a')
+				
+				console.time('var b = function')
+				for (var i = 0; i < 100000; i++)
+					b()
+				console.timeEnd('var b = function')
+				
+				console.time('g = function')
+				for (var i = 0; i < 100000; i++)
+					g()
+				console.timeEnd('g = function')
+				
+				console.time('longNamedGlobalFunction()')
+				for (var i = 0; i < 100000; i++)
+					longNamedGlobalFunction()
+				console.timeEnd('longNamedGlobalFunction()')
+				
+				console.time('with{g()}')
+				with ({})
+				{
+					for (var i = 0; i < 100000; i++)
+						g()
+				}
+				console.timeEnd('with{g()}')
+				
+				console.time('g = function, g.call()')
+				for (var i = 0; i < 100000; i++)
+					g.call()
+				console.timeEnd('g = function, g.call()')
+				
+				var lg = g
+				console.time('lg = g, lg()')
+				for (var i = 0; i < 100000; i++)
+					lg()
+				console.timeEnd('lg = g, lg()')
+				
+				console.time('self.g2 = function')
+				for (var i = 0; i < 100000; i++)
+					g2()
+				console.timeEnd('self.g2 = function')
 			},
 			
 			function ()
