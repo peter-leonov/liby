@@ -108,6 +108,13 @@
 				
 				var f
 				
+				function local () {}
+				
+				console.time('local()')
+				for (var i = 0; i < 100000; i++)
+					local()
+				console.timeEnd('local()')
+				
 				console.time('global()')
 				for (var i = 0; i < 100000; i++)
 					global()
