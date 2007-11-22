@@ -28,8 +28,11 @@
 		for (var i = 0; i < 1000; i++)
 			thousandObjs[i] = {prop:1}
 		
+		function global () {}
+		global2 = global
+		globalClosure = function () {}
 		
-		function longNamedGlobalFunction () {  }
+		function longNamedGlobalFunction () {}
 		
 		var tests =
 		[
@@ -103,54 +106,42 @@
 			{
 				console.info('simple function call')
 				
-				function a () {}
-				var b = function () {}
-				g = function () {}
-				self.g2 = function () {}
+				var f
 				
-				console.time('function a')
+				console.time('global()')
 				for (var i = 0; i < 100000; i++)
-					a()
-				console.timeEnd('function a')
+					global()
+				console.timeEnd('global()')
 				
-				console.time('var b = function')
+				f = global
+				console.time('f = global; f()')
 				for (var i = 0; i < 100000; i++)
-					b()
-				console.timeEnd('var b = function')
+					f()
+				console.timeEnd('f = global; f()')
 				
-				console.time('g = function')
+				console.time('global2()')
 				for (var i = 0; i < 100000; i++)
-					g()
-				console.timeEnd('g = function')
+					global2()
+				console.timeEnd('global2()')
 				
-				console.time('longNamedGlobalFunction()')
+				console.time('globalClosure()')
 				for (var i = 0; i < 100000; i++)
-					longNamedGlobalFunction()
-				console.timeEnd('longNamedGlobalFunction()')
+					globalClosure()
+				console.timeEnd('globalClosure()')
 				
-				console.time('with{g()}')
-				with ({})
-				{
-					for (var i = 0; i < 100000; i++)
-						g()
-				}
-				console.timeEnd('with{g()}')
+				var localClosure = function () {}
 				
-				console.time('g = function, g.call()')
+				console.time('localClosure()')
 				for (var i = 0; i < 100000; i++)
-					g.call()
-				console.timeEnd('g = function, g.call()')
+					localClosure()
+				console.timeEnd('localClosure()')
 				
-				var lg = g
-				console.time('lg = g, lg()')
-				for (var i = 0; i < 100000; i++)
-					lg()
-				console.timeEnd('lg = g, lg()')
+				self.globalLocalClosure = localClosure
 				
-				console.time('self.g2 = function')
+				console.time('globalLocalClosure()')
 				for (var i = 0; i < 100000; i++)
-					g2()
-				console.timeEnd('self.g2 = function')
+					globalLocalClosure()
+				console.timeEnd('globalLocalClosure()')
 			},
 			
 			function ()
