@@ -1,4 +1,4 @@
-<!--#include file="Programica/BugsCatcher.js" -->
+<!--include file="Programica/BugsCatcher.js" -->
 
 <!--#include file="Programica/Init.js" -->
 
