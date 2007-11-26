@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>Капнем капельку физики</title>
+	<script type="text/javascript" src="/lib/Programica.js"></script>
+	<style>
+		canvas { border: 1px solid #eee; display: block; cursor: default;/*width: 500px; height: 150px;*/ }
+		/*canvas { -webkit-transform: rotate(3deg); cursor: pointer; }*/
+	</style>
+</head>
+<body>
+	<canvas id="viewport" width="1000" height="300"></canvas>
+	
+	<script>
+	
+	var can = $('viewport')
+	var ctx = can.getContext('2d')
+	
+	var shapes =
+	[
+		{x: 100, y: 100, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 110, y: 110, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 120, y: 120, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 130, y: 130, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 140, y: 140, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 150, y: 150, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 160, y: 160, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 170, y: 170, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 180, y: 180, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 190, y: 100, fill: 'rgb(0, 220, 153)', vx: 0, vy: 0, m: 1, rot: 0/*.25*Math.PI*/, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 160, y: 140, fill: 'rgb(255, 128, 0)', vx: 0, vy: 0, m: 5, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+	]
+	
+	ctx.strokeStyle = 'rgb(0, 0, 0)'
+	
+	function compute ()
+	{
+		var shape, points, a, b
+		for (var i = 0, il = shapes.length; i < il; i++)
+		{
+			a = shapes[i]
+			
+			
+			for (var j = i+1; j < il; j++)
+			{
+				b = shapes[j]
+				
+				var dx = b.x - a.x
+				var dy = b.y - a.y
+				var c = Math.sqrt(dx * dx + dy * dy) + 10
+				var f = 100 * (a.m * b.m) / (c * c)
+				f = -f
+				a.vx += f * (dx / c) / a.m
+				a.vy += f * (dy / c) / a.m
+				b.vx += -f * (dx / c) / b.m
+				b.vy += -f * (dy / c) / b.m
+				
+			}
+		}
+		
+		for (var i = 0, il = shapes.length; i < il; i++)
+		{
+			a = shapes[i]
+			
+			var nx = a.x + a.vx
+			var ny = a.y + a.vy
+			
+			
+			if (nx < 0)
+			{
+				nx = -nx
+				a.vx = -a.vx
+			}
+			else if (nx > 1000)
+			{
+				nx = 2000 - nx
+				a.vx = -a.vx
+			}
+			
+			if (ny < 0)
+			{
+				ny = -ny
+				a.vy = -a.vy
+			}
+			else if (ny > 300)
+			{
+				ny = 600 - ny
+				a.vy = -a.vy
+			}
+			
+			a.x = nx
+			a.y = ny
+		}
+	}
+	
+	function draw ()
+	{
+		ctx.clearRect(0, 0, 1000, 300)
+		
+		var shape, points
+		for (var i = 0, il = shapes.length; i < il; i++)
+		{
+			shape = shapes[i]
+			
+			ctx.save()
+			ctx.translate(shape.x, shape.y)
+			ctx.rotate(shape.rot)
+			ctx.strokeStyle = shape.fill
+			
+			ctx.beginPath()
+			points = shape.points
+			ctx.moveTo(points[0], points[1])
+			for (var j = 2, jl = shape.points.length; j < jl; j+=2)
+			{
+				ctx.lineTo(points[j], points[j+1])
+			}
+			ctx.lineTo(points[0], points[1])
+			//
+			//ctx.arc(0, 0, 20, 0, Math.PI * 2, false)
+			ctx.stroke()
+			ctx.restore()
+		}
+		
+		//shapes[1].rot += 0.1
+	}
+	
+	function loaded ()
+	{
+		setInterval(draw, 20)
+		setInterval(compute, 20)
+	}
+	
+	$.onload(loaded)
+	</script>
+	
+</body>
+</html>
