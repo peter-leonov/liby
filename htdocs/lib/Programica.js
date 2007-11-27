@@ -1,5 +1,3 @@
-<!--include file="Programica/BugsCatcher.js" -->
-
 <!--#include file="Programica/Init.js" -->
 
 <!--#if expr="$HTTP_USER_AGENT = /Gecko\//" -->
@@ -22,3 +20,5 @@
 <!--#include file="Programica/Request.js" -->
 <!--#include file="Programica/Form.js" -->
 <!--#include file="Programica/Widget.js" -->
+
+<!--#include file="Programica/Development.js" -->
