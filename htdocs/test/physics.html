@@ -19,24 +19,20 @@
 	
 	var shapes =
 	[
-		{x: 100, y: 100, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 110, y: 110, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 120, y: 120, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 130, y: 130, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 140, y: 140, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 150, y: 150, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 160, y: 160, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 170, y: 170, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 160, y: 140, fill: 'rgb(255, 128, 0)', vx: 0, vy: 0, m: 50, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
 		{x: 180, y: 180, fill: 'rgb(0, 153, 255)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
 		{x: 190, y: 100, fill: 'rgb(0, 220, 153)', vx: 0, vy: 0, m: 1, rot: 0/*.25*Math.PI*/, points: [-10,-10,10,-10,10,10,-10,10]},
-		{x: 160, y: 140, fill: 'rgb(255, 128, 0)', vx: 0, vy: 0, m: 5, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]},
+		{x: 190, y: 100, fill: 'rgb(0, 220, 153)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]}
 	]
+	
+	for (var i = 1; i < 50; i++)
+		shapes.push({x: i, y: i, fill: 'rgb(0, 220, 153)', vx: 0, vy: 0, m: 1, rot: 0, points: [-10,-10,10,-10,10,10,-10,10]})
 	
 	ctx.strokeStyle = 'rgb(0, 0, 0)'
 	
 	function compute ()
 	{
-		var shape, points, a, b
+		var shape, points, a, b, dx, dy, c, f, kx, ky
 		for (var i = 0, il = shapes.length; i < il; i++)
 		{
 			a = shapes[i]
@@ -46,19 +42,30 @@
 			{
 				b = shapes[j]
 				
-				var dx = b.x - a.x
-				var dy = b.y - a.y
-				var c = Math.sqrt(dx * dx + dy * dy) + 10
-				var f = 100 * (a.m * b.m) / (c * c)
+				dx = b.x - a.x
+				dy = b.y - a.y
+				if (dx > 100 || dy > 100)
+					continue
+				
+				c = Math.sqrt(dx * dx + dy * dy) + 10
+				
+				f = 100 * (a.m * b.m) / (c * c)
 				f = -f
-				a.vx += f * (dx / c) / a.m
-				a.vy += f * (dy / c) / a.m
-				b.vx += -f * (dx / c) / b.m
-				b.vy += -f * (dy / c) / b.m
+				
+				kx = dx / c
+				ky = dy / c
+				
+				a.vx += f * kx / a.m
+				a.vy += f * ky / a.m
+				b.vx += -f * kx / b.m
+				b.vy += -f * ky / b.m
 				
 			}
 		}
-		
+	}
+	
+	function move ()
+	{
 		for (var i = 0, il = shapes.length; i < il; i++)
 		{
 			a = shapes[i]
@@ -98,27 +105,27 @@
 	{
 		ctx.clearRect(0, 0, 1000, 300)
 		
-		var shape, points
+		var a, points
 		for (var i = 0, il = shapes.length; i < il; i++)
 		{
-			shape = shapes[i]
+			a = shapes[i]
 			
 			ctx.save()
-			ctx.translate(shape.x, shape.y)
-			ctx.rotate(shape.rot)
-			ctx.strokeStyle = shape.fill
-			
+			ctx.translate(a.x, a.y)
+			ctx.rotate(a.rot)
+			ctx.fillStyle = a.fill
+			ctx.globalAlpha = 1/(Math.sqrt(a.vx * a.vx + a.vy * a.vy)+1)
 			ctx.beginPath()
-			points = shape.points
+			/*points = a.points
 			ctx.moveTo(points[0], points[1])
-			for (var j = 2, jl = shape.points.length; j < jl; j+=2)
+			for (var j = 2, jl = a.points.length; j < jl; j+=2)
 			{
 				ctx.lineTo(points[j], points[j+1])
 			}
-			ctx.lineTo(points[0], points[1])
+			ctx.lineTo(points[0], points[1])*/
 			//
-			//ctx.arc(0, 0, 20, 0, Math.PI * 2, false)
-			ctx.stroke()
+			ctx.arc(0, 0, Math.pow(a.m, 1/3)*3, 0, Math.PI * 2, false)
+			ctx.fill()
 			ctx.restore()
 		}
 		
@@ -127,8 +134,10 @@
 	
 	function loaded ()
 	{
+		
+		setInterval(compute, 50)
+		setInterval(move, 20)
 		setInterval(draw, 20)
-		setInterval(compute, 20)
 	}
 	
 	$.onload(loaded)
