@@ -92,6 +92,15 @@ String.prototype.plural = Number.prototype.plural = function (a, b, c)
 	return c
 }
 
+Date.rusMonths = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+
+Date.rusMonths2 = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
+Date.prototype.toRusDate = function ()
+{
+	return this.getDate() + ' ' + Date.rusMonths2[this.getMonth()] + ' ' + this.getFullYear()
+}
+
 function stringify (obj)
 {
 	var props = []
@@ -121,4 +130,4 @@ Math.longRandom = function ()
 }
 
 
-log2("Programica.thin.js loaded")
+log2("Programica/Init.js loaded")
