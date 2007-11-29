@@ -72,6 +72,11 @@ else
 	Programica.DOM.getElementsByClassName = Programica.DOM.getElementsByClassName_js
 
 
+Programica.DOM.getElementsBySelector = Programica.DOM.cssQuery = function (css)
+{
+	return cssQuery(css, this)
+}
+
 
 Programica.DOM.setClassName = function (cn)
 {
@@ -179,16 +184,6 @@ Programica.DOM.visible = function ()
 Programica.DOM.toggle = function (t)
 {
 	return this.visible() ? this.hide(t) : this.show(t)
-}
-
-Programica.DOM.$$ = function (cn)
-{
-	return this.getElementsByClassName(cn)
-}
-
-Programica.DOM.$$$ = function (cn)
-{
-	return this.getElementsByTagName(cn)
 }
 
 Programica.DOM.getComputedStyle = function (prop)

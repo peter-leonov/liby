@@ -102,8 +102,6 @@ function stringify (obj)
 }
 
 function $   (id)   { return document.getElementById(id) }
-function $$  (cn)   { return document.getElementsByClassName(cn) }
-function $$$ (cn)   { return document.getElementsByTagName(cn) }
 function $E  (type, props)
 {
 	var node = document.createElement(type)
