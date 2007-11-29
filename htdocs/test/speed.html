@@ -1,9 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" debug="true" debugHeight="100%">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>Тесты на скорость</title>
 	<script type="text/javascript" src="/lib/Programica.js"></script>
+	<script type="text/javascript" src="/lib/firebug/firebug.js"></script>
 </head>
 <body>
 	
@@ -20,6 +21,20 @@
 	<span id="many-classes" class="some class names a b c d e f big-class-name realy-big-class-name-down-here-this-night"></span>
 	
 	<script>
+		
+		(function(){
+			var arr = {}
+			console.time('arr.constructor == Array')
+			for (var i = 0; i < 100000; i++)
+				arr.constructor == Array
+			console.timeEnd('arr.constructor == Array')
+			
+			console.time('typeof arr == "Array"')
+			for (var i = 0; i < 100000; i++)
+				typeof arr == "Array"
+			console.timeEnd('typeof arr == "Array"')
+		})()
+		
 		
 		console.time('i++')
 		var arr = []
