@@ -58,14 +58,18 @@ Programica.RollingImages.prototype.Handler.prototype =
 				this.addButtonsFrom(this.mainNode)
 		}
 		
-		var noGrabs	= this.mainNode.getElementsByClassName('no-grab')
-		var aGrabs	= this.mainNode.getElementsByTagName('a')
+		
+		var noGrabs	=
+		[
+			this.mainNode.getElementsByClassName('no-grab'),
+			this.mainNode.getElementsByTagName('a'),
+			this.mainNode.getElementsByTagName('input'),
+			this.mainNode.getElementsByTagName('label'),
+		]
 		
 		for (var i = 0; i < noGrabs.length; i++)
-			this.ignore.push(noGrabs[i])
-		
-		for (var i = 0; i < aGrabs.length; i++)
-			this.ignore.push(aGrabs[i])
+			for (var j = 0; j < noGrabs[i].length; j++)
+				this.ignore.push(noGrabs[i][j])
 		
 		for (var i = 0; i < this.ignore.length; i++)
 			this.ignore[i].addEventListener
