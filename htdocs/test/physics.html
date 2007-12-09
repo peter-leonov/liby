@@ -10,7 +10,7 @@
 	</style>
 </head>
 <body>
-	<canvas id="viewport" width="1000" height="600"></canvas>
+	<canvas id="viewport" width="1000" height="400"></canvas>
 	
 	<script>
 	
@@ -22,7 +22,8 @@
 	
 	var shapes =
 	[
-		{x: 460, y: 140, color: 'rgb(255,128,0)', m: 150, a: 0, va: 0.02, points: [-20,-10,  15,-30,  10,10]}
+		{x: 460, y: 140, color: 'rgb(255,128,0)', m: 150, a: 0, va: 0.02, points: [-20,-10,  15,-30,  10,10]},
+		{x: 300, y: 160, color: 'rgb(128,200,0)', m: 200, a: 1, va: 0.02, points: [-30,-50,  -60,50,  60,50, 30,-50]}
 	]
 	
 	function initShapes (shapes)
@@ -61,12 +62,11 @@
 		
 	}
 	
-	function rotateShape (shape)
+	function rotateShape (shape, angle)
 	{
 		var pts, ptsA, angle
 		shape.points = pts = []
 		ptsA = shape.pointsA
-		angle = shape.a
 		
 		for (var j = 0; j < ptsA.length; j+=2)
 		{
@@ -76,6 +76,18 @@
 			// calculate new point coordinates
 			pts.push(ptsA[j] * Math.cos(na))
 			pts.push(ptsA[j] * Math.sin(na))
+		}
+	}
+	
+	function translateShape (shape, x, y)
+	{
+		var pts = shape.points
+		
+		for (var j = 0; j < pts.length; j+=2)
+		{
+			// calculate new point coordinates
+			pts[j] += x
+			pts[j+1] += y
 		}
 	}
 	
@@ -90,7 +102,8 @@
 			a.x += a.vx
 			a.y += a.vy
 			
-			rotateShape(a)
+			rotateShape(a, a.a)
+			translateShape(a, a.x, a.y)
 		}
 	}
 	
@@ -115,7 +128,7 @@
 			ctx.strokeStyle = a.color
 			ctx.fillStyle = a.color
 			
-			ctx.translate(a.x, a.y)
+			//ctx.translate(a.x, a.y)
 			//ctx.rotate(a.a)
 			
 			ctx.beginPath()
