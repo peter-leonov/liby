@@ -68,8 +68,9 @@ Programica.RollingImages.prototype.Handler.prototype =
 		]
 		
 		for (var i = 0; i < noGrabs.length; i++)
-			for (var j = 0; j < noGrabs[i].length; j++)
-				this.ignore.push(noGrabs[i][j])
+			if (noGrabs[i])
+				for (var j = 0; j < noGrabs[i].length; j++)
+					this.ignore.push(noGrabs[i][j])
 		
 		for (var i = 0; i < this.ignore.length; i++)
 			this.ignore[i].addEventListener
