@@ -23,7 +23,7 @@
 	var shapes =
 	[
 		{x: 460, y: 140, color: 'rgb(255,128,0)', m: 150, a: 0, va: 0.02, points: [-20,-10,  15,-30,  10,10]},
-		{x: 300, y: 160, color: 'rgb(128,200,0)', m: 200, a: 1, va: 0.02, points: [-30,-50,  -60,50,  60,50, 30,-50]}
+		{x: 300, y: 160, color: 'rgb(128,200,0)', m: 200, a: 1, va: 0.02, points: [-30,-50,  -60,50,  60,50,  30,-50]}
 	]
 	
 	function initShapes (shapes)
@@ -37,7 +37,7 @@
 			a.vy = a.vy || 0
 			a.va = a.va || 0
 			
-			a.pointsA = []
+			a.pointsRV = []
 			
 			pts = a.points
 			for (var j = 0; j < pts.length; j+=2)
@@ -45,10 +45,10 @@
 				// radius vector (RV) length
 				var c = Math.sqrt(pts[j] * pts[j] + pts[j+1] * pts[j+1])
 				// remember RV
-				a.pointsA.push(c)
+				a.pointsRV.push(c)
 				// remember RV angle
 				var angle = Math.acos(pts[j]/c)
-				a.pointsA.push(pts[j+1] >= 0 ? angle : (Math.PI * 2 - angle) )
+				a.pointsRV.push(pts[j+1] >= 0 ? angle : (Math.PI * 2 - angle) )
 			}
 		}
 	}
@@ -64,18 +64,16 @@
 	
 	function rotateShape (shape, angle)
 	{
-		var pts, ptsA, angle
-		shape.points = pts = []
-		ptsA = shape.pointsA
+		var pts = shape.points, rvs = shape.pointsRV, angle
 		
-		for (var j = 0; j < ptsA.length; j+=2)
+		for (var j = 0; j < rvs.length; j+=2)
 		{
 			// calculate new RA angle
-			na = ptsA[j+1] + angle
+			na = rvs[j+1] + angle
 			
 			// calculate new point coordinates
-			pts.push(ptsA[j] * Math.cos(na))
-			pts.push(ptsA[j] * Math.sin(na))
+			pts[j] = rvs[j] * Math.cos(na)
+			pts[j+1] = rvs[j] * Math.sin(na)
 		}
 	}
 	
