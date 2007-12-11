@@ -306,7 +306,11 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.current = num
 		this.updateNavigation()
 		
-		if (this.points[this.current] && this.points[this.current].onselect) this.points[this.current].onselect()
+		if (this.onselect)
+			this.onselect(this.points[this.current], this.current)
+		
+		if (this.points[this.current] && this.points[this.current].onselect)
+			this.points[this.current].onselect()
 	},
 	
 	findNearest: function ()
