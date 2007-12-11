@@ -46,7 +46,7 @@ Programica.FormPoster.prototype.Handler = function (node)
 	{
 		var frame_name	= 'id_' + Math.longRandom()
 		
-		var iframe = $E('iframe', {name: frame_name, 'class': 'empty_iframe', src: 'about:blank'})
+		var iframe = $E('iframe', {name: frame_name, 'class': 'empty-iframe', src: 'about:blank'})
 		node.target = frame_name
 		document.body.appendChild(iframe)
 		
