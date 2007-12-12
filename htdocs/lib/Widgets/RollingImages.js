@@ -39,7 +39,33 @@ Programica.RollingImages.prototype.Handler.prototype =
 		this.ignore				= []
 		
 		if (/^(yes|magnify)$/i.test(this.mainNode.getAttribute('pmc-rolling-images-grab')))
+		{
 			this.viewport.addClassName('grab')
+			
+			var noGrabs	=
+			[
+				this.mainNode.getElementsByClassName('no-grab'),
+				this.mainNode.getElementsByTagName('a'),
+				this.mainNode.getElementsByTagName('input'),
+				this.mainNode.getElementsByTagName('label'),
+			]
+			
+			for (var i = 0; i < noGrabs.length; i++)
+				if (noGrabs[i])
+					for (var j = 0; j < noGrabs[i].length; j++)
+						this.ignore.push(noGrabs[i][j])
+			
+			for (var i = 0; i < this.ignore.length; i++)
+				this.ignore[i].addEventListener
+				(
+					'mousedown',
+					function (e)
+					{
+						e.stopPropagation()
+					},
+					false
+				)
+		}
 		
 		{
 			var bstr = this.mainNode.getAttribute('pmc-rolling-images-buttons')
@@ -57,31 +83,6 @@ Programica.RollingImages.prototype.Handler.prototype =
 			else
 				this.addButtonsFrom(this.mainNode)
 		}
-		
-		
-		var noGrabs	=
-		[
-			this.mainNode.getElementsByClassName('no-grab'),
-			this.mainNode.getElementsByTagName('a'),
-			this.mainNode.getElementsByTagName('input'),
-			this.mainNode.getElementsByTagName('label'),
-		]
-		
-		for (var i = 0; i < noGrabs.length; i++)
-			if (noGrabs[i])
-				for (var j = 0; j < noGrabs[i].length; j++)
-					this.ignore.push(noGrabs[i][j])
-		
-		for (var i = 0; i < this.ignore.length; i++)
-			this.ignore[i].addEventListener
-			(
-				'mousedown',
-				function (e)
-				{
-					e.stopPropagation()
-				},
-				false
-			)
 		
 		for (var i in this.buttons)
 			node.button_num = node.getAttribute('pmc-button-num') * 100 || i
