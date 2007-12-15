@@ -84,9 +84,9 @@ Programica.RollingImages.prototype.Handler.prototype =
 				this.addButtonsFrom(this.mainNode)
 		}
 		
-		for (var i in this.buttons)
-			node.button_num = node.getAttribute('pmc-button-num') * 100 || i
-		
+		//for (var i = 0; i < this.buttons.length; i++)
+		//	node.button_num = node.getAttribute('pmc-button-num') * 100 || i
+		//
 		//this.buttons = this.buttons.sort(function (a, b) { a.button_num - b.button_num })
 		//log(this.buttons)
 		

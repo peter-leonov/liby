@@ -31,7 +31,7 @@ Programica.Animation = function (prms)
 	
 	// Трансформации, если заданы
 	if (prms.transformations)
-		for (var i in prms.transformations)
+		for (var i = 0; i < prms.transformations.length; i++)
 			if (prms.transformations[i])
 				this.setTransformation(prms.transformations[i])
 	
@@ -108,7 +108,7 @@ extend (Programica.Animation.prototype,
 		
 		this.totalFrames = this.duration * Programica.Animation.fps
 		
-		for (var i in this.transformations)
+		for (var i = 0; i < this.transformations.length; i++)
 		{
 			var t = this.transformations[i]
 			if (t.begin == null) t.begin = this.getStyleProperty(t.property)
@@ -166,13 +166,13 @@ extend (Programica.Animation.prototype,
 		if (!this.motion) log('Rendering without this.motion')
 		
 		if (this.forceLast && this.frame == this.totalFrames - 1)
-			for (var i in this.transformations)
+			for (var i = 0; i < this.transformations.length; i++)
 			{
 				var t = this.transformations[i]
 				this.setStyleProperty(t.property, t.end)
 			}
 		else
-			for (var i in this.transformations)
+			for (var i = 0; i < this.transformations.length; i++)
 			{
 				var t = this.transformations[i]
 				if ( t.property != null && t.begin != null && t.end != null  )
@@ -267,7 +267,7 @@ Programica.Animation.addTimer = function (func)
 
 Programica.Animation.delTimer = function (num)
 {
-	delete this.timers[num - 1]
+	this.timers[num-1] = null
 	
 	while (this.timers.length && this.timers[this.timers.length-1] == null)
 		this.timers.pop()
@@ -281,8 +281,8 @@ Programica.Animation.timers = []
 
 Programica.Animation.time = function ()
 {
-	for (var i in this.timers)
-		this.timers[i]()
+	for (var i = 0; i < this.timers.length; i++)
+		this.timers[i] && this.timers[i]()
 }
 
 
@@ -443,7 +443,7 @@ extend (Programica.Abstract.Events.prototype,
 		if (this['on' + eventName]) this['on' + eventName].call(this, eventName)
 		
 		if (this.pmcEvents && this.pmcEvents[eventName])
-			for (var i in this.pmcEvents[eventName])
+			for (var i = 0; i < this.pmcEvents[eventName].length; i++)
 				if (this.pmcEvents[eventName][i])
 				{
 					if (this.cancelBubble) return true
@@ -472,7 +472,7 @@ extend (Programica.Abstract.Events.prototype,
 	searchEventListenerIndex: function (eventName, handler, capture)
 	{
 		if (this.pmcEvents[eventName])
-			for (var i in this.pmcEvents[eventName])
+			for (var i = 0; i < this.pmcEvents[eventName].length; i++)
 				if (this.pmcEvents[eventName][i] == handler)
 					return i
 		

@@ -46,9 +46,10 @@ Programica.FormPoster.prototype.Handler = function (node)
 	{
 		var frame_name	= 'id_' + Math.longRandom()
 		
-		var iframe = $E('iframe', {name: frame_name, 'class': 'empty-iframe', src: 'about:blank'})
+		var iframe = $E('iframe', {name: frame_name, src: 'about:blank'})
 		node.target = frame_name
 		document.body.appendChild(iframe)
+		iframe.className = 'form-poster-hidden-iframe'
 		
 		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
 		

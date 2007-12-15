@@ -125,8 +125,8 @@ Programica.Trackbar.prototype.Handler.prototype =
 		document.addEventListener('mousemove', this.mousemove_handler, false)
 		document.addEventListener('mouseup', this.mouseup_handler, false)
 		
-		// takin maximum width and height in memory
-		// to avoid (some times ritch) recalculating on each mouse move
+		// remember maximum width and height in memory
+		// to avoid recalculation (some times ritch) on each mouse move
 		this.mw = this.mainNode.offsetWidth - this.dragger.offsetWidth
 		this.mh = this.mainNode.offsetHeight - this.dragger.offsetHeight
 		
