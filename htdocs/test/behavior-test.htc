@@ -1,0 +1,6 @@
+<public:component>
+	<script language="JScript" >
+	
+	element.test = function (str) { alert(str) }
+	</script>
+</public:component>
