@@ -290,7 +290,7 @@ function IEFixes ()
 	document.createElement = function (type)
 	{
 		var e = document.realIECreateElement(type)
-		IEFixes.proto(e)
+		IEFixes_fixIE(e)
 		return e
 	}
 	
