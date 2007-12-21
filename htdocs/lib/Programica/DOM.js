@@ -154,6 +154,15 @@ Programica.DOM.hide = function (t)
 
 Programica.DOM.show = function (t)
 {
+	if (this.onshow)
+	{
+		if (typeof this.onshow == 'string')
+			this.onshow = eval('function (event) { ' + this.onshow + ' }')
+		
+		if (this.onshow() === false)
+			return false
+	}
+	
 	if (t)
 	{
 		if (this.animate)
