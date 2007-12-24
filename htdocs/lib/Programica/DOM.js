@@ -125,8 +125,49 @@ Programica.DOM.enable = function ()
 	this.remClassName('disabled')
 }
 
+Programica.DOM.show = function (t)
+{
+	if (this.onshow)
+	{
+		if (typeof this.onshow == 'string')
+			this.onshow = eval('function (event) { ' + this.onshow + ' }')
+		
+		if (this.onshow({}) === false)
+			return false
+	}
+	
+	if (t)
+	{
+		if (this.animate)
+		{
+			if (!this.visible()) this.style.opacity = 0
+			this.style.display = 'block'
+			this.style.visibility = 'visible'
+			return this.animate('linearTween', {opacity:1}, t).start()
+		}
+		else
+			setTimeout(function () { this.style.display = 'block'; this.style.opacity = 1 }, t * 1000)
+	}
+	else
+	{
+		this.style.visibility = 'visible'
+		this.style.display = 'block'
+	}
+	
+	return true
+}
+
 Programica.DOM.hide = function (t)
 {
+	if (this.onhide)
+	{
+		if (typeof this.onhide == 'string')
+			this.onhide = eval('function (event) { ' + this.onhide + ' }')
+		
+		if (this.onhide({}) === false)
+			return false
+	}
+	
 	if (t)
 	{
 		if (this.animate)
@@ -148,38 +189,6 @@ Programica.DOM.hide = function (t)
 	}
 	else
 		this.style.display = 'none'
-	
-	return true
-}
-
-Programica.DOM.show = function (t)
-{
-	if (this.onshow)
-	{
-		if (typeof this.onshow == 'string')
-			this.onshow = eval('function (event) { ' + this.onshow + ' }')
-		
-		if (this.onshow() === false)
-			return false
-	}
-	
-	if (t)
-	{
-		if (this.animate)
-		{
-			if (!this.visible()) this.style.opacity = 0
-			this.style.display = 'block'
-			this.style.visibility = 'visible'
-			return this.animate('linearTween', {opacity:1}, t).start()
-		}
-		else
-			setTimeout(function () { this.style.display = 'block'; this.style.opacity = 1 }, t * 1000)
-	}
-	else
-	{
-		this.style.visibility = 'visible'
-		this.style.display = 'block'
-	}
 	
 	return true
 }
