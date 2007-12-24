@@ -233,6 +233,11 @@ Programica.RollingImages.prototype.Handler.prototype =
 		return this.animateTo(left, top, width, height, anim, dur)
 	},
 	
+	goToPointBefore: function (node, anim, dur)
+	{
+		return this.goToNode(node, anim, dur)
+	},
+	
 	animateTo: function (left, top, width, height, anim, dur)
 	{
 		anim = anim || this.animationType()
