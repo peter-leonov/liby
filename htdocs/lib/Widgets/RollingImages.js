@@ -235,7 +235,24 @@ Programica.RollingImages.prototype.Handler.prototype =
 	
 	goToPointBefore: function (node, anim, dur)
 	{
-		return this.goToNode(node, anim, dur)
+		var cn = this.ns ? this.ns + '-point' : 'point'
+		do
+		{
+			if (node.hasClassName(cn))
+				return this.goToNode(node, anim, dur)
+		}
+		while (node = node.previousSibling)
+	},
+	
+	goToPointAfter: function (node, anim, dur)
+	{
+		var cn = this.ns ? this.ns + '-point' : 'point'
+		do
+		{
+			if (node.hasClassName(cn))
+				return this.goToNode(node, anim, dur)
+		}
+		while (node = node.nextSibling)
 	},
 	
 	animateTo: function (left, top, width, height, anim, dur)
