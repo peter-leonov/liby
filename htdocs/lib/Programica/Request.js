@@ -1,13 +1,18 @@
 
-// наш "свежийий" взгляд на пресловутый аякс
+// наш «свежий» взгляд на пресловутый аякс
+
+if (!self.Programica)
+	self.Programica = {}
 
 Programica.Request = function (prms)
 {
-	extend(this,prms)
+	for (var p in prms)
+		if (this[p] === undefined)
+			this[p] = prms[p]
 	
 	// в this.transport кладем реальный дескриптор запроса
 	
-	if (self.XMLHttpRequest) // Mozilla, Safari, ...
+	if (self.XMLHttpRequest) // Mozilla, Safari, Opera...
 	{
 		try
 		{
@@ -313,4 +318,4 @@ Programica.Request.transformFragment = function (xml, xsl, node, doc)
 }
 
 
-log2("Programica/Request.js loaded")
+self.log2 && self.log2("Programica/Request.js loaded")

@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" debug="true" debugHeight="100%">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>Экстремальные тесты на скорость</title>
+	<script type="text/javascript" src="/lib/Programica/Request.js"></script>
+	<script type="text/javascript" src="/lib/firebug/firebug.js"></script>
+</head>
+<body>
+	<script>
+		
+		var base2dom = sGet('/lib/base2/base2-dom-fp.js').responseText()
+		var programica = sGet('/lib/Programica.js').responseText()
+		
+		console.info('base2')
+		
+		console.time('compiling');
+		eval('if (false) { '+base2dom+' }')
+		console.timeEnd('compiling')
+		
+		// console.log(eval('(function () { '+base2dom+' })').toString())
+		
+		console.time('evaling')
+		eval('if (true) { '+base2dom+' }')
+		console.timeEnd('evaling')
+		
+		
+		
+		console.info('Programica')
+		
+		console.time('compiling');
+		eval('if (false) { '+programica+' }')
+		console.timeEnd('compiling')
+		
+		console.time('evaling')
+		eval('if (true) { '+programica+' }')
+		console.timeEnd('evaling')
+		
+	</script>
+</body>
+</html>
