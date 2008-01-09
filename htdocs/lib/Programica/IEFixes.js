@@ -23,7 +23,9 @@ function IEFixes_disabled (node)
 
 // отчасти исправляет обработку png
 function IEFixes_imgPng (node)
-{
+{          
+	node.runtimeStyle.width = node.offsetWidth
+	node.runtimeStyle.height = node.offsetHeight
 	node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + node.src + "',sizingMethod='image')"
 	node.setAttribute('src', '/lib/img/dot.gif')
 	//node.runtimeStyle.visibility = 'hidden'

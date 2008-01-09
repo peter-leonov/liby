@@ -129,5 +129,26 @@ Math.longRandom = function ()
 	return (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17)
 }
 
+// light infantile browser matching
+Programica.userAgentRegExps =
+{
+	MSIE: /MSIE/,
+	MSIE6: /MSIE 6/,
+	MSIE7: /MSIE 7/,
+	Gecko: /Gecko/,
+	Opera: /Opera/,
+	Opera9: /Opera\/9/,
+	Safari: /AppleWebKit/,
+	Safari2: /AppleWebKit\/4/,
+	Safari3: /AppleWebKit\/5/
+}
+        
+Programica.userAgentChecker = function (doc, ua)
+{
+	var htmlNode = doc.documentElement
+	for (var p in this.userAgentRegExps)
+		if (this.userAgentRegExps[p].test(ua))
+			htmlNode.addClassName(p)
+}
 
 log2("Programica/Init.js loaded")
