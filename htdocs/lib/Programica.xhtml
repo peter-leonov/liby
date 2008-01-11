@@ -1,3 +1,7 @@
+<!--#if expr="$SERVER_TYPE != /development/" -->
+<script type="text/javascript" src="/lib/Programica/BugsCatcher.js"></script>
+<!--#endif -->
+
 <script type="text/javascript" src="/lib/Programica/Init.js"></script>
 	<!--#if expr="$HTTP_USER_AGENT = /Gecko\//" --><script type="text/javascript" src="/lib/Programica/FFFixes.js"></script>
 	<!--#elif expr="$HTTP_USER_AGENT = /MSIE/" --><script type="text/javascript" src="/lib/Programica/IEFixes.js"></script>
@@ -7,4 +11,7 @@
 	<script type="text/javascript" src="/lib/Programica/Request.js"></script>
 	<script type="text/javascript" src="/lib/Programica/Form.js"></script>
 	<script type="text/javascript" src="/lib/Programica/Widget.js"></script>
+
+<!--#if expr="$SERVER_TYPE = /development/" -->
 	<script type="text/javascript" src="/lib/Programica/Development.js"></script>
+<!--#endif -->

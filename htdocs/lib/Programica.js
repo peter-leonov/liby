@@ -1,3 +1,7 @@
+<!--#if expr="$SERVER_TYPE != /development/" -->
+	<!--#include file="Programica/BugsCatcher.js" -->
+<!--#endif -->
+
 <!--#include file="Programica/Init.js" -->
 
 <!--#if expr="$HTTP_USER_AGENT = /Gecko\//" -->
@@ -21,4 +25,6 @@
 <!--#include file="Programica/Form.js" -->
 <!--#include file="Programica/Widget.js" -->
 
-<!--#include file="Programica/Development.js" -->
+<!--#if expr="$SERVER_TYPE = /development/" -->
+	<!--#include file="Programica/Development.js" -->
+<!--#endif -->
