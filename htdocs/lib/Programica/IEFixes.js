@@ -201,10 +201,10 @@ function IEFixes ()
 			if (type == 'change' && this.tagName == 'FORM')
 			{
 				if (!this.onchange)
-					this.onchange = function ()
+					this.onchange = function (e)
 					{
 						for (var i = 0; i < this.onchange.stack.length; i++)
-							this.onchange.stack[i].call(this, window.event)
+							this.onchange.stack[i].call(this, e || window.event)
 					}
 				
 				if (!this.onchange.stack)
