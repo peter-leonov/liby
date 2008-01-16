@@ -310,6 +310,24 @@ function IEFixes ()
 		return document.createElement(type)
 	}
 	
+	if (!document.createEvent)
+	{
+		function initEvent (type) { this.type = type }
+		document.createEvent = function ()
+		{
+			var ne = document.createEventObject()
+			ne.initEvent = initEvent
+			return ne
+		}
+		
+		Element.prototype.dispatchEvent = function (e)
+		{
+			if (e.type == 'change')
+				return this.onchange && this.onchange(e)
+			else
+				return this.fireEvent(e.type, e)
+		}
+	}
 	
 	self.addEventListener('load', function () { IEFixes.fixThem(document.all) })
 	
