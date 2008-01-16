@@ -123,6 +123,14 @@ function $E  (type, props)
 }
 
 $.onload = function (fn) { return self.addEventListener('load', fn, false) }
+$.include = function (src)
+{
+	var node = document.createElement('script')
+	node.type = 'text/javascript'
+	node.src = src
+	document.getElementsByTagName('head')[0].appendChild(node)
+	return node
+}
 
 Math.longRandom = function ()
 {
