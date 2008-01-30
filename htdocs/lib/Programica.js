@@ -1,4 +1,4 @@
-<!--#if expr="$SERVER_ADDR != /^(127|192.168)/" -->
+<!--#if expr="$SERVER_ADDR != /^127/" -->
 	<!--#include file="Programica/BugsCatcher.js" -->
 <!--#endif -->
 
@@ -25,6 +25,6 @@
 <!--#include file="Programica/Form.js" -->
 <!--#include file="Programica/Widget.js" -->
 
-<!--#if expr="$SERVER_ADDR = /^(127|192.168)/" -->
+<!--#if expr="$SERVER_ADDR = /^127/" -->
 	<!--#include file="Programica/Development.js" -->
 <!--#endif -->
