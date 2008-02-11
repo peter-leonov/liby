@@ -299,7 +299,7 @@ function IEFixes ()
 		return e
 	}
 	
-	function $E  (type, props)
+	self.$E = function (type, props)
 	{
 		if (props)
 		{

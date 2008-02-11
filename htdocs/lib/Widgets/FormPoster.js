@@ -44,12 +44,13 @@ Programica.FormPoster.prototype.Handler = function (node)
 	// for Upload
 	if (/^multipart\/form\-data$/i.test(node.getAttribute('enctype')))
 	{
-		var frame_name	= 'id_' + Math.longRandom()
+		var frame_name = 'id_' + Math.longRandom()
 		
-		var iframe = $E('iframe', {name: frame_name, src: 'about:blank'})
-		node.target = frame_name
+		var iframe = $E('iframe', {name: frame_name, id: frame_name, src: 'about:blank'})
+		node.FormPosterIFrame = iframe
 		document.body.appendChild(iframe)
 		iframe.className = 'form-poster-hidden-iframe'
+		node.target = frame_name
 		
 		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
 		
