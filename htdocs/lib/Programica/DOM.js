@@ -5,13 +5,13 @@ if (!self.Programica.DOM) Programica.DOM = {}
 
 if (document.evaluate)
 {
-	// from prototype 1.5.1.1
-	Programica.DOM.getElementsByXPath = function (expression, ns)
+	// from prototype
+	Programica.DOM.getElementsByXPath = function (expression)
 	{
 		var results = []
 		var query = document.evaluate
 		(
-			expression, this, (ns || null),
+			expression, this, function () { return document.documentElement.namespaceURI },
 			XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null
 		)
 		
@@ -209,7 +209,23 @@ Programica.DOM.getComputedStyle = function (prop)
 	return document.defaultView.getComputedStyle(this, null).getPropertyValue(prop)
 }
 
-
+Programica.DOM.getElementListBySelector = function(q)
+{
+	var xhtml = true
+	q = q.replace(/\s+/g, ' ')
+	q = q.replace(/\s*([\!\=\[\]\>\+\~])\s*/g, '$1')
+	log(q)
+	if (xhtml)
+	{
+		q = q.replace(/(^[a-z])/g, 'x:$1')						// (div) -> x:div
+		log(q)
+		q = q.replace(/([ >])([a-z])/g, '$1x:$2')				// ( div) -> x:div
+		log(q)
+	}
+	q = q.replace(/ /g, '/descendant::')
+	log(q)
+	return this.getElementsByXPath(q)
+}
 
 // расширяем базовый класс всех элементов (в т.ч. XUL, SVG и иже с ними)
 for (var m in Programica.DOM)
