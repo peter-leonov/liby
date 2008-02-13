@@ -151,12 +151,15 @@ Programica.userAgentRegExps =
 	Safari3: /AppleWebKit\/5/
 }
         
-Programica.userAgentChecker = function (doc, ua)
+Programica.htmlUserAgentSetter = function (doc, ua)
 {
+	doc = doc || document
+	ua = ua || navigator.userAgent
+	
 	var htmlNode = doc.documentElement
 	for (var p in this.userAgentRegExps)
 		if (this.userAgentRegExps[p].test(ua))
-			htmlNode.addClassName(p)
+			htmlNode.className = (htmlNode.className || '') + ' ' + p
 }
 
 log2("Programica/Init.js loaded")
