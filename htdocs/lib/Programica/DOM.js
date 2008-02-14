@@ -1,7 +1,8 @@
 
 // DOM для всех
 
-if (!self.Programica.DOM) Programica.DOM = {}
+if (!self.Programica) self.Programica = {}
+if (!self.Programica.DOM) self.Programica.DOM = {}
 
 if (document.evaluate)
 {
