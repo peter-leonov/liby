@@ -1,5 +1,5 @@
 <!--#if expr="$SERVER_ADDR != /^127|192.168/" -->
-	<!--#include file="Programica/BugsCatcher.js" -->
+	<!--#include file="Programica/Oops.js" -->
 <!--#endif -->
 
 <!--#include file="Programica/Init.js" -->
