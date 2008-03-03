@@ -15,35 +15,13 @@ Programica.FormPoster.prototype.Handler = function (node)
 	if (node.enctype && typeof node.enctype != 'string')
 		throw new Error('Form element with name "enctype" masks form own attribute.')
 	
-	var send_listener = function (e)
-	{
-		// проверим, нужно ли ловить эту форму
-		if (!/^ajax$/i.test(this.target))
-			return
-		
-		// не даем форме отправиться (кое-как работает в ИЕ нашими стараниями)
-		
-		// поиграем в события
-		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
-		
-		var t	= this
-		
-
-		e.preventDefault()
-		var met	= /^post$/i.test(this.method) ? aPost : aGet
-		
-		// собственно отправляем данные
-		with (met(this.action, this.toHash()))
-		{
-			onLoad		= function () { t.onload({request:this}) }
-			onSuccess	= function () { t.onsuccess({request:this}) } // t.reset();
-			onError		= function () { t.onerror({request:this}) }
-		}
-	}
-	
-	// for Upload
+	// for upload
 	if (/^multipart\/form\-data$/i.test(node.getAttribute('enctype')))
 	{
+		// проверим, нужно ли ловить эту форму
+		if (!/^ajax$/i.test(node.target))
+			return
+		
 		var frame_name = 'id_' + Math.longRandom()
 		
 		var iframe = $E('iframe', {name: frame_name, id: frame_name, src: 'about:blank'})
@@ -73,7 +51,28 @@ Programica.FormPoster.prototype.Handler = function (node)
 	}
 	else
 	{
-		node.addEventListener('submit', send_listener,  false)
+		function sendListener (e)
+		{
+			// проверим, нужно ли ловить эту форму
+			if (!/^ajax$/i.test(this.target))
+				return
+			
+			// поиграем в события
+			Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
+			
+			e.preventDefault()
+			var met	= /^post$/i.test(this.method) ? aPost : aGet
+			
+			// собственно отправляем данные
+			with (met(this.action, this.toHash()))
+			{
+				onLoad		= function () { t.onload({request:this}) }
+				onSuccess	= function () { t.onsuccess({request:this}) } // t.reset();
+				onError		= function () { t.onerror({request:this}) }
+			}
+		}
+		
+		node.addEventListener('submit', sendListener,  false)
 	}
 }
 
