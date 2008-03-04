@@ -64,6 +64,7 @@ Programica.FormPoster.prototype.Handler = function (node)
 			var met	= /^post$/i.test(this.method) ? aPost : aGet
 			
 			// собственно отправляем данные
+			var t = this
 			with (met(this.action, this.toHash()))
 			{
 				onLoad		= function () { t.onload({request:this}) }
