@@ -44,6 +44,14 @@ function IEFixes_bgPng (node)
 	node.runtimeStyle.backgroundImage = 'none'
 }
 
+function IEFixes_bg2Png (node)
+{
+	var m = IEFixes_bgUrlRex.exec(node.currentStyle.backgroundImage)
+	
+	node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + m[1] + "',sizingMethod='scale')"
+	node.runtimeStyle.backgroundImage = 'none'
+}
+
 // делает кликабельными метки
 function IEFixes_label (node)
 {
