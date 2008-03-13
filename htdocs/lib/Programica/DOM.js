@@ -207,7 +207,7 @@ Programica.DOM.toggle = function (t)
 
 Programica.DOM.getComputedStyle = function (prop)
 {
-	return document.defaultView.getComputedStyle(this, null).getPropertyValue(prop)
+	return document.defaultView.getComputedStyle(this, null)
 }
 
 Programica.DOM.getElementListBySelector = function(q)

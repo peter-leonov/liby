@@ -166,14 +166,14 @@ function IEFixes ()
 	
 	IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
 	
-	IEFixes.preventDefault = function ()
+	function preventDefault ()
 	{
 		var old = this.returnValue
 		this.returnValue = false
 		return old
 	}
 	
-	IEFixes.stopPropagation = function ()
+	function stopPropagation ()
 	{
 		var old = this.cancelBubble
 		this.cancelBubble = true
@@ -202,8 +202,8 @@ function IEFixes ()
 				func[key] = function (e)
 				{
 					e.target = e.srcElement
-					e.preventDefault  = IEFixes.preventDefault
-					e.stopPropagation = IEFixes.stopPropagation
+					e.preventDefault  = preventDefault
+					e.stopPropagation = stopPropagation
 					e.detail = - e.wheelDelta / 30
 					func.apply(t, [e])
 				}
@@ -321,17 +321,34 @@ function IEFixes ()
 		return document.createElement(type)
 	}
 	
+	if (!document.defaultView)
+		document.defaultView = window
+	
+	if (!document.defaultView.getComputedStyle)
+		document.defaultView.getComputedStyle = function (node)
+		{
+			return node.currentStyle
+		}
+	
 	if (!document.createEvent)
 	{
-		function initEvent (type) { this.type = type }
+		function initEvent (type, bubbles, cancelable)
+		{
+			this.type = type
+			this.bubbles = bubbles
+			this.cancelable = cancelable
+		}
 		document.createEvent = function ()
 		{
 			var ne = document.createEventObject()
 			ne.initEvent = initEvent
 			return ne
 		}
-		
-		Element.prototype.dispatchEvent = function (e)
+	}
+	
+	if (!document.dispatchEvent)
+	{
+		document.dispatchEvent = Element.prototype.dispatchEvent = function (e)
 		{
 			if (e.type == 'change')
 				return this.onchange && this.onchange(e)
