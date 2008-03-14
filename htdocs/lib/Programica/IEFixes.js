@@ -52,7 +52,7 @@ function IEFixes_bg2Png (node)
 	node.runtimeStyle.backgroundImage = 'none'
 }
 
-// делает кликабельными метки
+// clickabe labels
 function IEFixes_label (node)
 {
 	node.attachEvent
@@ -76,7 +76,7 @@ function IEFixes_label (node)
 	)
 }
 
-// фиксим всплывание onchange до формы
+// input onchange bubbling on forms
 function IEFixes_input (node)
 {
 	//node.form = p
@@ -90,8 +90,14 @@ function IEFixes_input (node)
 
 function IEFixes_fixThem (nodes)
 {
+	var fixie = IEFixes_fixIE
 	for (var i = 0, il = nodes.length; i < il; i++)
-		IEFixes_fixIE(nodes[i])
+		fixie(nodes[i])
+}
+
+function IEFixes_fixThemAll ()
+{
+	IEFixes_fixThem(document.all)
 }
 
 function IEFixes_onpropertychange6 ()
@@ -112,6 +118,21 @@ function IEFixes_onpropertychange7 ()
 		IEFixes_fixThem(this.all)
 }
 
+function IEFixes_proto (node)
+{
+	var el = self.Element.prototype
+	for (var p in el)
+		node[p] = el[p]
+}
+
+function IEFixes_formProto (node)
+{
+	var hfel = HTMLFormElement.prototype
+	for (var p in hfel)
+		node[p] = hfel[p]
+}
+
+
 function IEFixes_fixIE6 (node)
 {
 	IEFixes_proto(node)
@@ -131,39 +152,7 @@ else if (/MSIE 6/.test(navigator.userAgent))
 
 function IEFixes ()
 {
-	var el = self.Element.prototype
-	var hfel = HTMLFormElement.prototype
-	var rex1
-	
-	// добавляет методы и свойства из Element.prototype
-	IEFixes_proto = function (node)
-	{
-		for (var p in el)
-			node[p] = el[p]
-	}
-	
-	// добавляет методы и свойства из HTMLFormElement.prototype
-	IEFixes_formProto = function (node)
-	{
-		for (var p in hfel)
-			node[p] = hfel[p]
-	}
-	
-	IEFixes.opacity = IEFixes_opacity
-	IEFixes.disabled = IEFixes_disabled
-	IEFixes.imgPng = IEFixes_imgPng
-	IEFixes.bgPng = IEFixes_bgPng
-	IEFixes.label = IEFixes_label
-	IEFixes.input = IEFixes_input
-	IEFixes.proto = IEFixes_proto
-	IEFixes.formProto = IEFixes_formProto
-	IEFixes.fixThem = IEFixes_fixThem
-	IEFixes.onpropertychange6 = IEFixes_onpropertychange6
-	IEFixes.onpropertychange7 = IEFixes_onpropertychange7
-	IEFixes.fixIE6 = IEFixes_fixIE6
-	IEFixes.fixIE7 = IEFixes_fixIE7
-	
-	
+	IEFixes.realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onpropertychange: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
 	IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
 	
 	function preventDefault ()
@@ -357,18 +346,18 @@ function IEFixes ()
 		}
 	}
 	
-	self.addEventListener('load', function () { IEFixes.fixThem(document.all) })
+	self.addEventListener('load', IEFixes_fixThemAll)
 	
 	IEFixes.CSSBindings =
 	[
-	'input,textarea,select{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),IEFixes.input(this))}',
+	'input,textarea,select{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),IEFixes_input(this))}',
 	'img{scrollbar-highlight-color:expression((runtimeStyle.scrollbarHighlightColor="transparent"),(title||(title="")))}',
-	'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes.formProto(this))}'
+	'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes_formProto(this))}'
 	//'*{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes_fixIE(this))}'
 	]
 	
 	if (/MSIE 6/.test(navigator.userAgent))
-		IEFixes.CSSBindings.push('label{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),IEFixes.label(this))}')
+		IEFixes.CSSBindings.push('label{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),IEFixes_label(this))}')
 	
 	document.write('<style>' + IEFixes.CSSBindings.join('\n') + '</style>')
 	
