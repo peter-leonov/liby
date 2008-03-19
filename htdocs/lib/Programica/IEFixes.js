@@ -171,30 +171,47 @@ function IEFixes ()
 	
 	// yet another addEventListener(...) fix
 	if (!self.addEventListener && self.attachEvent)
-	{
-		Element.prototype.addEventListener = function (type, func, dir)
+		self.addEventListener = document.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 		{
+			// window.status++
 			type = IEFixes.eventConversion[type] || type
 			
 			this._uniqueID = this._uniqueID || this.uniqueID
 			var key = '__IEEventWrapper:' + type + ':' + dir + ':' + this._uniqueID
-			//alert(key)
-			// JavaScript — сила!
-			// Каково: сохранить функцию-обертку в свойстве оборачиваемой функции
+			
 			if (func[key])
-			{
 				this.detachEvent('on' + type, func[key])
-			}
 			else
 			{
-				var t = this
-				func[key] = function (e)
+				if (this == self)
+					func[key] = function (e)
+					{
+						e.target = e.srcElement
+						e.preventDefault  = preventDefault
+						e.stopPropagation = stopPropagation
+						e.detail = - e.wheelDelta / 30
+						func.call(self, e)
+					}
+				else if (this == document)
+					func[key] = function (e)
+					{
+						e.target = e.srcElement
+						e.preventDefault  = preventDefault
+						e.stopPropagation = stopPropagation
+						e.detail = - e.wheelDelta / 30
+						func.call(document, e)
+					}
+				else
 				{
-					e.target = e.srcElement
-					e.preventDefault  = preventDefault
-					e.stopPropagation = stopPropagation
-					e.detail = - e.wheelDelta / 30
-					func.apply(t, [e])
+					var uid = this._uniqueID
+					func[key] = function (e)
+					{
+						e.target = e.srcElement
+						e.preventDefault  = preventDefault
+						e.stopPropagation = stopPropagation
+						e.detail = - e.wheelDelta / 30
+						func.call(document.all[uid], e)
+					}
 				}
 			}
 			
@@ -215,9 +232,6 @@ function IEFixes ()
 			else
 				this.attachEvent('on' + type, func[key])
 		}
-		
-		self.addEventListener = document.addEventListener = Element.prototype.addEventListener
-	}
 	
 	// quick fix for removeEventListener(...)
 	if (!self.removeEventListener && self.detachEvent)
@@ -237,7 +251,7 @@ function IEFixes ()
 		self.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
 	}
 	
-	// sorry mom, i had to fix this ****** onload call order bug
+	// sorry, i had to fix this onload call order bug
 	{
 		this['on-load-listeners'] = []
 		
@@ -369,4 +383,9 @@ function IEFixes ()
 	else if (self.external)
 		self.extern = self.external
 }
-IEFixes()
+
+if (!IEFixes.applied)
+{
+	IEFixes()
+	IEFixes.applied = true
+}
