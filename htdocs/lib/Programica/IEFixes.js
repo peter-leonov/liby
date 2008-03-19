@@ -102,6 +102,8 @@ function IEFixes_fixThemAll ()
 
 function IEFixes_onpropertychange6 ()
 {
+	// this.__garbageProperties[event.propertyName] = true
+	
 	if (event.propertyName == 'style.opacity')
 		IEFixes_opacity(this)
 	else if (event.propertyName == 'disabled')
@@ -112,6 +114,8 @@ function IEFixes_onpropertychange6 ()
 
 function IEFixes_onpropertychange7 ()
 {
+	// this.__garbageProperties[event.propertyName] = true
+	
 	if (event.propertyName == 'style.opacity')
 		IEFixes_opacity(this)
 	else if (event.propertyName == 'innerHTML')
@@ -136,14 +140,55 @@ function IEFixes_formProto (node)
 function IEFixes_fixIE6 (node)
 {
 	IEFixes_proto(node)
+	// node.__garbageProperties = {}
 	node.onpropertychange = IEFixes_onpropertychange6
 }
 
 function IEFixes_fixIE7 (node)
 {
 	IEFixes_proto(node)
+	// node.__garbageProperties = {}
 	node.onpropertychange = IEFixes_onpropertychange7
 }
+
+function IEFixes_onBeforeUnload ()
+{
+	var stack = IEFixes_onBeforeUnload.stack
+	for (var i = 0, il = stack.length; i < il; i++)
+	{
+		var el = stack[i]
+		el[0].detachEvent(el[1], el[2])
+	}
+	IEFixes_onBeforeUnload.stack = null
+	
+	
+	// var all = []
+	// var dall = document.body.getElementsByTagName('*')
+	// for (var i = 0, il = dall.length; i < il; i++)
+	// 	all[i] = dall[i]
+	// 
+	// var el = self.Element.prototype
+	// for (var i = 0, il = all.length; i < il; i++)
+	// {
+	// 	var node = all[i]
+	// 	
+	// 	try
+	// 	{
+	// 		for (var p in el)
+	// 			try { node[p] = null } catch (ex) {}
+	// 	
+	// 		if (node.__garbageProperties)
+	// 			for (var p in node.__garbageProperties)
+	// 				if (p.indexOf('.') == -1)
+	// 					try { node[p] = null } catch (ex) {}
+	// 	
+	// 		node.__garbageProperties = null
+	// 		node.onpropertychange = null
+	// 	}
+	// 	catch (ex) {}
+	// }
+}
+IEFixes_onBeforeUnload.stack = []
 
 if (/MSIE 7/.test(navigator.userAgent))
 	IEFixes_fixIE = IEFixes_fixIE7
@@ -152,7 +197,7 @@ else if (/MSIE 6/.test(navigator.userAgent))
 
 function IEFixes ()
 {
-	IEFixes.realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onpropertychange: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
+	// IEFixes.realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onpropertychange: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
 	IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
 	
 	function preventDefault ()
@@ -169,6 +214,8 @@ function IEFixes ()
 		return old
 	}
 	
+	window.attachEvent('onbeforeunload', IEFixes_onBeforeUnload)
+	
 	// yet another addEventListener(...) fix
 	if (!self.addEventListener && self.attachEvent)
 		self.addEventListener = document.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
@@ -183,34 +230,15 @@ function IEFixes ()
 				this.detachEvent('on' + type, func[key])
 			else
 			{
-				if (this == self)
-					func[key] = function (e)
-					{
-						e.target = e.srcElement
-						e.preventDefault  = preventDefault
-						e.stopPropagation = stopPropagation
-						e.detail = - e.wheelDelta / 30
-						func.call(self, e)
-					}
-				else if (this == document)
-					func[key] = function (e)
-					{
-						e.target = e.srcElement
-						e.preventDefault  = preventDefault
-						e.stopPropagation = stopPropagation
-						e.detail = - e.wheelDelta / 30
-						func.call(document, e)
-					}
-				else
 				{
-					var uid = this._uniqueID
+					var t = this
 					func[key] = function (e)
 					{
 						e.target = e.srcElement
 						e.preventDefault  = preventDefault
 						e.stopPropagation = stopPropagation
 						e.detail = - e.wheelDelta / 30
-						func.call(document.all[uid], e)
+						func.call(t, e)
 					}
 				}
 			}
@@ -230,7 +258,10 @@ function IEFixes ()
 				this.onchange.stack.push(func[key])
 			}
 			else
+			{
 				this.attachEvent('on' + type, func[key])
+				IEFixes_onBeforeUnload.stack.push([this, 'on' + type, func[key]])
+			}
 		}
 	
 	// quick fix for removeEventListener(...)
