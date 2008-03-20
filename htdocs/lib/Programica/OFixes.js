@@ -1,4 +1,5 @@
 
+<!--#if expr="$HTTP_USER_AGENT = /Opera\/9\.2/" -->
 // Opera screen image caching fix
 window.addEventListener
 (
@@ -23,3 +24,4 @@ window.addEventListener
 	},
 	false
 )
+<!--#endif -->
