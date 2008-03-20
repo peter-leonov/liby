@@ -8,6 +8,10 @@
 	<!--#include file="Programica/FFFixes.js" -->
 <!--#endif -->
 
+<!--#if expr="$HTTP_USER_AGENT = /Opera\//" -->
+	<!--#include file="Programica/OFixes.js" -->
+<!--#endif -->
+
 <!--#if expr="$HTTP_USER_AGENT = /MSIE/" -->
 	<!--#include file="Programica/IEFixes.js" -->
 <!--#endif -->
