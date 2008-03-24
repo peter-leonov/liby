@@ -126,6 +126,13 @@ Programica.DOM.enable = function ()
 	this.remClassName('disabled')
 }
 
+Programica.DOM.empty = function ()
+{
+	var node
+	while (node = this.firstChild)
+		this.removeChild(node)
+}
+
 Programica.DOM.show = function (t)
 {
 	if (this.onshow)

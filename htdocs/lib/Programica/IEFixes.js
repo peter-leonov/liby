@@ -132,11 +132,14 @@ function IEFixes_formProto (node)
 		node[p] = hfel[p]
 }
 
+// function IEFixes_appendChild (node) { this.appendChildReal(node) }
 
 function IEFixes_fixIE6 (node)
 {
 	IEFixes_proto(node)
 	node.onpropertychange = IEFixes_onpropertychange6
+	// node.appendChildReal = node.appendChild
+	// node.appendChild = IEFixes_appendChild
 }
 
 function IEFixes_fixIE7 (node)
@@ -187,6 +190,7 @@ function IEFixes ()
 	if (!self.addEventListener && self.attachEvent)
 		self.addEventListener = document.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 		{
+			dir = dir || false
 			// window.status++
 			type = IEFixes.eventConversion[type] || type
 			
@@ -197,16 +201,14 @@ function IEFixes ()
 				this.detachEvent('on' + type, func[key])
 			else
 			{
+				var t = this
+				func[key] = function (e)
 				{
-					var t = this
-					func[key] = function (e)
-					{
-						e.target = e.srcElement
-						e.preventDefault  = preventDefault
-						e.stopPropagation = stopPropagation
-						e.detail = - e.wheelDelta / 30
-						func.call(t, e)
-					}
+					e.target = e.srcElement
+					e.preventDefault  = preventDefault
+					e.stopPropagation = stopPropagation
+					e.detail = - e.wheelDelta / 30
+					func.call(t, e)
 				}
 			}
 			
@@ -236,6 +238,7 @@ function IEFixes ()
 	{
 		Element.prototype.removeEventListener = function (type, func, dir)
 		{
+			dir = dir || false
 			if (IEFixes.eventConversion[type])
 				type = IEFixes.eventConversion[type]
 			
