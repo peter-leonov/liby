@@ -102,8 +102,6 @@ function IEFixes_fixThemAll ()
 
 function IEFixes_onpropertychange6 ()
 {
-	// this.__garbageProperties[event.propertyName] = true
-	
 	if (event.propertyName == 'style.opacity')
 		IEFixes_opacity(this)
 	else if (event.propertyName == 'disabled')
@@ -114,8 +112,6 @@ function IEFixes_onpropertychange6 ()
 
 function IEFixes_onpropertychange7 ()
 {
-	// this.__garbageProperties[event.propertyName] = true
-	
 	if (event.propertyName == 'style.opacity')
 		IEFixes_opacity(this)
 	else if (event.propertyName == 'innerHTML')
@@ -140,14 +136,12 @@ function IEFixes_formProto (node)
 function IEFixes_fixIE6 (node)
 {
 	IEFixes_proto(node)
-	// node.__garbageProperties = {}
 	node.onpropertychange = IEFixes_onpropertychange6
 }
 
 function IEFixes_fixIE7 (node)
 {
 	IEFixes_proto(node)
-	// node.__garbageProperties = {}
 	node.onpropertychange = IEFixes_onpropertychange7
 }
 
@@ -160,33 +154,6 @@ function IEFixes_onBeforeUnload ()
 		el[0].detachEvent(el[1], el[2])
 	}
 	IEFixes_onBeforeUnload.stack = null
-	
-	
-	// var all = []
-	// var dall = document.body.getElementsByTagName('*')
-	// for (var i = 0, il = dall.length; i < il; i++)
-	// 	all[i] = dall[i]
-	// 
-	// var el = self.Element.prototype
-	// for (var i = 0, il = all.length; i < il; i++)
-	// {
-	// 	var node = all[i]
-	// 	
-	// 	try
-	// 	{
-	// 		for (var p in el)
-	// 			try { node[p] = null } catch (ex) {}
-	// 	
-	// 		if (node.__garbageProperties)
-	// 			for (var p in node.__garbageProperties)
-	// 				if (p.indexOf('.') == -1)
-	// 					try { node[p] = null } catch (ex) {}
-	// 	
-	// 		node.__garbageProperties = null
-	// 		node.onpropertychange = null
-	// 	}
-	// 	catch (ex) {}
-	// }
 }
 IEFixes_onBeforeUnload.stack = []
 
