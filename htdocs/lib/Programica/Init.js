@@ -143,7 +143,7 @@ Programica.userAgentRegExps =
 	MSIE: /MSIE/,
 	MSIE6: /MSIE 6/,
 	MSIE7: /MSIE 7/,
-	Gecko: /Gecko/,
+	Gecko: /Gecko\//,
 	Opera: /Opera/,
 	Opera9: /Opera\/9/,
 	Safari: /AppleWebKit/,
