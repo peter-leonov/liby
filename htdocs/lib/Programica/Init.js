@@ -162,4 +162,13 @@ Programica.htmlUserAgentSetter = function (doc, ua)
 			htmlNode.className = (htmlNode.className || '') + ' ' + p
 }
 
+if (!Array.prototype.forEach)
+	Array.prototype.forEach = function (f, inv)
+	{
+		var len = this.length
+		for (var i = 0; i < len; i++)
+			f.call(inv, this[i], i, this)
+			// f(this[i], i)
+	}
+
 log2("Programica/Init.js loaded")
