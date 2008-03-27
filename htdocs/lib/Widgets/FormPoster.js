@@ -8,17 +8,17 @@ Programica.FormPoster.prototype.Handler = function (node)
 {
 	this.mainNode = node
 	
-	// where 'form action="action"' in IE
+	// where form.action is a node
 	if (node.action && typeof node.action != 'string')
 		throw new Error('Form element with name "action" masks form own attribute.')
 	
 	if (node.enctype && typeof node.enctype != 'string')
 		throw new Error('Form element with name "enctype" masks form own attribute.')
 	
-	// for upload
+	// for files upload
 	if (/^multipart\/form\-data$/i.test(node.getAttribute('enctype')))
 	{
-		// проверим, нужно ли ловить эту форму
+		// check this form need to be proceeded
 		if (!/^ajax$/i.test(node.target))
 			return
 		
@@ -53,21 +53,23 @@ Programica.FormPoster.prototype.Handler = function (node)
 	{
 		function sendListener (e)
 		{
-			// проверим, нужно ли ловить эту форму
+			// check this form need to be proceeded
 			if (!/^ajax$/i.test(this.target))
 				return
 			
-			// поиграем в события
+			this.addClassName('sending')
+			
+			// play in events
 			Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
 			
 			e.preventDefault()
 			var met	= /^post$/i.test(this.method) ? aPost : aGet
 			
-			// собственно отправляем данные
+			// acync sending data
 			var t = this
 			with (met(this.action, this.toHash()))
 			{
-				onLoad		= function () { t.onload({request:this}) }
+				onLoad		= function () { t.remClassName('sending'); t.onload({request:this}) }
 				onSuccess	= function () { t.onsuccess({request:this}) } // t.reset();
 				onError		= function () { t.onerror({request:this}) }
 			}

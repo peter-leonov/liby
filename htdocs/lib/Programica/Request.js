@@ -1,6 +1,3 @@
-
-// наш «свежий» взгляд на пресловутый аякс
-
 if (!self.Programica)
 	self.Programica = {}
 
@@ -10,30 +7,28 @@ Programica.Request = function (prms)
 		if (this[p] === undefined)
 			this[p] = prms[p]
 	
-	// в this.transport кладем реальный дескриптор запроса
+	// this.transport saves real request object
 	
-	if (self.XMLHttpRequest) // Mozilla, Safari, Opera...
+	if (self.XMLHttpRequest) // Gecko, WebKit, Presto...
 	{
 		try
 		{
 			this.transport = new XMLHttpRequest()
-			if (this.transport.overrideMimeType) this.transport.overrideMimeType('application/xml')
+			if (this.transport.overrideMimeType)
+				this.transport.overrideMimeType('application/xml')
 		}
-		catch (E) {}
+		catch (ex) {}
 	}
-	else if (self.ActiveXObject) // MSIE
+	else if (self.ActiveXObject) // Trident
 	{
-		// microсиво? — а что поделать
+		// microsux
 		try { this.transport = new ActiveXObject("Msxml2.XMLHTTP") }
-		catch (E)
+		catch (ex)
 		{
-			try 
+			try { this.transport = new ActiveXObject("Microsoft.XMLHTTP") }
+			catch (ex2) 
 			{ 
-				this.transport = new ActiveXObject("Microsoft.XMLHTTP") 
-			}
-			catch (E2) 
-			{ 
-				log("Can`t create neither Msxml2.XMLHTTP nor Microsoft.XMLHTTP: " + E.messageText  + ", " + E2.messageText ) 
+				log("Can`t create neither Msxml2.XMLHTTP nor Microsoft.XMLHTTP: " + ex.messageText  + ", " + ex2.messageText ) 
 			}
 		}
 	}
@@ -46,9 +41,8 @@ Programica.Request = function (prms)
 			t.onreadystatechange()
 		}
 	}
-	else log('Can`t create an instatce of the XHR')
-	
-	this.lastRequestObject = null
+	else
+		log('Can`t create an instatce of the XMLHttpRequest')
 }
 
 Programica.Request.paramDelimiter = "&"
@@ -57,8 +51,8 @@ Programica.Request.urlEncode = function (data)
 {
 	if (!data) return ''
 	
-	// объекту виднее, как ему отправляться
-	if (data.toUrlEncode && data.toUrlEncode.constructor == Function)
+	// let object deside how to convert itself
+	if (data.toUrlEncode)
 		return data.toUrlEncode()
 	
 	switch (data.constructor)
@@ -80,8 +74,6 @@ Programica.Request.urlEncode = function (data)
 							arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i]))
 							break
 					}
-				//else
-				//	arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(data[i]))
 			
 			return arr.join(Programica.Request.paramDelimiter)
 		
@@ -104,14 +96,14 @@ Programica.Request.prototype =
 		return true
 	},
 	
-	// если след. методы возвращают истину, то будет вызвана также и onLoad()
-	onInformation:			function () { return true },
-	onSuccess:				function () { return true },
-	onRedirect:				function () { return true },
+	// если след. методы не возвращают ложь, то будет вызвана также и onLoad()
+	onInformation:			function () {},
+	onSuccess:				function () {},
+	onRedirect:				function () {},
 	
 	// а здесь — onError()
-	onClientError:			function () { return true },
-	onServerError:			function () { return true },
+	onClientError:			function () {},
+	onServerError:			function () {},
 	
 	
 	//——————————————————————————————————————————————————————————————————————————
@@ -128,9 +120,7 @@ Programica.Request.prototype =
 	{
 		var t = this
 		if (this.lastRequestObject.async)
-		{
 			setTimeout(function () { t.transport.send(data) }, 0)
-		}
 		else
 			t.transport.send(data)
 	},
@@ -169,24 +159,24 @@ Programica.Request.prototype =
 				switch (Math.floor(this.status() / 100))
 				{
 					case 1:
-						this.onInformation()	&& this.onLoad()
+						this.onInformation()
 						break
 					
 					case 0:
 					case 2:
-						this.onSuccess()		&& this.onLoad()
+						(this.onLoad() !== false) && this.onSuccess()
 						break
 					
 					case 3:
-						this.onRedirect()		&& this.onLoad()
+						this.onRedirect()
 						break
 					
 					case 4:
-						this.onClientError()	&& this.onError() && this.onLoad()
+						(this.onError() !== false) && this.onClientError()
 						break
 					
 					case 5:
-						this.onServerError()	&& this.onError() && this.onLoad()
+						(this.onError() !== false) && this.onServerError()
 						break
 					
 					default:
@@ -316,6 +306,3 @@ Programica.Request.transformFragment = function (xml, xsl, node, doc)
 	
 	return node
 }
-
-
-self.log2 && self.log2("Programica/Request.js loaded")
