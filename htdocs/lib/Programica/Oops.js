@@ -7,15 +7,12 @@ function Oops (message, url, line)
 {
 	try
 	{
-		var img, err = message + '\n' + url + ':' + line
+		var esc = encodeURIComponent || escape
+		var query = 'message=' + esc(url + ':' + line + ' ' + message) + ';session=' + Oops.randomId + ';type=error'
 		
-		if (document.realIECreateElement)
-			img = document.realIECreateElement('img')
-		else
-			img = document.createElement('img')
-		
+		var img = new Image()
 		if (img)
-			img.src = 'http://oops.programica.ru/report?' + (encodeURIComponent || escape)(err)
+			img.src = 'http://oops.programica.ru:8899/report?' + query
  	}
 	catch (ex) { window.console && window.console.log && window.console.log(ex.message) }
 	
@@ -25,6 +22,6 @@ function Oops (message, url, line)
 Oops.randomId = (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17)
 
 //alert(window.onerror)
-// window.onerror = Oops
-
-window.onerror = function (a,b,c) {  }
+window.onerror = Oops
+az
+// window.onerror = function (a,b,c) {  }
