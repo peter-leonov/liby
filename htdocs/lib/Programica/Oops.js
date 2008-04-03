@@ -23,5 +23,3 @@ Oops.randomId = (new Date()).getTime().toString() + Math.round(Math.random() * 1
 
 //alert(window.onerror)
 window.onerror = Oops
-az
-// window.onerror = function (a,b,c) {  }
