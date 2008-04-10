@@ -78,7 +78,7 @@ Programica.Request.urlEncode = function (data)
 			return arr.join(Programica.Request.paramDelimiter)
 		
 		default:
-			return data
+			return encodeURIComponent(data)
 	}
 }
 
@@ -190,7 +190,7 @@ Programica.Request.prototype =
 
 
 //——————————————————————————————————————————————————————————————————————————————
-// "шоткатыты", известные также под псевдонимом "алиасы" :)
+// shortcuts
 
 self.aPost = function (url, params)
 {
@@ -252,6 +252,23 @@ self.sGet = function (url, params, tail)
 	return r
 }
 
+
+self.sPut = function (url, params, tail, data)
+{
+	var r = new Programica.Request()
+	if (!r) return null
+	if (!data) return null
+	
+	var params = tail ? Programica.Request.urlEncode(params) + Programica.Request.paramDelimiter + Programica.Request.urlEncode(tail) : Programica.Request.urlEncode(params)
+	var delim = params ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
+	
+	r.open('POST', url + (params ? delim + params : ''), false)
+	r.setRequestHeader("Content-type", "application/x-www-form-urlencoded") // ; charset=utf-8
+	r.setRequestHeader("Content-length", data.length)
+	r.send(data)
+	
+	return r
+}
 
 
 self.aHead = function (url, params)
