@@ -63,7 +63,7 @@ Programica.Request.urlEncode = function (data)
 		case Object:
 			var arr = []
 			for (var i in data)
-				if (data[i] != undefined)
+				if (i != undefined && data[i] != undefined)
 					switch (data[i].constructor)
 					{
 						case Array:
@@ -238,15 +238,15 @@ self.aGet = function (url, params)
 	return r
 }
 
-self.sGet = function (url, params)
+self.sGet = function (url, params, tail)
 {
 	var r = new Programica.Request()
 	if (!r) return null
 	
-	var data = Programica.Request.urlEncode(params)
+	var data = tail ? Programica.Request.urlEncode(params) + Programica.Request.paramDelimiter + Programica.Request.urlEncode(tail) : Programica.Request.urlEncode(params)
 	var delim = data ? url.indexOf('?') < 0 ? '?' : Programica.Request.paramDelimiter : ''
 	
-	r.open('GET', url + delim + data, false)
+	r.open('GET', url + (data ? delim + data : ''), false)
 	r.send(null)
 	
 	return r
