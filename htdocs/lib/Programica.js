@@ -30,5 +30,5 @@
 <!--#include file="Programica/Widget.js" -->
 
 <!--#if expr="$SERVER_ADDR = /^127|^172|^192.168/" -->
-	<!--#include file="Programica/Development.js" -->
+<!--#include file="Programica/Development.js" -->
 <!--#endif -->
