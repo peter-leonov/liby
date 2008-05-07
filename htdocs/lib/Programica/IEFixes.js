@@ -208,8 +208,8 @@ function IEFixes ()
 					e.preventDefault  = preventDefault
 					e.stopPropagation = stopPropagation
 					e.detail = - e.wheelDelta / 30
-					e.pageX = e.clientX + document.body.scrollLeft - document.body.clientLeft
-					e.pageY = e.clientY + document.body.scrollTop  - document.body.clientTop
+					e.pageX = e.clientX + document.documentElement.scrollLeft - document.body.clientLeft // document.body.scrollLeft
+					e.pageY = e.clientY + document.documentElement.scrollTop  - document.body.clientTop // document.body.scrollTop
 					func.call(t, e)
 				}
 			}
