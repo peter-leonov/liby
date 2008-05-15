@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+	<title>Forms</title>
+	
+	<script type="text/javascript" src="/lib/Programica.js"></script>
+	
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	
+
+<form id="source" action="?">
+	<input type="text" name="fio"/>
+	<p>
+	<label><input type="radio" name="sex" value="male"/> М</label>
+	<label><input type="radio" name="sex" value="female"/> Ж</label>
+	</p>
+	<p>
+	<label><input type="radio" name="graduation" value="middle school"/> среднее</label>
+	<label><input type="radio" name="graduation" value="almost hi school"/>неоконченное высшее</label>
+	<label><input type="radio" name="graduation" value="hi school"/> высшее</label>
+	</p>
+</form>
+
+
+<script>
+	$.onload
+	(
+		function onLoad ()
+		{
+			var source = $('source')
+			// var hash = source.toHash()
+			// log(hash)
+			var hash = { fio: 'Леонов П. А.', sex: 'male' }
+			source.fromHash(hash)
+		}
+	)
+	
+</script>
+
+</body>
+</html>

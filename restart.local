@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# /www/lib/apachectl restart
+/www/lib/nginxctl restart
