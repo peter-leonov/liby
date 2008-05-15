@@ -13,15 +13,41 @@
 	
 
 <form id="source" action="?">
-	<input type="text" name="fio"/>
 	<p>
-	<label><input type="radio" name="sex" value="male"/> М</label>
-	<label><input type="radio" name="sex" value="female"/> Ж</label>
+		<input type="text" name="fio"/>
 	</p>
 	<p>
-	<label><input type="radio" name="graduation" value="middle school"/> среднее</label>
-	<label><input type="radio" name="graduation" value="almost hi school"/>неоконченное высшее</label>
-	<label><input type="radio" name="graduation" value="hi school"/> высшее</label>
+		<label><input type="radio" name="sex" value="male"/> М</label>
+		<label><input type="radio" name="sex" value="female"/> Ж</label>
+	</p>
+	<p>
+		<label><input type="radio" name="graduation" value="middle school"/> middle school</label>
+		<label><input type="radio" name="graduation" value="almost high school"/>almost high school</label>
+		<label><input type="radio" name="graduation" value="high school"/> high school</label>
+		<label><input type="checkbox" name="graduation" value="almost high school"/> almost high school</label>
+	</p>
+	<p>
+		<label><input type="checkbox" name="brand" value="Zara"/> Zara</label>
+		<label><input type="checkbox" name="brand" value="Bershka"/>Bershka</label>
+		<label><input type="checkbox" name="brand" value="Pool and Bear"/> Pool and Bear</label>
+	</p>
+	<p>
+		<input type="text" name="alphabet"/><input type="text" name="alphabet"/><input type="text" name="alphabet"/>
+		<input type="text" name="alphabet"/><input type="text" name="alphabet"/><input type="text" name="alphabet"/>
+		…<label><input type="checkbox" name="alphabet" value="o"/>o</label>…
+		<input type="text" name="alphabet"/><input type="text" name="alphabet"/><input type="text" name="alphabet"/>
+	</p>
+	<p>
+		<select name="city">
+			<option></option>
+			<option value="Moscow">Moscow</option>
+			<option value="Moscow">St. Peterburg</option>
+			<option value="Omsk">Omsk</option>
+			<option value="Novosibirsk">Novosibirsk</option>
+		</select>
+	</p>
+	<p>
+		<textarea name="text"></textarea>
 	</p>
 </form>
 
@@ -34,7 +60,7 @@
 			var source = $('source')
 			// var hash = source.toHash()
 			// log(hash)
-			var hash = { fio: 'Леонов П. А.', sex: 'male' }
+			var hash = { fio: 'Leonov A Peter', sex: 'male', graduation: ['almost high school', 'almost high school'], brand: ['Bershka', 'Pool and Bear'], alphabet: ['a', 'b', 'c', 'd', 'e', 'f', 'o', 'z', 'y', 'x'], city: 'Omsk', text: 'Lorem ipsum' }
 			source.fromHash(hash)
 		}
 	)
