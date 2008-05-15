@@ -58,63 +58,6 @@ Programica.Form =
 		return hash;
 	},
 	
-	indexFormHash: function (h)
-	{
-		var res = {}
-		for (var k in h)
-		{
-			var v = h[k]
-			var ndx = res[k] = {}
-			if (v === undefined)
-				ndx
-			if (v.constructor == Array)
-				for (var i = 0; i < v.length; i++)
-					ndx[v[i]] = ndx[v[i]] ? ndx[v[i]] + 1 : 1
-			else if (v.constructor == String)
-				ndx[v] = 1
-			else
-				throw new Error('Can`t proceed key of constructor "' + v.constructor + '"')
-		}
-		log(res)
-		return res
-	},
-	
-	hash2form1: function (h, f)
-	{
-		h = this.indexFormHash(h)
-		for (var i = 0; i < f.length; i++)
-		{
-			var node = f.elements[i]
-			var nn = node.name
-			
-			if (h[nn])
-				switch (node.type)
-				{
-					case 'checkbox':
-					case 'radio':
-						if (h[nn][node.value])
-							h[nn][node.value]--, node.checked =  'checked'
-						break
-				
-					case 'select-one':
-						val = node.options[node.selectedIndex].value
-						break
-					
-					case 'submit':
-						break
-					
-					default:
-						for (var k in h[nn])
-							if (h[nn][k])
-							{
-								h[nn][k]--
-								node.value = k
-								break
-							}
-				}
-		}
-	},
-	
 	forceArrayFormHash: function (h)
 	{
 		var res = {}
@@ -130,13 +73,14 @@ Programica.Form =
 			else
 				throw new Error('Can`t proceed key of constructor "' + v.constructor + '"')
 		}
-		log(res)
 		return res
 	},
 	
-	hash2form: function (h, f)
+	hash2form: function (h, f, forse_array)
 	{
-		h = this.forceArrayFormHash(h)
+		if (!forse_array)
+			h = this.forceArrayFormHash(h)
+		
 		for (var i = 0; i < f.length; i++)
 		{
 			var node = f.elements[i]
