@@ -1,19 +1,16 @@
 
-if (!self.Programica)
-	self.Programica = {}
-
-self.Programica.Cookie =
+if (!self.Cookie) self.Cookie =
 {
 	set: function (name, value, daysToExpire)
 	{
 		var expire = ''
-		if (daysToExpire != undefined)
+		if (typeof daysToExpire === 'number')
 		{
 			var d = new Date()
-			d.setTime(d.getTime() + (86400000 * parseFloat(daysToExpire)))
+			d.setTime(d.getTime() + 86400000 * daysToExpire)
 			expire = '; expires=' + d.toGMTString()
 		}
-		return (document.cookie = escape(name) + '=' + escape(value || '') + expire)
+		return document.cookie = escape(name) + '=' + escape(value || '') + expire
 	},
 	
 	get: function (name)
@@ -35,6 +32,6 @@ self.Programica.Cookie =
 			return navigator.cookieEnabled
 		
 		this.set('__cookie_test', '1')
-		return (this.erase('__cookie_test') == ‘1’)
+		return (this.erase('__cookie_test') == '1')
 	}
 }
