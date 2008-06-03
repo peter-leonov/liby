@@ -11,7 +11,7 @@ var PA = Programica.Animation = function (prms)
 	this.motion				= prms.motion || PA.defaults.type
 	this.running			= false
 	this.complete			= false
-	this.obj				= prms.obj || false
+	this.node				= prms.node || false
 	this.animationTypes		= PA.Types
 
 	this.onstart = this.oncomplete = this.onstep = function () {}
@@ -44,7 +44,7 @@ Element.prototype.animate = function (motion, props, duration, unit)
 		else
 			trans.push({property: i, begin: null, end: pi[0] || pi})
 	}
-	return new PA({obj: this, motion: motion, duration: duration, trans: trans, unit: unit}).start()
+	return new PA({node: this, motion: motion, duration: duration, trans: trans, unit: unit}).start()
 }
 
 
@@ -72,9 +72,9 @@ PA.prototype =
 			return this
 
 		// only one animation per node for now
-		if (this.obj.animation)
-			this.obj.animation.stop()
-		this.obj.animation = this
+		if (this.node.animation)
+			this.node.animation.stop()
+		this.node.animation = this
 
 		this.running = true
 		this.complete = false
@@ -102,7 +102,7 @@ PA.prototype =
 	{
 		if (this.running)
 		{
-			this.obj.animation = null
+			this.node.animation = null
 			this.running = false
 			PA.removeTimer(this.timer)
 		}
@@ -148,21 +148,21 @@ PA.prototype =
 
 	getStyleProperty: function (p)
 	{
-		if (p == "top" && !this.obj.style[p])
-			return this.obj.offsetTop
+		if (p == "top" && !this.node.style[p])
+			return this.node.offsetTop
 
-		if (p == "left" && !this.obj.style[p])
-			return this.obj.offsetLeft
+		if (p == "left" && !this.node.style[p])
+			return this.node.offsetLeft
 
 
-		if (p == "opacity" && isNaN(parseFloat(this.obj.style[p])))
+		if (p == "opacity" && isNaN(parseFloat(this.node.style[p])))
 			return 1
 
 
 		if (/scroll/.test(p))
-			return this.obj[p]
+			return this.node[p]
 
-		return parseFloat(this.obj.style[p]) || 0
+		return parseFloat(this.node.style[p]) || 0
 	},
 
 	setStyleProperty: function (p, value)
@@ -171,26 +171,26 @@ PA.prototype =
 		try
 		{
 			if (/color/.test(p))
-				return this.obj.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
+				return this.node.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
 
 			// for SVG elements
 			if (p == 'r')
-				return this.obj.r.baseVal.value = value
+				return this.node.r.baseVal.value = value
 
 
 			if (/scroll/.test(p))
-				return this.obj[p] = Math.round(value)
+				return this.node[p] = Math.round(value)
 
 			if (p == "opacity")
-				return this.obj.style[p] = value
+				return this.node.style[p] = value
 
 			if ((p == 'width' || p == 'height') && value < 0)
 				value = 0
 
 			if (this.unit == 'em')
-				return this.obj.style[p] = Math.round(value * 100) / 100 + this.unit
+				return this.node.style[p] = Math.round(value * 100) / 100 + this.unit
 
-			return this.obj.style[p] = Math.round(value) + this.unit
+			return this.node.style[p] = Math.round(value) + this.unit
 		}
 		catch (ex)
 		{
