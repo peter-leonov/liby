@@ -191,7 +191,6 @@ Programica.DOM.hide = function (t)
 					this.obj.style.display = 'none'
 				}
 			)
-			ani.start()
 			return ani
 		}
 		else

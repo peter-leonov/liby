@@ -112,7 +112,7 @@ Programica.Trackbar.prototype.Handler.prototype =
 	
 	moveTo: function (left)
 	{
-		this.dragger.animate('easeOutQuad', {left:left}, 0.75).start()
+		this.dragger.animate('easeOutQuad', {left:left}, 0.75)
 	},
 	
 	startdrag: function (e)

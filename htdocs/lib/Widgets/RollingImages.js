@@ -276,7 +276,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		
 		
 		this.drop_magnify()
-		return this.viewport.animate(anim, trans, dur).start()
+		return this.viewport.animate(anim, trans, dur)
 	},
 	
 	jumpTo: function (left, top)

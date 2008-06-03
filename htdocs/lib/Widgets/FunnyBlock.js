@@ -57,7 +57,7 @@ Programica.FunnyBlock.prototype.Handler.prototype =
 		if (!this.viewport) log('Viewport is undefined!')
 		if (!this.viewport.animate) log('Viewport can`t be animated!')
 		
-		return this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft], height:  [node.offsetHeight], width: [node.offsetWidth]},  1).start()
+		return this.viewport.animate(anim, {scrollTop:  [node.offsetTop], scrollLeft: [node.offsetLeft], height:  [node.offsetHeight], width: [node.offsetWidth]},  1)
 	}
 }
 

@@ -62,7 +62,7 @@
 	</hbox>
 	
 	<hbox>
-		<image style="cursor:pointer" src="i/9.jpg" alt="" onclick="this.animate('linearTween', {opacity: [1,0]}, 2).start()" />
+		<image style="cursor:pointer" src="i/9.jpg" alt="" onclick="this.animate('linearTween', {opacity: [1,0]}, 2)" />
 	</hbox>
 	
 </window>
