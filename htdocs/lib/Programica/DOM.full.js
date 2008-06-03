@@ -183,14 +183,11 @@ Programica.DOM.hide = function (t)
 		if (this.animate)
 		{
 			var ani = this.animate('linearTween', {opacity:[0]}, t)
-			ani.addEventListener
-			(
-				'complete',
-				function ()
-				{
-					this.obj.style.display = 'none'
-				}
-			)
+			ani.oncomplete =
+			function ()
+			{
+				this.obj.style.display = 'none'
+			}
 			return ani
 		}
 		else

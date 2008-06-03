@@ -42,11 +42,7 @@ Programica.FunnyBlock.prototype.Handler.prototype =
 			this.viewport.className = this.viewport.className.replace(/ active/g, ""),
 			this.viewport.className += ' active'
 		else
-			this.goToNode(this.begin).addEventListener
-			(
-				'complete',
-				function () { t.viewport.className = t.viewport.className.replace(/ active/g, "") }
-			)
+			this.goToNode(this.begin).oncomplete = function () { t.viewport.className = t.viewport.className.replace(/ active/g, "") }
 	},
 	
 	goToNode: function (node, anim)
