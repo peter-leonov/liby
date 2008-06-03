@@ -2,10 +2,9 @@
 
 Programica.Animation = function (prms)
 {
-	// Входные параметры
 	prms = prms || {}
 	
-	// Дефолтные значения
+	// defaults
 	this.transformations	= []
 	this.duration			= prms.duration || 1,
 	this.unit				= prms.unit != null ? prms.unit : Programica.Animation.defaults.unit
@@ -18,67 +17,39 @@ Programica.Animation = function (prms)
 	this.forceLast			= false
 	this.animationTypes		= Programica.Animation.Types
 	
-	switch (this.motion.constructor)
+	switch (typeof this.motion)
 	{
-		case String:
+		case 'string':
 			this.motion = this.animationTypes[this.motion] || null
 			break
-		case Function:
+		case 'function':
 			break
 		default:
 			this.motion = null
 	}
 	
-	// Трансформации, если заданы
+	// transformations
 	if (prms.transformations)
 		for (var i = 0; i < prms.transformations.length; i++)
 			if (prms.transformations[i])
 				this.setTransformation(prms.transformations[i])
-	
-	log2("new Programica.Animation prms: " + prms)
-	log2("new Programica.Animation this: " + this)
-	
-	return this
 }
 
 Programica.Animation.fps = 60
 Programica.Animation.defaults = { unit: 'px' }
 
-//.animate('linearTween', {marginTop: [0,-50]}, 1).start()
 Element.prototype.animate = function (motion, props, duration, unit)
 {
 	var trans = []
-	
 	for (var i in props)
 	{
-		if (props[i].length == 2)
-		{
-			trans.push
-			({
-				property:	i,
-				begin:		props[i][0],
-				end:		props[i][1]
-			})
-		}
+		var pi = props[i]
+		if (pi.length == 2)
+			trans.push({property: i, begin: pi[0], end: pi[1]})
 		else
-		{
-			trans.push
-			({
-				property:	i,
-				begin:		null,
-				end:		props[i][0] || props[i]
-			})
-		}
+			trans.push({property: i, begin: null, end: pi[0] || pi})
 	}
-	
-	return new Programica.Animation
-	({
-		obj:				this,
-		motion:				motion,
-		duration:			duration,
-		transformations:	trans,
-		unit:				unit
-	})
+	return new Programica.Animation({obj: this, motion: motion, duration: duration, transformations: trans, unit: unit}).start()
 }
 
 if (!self.Programica.Abstract) Programica.Abstract = {}
@@ -92,15 +63,13 @@ extend (Programica.Animation.prototype,
 	{
 		// Если анимация уже запущена
 		if (this.isRunning() && !this.isPaused())
-			return false
+			return this
 		
 		if (!this.dispatchEvent('beforeStart')) return false
 		
 		// пока по одной анимации на объект
 		if (this.obj.animation) this.obj.animation.stop()
 		this.obj.animation = this
-		
-		log2('Programica.Animation.start()')
 		
 		this.running = true
 		this.complete = false
