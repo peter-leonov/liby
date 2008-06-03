@@ -186,7 +186,7 @@ Programica.DOM.hide = function (t)
 			ani.oncomplete =
 			function ()
 			{
-				this.obj.style.display = 'none'
+				this.node.style.display = 'none'
 			}
 			return ani
 		}
