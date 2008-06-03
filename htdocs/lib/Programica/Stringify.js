@@ -1,11 +1,13 @@
 // based on json2 (http://www.JSON.org/json2.js)
+// WARNING: this is not JSON library, it is not secure, it is for internal use only
+// if you do not understand the difference please use original json2.js library
 
 ;(function ()
 {
 	// Format integers to have at least two digits.
 	function f (n) { return n < 10 ? '0' + n : n }
 	
-	var escapeable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+	var escapeable = new RegExp('[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]', 'g'),
 	Object_hasOwnProperty = Object.hasOwnProperty,
 	Date_constructor = Date,
 	String_constructor = String,
@@ -85,7 +87,12 @@
 		}
 	}
 	
-	Object.stringify = str
+	function parse (code)
+	{
+		return eval('(' + code + ')')
+	}
 	
-}) ()
-
+	Object.stringify = str
+	Object.parse = parse
+	
+}) ();
