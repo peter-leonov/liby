@@ -1,20 +1,8 @@
-if (self.console && self.console.firebug)
-	self.log = console.log
-
-
-
-//alert('I`m Gecko')
-if (!self.Programica) Programica = {}
-
-Programica.Fixes = {}
-
-
-//——————————————————————————————————————————————————————————————————————————————
-// капелька фиксов для XULElement
+// some fixes for XULElement
 
 if (self.XULElement)
 {
-	// в XUL нет scrollLeft и scrollTop — имитируем через геттер/сеттер
+	// XUL does not implement scrollLeft nor scrollTop, so emulating them via getters/setters
 	XULElement.prototype.__boxInterfaceGetter = function ()
 	{
 		try
@@ -66,7 +54,7 @@ if (self.XULElement)
 	XULElement.prototype.__defineSetter__('scrollTop',  XULElement.prototype.__scrollTopSetter)
 	XULElement.prototype.__defineSetter__('scrollLeft', XULElement.prototype.__scrollLeftSetter)
 	
-	// в XUL нет offset* — имитируем через геттер/сеттер
+	// and emulating offset* too
 	XULElement.prototype.__defineGetter__('offsetHeight',  function () { return this.boxObject.height })
 	XULElement.prototype.__defineGetter__('offsetWidth', function () { return this.boxObject.width })
 	XULElement.prototype.__defineGetter__('offsetLeft',  function () { return this.boxObject.x })
