@@ -55,46 +55,41 @@ PA.prototype =
 {
 	start: function ()
 	{
-		if (this.motion == this.animationTypes.directJump)
-		{
-			this.frame = this.totalFrames - 1
-			this.renderForceLast()
-
-			this.stop()
-			this.complete = true
-			this.oncomplete()
-
-			return this
-		}
-
 		// if animation is already started
 		if (this.running)
 			return this
-
+		
 		// only one animation per node for now
 		if (this.node.animation)
 			this.node.animation.stop()
 		this.node.animation = this
-
+		
 		this.running = true
 		this.complete = false
-		this.frame = 0
-
-		this.totalFrames = this.duration * PA.fps
-
-		for (var i = 0; i < this.trans.length; i++)
-		{
-			var t = this.trans[i]
-			if (t.begin == null)
-				t.begin = this.getStyleProperty(t.property)
-			t.step = ( t.end - t.begin ) / this.totalFrames
-		}
-
+		
 		var t = this
-		this.timer = PA.addTimer( function () { t.step() } )
-
+		if (this.motion == this.animationTypes.directJump)
+		{
+			this.frame = this.totalFrames - 1
+			setTimeout(function () { t.renderForceLast(); t.stop(); t.complete = true; t.oncomplete() }, 0)
+		}
+		else
+		{
+			this.frame = 0
+			this.totalFrames = this.duration * PA.fps
+		
+			for (var i = 0; i < this.trans.length; i++)
+			{
+				var tr = this.trans[i]
+				if (tr.begin == null)
+					tr.begin = this.getStyleProperty(tr.property)
+				tr.step = ( tr.end - tr.begin ) / this.totalFrames
+			}
+		
+			this.timer = PA.addTimer( function () { t.step() } )
+		}
+		
 		this.onstart()
-
 		return this
 	},
 
