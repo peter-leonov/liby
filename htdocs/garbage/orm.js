@@ -8,7 +8,7 @@ function ORM (c,props)
 		this.id = this.klass.id + ':' + num
 	}
 	
-	extend(orm, ORM.base)
+	Object.extend(orm, ORM.base)
 	
 	// задаем свойства для элементов этого класса
 	orm.props = props
@@ -21,7 +21,7 @@ function ORM (c,props)
 	
 	// раширяем полезностью
 	orm.prototype = {}
-	extend(orm.prototype, ORM.base.prototype)
+	Object.extend(orm.prototype, ORM.base.prototype)
 	orm.prototype.klass = orm
 	
 	return orm

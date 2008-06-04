@@ -1,3 +1,8 @@
+if (self.console && self.console.firebug)
+	self.log = console.log
+
+
+
 //alert('I`m Gecko')
 if (!self.Programica) Programica = {}
 

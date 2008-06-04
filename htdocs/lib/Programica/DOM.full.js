@@ -244,6 +244,3 @@ if (!document.getElementsByClassName)
 
 if (!document.getElementsByXPath)
 	document.getElementsByXPath = Programica.DOM.getElementsByXPath
-
-
-log2("Programica/DOM.js loaded")

@@ -190,6 +190,3 @@ Programica.Trackbar.prototype.Handler.prototype =
 }
 
 Programica.Widget.register(new Programica.Trackbar())
-
-
-log2("Widget/Trackbar.js loaded")

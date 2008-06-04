@@ -1,3 +1,12 @@
+if (self.console && self.console.log)
+	self.log = function ()
+	{
+		var arr = []
+		for (var i = 0; i < arguments.length; i++)
+			arr.push(arguments[i])
+		return console.log(arr.join(', '))
+	}
+
 
 window.addEventListener
 (

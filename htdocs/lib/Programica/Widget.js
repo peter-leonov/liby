@@ -1,10 +1,8 @@
 
 self.addEventListener('load', function () { Programica.Widget.onLoader() }, false)
 
-// вспомогательный интерфейс для организации виджетов
-
 Programica.Widget = function () {}
-extend (Programica.Widget,
+Object.extend (Programica.Widget,
 {
 	registered: [],
 	
@@ -18,15 +16,13 @@ extend (Programica.Widget,
 		pri: function (a,b) { return a.pri - b.pri }
 	},
 	
-	// ищет ноды для виджетов, ранжирует и вызывает bind для каждой
+	// search for widget nodes, sort it and call bind for each
 	onLoader: function ()
 	{
 		if (this.thinkLoaded) return
 		this.thinkLoaded = true
 		
-		log2("Registered widgets: ", this.registered)
-		
-		// ищем все ноды в stack
+		// search notes into stack
 		var stack = [];
 		for (var wi in this.registered)
 		{
@@ -50,46 +46,24 @@ extend (Programica.Widget,
 		}
 		
 		
-		// ранжируем
+		// sorting
 		this.sorted = stack.sort(this.sortby.pri)
 		
-		if (this.asyncBind)
+		for (var ni = 0; ni < this.sorted.length; ni++)
 		{
-			// Пришлось усложнить механизм инициализации.
-			// Суть в том, что иногда брузеры (фф, ие) не создают ноды в дереве
-			// до тех пор, пока яваскрипт не выполнится до конца.
-			// Некоторые скрипты могут создавать ноды, на которые потом
-			// рассчитывают другие скрипты
-			// таймер нас спасет
-			var t = this
-			this.initInterval = setInterval(function () { t.initJob() }, 10)
-		}
-		else
-		{
-			for (var ni = 0; ni < this.sorted.length; ni++)
-			{
-				var n = this.sorted[ni]
-				
-				log2("Binding sync widget ", n.w, " to ", n.node)
-				n.w.bind(n.node)
-				log2("... bint")
-			}
+			var n = this.sorted[ni]
+			n.w.bind(n.node)
 		}
 	},
 	
-	// поиграем в треды?
+	// play in threads
 	initJob: function ()
 	{
-		// биндим
+		// bind
 		for (var ni = 0; ni < this.sorted.length; ni++)
 		{
 			var n = this.sorted[ni]
 			if (n.bint || n.error) continue
-			log("Binding async widget ", n.w, " to ", n.node)
-			
-			// блокировки не организовываем в рассчете на то,
-			// что в яваскриптах нет многопоточночти и события
-			// прийдут точно одно за другим
 			
 			try
 			{
@@ -104,30 +78,17 @@ extend (Programica.Widget,
 			}
 			
 			n.bint = true
-			log("... bint")
-			return // мы же в "треде" :)
+			return
 		}
 		clearInterval(this.initInterval)
 	}
 })
 
 
-// базовый класс виджетов
-
+// widgets base class
 Programica.Widget.prototype =
 {
 	klass: 'Programica.Widget',
-	
-	bind: function (node)
-	{
-		/*node.pmc || (node.pmc = {})
-		
-		node.pmc[this] = new this.Handler(node);
-		node.pmc[this].init()*/
-		(new this.Handler(node)).init()
-	},
-	
+	bind: function (node) { (new this.Handler(node)).init() },
 	toString: function () { return '[object ' + this.klass + ']' }
 }
-
-log2("Programica/Widget.js loaded")

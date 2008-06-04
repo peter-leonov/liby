@@ -11,7 +11,7 @@ with (Programica.Abstract.Events.Event = function () {})
 }
 
 // событийная модель
-extend (Programica.Abstract.Events.prototype,
+Object.extend (Programica.Abstract.Events.prototype,
 {
 	// распространяем событие
 	dispatchEvent: function (eventName)

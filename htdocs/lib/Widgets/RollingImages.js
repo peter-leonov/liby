@@ -182,8 +182,6 @@ Programica.RollingImages.prototype.Handler.prototype =
 			if (this.mainNode.onjump(node) === false)
 				return null
 		
-		log2(this.current + ': offsetTop = ' + node.offsetTop + ', offsetLeft = ' + node.offsetLeft)
-		
 		var left = null
 		var top = null
 		var width = null
@@ -581,5 +579,3 @@ document.addEventListener
 	},
 	true
 )
-
-log2("Widget/RollingImages.js loaded")

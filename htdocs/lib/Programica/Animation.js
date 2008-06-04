@@ -167,7 +167,6 @@ PA.prototype =
 
 	setStyleProperty: function (p, value)
 	{
-		log3("setStyleProperty(" + p + "," + value + ")")
 		try
 		{
 			if (/color/.test(p))

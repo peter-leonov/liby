@@ -1,4 +1,8 @@
 
+if (self.opera && opera.postError)
+	self.log = function () { return opera.postError(arguments) }
+
+
 <!--#if expr="$HTTP_USER_AGENT = /Opera\/9\.2/" -->
 // Opera screen image caching fix
 window.addEventListener

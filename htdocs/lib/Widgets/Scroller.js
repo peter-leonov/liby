@@ -14,6 +14,3 @@ Programica.Scroller.prototype.Handler.prototype =
 }
 
 Programica.Widget.register(new Programica.Scroller())
-
-
-log2("Widget/Scroller.js loaded")

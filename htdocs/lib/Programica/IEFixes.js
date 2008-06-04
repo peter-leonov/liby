@@ -301,10 +301,6 @@ function IEFixes ()
 		)
 	}
 	
-	// another dirty fix: now for getAttributeNS(...)
-	if (!document.getAttributeNS)
-		Element.prototype.getAttributeNS = function (ns, attr) { return this.getAttribute(XMLNS[ns] + ':' + attr) }
-	
 	document.realIECreateElement = document.createElement
 	document.createElement = function (type)
 	{
