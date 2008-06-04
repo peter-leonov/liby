@@ -32,23 +32,14 @@ Programica.FormPoster.prototype.Handler = function (node)
 		
 		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
 		
-		iframe.addEventListener
-		(
-			'load',
-			function ()
-			{
-				this.addEventListener
-				(
-					'load',
-					function ()
-					{
-						node.onsuccess({request:iframe})
-					},
-					false
-				)
-			},
-			false
-		)
+		function firstOnLoad ()
+		{
+			this.removeEventListener('load', firstOnLoad, false)
+			var t = this
+			setTimeout(function () { t.addEventListener('load', function () { node.onsuccess({request:iframe}) }, false) }, 10)
+		}
+		
+		iframe.addEventListener('load', firstOnLoad, false)
 	}
 	else
 	{
