@@ -1,4 +1,0 @@
-#!/bin/sh
-cd /www/lib/htdocs/lib
-curl "http://www.google-analytics.com/urchin.js" > urchin.js
-yuicompressor urchin.js -o urchin-mini.js
