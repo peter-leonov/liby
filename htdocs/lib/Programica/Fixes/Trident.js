@@ -1,4 +1,3 @@
-
 if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
 if (!self.Element) self.Element = {prototype:{}}
 
@@ -19,61 +18,6 @@ function IEFixes_disabled (node)
 {
 	node.addClassName('disabled')
 	node.disabled ? node.addClassName('disabled') : node.remClassName('disabled')
-}
-
-// отчасти исправляет обработку png
-function IEFixes_imgPng (node)
-{ 
-	if (node.offsetWidth)         
-		node.runtimeStyle.width = node.offsetWidth + 'px'
-	if (node.offsetHeight)
-		node.runtimeStyle.height = node.offsetHeight + 'px'
-	
-	node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + node.src + "',sizingMethod='image')"
-	node.setAttribute('src', '/lib/img/dot.gif')
-	//node.runtimeStyle.visibility = 'hidden'
-}
-
-var IEFixes_bgUrlRex = /url\("(.+?)"\)$/
-
-function IEFixes_bgPng (node)
-{
-	var m = IEFixes_bgUrlRex.exec(node.currentStyle.backgroundImage)
-	
-	node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + m[1] + "',sizingMethod='crop')"
-	node.runtimeStyle.backgroundImage = 'none'
-}
-
-function IEFixes_bg2Png (node)
-{
-	var m = IEFixes_bgUrlRex.exec(node.currentStyle.backgroundImage)
-	
-	node.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + m[1] + "',sizingMethod='scale')"
-	node.runtimeStyle.backgroundImage = 'none'
-}
-
-// clickabe labels
-function IEFixes_label (node)
-{
-	node.attachEvent
-	(
-		'onclick',
-		function ()
-		{
-			// трай/кеч нужен; иначе необходимо определять,
-			// может элемент принять фокус или не может
-			try
-			{
-				n = (node.getElementsByTagName('input')[0] ||
-						node.getElementsByTagName('textarea')[0] ||
-						node.getElementsByTagName('select')[0])
-				if (n)
-					//n.fireEvent('on' + event.type, event)
-					n.click(), n.focus()
-			}
-			catch (ex) { log(ex.message) }
-		}
-	)
 }
 
 // input onchange bubbling on forms
@@ -376,20 +320,6 @@ function IEFixes ()
 	}
 	
 	self.addEventListener('load', IEFixes_fixThemAll)
-	
-	IEFixes.CSSBindings =
-	[
-	'img{scrollbar-highlight-color:expression((runtimeStyle.scrollbarHighlightColor="transparent"),(title||(title="")))}'
-	// 'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes_formProto(this))}'
-	//'*{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes_fixIE(this))}'
-	]
-	
-	if (/MSIE 6/.test(navigator.userAgent))
-		IEFixes.CSSBindings.push('label{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),IEFixes_label(this))}')
-	
-	document.write('<style>' + IEFixes.CSSBindings.join('\n') + '</style>')
-	
-	
 	
 	// for oldstyle popups
 	if (self.dialogArguments && self.dialogArguments.external)
