@@ -1,3 +1,5 @@
+;(function () {
+
 if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
 if (!self.Element) self.Element = {prototype:{}}
 
@@ -333,3 +335,5 @@ if (!IEFixes.applied)
 	IEFixes()
 	IEFixes.applied = true
 }
+
+})();
