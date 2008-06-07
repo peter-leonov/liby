@@ -22,18 +22,6 @@ function IEFixes_disabled (node)
 	node.disabled ? node.addClassName('disabled') : node.remClassName('disabled')
 }
 
-// input onchange bubbling on forms
-function IEFixes_input (node)
-{
-	//node.form = p
-	Element.prototype.addEventListener.apply
-	(
-		node,
-		[node.type == 'text' ? 'change' : 'click',
-		function (e) { try { node.form.onchange(e) } catch (ex) { log(ex.message) } }]
-	)
-}
-
 function IEFixes_fixThem (nodes)
 {
 	var fix = IEFixes_fixIE
@@ -41,27 +29,9 @@ function IEFixes_fixThem (nodes)
 		fix(nodes[i])
 }
 
-function IEFixes_fixForms (nodes)
-{
-	var fix = IEFixes_formProto
-	for (var i = 0, il = nodes.length; i < il; i++)
-		fix(nodes[i])
-}
-
-function IEFixes_fixInputs (nodes)
-{
-	var fix = IEFixes_input
-	for (var i = 0, il = nodes.length; i < il; i++)
-		fix(nodes[i])
-}
-
 function IEFixes_fixThemAll ()
 {
 	IEFixes_fixThem(document.all)
-	IEFixes_fixForms(document.getElementsByTagName('form'))
-	IEFixes_fixInputs(document.getElementsByTagName('input'))
-	IEFixes_fixInputs(document.getElementsByTagName('textarea'))
-	IEFixes_fixInputs(document.getElementsByTagName('select'))
 }
 
 function IEFixes_onpropertychange6 ()
@@ -87,13 +57,21 @@ function IEFixes_proto (node)
 	var el = self.Element.prototype
 	for (var p in el)
 		node[p] = el[p]
-}
-
-function IEFixes_formProto (node)
-{
-	var hfel = HTMLFormElement.prototype
-	for (var p in hfel)
-		node[p] = hfel[p]
+	
+	if (node.nodeName == 'INPUT' || node.nodeName == 'SELECT' || node.nodeName == 'TEXTAREA')
+	{
+		// input onchange bubbling on forms
+		function onchange (e) { try { node.form.onchange(e) } catch (ex) { self.log&&self.log(ex.message) } }
+		var ael = Element.prototype.addEventListener
+		ael.call(node, 'change', onchange)
+		ael.call(node, 'click',  onchange)
+	}
+	else if (node.nodeName == 'FORM')
+	{
+		var hfel = HTMLFormElement.prototype
+		for (var p in hfel)
+			node[p] = hfel[p]
+	}
 }
 
 
