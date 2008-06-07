@@ -59,7 +59,7 @@ function IEFixes_label (node)
 	(
 		'onclick',
 		function ()
-		{//alert(event.srcElement)
+		{
 			// трай/кеч нужен; иначе необходимо определять,
 			// может элемент принять фокус или не может
 			try
@@ -90,14 +90,32 @@ function IEFixes_input (node)
 
 function IEFixes_fixThem (nodes)
 {
-	var fixie = IEFixes_fixIE
+	var fix = IEFixes_fixIE
 	for (var i = 0, il = nodes.length; i < il; i++)
-		fixie(nodes[i])
+		fix(nodes[i])
+}
+
+function IEFixes_fixForms (nodes)
+{
+	var fix = IEFixes_formProto
+	for (var i = 0, il = nodes.length; i < il; i++)
+		fix(nodes[i])
+}
+
+function IEFixes_fixInputs (nodes)
+{
+	var fix = IEFixes_input
+	for (var i = 0, il = nodes.length; i < il; i++)
+		fix(nodes[i])
 }
 
 function IEFixes_fixThemAll ()
 {
 	IEFixes_fixThem(document.all)
+	IEFixes_fixForms(document.getElementsByTagName('form'))
+	IEFixes_fixInputs(document.getElementsByTagName('input'))
+	IEFixes_fixInputs(document.getElementsByTagName('textarea'))
+	IEFixes_fixInputs(document.getElementsByTagName('select'))
 }
 
 function IEFixes_onpropertychange6 ()
@@ -131,6 +149,7 @@ function IEFixes_formProto (node)
 	for (var p in hfel)
 		node[p] = hfel[p]
 }
+
 
 // function IEFixes_appendChild (node) { this.appendChildReal(node) }
 
@@ -327,10 +346,7 @@ function IEFixes ()
 		document.defaultView = window
 	
 	if (!document.defaultView.getComputedStyle)
-		document.defaultView.getComputedStyle = function (node)
-		{
-			return node.currentStyle
-		}
+		document.defaultView.getComputedStyle = function (node) { return node.currentStyle }
 	
 	if (!document.createEvent)
 	{
@@ -363,9 +379,8 @@ function IEFixes ()
 	
 	IEFixes.CSSBindings =
 	[
-	'input,textarea,select{scrollbar-base-color:expression((runtimeStyle.scrollbarBaseColor="transparent"),IEFixes_input(this))}',
-	'img{scrollbar-highlight-color:expression((runtimeStyle.scrollbarHighlightColor="transparent"),(title||(title="")))}',
-	'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes_formProto(this))}'
+	'img{scrollbar-highlight-color:expression((runtimeStyle.scrollbarHighlightColor="transparent"),(title||(title="")))}'
+	// 'form{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes_formProto(this))}'
 	//'*{scrollbar-face-color:expression((runtimeStyle.scrollbarFaceColor="transparent"),IEFixes_fixIE(this))}'
 	]
 	
