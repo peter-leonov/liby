@@ -1,0 +1,10 @@
+
+#include "Programica/Init.js"
+#include "Programica/UA.js"
+#include "Programica/Humanize.js"
+#include "Programica/Fixes.h.js"
+#include "Programica/DOM.js"
+#include "Programica/Animation.js"
+#include "Programica/Request.js"
+#include "Programica/Form.js"
+#include "Programica/Widget.js"
