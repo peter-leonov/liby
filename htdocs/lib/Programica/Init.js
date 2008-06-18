@@ -6,16 +6,16 @@ function log () {}
 
 // preparing DOM prototypes
 if (!self.Element)
-	Element = {}
+	self.Element = {}
 
-if (!Element.prototype)
-	Element.prototype = document.createElement('div').__proto__ || {}
+if (!self.Element.prototype)
+	self.Element.prototype = document.createElement('div').__proto__ || {}
 
 if (!self.HTMLFormElement)
-	HTMLFormElement = {}
+	self.HTMLFormElement = {}
 
-if (!HTMLFormElement.prototype)
-	HTMLFormElement.prototype = document.createElement('form').__proto__ || {}
+if (!self.HTMLFormElement.prototype)
+	self.HTMLFormElement.prototype = document.createElement('form').__proto__ || {}
 
 
 // base objects extensions
