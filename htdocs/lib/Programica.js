@@ -1,7 +1,7 @@
 
 <!--#include file="Programica/Init.js" -->
-<!--#include file="/lib/Programica/UA.js" -->
-<!--#include file="/lib/Programica/Humanize.js" -->
+<!--#include file="Programica/UA.js" -->
+<!--#include file="Programica/Humanize.js" -->
 <!--#include file="Programica/Fixes.js" -->
 <!--#include file="Programica/DOM.js" -->
 <!--#include file="Programica/Animation.js" -->
