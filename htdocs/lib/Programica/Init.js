@@ -31,6 +31,9 @@ if (!String.localeCompare)
 if (!Array.prototype.forEach)
 	Array.prototype.forEach = function (f, inv) { for (var i = 0, len = this.length; i < len; i++) f.call(inv, this[i], i, this) }
 
+if (!Array.copy)
+	Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
+
 
 function $   (id)   { return document.getElementById(id) }
 function $E  (type, props)
