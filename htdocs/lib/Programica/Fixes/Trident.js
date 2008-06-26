@@ -3,6 +3,8 @@
 if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
 if (!self.Element) self.Element = {prototype:{}}
 
+var realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
+
 function IEFixes_opacity (node)
 {
 	if ((s = node.style))
@@ -36,20 +38,26 @@ function IEFixes_fixThemAll ()
 
 function IEFixes_onpropertychange6 ()
 {
-	if (event.propertyName == 'style.opacity')
+	var e = event
+	if (e.propertyName == 'style.opacity')
 		IEFixes_opacity(this)
-	else if (event.propertyName == 'disabled')
+	else if (e.propertyName == 'disabled')
 		IEFixes_disabled(this)
-	else if (event.propertyName == 'innerHTML')
+	else if (e.propertyName == 'innerHTML')
 		IEFixes_fixThem(this.all)
+	else if (realEvents[e.propertyName])
+		wrapOnEvent(this, e.propertyName)
 }
 
 function IEFixes_onpropertychange7 ()
 {
-	if (event.propertyName == 'style.opacity')
+	var e = event
+	if (e.propertyName == 'style.opacity')
 		IEFixes_opacity(this)
-	else if (event.propertyName == 'innerHTML')
+	else if (e.propertyName == 'innerHTML')
 		IEFixes_fixThem(this.all)
+	else if (realEvents[e.propertyName])
+		wrapOnEvent(this, e.propertyName)
 }
 
 function IEFixes_proto (node)
@@ -108,24 +116,55 @@ if (/MSIE 7/.test(navigator.userAgent))
 else if (/MSIE 6/.test(navigator.userAgent))
 	IEFixes_fixIE = IEFixes_fixIE6
 
+function wrapOnEvent (node, ontype)
+{
+	var type = ontype.replace(/^on/, '')
+	if (!node[ontype].isIEEventWrapper)
+		node[ontype] = getEventWrapper(node, type, node[ontype], false)
+}
+
+function preventDefault ()
+{
+	var old = this.returnValue
+	this.returnValue = false
+	return old
+}
+
+function stopPropagation ()
+{
+	var old = this.cancelBubble
+	this.cancelBubble = true
+	return old
+}
+
+function getEventWrapper (node, type, func, dir)
+{
+	node._uniqueID = node._uniqueID || node.uniqueID
+	var key = '__IEEventWrapper:' + type + ':' + dir + ':' + node._uniqueID
+	
+	if (func[key])
+		return func[key]
+	else
+	{
+		var wrapper = func[key] = function (e)
+		{
+			e = e || event
+			e.target = e.srcElement
+			e.preventDefault  = preventDefault
+			e.stopPropagation = stopPropagation
+			e.detail = - e.wheelDelta / 30
+			e.pageX = e.clientX + document.documentElement.scrollLeft - document.body.clientLeft // document.body.scrollLeft
+			e.pageY = e.clientY + document.documentElement.scrollTop  - document.body.clientTop // document.body.scrollTop
+			func.call(node, e)
+		}
+		wrapper.isIEEventWrapper = true
+		return wrapper
+	}
+}
+
 function IEFixes ()
 {
-	// IEFixes.realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onpropertychange: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
 	IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel' }
-	
-	function preventDefault ()
-	{
-		var old = this.returnValue
-		this.returnValue = false
-		return old
-	}
-	
-	function stopPropagation ()
-	{
-		var old = this.cancelBubble
-		this.cancelBubble = true
-		return old
-	}
 	
 	window.attachEvent('onbeforeunload', IEFixes_onBeforeUnload)
 	
@@ -137,25 +176,10 @@ function IEFixes ()
 			// window.status++
 			type = IEFixes.eventConversion[type] || type
 			
-			this._uniqueID = this._uniqueID || this.uniqueID
-			var key = '__IEEventWrapper:' + type + ':' + dir + ':' + this._uniqueID
+			var wrapper = getEventWrapper(this, type, func, dir)
 			
-			if (func[key])
-				this.detachEvent('on' + type, func[key])
-			else
-			{
-				var t = this
-				func[key] = function (e)
-				{
-					e.target = e.srcElement
-					e.preventDefault  = preventDefault
-					e.stopPropagation = stopPropagation
-					e.detail = - e.wheelDelta / 30
-					e.pageX = e.clientX + document.documentElement.scrollLeft - document.body.clientLeft // document.body.scrollLeft
-					e.pageY = e.clientY + document.documentElement.scrollTop  - document.body.clientTop // document.body.scrollTop
-					func.call(t, e)
-				}
-			}
+			if (wrapper)
+				this.detachEvent('on' + type, wrapper)
 			
 			if (type == 'change' && this.tagName == 'FORM')
 			{
@@ -169,12 +193,12 @@ function IEFixes ()
 				if (!this.onchange.stack)
 					this.onchange.stack = []
 				
-				this.onchange.stack.push(func[key])
+				this.onchange.stack.push(wrapper)
 			}
 			else
 			{
-				this.attachEvent('on' + type, func[key])
-				IEFixes_onBeforeUnload.stack.push([this, 'on' + type, func[key]])
+				this.attachEvent('on' + type, wrapper)
+				IEFixes_onBeforeUnload.stack.push([this, 'on' + type, wrapper])
 			}
 		}
 	
@@ -187,11 +211,9 @@ function IEFixes ()
 			if (IEFixes.eventConversion[type])
 				type = IEFixes.eventConversion[type]
 			
-			this._uniqueID = this._uniqueID || this.uniqueID
-			var key = '__IEEventWrapper:' + type + ':' + dir + ':' + this._uniqueID
-			//alert(key)
-			if (func[key])
-				this.detachEvent('on' + type, func[key])
+			var wrapper = getEventWrapper(this, type, func, dir)
+			if (wrapper)
+				this.detachEvent('on' + type, wrapper)
 		}
 		
 		self.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
