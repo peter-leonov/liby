@@ -1,5 +1,7 @@
 ;(function () {
 
+// appendChild, insertBefore, replaceChild
+
 if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
 if (!self.Element) self.Element = {prototype:{}}
 
@@ -119,7 +121,7 @@ else if (/MSIE 6/.test(navigator.userAgent))
 function wrapOnEvent (node, ontype)
 {
 	var type = ontype.replace(/^on/, '')
-	if (!node[ontype].isIEEventWrapper)
+	if (node[ontype] && !node[ontype].isIEEventWrapper)
 		node[ontype] = getEventWrapper(node, type, node[ontype], false)
 }
 
