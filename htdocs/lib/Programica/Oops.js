@@ -1,3 +1,5 @@
+<!--# if expr="$SERVER_TYPE = /PRODUCTION/" -->
+
 try { console.log('Programica Oops enabled') } catch (ex) {}
 
 // at this stage no fixes or wrappers are loaded from any lib
@@ -8,11 +10,10 @@ function Oops (message, url, line)
 	try
 	{
 		var esc = encodeURIComponent || escape
-		var query = 'message=' + esc(url + ':' + line + ' ' + message) + ';session=' + Oops.randomId + ';type=error'
+		var q = 'url=' + esc(url + ':' + line) + '&message=' + esc(message) + '&session=' + Oops.randomId + '&type=error'
 		
-		var img = new Image()
-		if (img)
-			img.src = 'http://oops.programica.ru:8899/report?' + query
+		var img = document.createElement('img')//new Image()
+		img.src = 'http://oops.programica.ru/report?' + q
  	}
 	catch (ex) { window.console && window.console.log && window.console.log(ex.message) }
 	
@@ -23,3 +24,5 @@ Oops.randomId = (new Date()).getTime().toString() + Math.round(Math.random() * 1
 
 //alert(window.onerror)
 window.onerror = Oops
+
+<!--# endif -->
