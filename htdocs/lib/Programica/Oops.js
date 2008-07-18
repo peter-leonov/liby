@@ -1,5 +1,4 @@
-<!--# if expr="$SERVER_TYPE = /PRODUCTION/" -->
-
+<!--# if expr="$HOST != /[A-Za-z\-]+\.[A-Za-z\-]+.programica.ru/" -->
 try { console.log('Programica Oops enabled') } catch (ex) {}
 
 // at this stage no fixes or wrappers are loaded from any lib
@@ -22,7 +21,5 @@ function Oops (message, url, line)
 
 Oops.randomId = (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17)
 
-//alert(window.onerror)
 window.onerror = Oops
-
 <!--# endif -->
