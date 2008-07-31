@@ -49,10 +49,10 @@ if (!Array.copy)
 	Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
 
 if (!Function.prototype.delay)
-	Function.prototype.delay = function (delay, args, inv) { var me = this; return setTimeout(function () { return me.apply(inv, args) }, delay || 10) }
+	Function.prototype.delay = function (delay, args, inv) { var me = this; return setTimeout(function () { return me.apply(inv, args || arguments) }, delay || 10) }
 
 if (!Function.prototype.bind)
-	Function.prototype.bind = function (inv) { var me = this; return function () { me.apply(inv, arguments) } }
+	Function.prototype.bind = function (inv, args) { var me = this; return function () { me.apply(inv, args || arguments) } }
 
 
 function $   (id)   { return document.getElementById(id) }
