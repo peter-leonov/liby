@@ -23,7 +23,10 @@ if (!Object.extend)
 	Object.extend = function (d, s) { for (var p in s) d[p] = s[p]; return d }
 
 if (!Object.copy)
-	Object.copy = function (src) { var dst = {}; for (var k in src) dst[k] = src[k]; return dst }
+	Object.copy = function (s) { var d = {}; for (var k in s) d[k] = s[k]; return d }
+
+if (!Object.keys)
+	Object.keys = function (s) { var r = []; for (var k in s) r.push(k); return r }
 
 if (!Math.longRandom)
 	Math.longRandom = function () { return (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17) }
