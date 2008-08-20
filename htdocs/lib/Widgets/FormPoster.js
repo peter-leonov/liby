@@ -1,10 +1,11 @@
+{(function () {
+var P = Programica
+var FormPoster = P.FormPoster = function () {}
+var prototype = FormPoster.prototype = new P.Widget()
 
-Programica.FormPoster = function () {}
-
-Programica.FormPoster.prototype = new Programica.Widget()
-Programica.FormPoster.prototype.mainNodeTagName = 'form'
-Programica.FormPoster.prototype.klass = 'Programica.FormPoster'
-Programica.FormPoster.prototype.Handler = function (node)
+prototype.mainNodeTagName = 'form'
+prototype.klass = 'Programica.FormPoster'
+prototype.Handler = function (node)
 {
 	this.mainNode = node
 	
@@ -18,25 +19,25 @@ Programica.FormPoster.prototype.Handler = function (node)
 	// for files upload
 	if (/^multipart\/form\-data$/i.test(node.getAttribute('enctype')))
 	{
-		// check this form need to be proceeded
+		// check if this form needs to be proceeded
 		if (!/^ajax$/i.test(node.target))
 			return
 		
-		var frame_name = 'id_' + Math.longRandom()
+		var frameName = 'id-' + Math.longRandom()
 		
-		var iframe = $E('iframe', {name: frame_name, id: frame_name})
+		var iframe = $E('iframe', {name: frameName, id: frameName})
 		iframe.style.display = 'none'
 		document.body.appendChild(iframe)
 		iframe.src = 'about:blank'
-		node.target = frame_name
+		node.target = frameName
 		
-		Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
+		FormPoster.bakeEvents(node)
 		
 		function firstOnLoad ()
 		{
 			this.removeEventListener('load', firstOnLoad, false)
-			var t = this
-			setTimeout(function () { t.addEventListener('load', function () { node.onsuccess({request:iframe}) }, false) }, 10)
+			var me = this
+			setTimeout(function () { me.addEventListener('load', function () { node.onsuccess({request:iframe}) }, false) }, 10)
 		}
 		
 		iframe.addEventListener('load', firstOnLoad, false)
@@ -45,25 +46,29 @@ Programica.FormPoster.prototype.Handler = function (node)
 	{
 		function sendListener (e)
 		{
-			// check this form need to be proceeded
+			// check if this form needs to be proceeded
 			if (!/^ajax$/i.test(this.target))
+				return
+			
+			e.preventDefault()
+			
+			// play in events
+			var event = {request: this, hash: this.toHash(), target: this}
+			FormPoster.bakeEvents(node)
+			
+			if (this.oncheck(event) === false)
 				return
 			
 			this.addClassName('sending')
 			
-			// play in events
-			Programica.FormPoster.bakeEvents(node, ['onload', 'onsuccess', 'onerror'])
-			
-			e.preventDefault()
-			var met	= /^post$/i.test(this.method) ? aPost : aGet
-			
 			// acync sending data
-			var t = this
-			with (met(this.action, this.toHash()))
+			var met	= /^post$/i.test(this.method) ? aPost : aGet
+			var me = this
+			with (met(this.action, event.hash))
 			{
-				onLoad		= function () { t.remClassName('sending'); t.onload({request:this}) }
-				onSuccess	= function () { t.onsuccess({request:this}) } // t.reset();
-				onError		= function () { t.onerror({request:this}) }
+				onLoad		= function () { me.remClassName('sending'); me.onload(event) }
+				onSuccess	= function () { me.onsuccess(event) } // me.reset();
+				onError		= function () { me.onerror(event) }
 			}
 		}
 		
@@ -72,19 +77,18 @@ Programica.FormPoster.prototype.Handler = function (node)
 }
 
 
-Programica.FormPoster.prototype.Handler.prototype =
-{
-	init: function () { /*пусто*/ }
-}
+prototype.Handler.prototype = { init: function () {} }
 
 
-//Programica.FormPoster.code2event = function (code) { return eval("[function (event) { " + code + " }]")[0] }
-Programica.FormPoster.bakeEvents = function (node, events)
+FormPoster.defaultEvents = ['onload', 'onsuccess', 'onerror', 'oncheck']
+FormPoster.bakeEvents = function (node, events)
 {
+	events = events || this.defaultEvents
 	for (var i = 0; i < events.length; i++)
 		if (!node[events[i]] || node[events[i]].constructor == String)
 			node[events[i]] = eval("[function (event) { " + node.getAttribute(events[i]) + " }]")[0]
 }
 
 
-Programica.Widget.register(new Programica.FormPoster())
+P.Widget.register(new FormPoster())
+})()}
