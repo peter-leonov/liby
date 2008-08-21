@@ -84,30 +84,28 @@ Programica.Request.urlEncode = function (data)
 
 Programica.Request.prototype =
 {
-	onLoad:					function ()	{},
+	onLoad: function ()	{},
 	
-	// дефолтный обработчичек ошибочек
+	// default error handler
 	onError: function ()
 	{
-		var errstr = this.responseText()
-		var stat = this.status()
-		var stattext = this.statusText()
-		log("Request at " + this.lastRequest().uri + " cause an errorr #" + stat + " (" + stattext + ")" + ":\n" + errstr)
+		log(this.errorMessage())
 		return true
 	},
 	
-	// если след. методы не возвращают ложь, то будет вызвана также и onLoad()
-	onInformation:			function () {},
-	onSuccess:				function () {},
-	onRedirect:				function () {},
+	// this methods may return false to prevent calling onLoad()
+	onInformation: function () {},
+	onSuccess: function () {},
+	onRedirect: function () {},
 	
-	// а здесь — onError()
-	onClientError:			function () {},
-	onServerError:			function () {},
+	// and this for onError()
+	onClientError: function () {},
+	onServerError: function () {},
 	
+	errorMessage: function () { return "Error while request " + this.lastRequest().uri + ": " + this.status() + " " + this.statusText() },
 	
 	//——————————————————————————————————————————————————————————————————————————
-	// обертки методов XMLHttpRequest
+	// XMLHttpRequest methods wrappers
 	
 	open: function (method, uri, async, user, password)
 	{
@@ -115,8 +113,8 @@ Programica.Request.prototype =
 		return this.transport.open(method, uri, async, user, password)
 	},
 	
-	// transport.send() обернута в таймер из-за #97
-	send:					function (data)
+	// transport.send() is wrapped in timer couse of #97
+	send: function (data)
 	{
 		var t = this
 		if (this.lastRequestObject.async)
@@ -125,63 +123,60 @@ Programica.Request.prototype =
 			t.transport.send(data)
 	},
 	
-	lastRequest:			function ()					{ return this.lastRequestObject },
-	setRequestHeader:		function (header, value)	{ return this.transport.setRequestHeader(header, value) },
-	abort:					function ()					{ return this.transport.abort() },
-	getAllResponseHeaders:	function ()					{ return this.transport.getAllResponseHeaders() },
-	getResponseHeader:		function (header)			{ return this.transport.getResponseHeader(header) },
-	status:					function ()					{ return this.transport.status || 0 }, // || 0 для загрузок напрямую из файла без HTTP
-	statusText:				function ()					{ return this.transport.statusText },
+	lastRequest: function () { return this.lastRequestObject },
+	setRequestHeader: function (header, value) { return this.transport.setRequestHeader(header, value) },
+	abort: function () { return this.transport.abort() },
+	getAllResponseHeaders: function () { return this.transport.getAllResponseHeaders() },
+	getResponseHeader: function (header) { return this.transport.getResponseHeader(header) },
+	status: function () { return this.transport.status || 0 }, // 0 for direct file loading from filesystem
+	statusText: function () { return this.transport.statusText },
 	
 	
 	//——————————————————————————————————————————————————————————————————————————
-	// обертки свойств XMLHttpRequest
+	// XMLHttpRequest properties wrappers
 	
-	readyState:				function () { return this.transport.readyState },
-	responseText:			function () { return this.transport.responseText },
-	responseXML:			function ()
+	readyState: function () { return this.transport.readyState },
+	responseText: function () { return this.transport.responseText },
+	responseXML: function ()
 	{
 		var result = this.transport.responseXML
 		
 		// MSIE
 		if(!result.documentElement && this.transport.responseStream)
-		{
 			result.load(this.transport.responseStream)
-		}
 		return result
 	},
 	
 	onreadystatechange: function ()
 	{
-		switch (this.readyState())
+		if (this.readyState() == 4)
 		{
-			case 4:
-				switch (Math.floor(this.status() / 100))
-				{
-					case 1:
-						this.onInformation()
-						break
-					
-					case 0:
-					case 2:
-						(this.onLoad() !== false) && this.onSuccess()
-						break
-					
-					case 3:
-						this.onRedirect()
-						break
-					
-					case 4:
-						(this.onError() !== false) && this.onClientError()
-						break
-					
-					case 5:
-						(this.onError() !== false) && this.onServerError()
-						break
-					
-					default:
-						log("Strange response status: " + this.status())
-				}
+			switch (Math.floor(this.status() / 100))
+			{
+				case 1:
+					this.onInformation()
+					break
+				
+				case 0:
+				case 2:
+					(this.onLoad() !== false) && this.onSuccess()
+					break
+				
+				case 3:
+					this.onRedirect()
+					break
+				
+				case 4:
+					(this.onError() !== false) && this.onClientError()
+					break
+				
+				case 5:
+					(this.onError() !== false) && this.onServerError()
+					break
+				
+				default:
+					log("Strange response status: " + this.status())
+			}
 		}
 		
 		return false

@@ -1,19 +1,20 @@
-if (self.console && self.console.log)
-	self.log = function ()
-	{
-		var arr = []
-		for (var i = 0; i < arguments.length; i++)
-			arr.push(arguments[i])
-		return console.log(arr.join(', '))
-	}
-
+if (self.console && self.console.log && self.console.error)
+{
+	if (!self.log)
+		self.log = function () { return self.console.log(Array.prototype.slice.call(arguments).join(', ')) }
+	
+	if (!self.reportError)
+		self.reportError = function () { return self.console.error(Array.prototype.slice.call(arguments).join(', ')) }
+}
+else
+	self.log = self.reportError = function () {  }
 
 window.addEventListener
 (
 	'mousewheel',
 	function (e)
 	{
-		// stop mousewheel event for all webkits
+		// stop mousewheel event for all WebKits
 		e.stopPropagation()
 		
 		var d = (- e.wheelDelta / 120)

@@ -1,8 +1,5 @@
-
 // defining spaces
 if (!self.Programica) self.Programica = {}
-
-function log () {}
 
 // preparing DOM prototypes
 if (!self.Element)
@@ -48,8 +45,11 @@ if (!Array.prototype.map)
 		return res
 	}
 
+// if (!Array.copy)
+// 	Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
+
 if (!Array.copy)
-	Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
+	Array.copy = function (src) { return Array.prototype.slice.call(src) }
 
 if (!Function.prototype.delay)
 	Function.prototype.delay = function (delay, args, inv) { var me = this; return setTimeout(function () { return me.apply(inv, args || arguments) }, delay || 10) }
@@ -82,4 +82,3 @@ $.include = function (src)
 	cache[src] = node
 	return node
 }
-

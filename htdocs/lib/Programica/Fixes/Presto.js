@@ -1,7 +1,14 @@
 
 if (self.opera && opera.postError)
-	self.log = function () { return opera.postError(arguments) }
-
+{
+	if (!self.log)
+		self.log = function () { return self.opera.postError(arguments) }
+	
+	if (!self.reportError)
+		self.reportError = self.log
+}
+else
+	self.log = self.reportError = function () {  }
 
 if (/Opera\/9\.2/.test(navigator.userAgent))
 {

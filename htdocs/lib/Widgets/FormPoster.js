@@ -53,22 +53,23 @@ prototype.Handler = function (node)
 			e.preventDefault()
 			
 			// play in events
-			var event = {request: this, hash: this.toHash(), target: this}
+			var ev = {hash: this.toHash(), form: this}
 			FormPoster.bakeEvents(node)
-			
-			if (this.oncheck(event) === false)
+			if (this.oncheck(ev) === false)
 				return
 			
 			this.addClassName('sending')
-			
+			this.onsend(ev)
 			// acync sending data
-			var met	= /^post$/i.test(this.method) ? aPost : aGet
-			var me = this
-			with (met(this.action, event.hash))
+			var met = /^post$/i.test(this.method) ? aPost : aGet,
+				me = this,
+				request
+			with (request = met(this.action, ev.hash))
 			{
-				onLoad		= function () { me.remClassName('sending'); me.onload(event) }
-				onSuccess	= function () { me.onsuccess(event) } // me.reset();
-				onError		= function () { me.onerror(event) }
+				ev.request = request
+				onLoad		= function () { me.remClassName('sending'); me.onload(ev) }
+				onSuccess	= function () { me.onsuccess(ev) }
+				onError		= function () { me.onerror(ev) }
 			}
 		}
 		
@@ -80,7 +81,7 @@ prototype.Handler = function (node)
 prototype.Handler.prototype = { init: function () {} }
 
 
-FormPoster.defaultEvents = ['onload', 'onsuccess', 'onerror', 'oncheck']
+FormPoster.defaultEvents = ['onload', 'onsuccess', 'onerror', 'oncheck', 'onsend']
 FormPoster.bakeEvents = function (node, events)
 {
 	events = events || this.defaultEvents

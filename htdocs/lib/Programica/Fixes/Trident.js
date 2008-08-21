@@ -1,5 +1,12 @@
 ;(function () {
 
+if (!self.log)
+	self.log = function () {}
+
+if (!self.reportError)
+	self.reportError = self.log
+
+
 // appendChild, insertBefore, replaceChild
 
 if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
