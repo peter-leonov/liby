@@ -1,4 +1,5 @@
 
+// 1, 2, 5: банкир, банкира, банкиров
 String.prototype.plural = Number.prototype.plural = function (a, b, c)
 {
 	if (this % 1)
