@@ -6,6 +6,8 @@ if (!self.log)
 if (!self.reportError)
 	self.reportError = self.log
 
+Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
+
 
 // appendChild, insertBefore, replaceChild
 

@@ -45,9 +45,6 @@ if (!Array.prototype.map)
 		return res
 	}
 
-// if (!Array.copy)
-// 	Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
-
 if (!Array.copy)
 	Array.copy = function (src) { return Array.prototype.slice.call(src) }
 
