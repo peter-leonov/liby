@@ -128,6 +128,11 @@
 		return this.visible() ? this.hide() : this.show()
 	}
 	
+	proto.remove = function ()
+	{
+		return this.parentNode ? this.parentNode.removeChild(this) : this
+	}
+	
 	proto.getComputedStyle = function (prop)
 	{
 		return document.defaultView.getComputedStyle(this, null)
