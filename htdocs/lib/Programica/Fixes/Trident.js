@@ -118,7 +118,7 @@ function IEFixes_onBeforeUnload ()
 		var el = stack[i]
 		el[0].detachEvent(el[1], el[2])
 	}
-	IEFixes_onBeforeUnload.stack = null
+	IEFixes_onBeforeUnload.stack = []
 }
 IEFixes_onBeforeUnload.stack = []
 
