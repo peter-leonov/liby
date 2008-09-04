@@ -17,23 +17,15 @@ Switcher =
 				num = this.names.indexOf(num)
 			
 			var buttons = this.nodes.buttons
-			
-			var selected = buttons[num]
-			if (selected)
-			{
-				for (var i = 0; i < buttons.length; i++)
-					buttons[i].remClassName('selected')
-				
-				selected.addClassName('selected')
-			}
+			for (var i = 0; i < buttons.length; i++)
+				if (buttons[i])
+					num == i ? buttons[i].addClassName('selected') : buttons[i].remClassName('selected')
 			
 			var tabs = this.nodes.tabs
 			if (tabs && tabs[num])
-			{
 				for (var i = 0; i < tabs.length; i++)
-					tabs[i].hide()
-				tabs[num].show()
-			}
+					if (tabs[i])
+						num == i ? tabs[i].show() : tabs[i].hide()
 		}
 		
 		function isParent (node, parent, root)
