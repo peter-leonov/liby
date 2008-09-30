@@ -1,0 +1,11 @@
+#!/usr/bin/ruby
+
+NGINX_PORT = 8004
+APACHE_PORT = 8104
+
+require 'pmc/servers'
+
+puts "Starting #{Servers::NAME} as #{Servers::TYPE}..."
+
+Servers.start 'nginx'
+# Servers.start 'apache'

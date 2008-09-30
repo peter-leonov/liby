@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# /www/lib/apachectl stop
-/www/lib/nginxctl stop
