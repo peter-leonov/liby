@@ -159,7 +159,8 @@ function getEventWrapper (node, type, func, dir)
 	{
 		var wrapper = func[key] = function (e)
 		{
-			e = e || event
+			if (e === undefined)
+				e = event
 			e.target = e.srcElement
 			e.preventDefault  = preventDefault
 			e.stopPropagation = stopPropagation
