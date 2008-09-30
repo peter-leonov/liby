@@ -7,7 +7,6 @@ Switcher =
 		main.nodes = {buttons: Array.copy(buttons), tabs: Array.copy(tabs)}
 		main.names = names || []
 		
-		main.autoSelect = true
 		main.onselect = function () {}
 		main.setTabs = function (tabs) { this.nodes.tabs = tabs }
 		main.setNames = function (names) { this.names = names }
@@ -15,6 +14,19 @@ Switcher =
 		{
 			if (typeof num != 'number')
 				num = this.names.indexOf(num)
+			
+			if (num < 0 || this.onselect(num) === false)
+				return
+			
+			this.drawSelected(num)
+		}
+		main.drawSelected = function (num)
+		{
+			if (typeof num != 'number')
+				num = this.names.indexOf(num)
+			
+			if (num < 0)
+				return
 			
 			var buttons = this.nodes.buttons
 			for (var i = 0; i < buttons.length; i++)
@@ -43,7 +55,7 @@ Switcher =
 			return false
 		}
 		
-		function select (e)
+		function mouseSelect (e)
 		{
 			var buttons = this.nodes.buttons
 			var num = -1
@@ -51,12 +63,9 @@ Switcher =
 				if (isParent(e.target, buttons[i], this))
 					num = i
 			
-			if (num > -1 && this.onselect(num, e.target) !== false && this.autoSelect)
-				return this.select(num, e.target)
-			
-			return false
+			return this.select(num)
 		}
-		main.addEventListener('mousedown', select, false)
+		main.addEventListener('mousedown', mouseSelect, false)
 		
 		return main
 	}
