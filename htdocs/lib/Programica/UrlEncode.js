@@ -4,17 +4,14 @@ var UrlEncode =
 	
 	parse: function (string, forceArray)
 	{
-		string = string.substr(1, string.length-1)
-	
 		var res = {}
 	
-		var parts = string.split(/[;&]/)
+		var parts = String(string).split(/[;&]/)
 		for (var i=0; i < parts.length; i++)
 		{
-			var a = parts[i].split('=')
-			var name = a[0]
-			a[0] = ''
-			var val = decodeURIComponent(a.join(''))
+			var pair = parts[i].split('=')
+			var name = decodeURIComponent(pair[0])
+			var val = decodeURIComponent(pair[1] || '')
 		
 			if (forceArray)
 			{
