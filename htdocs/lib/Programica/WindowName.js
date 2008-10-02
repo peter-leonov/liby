@@ -3,7 +3,6 @@ var WindowName =
 	get: function (key)
 	{
 		var hash = UrlEncode.parse(decodeURIComponent(window.name))
-		log("WindowName.get", hash)
 		return hash ? hash[key] : undefined
 	},
 	
