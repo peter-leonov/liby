@@ -121,8 +121,8 @@ Programica.RollingImagesLite.prototype =
 	
 	setCurrent: function (num)
 	{
-		if (num == this.current)
-			return
+    // if (num == this.current)
+		//	return
 		
 		this.current = num
 		this.updateNavigation()
