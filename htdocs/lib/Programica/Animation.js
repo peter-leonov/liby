@@ -13,9 +13,9 @@ var PA = Programica.Animation = function (prms)
 	this.complete			= false
 	this.node				= prms.node || false
 	this.animationTypes		= PA.Types
-
+	
 	this.onstart = this.oncomplete = this.onstep = function () {}
-
+	
 	switch (typeof this.motion)
 	{
 		case 'string':
@@ -26,7 +26,7 @@ var PA = Programica.Animation = function (prms)
 		default:
 			this.motion = null
 	}
-
+	
 	if (prms.trans)
 		for (var i = 0; i < prms.trans.length; i++)
 			if (prms.trans[i])
@@ -49,7 +49,7 @@ Element.prototype.animate = function (motion, props, duration, unit)
 
 
 PA.fps = 60
-PA.defaults = { unit: 'px', type: 'linearTween' }
+PA.defaults = {unit: 'px', type: 'linearTween'}
 
 PA.prototype =
 {
@@ -77,7 +77,7 @@ PA.prototype =
 		{
 			this.frame = 0
 			this.totalFrames = this.duration * PA.fps
-		
+			
 			for (var i = 0; i < this.trans.length; i++)
 			{
 				var tr = this.trans[i]
@@ -85,14 +85,14 @@ PA.prototype =
 					tr.begin = this.getStyleProperty(tr.property)
 				tr.step = ( tr.end - tr.begin ) / this.totalFrames
 			}
-		
+			
 			this.timer = PA.addTimer( function () { t.step() } )
 		}
 		
 		this.onstart()
 		return this
 	},
-
+	
 	stop: function ()
 	{
 		if (this.running)
@@ -101,25 +101,25 @@ PA.prototype =
 			this.running = false
 			PA.removeTimer(this.timer)
 		}
-
+		
 		return this
 	},
-
+	
 	step: function ()
 	{
 		this.render()
 		this.onstep()
-
+		
 		if (this.frame >= this.totalFrames - 1)
 		{
 			this.stop()
 			this.complete = true
 			this.oncomplete()
 		}
-
+		
 		this.frame++
 	},
-
+	
 	renderForceLast: function ()
 	{
 		for (var i = 0; i < this.trans.length; i++)
@@ -128,7 +128,7 @@ PA.prototype =
 			this.setStyleProperty(t.property, t.end)
 		}
 	},
-
+	
 	render: function ()
 	{
 		for (var i = 0; i < this.trans.length; i++)
@@ -145,45 +145,45 @@ PA.prototype =
 	{
 		if (p == "top" && !this.node.style[p])
 			return this.node.offsetTop
-
+		
 		if (p == "left" && !this.node.style[p])
 			return this.node.offsetLeft
-
-
+		
+		
 		if (p == "opacity" && isNaN(parseFloat(this.node.style[p])))
 			return 1
-
-
+		
+		
 		if (/scroll/.test(p))
 			return this.node[p]
-
+		
 		return parseFloat(this.node.style[p]) || 0
 	},
-
+	
 	setStyleProperty: function (p, value)
 	{
 		try
 		{
 			if (/color/.test(p))
 				return this.node.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
-
+			
 			// for SVG elements
 			if (p == 'r')
 				return this.node.r.baseVal.value = value
-
-
+			
+			
 			if (/scroll/.test(p))
 				return this.node[p] = Math.round(value)
-
+			
 			if (p == "opacity")
 				return this.node.style[p] = value
-
+			
 			if ((p == 'width' || p == 'height') && value < 0)
 				value = 0
-
+			
 			if (this.unit == 'em')
 				return this.node.style[p] = Math.round(value * 100) / 100 + this.unit
-
+			
 			return this.node.style[p] = Math.round(value) + this.unit
 		}
 		catch (ex)
@@ -199,9 +199,9 @@ PA.addTimer = function (func)
 	if (!this.timer)
 	{
 		var t = this
-		this.timer = setInterval (function (d) { t.time(d) }, 1000 / this.fps)
+		this.timer = setInterval(function (d) { t.time(d) }, 1000 / this.fps)
 	}
-
+	
 	return this.timers.push(func)
 }
 
@@ -209,10 +209,10 @@ PA.removeTimer = function (num)
 {
 	var ts = this.timers
 	ts[num-1] = null
-
+	
 	while (ts[ts.length-1] === null)
 		ts.length--
-
+	
 	if (!ts.length)
 		clearInterval(this.timer), this.timer = null
 }

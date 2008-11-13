@@ -17,7 +17,7 @@ if (!self.HTMLFormElement.prototype)
 
 // base objects extensions
 if (!Object.extend)
-	Object.extend = function (d, s) { for (var p in s) d[p] = s[p]; return d }
+	Object.extend = function (d, s) { if (d) for (var p in s) d[p] = s[p]; return d }
 
 if (!Object.copy)
 	Object.copy = function (s) { var d = {}; for (var k in s) d[k] = s[k]; return d }
@@ -33,6 +33,20 @@ if (!String.localeCompare)
 
 if (!Array.prototype.forEach)
 	Array.prototype.forEach = function (f, inv) { for (var i = 0, len = this.length; i < len; i++) f.call(inv, this[i], i, this) }
+
+if (!Array.prototype.indexOf)
+	Array.prototype.indexOf = function(v, i)
+	{
+		var len = this.length,
+			i = Number(i) || 0
+		i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
+		
+		for (; i < len; i++)
+			if (i in this && this[i] === v)
+				return i
+		return -1
+	}
+
 
 if (!Array.prototype.map)
 	Array.prototype.map = function(f, inv)
