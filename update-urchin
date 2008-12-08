@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /www/lib/htdocs/lib
+cd /www/lib/htdocs/external
 curl 'http://www.google-analytics.com/urchin.js' > urchin.js 2>/dev/null
 yuicompressor urchin.js -o urchin-mini.js
 svn diff urchin.js 1>&2
