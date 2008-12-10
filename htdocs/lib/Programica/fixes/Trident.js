@@ -6,8 +6,6 @@ if (!self.log)
 if (!self.reportError)
 	self.reportError = self.log
 
-Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
-
 
 // appendChild, insertBefore, replaceChild
 
@@ -16,7 +14,7 @@ if (!self.Element) self.Element = {prototype:{}}
 
 var realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
 
-function IEFixes_opacity (node)
+function fixOpacity (node)
 {
 	if ((s = node.style))
 	{
@@ -29,49 +27,63 @@ function IEFixes_opacity (node)
 	}
 }
 
-function IEFixes_disabled (node)
+
+function fixTarget (node)
 {
-	node.addClassName('disabled')
-	node.disabled ? node.addClassName('disabled') : node.remClassName('disabled')
+	if (fixTarget.skip)
+		return fixTarget.skip = false
+	
+	var target = node.target
+	if (target)
+	{
+		var all = document.all
+		for (var i = 0, il = all.length; i < il; i++)
+			if (all[i].name === target)
+			{
+				fixTarget.skip = true
+				node.target = all[i]['pmc::realIframeName']
+			}
+				alert('found: ' + target)
+	}
 }
 
-function IEFixes_fixThem (nodes)
+function fixThem (nodes)
 {
-	var fix = IEFixes_fixIE
+	var fix = fixIE
 	for (var i = 0, il = nodes.length; i < il; i++)
 		fix(nodes[i])
 }
 
-function IEFixes_fixThemAll ()
+function fixDocumentAll ()
 {
-	IEFixes_fixThem(document.all)
+	fixThem(document.all)
 }
 
-function IEFixes_onpropertychange6 ()
+function onpropertychange6 ()
 {
-	var e = event
+	var e = event, node = e.srcElement
 	if (e.propertyName == 'style.opacity')
-		IEFixes_opacity(this)
-	else if (e.propertyName == 'disabled')
-		IEFixes_disabled(this)
+		fixOpacity(node)
 	else if (e.propertyName == 'innerHTML')
-		IEFixes_fixThem(this.all)
+		fixThem(node.all)
+	else if (e.propertyName == 'target')
+		fixTarget(node)
 	else if (realEvents[e.propertyName])
-		wrapOnEvent(this, e.propertyName)
+		wrapOnEvent(node, e.propertyName)
 }
 
-function IEFixes_onpropertychange7 ()
+function onpropertychange7 ()
 {
-	var e = event
+	var e = event, node = e.srcElement
 	if (e.propertyName == 'style.opacity')
-		IEFixes_opacity(this)
+		fixOpacity(node)
 	else if (e.propertyName == 'innerHTML')
-		IEFixes_fixThem(this.all)
+		fixThem(node.all)
 	else if (realEvents[e.propertyName])
-		wrapOnEvent(this, e.propertyName)
+		wrapOnEvent(node, e.propertyName)
 }
 
-function IEFixes_proto (node)
+function fix_proto (node)
 {
 	var el = self.Element.prototype
 	for (var p in el)
@@ -94,38 +106,40 @@ function IEFixes_proto (node)
 }
 
 
-// function IEFixes_appendChild (node) { this.appendChildReal(node) }
+// function fix_appendChild (node) { this.appendChildReal(node) }
 
-function IEFixes_fixIE6 (node)
+function fixIE6 (node)
 {
-	IEFixes_proto(node)
-	node.onpropertychange = IEFixes_onpropertychange6
+	fix_proto(node)
+	// node.onpropertychange = onpropertychange6
+	node.attachEvent('onpropertychange', onpropertychange6)
 	// node.appendChildReal = node.appendChild
-	// node.appendChild = IEFixes_appendChild
+	// node.appendChild = fix_appendChild
 }
 
-function IEFixes_fixIE7 (node)
+function fixIE7 (node)
 {
-	IEFixes_proto(node)
-	node.onpropertychange = IEFixes_onpropertychange7
+	fix_proto(node)
+	// node.onpropertychange = onpropertychange7
+	node.attachEvent('onpropertychange', onpropertychange7)
 }
 
-function IEFixes_onBeforeUnload ()
+function onBeforeUnload ()
 {
-	var stack = IEFixes_onBeforeUnload.stack
+	var stack = onBeforeUnload.stack
 	for (var i = 0, il = stack.length; i < il; i++)
 	{
 		var el = stack[i]
 		el[0].detachEvent(el[1], el[2])
 	}
-	IEFixes_onBeforeUnload.stack = []
+	onBeforeUnload.stack = []
 }
-IEFixes_onBeforeUnload.stack = []
+onBeforeUnload.stack = []
 
 if (/MSIE 7/.test(navigator.userAgent))
-	IEFixes_fixIE = IEFixes_fixIE7
+	fixIE = fixIE7
 else if (/MSIE 6/.test(navigator.userAgent))
-	IEFixes_fixIE = IEFixes_fixIE6
+	fixIE = fixIE6
 
 function wrapOnEvent (node, ontype)
 {
@@ -150,8 +164,9 @@ function stopPropagation ()
 
 function getEventWrapper (node, type, func, dir)
 {
-	node._uniqueID = node._uniqueID || node.uniqueID
-	var key = '__IEEventWrapper:' + type + ':' + dir + ':' + node._uniqueID
+	var pmc_uid = 'pmc::uniqueID'
+	node[pmc_uid] = node[pmc_uid] || node.uniqueID
+	var key = '__IEEventWrapper:' + type + ':' + dir + ':' + node[pmc_uid]
 	
 	if (func[key])
 		return func[key]
@@ -178,7 +193,7 @@ function IEFixes ()
 {
 	IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel', unload: 'beforeunload' }
 	
-	window.attachEvent('onbeforeunload', IEFixes_onBeforeUnload)
+	window.attachEvent('onbeforeunload', onBeforeUnload)
 	
 	// yet another addEventListener(...) fix
 	if (!self.addEventListener && self.attachEvent)
@@ -210,7 +225,7 @@ function IEFixes ()
 			else
 			{
 				this.attachEvent('on' + type, wrapper)
-				IEFixes_onBeforeUnload.stack.push([this, 'on' + type, wrapper])
+				onBeforeUnload.stack.push([this, 'on' + type, wrapper])
 			}
 		}
 	
@@ -278,27 +293,37 @@ function IEFixes ()
 		)
 	}
 	
-	document.realIECreateElement = document.createElement
+	var IFRAME_counter = 0
+	document.nativeIECreateElement = document.createElement
 	document.createElement = function (type)
 	{
-		var e = document.realIECreateElement(type)
-		IEFixes_fixIE(e)
-		return e
+		var node
+		if (type == 'iframe')
+		{
+			var realName = 'PMC_IFRAME_REAL_NAME_' + ++IFRAME_counter
+			node = document.nativeIECreateElement('<IFRAME name="' + realName + '">')
+			node['pmc::realIframeName'] = realName
+		}
+		else
+			node = document.nativeIECreateElement(type)
+		
+		fixIE(node)
+		return node
 	}
 	
-	self.$E = function (type, props)
-	{
-		if (props)
-		{
-			var html = []
-			for (var i in props)
-				html.push(i + '="' + encodeURI(props[i]) + '"')
-			
-			return document.createElement('<' + type + ' ' + html.join(' ') + '>')
-		}
-		
-		return document.createElement(type)
-	}
+	// self.$E = function (type, props)
+	// {
+	// 	if (props)
+	// 	{
+	// 		var html = []
+	// 		for (var i in props)
+	// 			html.push(i + '="' + encodeURI(props[i]) + '"')
+	// 		
+	// 		return document.createElement('<' + type + ' ' + html.join(' ') + '>')
+	// 	}
+	// 	
+	// 	return document.createElement(type)
+	// }
 	
 	if (!document.defaultView)
 		document.defaultView = window
@@ -333,7 +358,7 @@ function IEFixes ()
 		}
 	}
 	
-	self.addEventListener('load', IEFixes_fixThemAll)
+	self.addEventListener('load', fixDocumentAll)
 	
 	// for oldstyle popups
 	if (self.dialogArguments && self.dialogArguments.external)
