@@ -43,7 +43,6 @@ function fixTarget (node)
 				fixTarget.skip = true
 				node.target = all[i]['pmc::realIframeName']
 			}
-				alert('found: ' + target)
 	}
 }
 
@@ -72,16 +71,20 @@ function onpropertychange6 ()
 		wrapOnEvent(node, e.propertyName)
 }
 
-function onpropertychange7 ()
-{
-	var e = event, node = e.srcElement
-	if (e.propertyName == 'style.opacity')
-		fixOpacity(node)
-	else if (e.propertyName == 'innerHTML')
-		fixThem(node.all)
-	else if (realEvents[e.propertyName])
-		wrapOnEvent(node, e.propertyName)
-}
+var onpropertychange7 = onpropertychange6
+
+// function onpropertychange7 ()
+// {
+// 	var e = event, node = e.srcElement
+// 	if (e.propertyName == 'style.opacity')
+// 		fixOpacity(node)
+// 	else if (e.propertyName == 'innerHTML')
+// 		fixThem(node.all)
+// 	else if (e.propertyName == 'target')
+// 		fixTarget(node)
+// 	else if (realEvents[e.propertyName])
+// 		wrapOnEvent(node, e.propertyName)
+// }
 
 function fix_proto (node)
 {
