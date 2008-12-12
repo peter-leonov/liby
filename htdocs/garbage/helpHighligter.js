@@ -21,7 +21,7 @@ helpHighlighters.highlightDown = function ()
 	this.delight = function ()
 	{
 		for (var i = 0; i < nodes.length; i++)
-			nodes[i].remClassName('highlight')
+			nodes[i].removeClassName('highlight')
 	}
 	
 	for (var i = 0; i < nodes.length; i++)

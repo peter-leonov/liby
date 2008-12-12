@@ -31,7 +31,7 @@ Switcher =
 			var buttons = this.nodes.buttons
 			for (var i = 0; i < buttons.length; i++)
 				if (buttons[i])
-					num == i ? buttons[i].addClassName('selected') : buttons[i].remClassName('selected')
+					num == i ? buttons[i].addClassName('selected') : buttons[i].removeClassName('selected')
 			
 			var tabs = this.nodes.tabs
 			if (tabs && tabs[num])

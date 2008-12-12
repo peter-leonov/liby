@@ -87,12 +87,12 @@ Programica.DOM.setClassName = function (cn)
 
 Programica.DOM.addClassName = function (cn)
 {
-	this.remClassName(cn)
+	this.removeClassName(cn)
 	this.className += ' ' + cn
 	return cn
 }
 
-Programica.DOM.remClassName = function (cn)
+Programica.DOM.removeClassName = function (cn)
 {
 	this.className = this.className && this.className.replace(new RegExp('(?:\\s+|^)' + cn + '(?:\\s+|$)', "g"), " ").replace(/^\s+|\s+$/g, "")
 	return cn
@@ -125,7 +125,7 @@ Programica.DOM.disable = function ()
 Programica.DOM.enable = function ()
 {
 	this.removeAttribute('disabled')
-	this.remClassName('disabled')
+	this.removeClassName('disabled')
 }
 
 Programica.DOM.empty = function ()

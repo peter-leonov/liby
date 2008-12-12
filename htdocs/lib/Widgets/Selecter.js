@@ -24,8 +24,8 @@ var Selecter =
 			var optionsNode = this.nodes.options
 			optionsNode.empty()
 			
-			this.remClassName('empty')
-			this.remClassName('single')
+			this.removeClassName('empty')
+			this.removeClassName('single')
 			
 			if (options && options.length)
 			{
@@ -84,7 +84,7 @@ var Selecter =
 					return
 				
 				for (var i = 0; i < optionsChilds.length; i++)
-					optionsChilds[i].remClassName('selected')
+					optionsChilds[i].removeClassName('selected')
 				
 				selected.addClassName('selected')
 				this.setCaption(selected.innerHTML)
@@ -97,7 +97,7 @@ var Selecter =
 		
 		function close (e)
 		{
-			main.remClassName('open')
+			main.removeClassName('open')
 			main.addEventListener('mousedown', open, false)
 			main.removeEventListener('mousedown', close, false)
 			document.removeEventListener('mouseup', close, false)

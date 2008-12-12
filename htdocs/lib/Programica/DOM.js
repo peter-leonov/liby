@@ -50,12 +50,12 @@ proto.setClassName = function (cn)
 
 proto.addClassName = function (cn)
 {
-	this.remClassName(cn)
+	this.removeClassName(cn)
 	this.className += ' ' + cn
 	return cn
 }
 
-proto.remClassName = function (cn)
+proto.removeClassName = function (cn)
 {
 	if (this.className)
 		this.className = this.className.replace(new RegExp('(?:\\s+|^)?' + cn + '(?:\\s+|$)', 'g'), ' ').replace(/^\s+|\s+$/g, '')
@@ -76,7 +76,7 @@ proto.disable = function ()
 proto.enable = function ()
 {
 	this.removeAttribute('disabled')
-	this.remClassName('disabled')
+	this.removeClassName('disabled')
 }
 
 proto.empty = function ()

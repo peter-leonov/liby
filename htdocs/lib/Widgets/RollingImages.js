@@ -288,7 +288,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		Programica.RollingImages.active = this
 		
 		for (var i = 0, il = this.buttons.length; i < il; i++)
-			this.buttons[i].remClassName('selected-button')
+			this.buttons[i].removeClassName('selected-button')
 		
 		var button = this.buttons[this.current]
 		if (button)
@@ -510,7 +510,7 @@ Programica.RollingImages.prototype.Handler.prototype =
 		}
 		
 		this.di = null
-		this.viewport.remClassName('grabbing')
+		this.viewport.removeClassName('grabbing')
 	},
 	
 	dragclick: function (e)
