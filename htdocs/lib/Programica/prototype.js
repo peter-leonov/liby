@@ -2,13 +2,16 @@
 
 // base objects extensions
 if (!Object.extend)
-	Object.extend = function (d, s) { if (d) for (var p in s) d[p] = s[p]; return d }
+	Object.extend = function (d, s) { if (d) for (var k in s) d[k] = s[k]; return d }
 
 if (!Object.copy)
 	Object.copy = function (s) { var d = {}; for (var k in s) d[k] = s[k]; return d }
 
 if (!Object.keys)
 	Object.keys = function (s) { var r = []; for (var k in s) r.push(k); return r }
+
+if (!Object.values)
+	Object.values = function (s) { var r = []; for (var k in s) r.push(s[k]); return r }
 
 if (!Math.longRandom)
 	Math.longRandom = function () { return (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17) }
