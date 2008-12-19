@@ -6,6 +6,10 @@ if (!self.log)
 if (!self.reportError)
 	self.reportError = self.log
 
+// this is necesary becouse IE can`t normaly use Array.prototype.slice() as defined in Progrmica/prototype.js
+// so this is a fix for our Array.copy :)
+Array.copy = function (s) { var d = []; if (s !== undefined) for (var i = 0, len = s.length; i < len; i++) d[i] = s[i]; return d }
+
 
 // appendChild, insertBefore, replaceChild
 
