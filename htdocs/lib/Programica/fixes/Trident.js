@@ -6,9 +6,21 @@ if (!self.log)
 if (!self.reportError)
 	self.reportError = self.log
 
+var doc = document, undef
+
 // this is necesary becouse IE can`t normaly use Array.prototype.slice() as defined in Progrmica/prototype.js
 // so this is a fix for our Array.copy :)
-Array.copy = function (s) { var d = []; if (s !== undefined) for (var i = 0, len = s.length; i < len; i++) d[i] = s[i]; return d }
+Array.copy = function (s) { var d = []; if (s !== undef) for (var i = 0, len = s.length; i < len; i++) d[i] = s[i]; return d }
+
+if (Programica.NodesShortcut)
+	Programica.NodesShortcut.E = function (tag, cn, props)
+	{
+		var node = props.name ? doc.createElement('<' + tag + ' name="' + props.name + '">') : doc.createElement(tag)
+		if (props)
+			for (var i in props)
+				node[i] = props[i]
+		return node
+	}
 
 
 // appendChild, insertBefore, replaceChild
@@ -16,7 +28,7 @@ Array.copy = function (s) { var d = []; if (s !== undefined) for (var i = 0, len
 if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
 if (!self.Element) self.Element = {prototype:{}}
 
-var realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
+// var realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
 
 function fixOpacity (node)
 {
@@ -32,63 +44,52 @@ function fixOpacity (node)
 }
 
 
-function fixTarget (node)
-{
-	if (fixTarget.skip)
-		return fixTarget.skip = false
-	
-	var target = node.target
-	if (target)
-	{
-		var all = document.all
-		for (var i = 0, il = all.length; i < il; i++)
-			if (all[i].name === target)
-			{
-				fixTarget.skip = true
-				node.target = all[i]['pmc::realIframeName']
-			}
-	}
-}
+// function fixTarget (node)
+// {
+// 	if (fixTarget.skip)
+// 		return fixTarget.skip = false
+// 	
+// 	var target = node.target
+// 	if (target)
+// 	{
+// 		var all = doc.all
+// 		for (var i = 0, il = all.length; i < il; i++)
+// 			if (all[i].name === target)
+// 			{
+// 				fixTarget.skip = true
+// 				node.target = all[i]['pmc::realName']
+// 			}
+// 	}
+// }
 
 function fixThem (nodes)
 {
-	var fix = fixIE
+	var fix = fixNode
 	for (var i = 0, il = nodes.length; i < il; i++)
 		fix(nodes[i])
 }
 
 function fixDocumentAll ()
 {
-	fixThem(document.all)
+	fixThem(doc.all)
 }
 
 function onpropertychange6 ()
 {
-	var e = event, node = e.srcElement
-	if (e.propertyName == 'style.opacity')
+	var e = event, node = e.srcElement, prop = e.propertyName
+	if (prop == 'style.opacity')
 		fixOpacity(node)
-	else if (e.propertyName == 'innerHTML')
+	else if (prop == 'innerHTML')
 		fixThem(node.all)
-	else if (e.propertyName == 'target')
-		fixTarget(node)
-	else if (realEvents[e.propertyName])
-		wrapOnEvent(node, e.propertyName)
+	// else if (prop == 'target')
+	// 	fixTarget(node)
+	// else if (realEvents[prop])
+	// 	wrapOnEvent(node, prop)
+	else if (prop.indexOf('on') == 0)
+		wrapOnEvent(node, prop)
 }
 
 var onpropertychange7 = onpropertychange6
-
-// function onpropertychange7 ()
-// {
-// 	var e = event, node = e.srcElement
-// 	if (e.propertyName == 'style.opacity')
-// 		fixOpacity(node)
-// 	else if (e.propertyName == 'innerHTML')
-// 		fixThem(node.all)
-// 	else if (e.propertyName == 'target')
-// 		fixTarget(node)
-// 	else if (realEvents[e.propertyName])
-// 		wrapOnEvent(node, e.propertyName)
-// }
 
 function fix_proto (node)
 {
@@ -115,20 +116,13 @@ function fix_proto (node)
 
 // function fix_appendChild (node) { this.appendChildReal(node) }
 
-function fixIE6 (node)
+function fixNode (node)
 {
 	fix_proto(node)
 	// node.onpropertychange = onpropertychange6
 	node.attachEvent('onpropertychange', onpropertychange6)
 	// node.appendChildReal = node.appendChild
 	// node.appendChild = fix_appendChild
-}
-
-function fixIE7 (node)
-{
-	fix_proto(node)
-	// node.onpropertychange = onpropertychange7
-	node.attachEvent('onpropertychange', onpropertychange7)
 }
 
 function onBeforeUnload ()
@@ -143,10 +137,6 @@ function onBeforeUnload ()
 }
 onBeforeUnload.stack = []
 
-if (/MSIE 7/.test(navigator.userAgent))
-	fixIE = fixIE7
-else if (/MSIE 6/.test(navigator.userAgent))
-	fixIE = fixIE6
 
 function wrapOnEvent (node, ontype)
 {
@@ -181,14 +171,14 @@ function getEventWrapper (node, type, func, dir)
 	{
 		var wrapper = func[key] = function (e)
 		{
-			if (e === undefined)
+			if (e === undef)
 				e = event
 			e.target = e.srcElement
 			e.preventDefault  = preventDefault
 			e.stopPropagation = stopPropagation
 			e.detail = - e.wheelDelta / 30
-			e.pageX = e.clientX + document.documentElement.scrollLeft - document.body.clientLeft // document.body.scrollLeft
-			e.pageY = e.clientY + document.documentElement.scrollTop  - document.body.clientTop // document.body.scrollTop
+			e.pageX = e.clientX + doc.documentElement.scrollLeft - doc.body.clientLeft // doc.body.scrollLeft
+			e.pageY = e.clientY + doc.documentElement.scrollTop  - doc.body.clientTop // doc.body.scrollTop
 			func.call(node, e)
 		}
 		wrapper.isIEEventWrapper = true
@@ -204,7 +194,7 @@ function IEFixes ()
 	
 	// yet another addEventListener(...) fix
 	if (!self.addEventListener && self.attachEvent)
-		self.addEventListener = document.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
+		self.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 		{
 			dir = dir || false
 			// window.status++
@@ -250,7 +240,7 @@ function IEFixes ()
 				this.detachEvent('on' + type, wrapper)
 		}
 		
-		self.removeEventListener = document.removeEventListener = Element.prototype.removeEventListener
+		self.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener
 	}
 	
 	// sorry, i had to fix this onload call order bug
@@ -300,21 +290,21 @@ function IEFixes ()
 		)
 	}
 	
-	var IFRAME_counter = 0
-	document.nativeIECreateElement = document.createElement
-	document.createElement = function (type)
+	var NAME_counter = 0
+	doc.nativeCreateElement = doc.createElement
+	doc.createElement = function (type)
 	{
 		var node
-		if (type == 'iframe')
-		{
-			var realName = 'PMC_IFRAME_REAL_NAME_' + ++IFRAME_counter
-			node = document.nativeIECreateElement('<IFRAME name="' + realName + '">')
-			node['pmc::realIframeName'] = realName
-		}
-		else
-			node = document.nativeIECreateElement(type)
+		// if (type == 'input' || type == 'iframe')
+		// {
+		// 	var realName = 'PMC_REAL_NAME_' + ++NAME_counter
+		// 	node = doc.nativeCreateElement('<' + type + ' name="' + realName + '">')
+		// 	node['pmc::realName'] = realName
+		// }
+		// else
+			node = doc.nativeCreateElement(type)
 		
-		fixIE(node)
+		fixNode(node)
 		return node
 	}
 	
@@ -326,19 +316,19 @@ function IEFixes ()
 	// 		for (var i in props)
 	// 			html.push(i + '="' + encodeURI(props[i]) + '"')
 	// 		
-	// 		return document.createElement('<' + type + ' ' + html.join(' ') + '>')
+	// 		return doc.createElement('<' + type + ' ' + html.join(' ') + '>')
 	// 	}
 	// 	
-	// 	return document.createElement(type)
+	// 	return doc.createElement(type)
 	// }
 	
-	if (!document.defaultView)
-		document.defaultView = window
+	if (!doc.defaultView)
+		doc.defaultView = window
 	
-	if (!document.defaultView.getComputedStyle)
-		document.defaultView.getComputedStyle = function (node) { return node.currentStyle }
+	if (!doc.defaultView.getComputedStyle)
+		doc.defaultView.getComputedStyle = function (node) { return node.currentStyle }
 	
-	if (!document.createEvent)
+	if (!doc.createEvent)
 	{
 		function initEvent (type, bubbles, cancelable)
 		{
@@ -346,17 +336,17 @@ function IEFixes ()
 			this.bubbles = bubbles
 			this.cancelable = cancelable
 		}
-		document.createEvent = function ()
+		doc.createEvent = function ()
 		{
-			var ne = document.createEventObject()
+			var ne = doc.createEventObject()
 			ne.initEvent = initEvent
 			return ne
 		}
 	}
 	
-	if (!document.dispatchEvent)
+	if (!doc.dispatchEvent)
 	{
-		document.dispatchEvent = Element.prototype.dispatchEvent = function (e)
+		doc.dispatchEvent = Element.prototype.dispatchEvent = function (e)
 		{
 			if (e.type == 'change')
 				return this.onchange && this.onchange(e)
