@@ -24,8 +24,15 @@ var Me = self.XMLHttpRequest = function ()
 
 Me.prototype =
 {
-	// errorMessage: function () { return 'Error while request ' + this.lastRequest().uri + ": " + this.status() + " " + this.statusText() },
+	// defaults
+	readyState: 0,
+	responseXML: null,
+	responseText: '',
+	status: 0,
+	statusText: '',
+	onreadystatechange: null,
 	
+	// method wrappers
 	open: function (method, uri, async, user, password)
 	{
 		this.__async = async
@@ -51,17 +58,25 @@ Me.prototype =
 	getAllResponseHeaders: function () { return this.__r.getAllResponseHeaders() },
 	getResponseHeader: function (header) { return this.__r.getResponseHeader(header) },
 	
+	// properties wrappers
 	__onreadystatechange: function ()
 	{
 		var r = this.__r
 		this.readyState = r.readyState
-		this.responseXML = r.responseXML
-		this.responseText = r.responseText
-		this.status = r.status || 0 // 0 for direct file loading from filesystem
-		this.statusText = r.statusText
 		
-		if (!this.responseXML.documentElement && r.responseStream)
-			this.responseXML.load(r.responseStream)
+		if (r.readyState === 4)
+		{
+			this.status = r.status || 0 // 0 for direct file loading from filesystem
+			this.statusText = r.statusText
+			
+			this.responseXML = r.responseXML
+			this.responseText = r.responseText
+			
+			if (!this.responseXML.documentElement && r.responseStream)
+				this.responseXML.load(r.responseStream)
+		}
+		
+		
 		
 		if (this.onreadystatechange)
 			this.onreadystatechange()

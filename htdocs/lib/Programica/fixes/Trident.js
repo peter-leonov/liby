@@ -15,11 +15,29 @@ Array.copy = function (s) { var d = []; if (s !== undef) for (var i = 0, len = s
 if (Programica.NodesShortcut)
 	Programica.NodesShortcut.E = function (tag, cn, props)
 	{
-		var node = props.name ? doc.createElement('<' + tag + ' name="' + props.name + '">') : doc.createElement(tag)
 		if (props)
+		{
+			var html = []
+			if (props.name)
+			{
+				html.push('name="' + props.name + '"')
+				delete props.name
+			}
+			if (props.type)
+			{
+				html.push('type="' + props.type + '"')
+				delete props.type
+			}
+			
+			var node = doc.createElement('<' + tag + ' ' + html.join(' ') + '>')
+			
 			for (var i in props)
 				node[i] = props[i]
-		return node
+			
+			return node
+		}
+		else
+			return doc.createElement(tag)
 	}
 
 

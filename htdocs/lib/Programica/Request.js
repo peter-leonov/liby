@@ -1,7 +1,7 @@
 ;(function(){
 
+// XHR.mixIn(EventDriven)
 
-// XMLHttpRequest.mixIn(EventDriven)
 // if (this.readyState == 4)
 // {
 // 	this.responseText = this.transport.responseText
@@ -34,7 +34,7 @@
 // 	}
 // }
 
-
+Object.extend(XMLHttpRequest, {UNSENT: 0, OPENED: 1, HEADERS_RECEIVED: 2, LOADING: 3, DONE: 4})
 
 
 var Me = Programica.Request = {}
