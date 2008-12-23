@@ -371,3 +371,5 @@ if (!IEFixes.applied)
 }
 
 })();
+
+<!--# include file="Trident.XHR.js" -->
