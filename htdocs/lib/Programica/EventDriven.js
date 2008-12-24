@@ -11,7 +11,7 @@ function uselessDispatchEvent () {}
 function usefullDispatchEvent (e, data)
 {
 	if (typeof e == 'string')
-		e = {type: e, data: data || {}}
+		e = {type: e, data: data || {}, timeStamp: +new Date}
 	
 	var handlers, harr, i, ret = true
 	if (handlers = this.__EventDrivenHandlers)

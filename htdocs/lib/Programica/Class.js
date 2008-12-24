@@ -27,7 +27,7 @@ Me.Object.prototype =
 	extend: function (s) { if (s) for (var p in s) this[p] = s[p]; return this }
 }
 
-// Me.supercall(this, 'initialize', [limit])
+// Me.supercall(this, 'initialize', [arg1, arg2, arg3...])
 Function.prototype.supercall = function (o, n, a) { this.prototype.constructor.prototype[n].apply(o, a) }
 
 })();
@@ -40,9 +40,11 @@ Function.prototype.supercall = function (o, n, a) { this.prototype.constructor.p
 var myName = 'Module'
 var Me = self[myName] = function (name, proto)
 {
-	var module = function () { throw new Error(myName + ': can`t create direct instance of myself') }
+	var module = function () { throw new Error(myName + ': can`t create direct instances of myself') }
 	module.name = name || '[anonimous ' + myName + ']'
 	module.constructor = Me
+	module.mix = function (cls) { Object.extend(cls.prototype, this.prototype); return this }
+	
 	if (proto)
 		module.prototype = proto
 	return module
@@ -50,11 +52,11 @@ var Me = self[myName] = function (name, proto)
 
 Me.name = myName
 
-Function.prototype.mixIn = function (cls)
+Function.prototype.mixIn = function (module)
 {
-	if (cls.constructor != Me)
+	if (module.constructor != Me)
 		throw new Error('Function: can only mixIn modules')
-	Object.extend(this.prototype, cls.prototype)
+	return module.mix(this)
 }
 
 })();
