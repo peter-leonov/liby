@@ -1,7 +1,8 @@
 // NodesShortcut
 ;(function(){
 
-var doc = document, undef
+var doc = document, undef, myName = 'NodesShortcut'
+
 function T (text) { return doc.createTextNode(text) }
 function N (tag, cn, text)
 {
@@ -21,9 +22,11 @@ function E (tag, cn, props)
 	return node
 }
 
-Programica.NodesShortcut = function () { return 'var doc = document; var T = Programica.NodesShortcut.T; var N = Programica.NodesShortcut.N; var E = Programica.NodesShortcut.E' }
-Programica.NodesShortcut.T = T
-Programica.NodesShortcut.N = N
-Programica.NodesShortcut.E = E
+var code = 'var T=' + myName + '.T,N=' + myName + '.N,E=' + myName + '.E',
+	Me = self[myName] = function () { return code }
+
+Me.T = T
+Me.N = N
+Me.E = E
 
 })();

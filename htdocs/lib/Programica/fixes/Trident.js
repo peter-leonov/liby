@@ -12,8 +12,8 @@ var doc = document, undef
 // so this is a fix for our Array.copy :)
 Array.copy = function (s) { var d = []; if (s !== undef) for (var i = 0, len = s.length; i < len; i++) d[i] = s[i]; return d }
 
-if (Programica.NodesShortcut)
-	Programica.NodesShortcut.E = function (tag, cn, props)
+if (self.NodesShortcut)
+	self.NodesShortcut.E = function (tag, cn, props)
 	{
 		if (props)
 		{
