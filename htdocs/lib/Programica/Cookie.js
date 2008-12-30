@@ -1,22 +1,24 @@
+;(function(){
 
-if (!self.Cookie) self.Cookie =
+var myName = 'Cookie', day = 864e5, encode = encodeURIComponent, decode = decodeURIComponent, doc = document
+
+if (!self[myName]) self[myName] =
 {
-	set: function (name, value, daysToExpire)
+	days: 30,
+	set: function (name, value, days)
 	{
-		var expire = ''
-		if (typeof daysToExpire === 'number')
-		{
-			var d = new Date()
-			d.setTime(d.getTime() + 86400000 * daysToExpire)
-			expire = '; expires=' + d.toGMTString()
-		}
-		return document.cookie = escape(name) + '=' + escape(value || '') + expire
+		var d = new Date()
+		days = typeof days === 'number' ? days : this.days
+		
+		d.setTime(d.getTime() + day * days)
+		doc.cookie = encode(name) + '=' + this.stringify(value) + '; expires=' + d.toGMTString()
+		return value
 	},
 	
 	get: function (name)
 	{
-		var cookie = document.cookie.match(new RegExp('(^|;)\\s*' + escape(name) + '=([^;\\s]*)'))
-		return (cookie ? unescape(cookie[2]) : null)
+		var value, cookie = new RegExp('(^|;)\\s*' + encode(name) + '=([^;\\s]*)').exec(doc.cookie)
+		return cookie ? this.parse(cookie[2]) : null
 	},
 	
 	erase: function (name)
@@ -26,12 +28,8 @@ if (!self.Cookie) self.Cookie =
 		return cookie
 	},
 	
-	accept: function ()
-	{
-		if (typeof navigator.cookieEnabled == 'boolean')
-			return navigator.cookieEnabled
-		
-		this.set('__cookie_test', '1')
-		return (this.erase('__cookie_test') == '1')
-	}
+	stringify: function (value) { return value },
+	parse: function (value) { return value }
 }
+
+})();
