@@ -93,7 +93,7 @@ function urlEncode (data)
 
 
 Me.delimiter = '&'
-Me.urlEncode = urlEncode 
+Me.urlEncode = urlEncode
 
 
 var $ = self.$
