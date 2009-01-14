@@ -17,21 +17,21 @@ if (self.NodesShortcut)
 	{
 		if (props)
 		{
-			var html = []
-			if (props.name)
+			var node, html = [], name, i, names = ['name', 'type']
+			
+			for (i = 0; i < names.length; i++)
 			{
-				html.push('name="' + props.name + '"')
-				delete props.name
-			}
-			if (props.type)
-			{
-				html.push('type="' + props.type + '"')
-				delete props.type
+				name = names[i]
+				if (name in props)
+				{
+					html.push(name + '="' + props[name].replace(/"/, '\\"') + '"')
+					delete props[name]
+				}
 			}
 			
-			var node = doc.createElement('<' + tag + ' ' + html.join(' ') + '>')
+			node = doc.createElement('<' + tag + ' ' + html.join(' ') + '>')
 			
-			for (var i in props)
+			for (i in props)
 				node[i] = props[i]
 			
 			return node
