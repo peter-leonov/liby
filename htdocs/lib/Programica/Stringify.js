@@ -95,7 +95,9 @@
 	
 	function parse (code)
 	{
-		return eval('(' + code + ')')
+		parse.lastError = null
+		try { return eval('(' + code + ')') }
+		catch(ex) { parse.lastError = ex; return null }
 	}
 	
 	Object.stringify = str
