@@ -30,13 +30,8 @@
 	
 	function quote (string)
 	{
-		if (bareword.test(string))
-			return string
-		else
-		{
-			escapeable.lastIndex = 0
-			return '"' + string.replace(escapeable, quoteReplacer) + '"'
-		}
+		escapeable.lastIndex = 0
+		return '"' + string.replace(escapeable, quoteReplacer) + '"'
 	}
 	
 	
@@ -87,7 +82,7 @@
 				// Plain object
 				for (k in value)
 					if (Object_hasOwnProperty.call(value, k))
-						partial[partial_length++] = quote(k) + ':' + str(value[k])
+						partial[partial_length++] = (bareword.test(k) ? k : quote(k)) + ':' + str(value[k])
 				
 				return partial_length === 0 ? '{}' : '{' + partial.join(',') + '}'
 		}
@@ -97,7 +92,7 @@
 	{
 		parse.lastError = null
 		try { return eval('(' + code + ')') }
-		catch(ex) { parse.lastError = ex; return null }
+		catch(ex) { log(ex); parse.lastError = ex; return null }
 	}
 	
 	Object.stringify = str
