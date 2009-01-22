@@ -11,18 +11,18 @@ if (!document.getElementsByClassName)
 	// from prototype 1.5.1.1
 	proto.getElementsByClassName = document.getElementsByClassName = function (className, tagName)
 	{
-		// geting elems with native function
-		var children = this.getElementsByTagName(tagName || '*')
-		// predeclaring vars
-		var elements = [], child, l = 0
-		// precompile regexp
-		var rex = new RegExp("(?:\\s+|^)" + className + "(?:\\s+|$)")
-		// length is constant, so caching its value
-		var len = children.length
+			// geting elems with native function
+		var children = this.getElementsByTagName(tagName || '*'),
+			// predeclaring vars
+			elements = [], child, i, l = 0,
+			// precompile regexp
+			rex = new RegExp("(?:\\s+|^)" + className + "(?:\\s+|$)"),
+			// length is constant, so caching its value
+			len = children.length
 		
 		// memory for array of nodes will be allocated only once
 		elements.length = len
-		for (var i = 0; i < len; i++)
+		for (i = 0; i < len; i++)
 		{
 			// even caching the reference for children[i] gives us some nanoseconds ;)
 			child = children[i]
@@ -139,6 +139,22 @@ proto.remove = function ()
 {
 	return this.parentNode ? this.parentNode.removeChild(this) : this
 }
+
+proto.isParent = function (parent, root)
+{
+	var node = this
+	do
+	{
+		if (node === parent)
+			return true
+		if (node === root)
+			break
+	}
+	while ((node = node.parentNode))
+	
+	return false
+}
+
 
 proto.getComputedStyle = function (prop)
 {
