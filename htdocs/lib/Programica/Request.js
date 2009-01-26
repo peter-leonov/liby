@@ -26,6 +26,8 @@ Object.extend(XHR, {UNSENT: 0, OPENED: 1, HEADERS_RECEIVED: 2, LOADING: 3, DONE:
 
 var Me = Programica.Request = {}
 
+Me.onreadystatechange = onreadystatechange
+
 Me.post = function (url, params, callback, sync)
 {
 	var r = new XHR(),
