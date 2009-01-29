@@ -1,26 +1,50 @@
 // EventDriven
 ;(function(){
 
-var myName = 'EventDriven'
-var Me = self[myName] = Module(myName)
+var myName = 'EventDriven',
+	Me = self[myName] = Module(myName)
+	MyEvent = Me.Event = Class(myName + '.Event')
+
+MyEvent.prototype = 
+{
+	eventPhase: 2,
+	bubbles: false,
+	cancelable: true,
+	
+	initialize: function (target)
+	{
+		this.timeStamp = +new Date()
+		this.currentTarget = this.target = target
+	},
+	
+	stopPropagation: function () {},
+	preventDefault: function () { this._preventedDefault = true },
+	initEvent: function () {}
+}
 
 // var cache = Me.cache = {}
 
-function uselessDispatchEvent () {}
+function uselessDispatchEvent () { return true }
 
 function usefullDispatchEvent (e, data)
 {
+	var event = new MyEvent(this)
+	
 	if (typeof e == 'string')
-		e = {type: e, data: data || {}, timeStamp: +new Date}
+	{
+		event.type = e
+		event.data = data || {}
+	}
+	else
+		Object.extend(event, e)
 	
 	var handlers, harr, i, ret = true
 	if (handlers = this.__EventDrivenHandlers)
-		if (harr = handlers[e.type])
+		if (harr = handlers[event.type])
 			for (i = 0, len = harr.length; i < len; i++)
-				if (harr[i].call(this, e) === false)
-					ret = false
+				harr[i].call(this, event)
 	
-	return ret
+	return !event._preventedDefault
 }
 
 // event = document.createEvent("Event")
