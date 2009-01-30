@@ -12,14 +12,14 @@ var Me = self[myName] = function (name, sup)
 		// catch (ex) { throw new Error(name + ': ' + ex.message) }
 	}
 	
-	klass.name = name || '[anonimous ' + myName + ']'
+	klass.className = name || '[anonimous ' + myName + ']'
 	klass.prototype = new (sup || Me.Object)()
 	klass.constructor = Me
 	
 	return klass
 }
 
-Me.name = myName
+Me.className = myName
 Me.Object = function () {}
 Me.Object.prototype =
 {
@@ -41,7 +41,7 @@ var myName = 'Module'
 var Me = self[myName] = function (name, proto)
 {
 	var module = function () { throw new Error(myName + ': can`t create direct instances of myself') }
-	module.name = name || '[anonimous ' + myName + ']'
+	module.className = name || '[anonimous ' + myName + ']'
 	module.constructor = Me
 	module.mix = function (cls) { Object.extend(cls.prototype, this.prototype); return this }
 	
@@ -50,7 +50,7 @@ var Me = self[myName] = function (name, proto)
 	return module
 }
 
-Me.name = myName
+Me.className = myName
 
 Function.prototype.mixIn = function (module)
 {
