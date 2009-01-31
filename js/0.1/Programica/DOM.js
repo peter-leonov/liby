@@ -58,7 +58,7 @@ proto.addClassName = function (cn)
 proto.remClassName = function (cn)
 {
 	if (this.className)
-		this.className = this.className.replace(new RegExp('(?:\\s+|^)?' + cn + '(?:\\s+|$)', 'g'), ' ').replace(/^\s+|\s+$/g, '')
+		this.className = this.className.replace(new RegExp('(?:\\s+|^)' + cn + '(?:\\s+|$)', 'g'), ' ').replace(/^\s+|\s+$/g, '')
 	return cn
 }
 
