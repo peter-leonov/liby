@@ -67,7 +67,7 @@ prototype.Handler = function (node)
 			with (request = met(this.action, ev.hash))
 			{
 				ev.request = request
-				onLoad		= function () { me.removeClassName('sending'); me.onload(ev) }
+				onLoad		= function () { me.remClassName('sending'); me.onload(ev) }
 				onSuccess	= function () { me.onsuccess(ev) }
 				onError		= function () { me.onerror(ev) }
 			}

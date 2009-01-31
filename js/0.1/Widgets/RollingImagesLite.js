@@ -106,7 +106,7 @@ Programica.RollingImagesLite.prototype =
 	updateNavigation: function ()
 	{
 		for (var i = 0, il = this.buttons.length; i < il; i++)
-			this.buttons[i].removeClassName('selected-button')
+			this.buttons[i].remClassName('selected-button')
 		
 		var button = this.buttons[this.current]
 		if (button)

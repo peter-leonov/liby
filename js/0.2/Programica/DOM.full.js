@@ -75,7 +75,7 @@ else
 
 Programica.DOM.getElementsBySelector = function (css)
 {
-	return cssQuery(css, this)
+	return $$(css, this)
 }
 
 

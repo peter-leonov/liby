@@ -20,6 +20,6 @@ ThreeDots =
 	adjustTextSizeOfNodes: function (root, selector)
 	{
 		var me = this
-		setTimeout(function () { me.adjustTextSize(cssQuery(selector, root)) }, 1)
+		setTimeout(function () { me.adjustTextSize($$(selector, root)) }, 1)
 	}
 }
