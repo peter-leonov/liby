@@ -1,19 +1,21 @@
 ;(function () {
 
-if (!self.log)
-	self.log = function () {}
+var doc = document, win = window, undef
 
-if (!self.reportError)
-	self.reportError = self.log
+if (!win.log)
+	win.log = function () {}
 
-var doc = document, undef
+if (!win.reportError)
+	win.reportError = win.log
+
+
 
 // this is necesary becouse IE can`t normaly use Array.prototype.slice() as defined in Progrmica/prototype.js
 // so this is a fix for our Array.copy :)
 Array.copy = function (s) { var d = []; if (s !== undef) for (var i = 0, len = s.length; i < len; i++) d[i] = s[i]; return d }
 
-if (self.NodesShortcut)
-	self.NodesShortcut.E = function (tag, cn, props)
+if (win.NodesShortcut)
+	win.NodesShortcut.E = function (tag, cn, props)
 	{
 		if (props)
 		{
@@ -43,10 +45,10 @@ if (self.NodesShortcut)
 
 // appendChild, insertBefore, replaceChild
 
-if (!self.HTMLFormElement) self.HTMLFormElement = {prototype:{}}
-if (!self.Element) self.Element = {prototype:{}}
+if (!win.HTMLFormElement) win.HTMLFormElement = {prototype:{}}
+if (!win.Element) win.Element = {prototype:{}}
 
-// var realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
+var realEvents = {onabort: 1, onactivate: 1, onafterprint: 1, onafterupdate: 1, onbeforeactivate: 1, onbeforecopy: 1, onbeforecut: 1, onbeforedeactivate: 1, onbeforeeditfocus: 1, onbeforepaste: 1, onbeforeprint: 1, onbeforeunload: 1, onbeforeupdate: 1, onblur: 1, onbounce: 1, one: 1, oncellchange: 1, onchange: 1, onclick: 1, oncontextmenu: 1, oncontrolselect: 1, oncopy: 1, oncut: 1, ondataavailable: 1, ondatasetchanged: 1, ondatasetcomplete: 1, ondblclick: 1, ondeactivate: 1, ondrag: 1, ondragend: 1, ondragenter: 1, ondragleave: 1, ondragover: 1, ondragstart: 1, ondrop: 1, onerror: 1, onerror: 1, onerrorupdate: 1, onfilterchange: 1, onfinish: 1, onfocus: 1, onfocusin: 1, onfocusout: 1, onhashchange: 1, onhelp: 1, onkeydown: 1, onkeypress: 1, onkeyup: 1, onlayoutcomplete: 1, onload: 1, onload: 1, onlosecapture: 1, onmessage: 1, onmousedown: 1, onmouseenter: 1, onmouseleave: 1, onmousemove: 1, onmouseout: 1, onmouseover: 1, onmouseup: 1, onmousewheel: 1, onmove: 1, onmoveend: 1, onmovestart: 1, onoffline: 1, ononline: 1, online: 1, onpaste: 1, onprogress: 1, onreadystatechange: 1, onreset: 1, onresize: 1, onresizeend: 1, onresizestart: 1, onrowenter: 1, onrowexit: 1, onrowsdelete: 1, onrowsinserted: 1, onscroll: 1, onselect: 1, onselectionchange: 1, onselectstart: 1, onstart: 1, onstop: 1, onstorage: 1, onstoragecommit: 1, onsubmit: 1, ontimeout: 1, onunload: 1}
 
 function fixOpacity (node)
 {
@@ -61,24 +63,6 @@ function fixOpacity (node)
 	}
 }
 
-
-// function fixTarget (node)
-// {
-// 	if (fixTarget.skip)
-// 		return fixTarget.skip = false
-// 	
-// 	var target = node.target
-// 	if (target)
-// 	{
-// 		var all = doc.all
-// 		for (var i = 0, il = all.length; i < il; i++)
-// 			if (all[i].name === target)
-// 			{
-// 				fixTarget.skip = true
-// 				node.target = all[i]['pmc::realName']
-// 			}
-// 	}
-// }
 
 function fixThem (nodes)
 {
@@ -99,10 +83,8 @@ function onpropertychange6 ()
 		fixOpacity(node)
 	else if (prop == 'innerHTML')
 		fixThem(node.all)
-	// else if (prop == 'target')
-	// 	fixTarget(node)
-	// else if (realEvents[prop])
-	// 	wrapOnEvent(node, prop)
+	else if (realEvents[prop])
+		wrapOnEvent(node, prop)
 	else if (prop.indexOf('on') == 0)
 		wrapOnEvent(node, prop)
 }
@@ -111,14 +93,14 @@ var onpropertychange7 = onpropertychange6
 
 function fix_proto (node)
 {
-	var el = self.Element.prototype
+	var el = win.Element.prototype
 	for (var p in el)
 		node[p] = el[p]
 	
 	if (node.nodeName == 'INPUT' || node.nodeName == 'SELECT' || node.nodeName == 'TEXTAREA')
 	{
 		// input onchange bubbling on forms
-		function onchange (e) { try { node.form.onchange(e) } catch (ex) { self.log&&self.log(ex.message) } }
+		function onchange (e) { try { node.form.onchange(e) } catch (ex) {} }
 		var ael = Element.prototype.addEventListener
 		ael.call(node, 'change', onchange)
 		ael.call(node, 'click',  onchange)
@@ -141,6 +123,7 @@ function fixNode (node)
 	node.attachEvent('onpropertychange', onpropertychange6)
 	// node.appendChildReal = node.appendChild
 	// node.appendChild = fix_appendChild
+	return node
 }
 
 function onBeforeUnload ()
@@ -204,19 +187,23 @@ function getEventWrapper (node, type, func, dir)
 	}
 }
 
+var eventConversion = { DOMMouseScroll: 'mousewheel', unload: 'beforeunload' }
+
 function IEFixes ()
 {
-	IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel', unload: 'beforeunload' }
+	if (IEFixes.applied)
+		return
+	IEFixes.applied = true
 	
 	window.attachEvent('onbeforeunload', onBeforeUnload)
 	
 	// yet another addEventListener(...) fix
-	if (!self.addEventListener && self.attachEvent)
-		self.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
+	if (!win.addEventListener && win.attachEvent)
+		win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 		{
 			dir = dir || false
 			// window.status++
-			type = IEFixes.eventConversion[type] || type
+			type = eventConversion[type] || type
 			
 			var wrapper = getEventWrapper(this, type, func, dir)
 			
@@ -245,28 +232,28 @@ function IEFixes ()
 		}
 	
 	// quick fix for removeEventListener(...)
-	if (!self.removeEventListener && self.detachEvent)
+	if (!win.removeEventListener && win.detachEvent)
 	{
 		Element.prototype.removeEventListener = function (type, func, dir)
 		{
 			dir = dir || false
-			if (IEFixes.eventConversion[type])
-				type = IEFixes.eventConversion[type]
+			if (eventConversion[type])
+				type = eventConversion[type]
 			
 			var wrapper = getEventWrapper(this, type, func, dir)
 			if (wrapper)
 				this.detachEvent('on' + type, wrapper)
 		}
 		
-		self.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener
+		win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener
 	}
 	
 	// sorry, i had to fix this onload call order bug
 	{
 		this['on-load-listeners'] = []
 		
-		self.addEventListenerReal = self.addEventListener
-		self.addEventListener = function (type, func, dir)
+		win.addEventListenerReal = win.addEventListener
+		win.addEventListener = function (type, func, dir)
 		{
 			if (type == 'load')
 			{
@@ -279,8 +266,8 @@ function IEFixes ()
 			return func
 		}
 		
-		self.removeEventListenerReal = self.removeEventListener
-		self.removeEventListener = function (type, func, dir)
+		win.removeEventListenerReal = win.removeEventListener
+		win.removeEventListener = function (type, func, dir)
 		{
 			if (type == 'load')
 			{
@@ -296,7 +283,7 @@ function IEFixes ()
 		}
 		
 		// we have already done the wrapper job
-		self.addEventListenerReal
+		win.addEventListenerReal
 		(
 			'load',
 			function (e)
@@ -310,35 +297,7 @@ function IEFixes ()
 	
 	var NAME_counter = 0
 	doc.nativeCreateElement = doc.createElement
-	doc.createElement = function (type)
-	{
-		var node
-		// if (type == 'input' || type == 'iframe')
-		// {
-		// 	var realName = 'PMC_REAL_NAME_' + ++NAME_counter
-		// 	node = doc.nativeCreateElement('<' + type + ' name="' + realName + '">')
-		// 	node['pmc::realName'] = realName
-		// }
-		// else
-			node = doc.nativeCreateElement(type)
-		
-		fixNode(node)
-		return node
-	}
-	
-	// self.$E = function (type, props)
-	// {
-	// 	if (props)
-	// 	{
-	// 		var html = []
-	// 		for (var i in props)
-	// 			html.push(i + '="' + encodeURI(props[i]) + '"')
-	// 		
-	// 		return doc.createElement('<' + type + ' ' + html.join(' ') + '>')
-	// 	}
-	// 	
-	// 	return doc.createElement(type)
-	// }
+	doc.createElement = function (type) { return fixNode(doc.nativeCreateElement(type)) }
 	
 	if (!doc.defaultView)
 		doc.defaultView = window
@@ -373,20 +332,16 @@ function IEFixes ()
 		}
 	}
 	
-	self.addEventListener('load', fixDocumentAll)
+	win.addEventListener('load', fixDocumentAll)
 	
 	// for oldstyle popups
-	if (self.dialogArguments && self.dialogArguments.external)
-		self.extern = self.dialogArguments.external
-	else if (self.external)
-		self.extern = self.external
+	if (win.dialogArguments && win.dialogArguments.external)
+		win.extern = win.dialogArguments.external
+	else if (win.external)
+		win.extern = win.external
 }
 
-if (!IEFixes.applied)
-{
-	IEFixes()
-	IEFixes.applied = true
-}
+IEFixes()
 
 })();
 
