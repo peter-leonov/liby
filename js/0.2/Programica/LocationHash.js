@@ -1,4 +1,4 @@
-// beta :)
+// alpha :)
 var LocationHash =
 {
 	onchange: function () {  },
