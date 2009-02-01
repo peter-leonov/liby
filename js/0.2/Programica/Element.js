@@ -1,8 +1,6 @@
 ;(function(){
 
-var R = RegExp, classNameRexCache = {}
-
-function bakeClassNameRex (cn) { return classNameRexCache[cn] = new R('(?:\\s+|^)' + cn + '(?:\\s+|$)', 'g') }
+var R = RegExp, rexCache = {}
 
 Object.add
 (
@@ -23,14 +21,17 @@ Object.add
 		
 		removeClassName: function (cn)
 		{
-			if (this.className)
-				this.className = this.className.replace(classNameRexCache[cn] || bakeClassNameRex(cn), ' ').replace(/^\s+|\s+$/g, '')
+			var className = this.className
+			if (className)
+				this.className = className.replace(rexCache[cn] || (rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')), ' ')
+								.replace(/^\s+|\s+$/g, '')
 			return cn
 		},
 		
 		hasClassName: function (cn)
 		{
-			return (this.className == cn || (classNameRexCache[cn] || bakeClassNameRex(cn)).test(this.className))
+			var className = this.className
+			return (className == cn || (rexCache[cn] || (rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+'))).test(className))
 		},
 		
 		empty: function ()
