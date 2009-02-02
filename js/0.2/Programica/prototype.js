@@ -49,9 +49,10 @@ add
 				if (i in this)
 					res[i] = f.call(inv, this[i], i, this)
 			return res
-		},
-		copy: function (src) { return Ap.slice.call(src) }
+		}
 	}
 )
+
+add(A, {copy: function (src) { return Ap.slice.call(src) }})
 
 })();
