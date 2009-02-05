@@ -1,10 +1,11 @@
 ;(function(){
 
-var XHR = XMLHttpRequest
+var Me = Programica.Request = {},
+	XHR = XMLHttpRequest,
+	statusEventNames = ['success', 'information', 'success', 'redirect', 'error', 'error'],
+	urlEncode = UrlEncode.stringify
 
 EventDriven.mix(XHR)
-
-var statusEventNames = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
 function onreadystatechange ()
 {
@@ -24,8 +25,6 @@ function onreadystatechange ()
 
 Object.extend(XHR, {UNSENT: 0, OPENED: 1, HEADERS_RECEIVED: 2, LOADING: 3, DONE: 4})
 
-var Me = Programica.Request = {}
-
 Me.onreadystatechange = onreadystatechange
 
 Me.post = function (url, params, callback, sync)
@@ -40,63 +39,29 @@ Me.post = function (url, params, callback, sync)
 	if (callback)
 		r.addEventListener('load', callback, false)
 	r.send(data)
+	if (sync)
+		onreadystatechange.apply(r)
 	
 	return r
 }
 
 Me.get = function (url, params, callback, sync)
 {
-	var r = new XHR(),
-		data = urlEncode(params),
-		delim = data ? url.indexOf('?') < 0 ? '?' : Me.delimiter : ''
+	var r = new XHR()
 	
-	r.open('GET', url + delim + data, !sync)
+	if (params)
+		url += '?' + urlEncode(params)
+	
+	r.open('GET', url, !sync)
 	r.onreadystatechange = onreadystatechange
 	if (callback)
 		r.addEventListener('load', callback, false)
 	r.send(null)
+	if (sync)
+		onreadystatechange.apply(r)
 	
 	return r
 }
-
-var encode = encodeURIComponent
-
-function urlEncode (data)
-{
-	if (!data)
-		return ''
-	
-	switch (data.constructor)
-	{
-	case Array:
-		return data.join(Me.delimiter)
-	
-	case Object:
-		var arr = []
-		for (var i in data)
-			if (i != undefined && data[i] != undefined)
-				switch (data[i].constructor)
-				{
-					case Array:
-						for (var j = 0, jl = data[i].length; j < jl; j++)
-							arr.push(encode(i) + '=' + encode(data[i][j]))
-						break
-					default:
-						arr.push(encode(i) + '=' + encode(data[i]))
-						break
-				}
-		
-		return arr.join(Me.delimiter)
-	
-	default:
-		return encode(data)
-	}
-}
-
-
-Me.delimiter = '&'
-Me.urlEncode = urlEncode
-
 
 var $ = self.$
 if ($)

@@ -1,4 +1,7 @@
-var UrlEncode = 
+;(function(){
+
+var myName = 'UrlEncode',
+	Me = self[myName] =
 {
 	paramDelimiter: '&',
 	
@@ -40,7 +43,7 @@ var UrlEncode =
 	stringify: function (data)
 	{
 		var enc = encodeURIComponent,
-			pd = this.paramDelimiter
+			pd = Me.paramDelimiter
 		
 		if (!data)
 			return ''
@@ -79,3 +82,5 @@ var UrlEncode =
 		}
 	}
 }
+
+})();
