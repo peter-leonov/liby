@@ -2,13 +2,13 @@
 // this code is heavy minified and it couldn't be changed frequently
 ;(function(){
 
-var A = Array, Ap = A.prototype, S = String, F = Function, D = Date, N = Number, M = Math
+var O = Object, A = Array, Ap = A.prototype, S = String, Fp = Function.prototype, D = Date, N = Number, M = Math
 
 function add (d, s) { if (d) for (var k in s) if (!(k in d)) d[k] = s[k]; return d }
 
 add
 (
-	Object,
+	O,
 	{
 		add: add,
 		extend: function (d, s) { if (d) for (var k in s) d[k] = s[k]; return d },
@@ -20,6 +20,7 @@ add
 
 add(String, {localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }})
 
+add(Fp, {extend: O.extend})
 
 var ceil = M.ceil, floor = M.floor, round = M.round, random = M.random
 add(M, {longRandom: function () { return (new D()).getTime().toString() + round(random() * 1E+17) }})
