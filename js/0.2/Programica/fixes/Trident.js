@@ -17,9 +17,10 @@ Array.copy = function (s) { var d = []; if (s !== undef) for (var i = 0, len = s
 if (win.NodesShortcut)
 	win.NodesShortcut.E = function (tag, cn, props)
 	{
+		var node
 		if (props)
 		{
-			var node, html = [], name, i, names = ['name', 'type']
+			var html = [], name, i, names = ['name', 'type']
 			
 			for (i = 0; i < names.length; i++)
 			{
@@ -35,11 +36,13 @@ if (win.NodesShortcut)
 			
 			for (i in props)
 				node[i] = props[i]
-			
-			return node
 		}
 		else
-			return doc.createElement(tag)
+			node = doc.createElement(tag)
+		
+		if (cn !== undef) node.className = cn
+		
+		return node
 	}
 
 
