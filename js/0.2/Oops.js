@@ -11,9 +11,9 @@ if (!(/[A-Za-z\-]+\.[A-Za-z\-]+\.programica\.ru/.test(window.location.host)))
 		{
 			var href = 'http://oops.programica.ru/report',
 				esc = window.encodeURIComponent || window.escape,
-				q = 'url=' + esc(url + ':' + line) + '&message=' + esc(message) + '&session=' + Oops.session + '&type=' + (type || 'error')
+				q = '?url=' + esc(url + ':' + line) + '&message=' + esc(message) + '&session=' + Oops.session + '&type=' + (type || 'error')
 			
-			document.createElement('img').src = '?' + q
+			document.createElement('img').src = q
 		}
 		catch (ex)
 		{
