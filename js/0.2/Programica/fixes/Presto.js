@@ -10,6 +10,18 @@ if (self.opera && opera.postError)
 else
 	self.log = self.reportError = function () {  }
 
+if (/Opera\/9\.2/.test(navigator.userAgent))
+{
+	var proto = Element.prototype
+	proto.__nativeCloneNode = proto.cloneNode
+	proto.cloneNode = function (deep)
+	{
+		var node = this.__nativeCloneNode(deep)
+		node.innerHTML = node.innerHTML
+		return node
+	}
+}
+
 // if (/Opera\/9\.2/.test(navigator.userAgent))
 // {
 // 	// Opera screen image caching fix
