@@ -177,7 +177,7 @@ function getEventWrapper (node, type, func, dir)
 		{
 			if (e === undef)
 				e = event
-			e.target = e.srcElement
+			e.currentTarget = e.target = e.srcElement
 			e.preventDefault  = preventDefault
 			e.stopPropagation = stopPropagation
 			e.detail = - e.wheelDelta / 30
