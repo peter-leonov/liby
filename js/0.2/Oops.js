@@ -1,7 +1,7 @@
 // at this stage no fixes or wrappers are loaded from any lib
 // so you can see some dirty "cross browser" code here
 
-if (!(/[A-Za-z\-]+\.[A-Za-z\-]+\.programica\.ru/.test(window.location.host)))
+if (!(/Oops=disable/.test(document.cookie)))
 {
 	try { console.log('Oops enabled') } catch (ex) {}
 	
