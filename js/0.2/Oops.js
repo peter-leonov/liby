@@ -36,4 +36,4 @@ if (!(/Oops=disabled/.test(document.cookie)))
 	}
 	
 	window.onerror = Oops
-}xxx
+}
