@@ -8,6 +8,8 @@ if (!win.log)
 if (!win.reportError)
 	win.reportError = win.log
 
+Array.copy = function (src) { var dst = []; for (var i = 0, len = src.length; i < len; i++) dst[i] = src[i]; return dst }
+
 function onBeforeUnload ()
 {
 	var stack = onBeforeUnload.stack
