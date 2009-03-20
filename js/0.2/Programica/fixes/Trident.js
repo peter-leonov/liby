@@ -1,4 +1,4 @@
-;(function () {
+;(function(){
 
 var doc = document, win = window, undef
 
@@ -10,7 +10,7 @@ if (!win.reportError)
 
 
 
-// this is necesary becouse IE can`t normaly use Array.prototype.slice() as defined in Progrmica/prototype.js
+// this is necesary because IE can`t normaly use Array.prototype.slice() as defined in Progrmica/prototype.js
 // so this is a fix for our Array.copy :)
 Array.copy = function (s) { var d = []; if (s !== undef) for (var i = 0, len = s.length; i < len; i++) d[i] = s[i]; return d }
 
@@ -236,8 +236,7 @@ function IEFixes ()
 	
 	// quick fix for removeEventListener(...)
 	if (!win.removeEventListener && win.detachEvent)
-	{
-		Element.prototype.removeEventListener = function (type, func, dir)
+		win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
 		{
 			dir = dir || false
 			if (eventConversion[type])
@@ -247,9 +246,6 @@ function IEFixes ()
 			if (wrapper)
 				this.detachEvent('on' + type, wrapper)
 		}
-		
-		win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener
-	}
 	
 	// sorry, i had to fix this onload call order bug
 	{
@@ -347,5 +343,3 @@ function IEFixes ()
 IEFixes()
 
 })();
-
-<!--# include file="Trident.XHR.js" -->
