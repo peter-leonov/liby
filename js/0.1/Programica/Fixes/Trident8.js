@@ -2,6 +2,8 @@
 
 var doc = document, win = window, undef
 
+// Object.defineProperty(CSSStyleDeclaration.prototype, 'opacity', {set: function (v) { (this.filter = 'alpha(opacity=' + Math.round((this.__pmc_opacity = (v < 0 ? 0 : (v > 1 ? 1 : v))) * 100) + ')') }, get: function () { return this.__pmc_opacity }})
+
 if (!win.log)
 	win.log = function () {}
 
