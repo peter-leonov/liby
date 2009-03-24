@@ -1,7 +1,7 @@
 // at this stage no fixes or wrappers are loaded from any lib
 // so you can see some dirty "cross browser" code here
 
-if (!(/Oops=disabled/.test(document.cookie)))
+if (!(/Oops=disabled/.test(document.cookie)) && !window.console)
 {
 	try { console.log('Oops enabled') } catch (ex) {}
 	
