@@ -3,7 +3,7 @@
 var doc = document, win = window, undef
 
 if (!win.log)
-	win.log = console.log
+	win.log = win.console ? win.console.log : function () {}
 
 if (!win.reportError)
 	win.reportError = win.log
