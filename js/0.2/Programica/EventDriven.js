@@ -1,8 +1,7 @@
-// EventDriven
 ;(function(){
 
 var myName = 'EventDriven',
-	Me = self[myName] = Module(myName)
+	Me = self[myName] = Module(myName),
 	MyEvent = Me.Event = Class(myName + '.Event')
 
 MyEvent.prototype = 
