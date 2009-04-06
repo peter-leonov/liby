@@ -116,4 +116,52 @@ if (!win.removeEventListener && win.detachEvent)
 	}
 
 
+	// sorry, i had to fix this onload call order bug
+	{
+		this['on-load-listeners'] = []
+		
+		win.addEventListenerReal = win.addEventListener
+		win.addEventListener = function (type, func, dir)
+		{
+			if (type == 'load')
+			{
+				this.removeEventListener(type, func, dir)
+				this['on-load-listeners'].push(func)
+			}
+			else
+				this.addEventListenerReal(type, func, dir)
+			
+			return func
+		}
+		
+		win.removeEventListenerReal = win.removeEventListener
+		win.removeEventListener = function (type, func, dir)
+		{
+			if (type == 'load')
+			{
+				var newarr = []
+				for (var i = 0; i < this['on-load-listeners'].length; i++)
+					if (this['on-load-listeners'][i] != func)
+						newarr.push(this['on-load-listeners'][i])
+			}
+			else
+				this.removeEventListenerReal(type, func, dir)
+			
+			return func
+		}
+		
+		// we have already done the wrapper job
+		win.addEventListenerReal
+		(
+			'load',
+			function (e)
+			{
+				for (var i = 0; i < this['on-load-listeners'].length; i++)
+					this['on-load-listeners'][i](e)
+			},
+			true
+		)
+	}
+
+
 })();
