@@ -100,7 +100,7 @@ Programica.RollingImagesLite.prototype =
 	animateTo: function (left, top, anim, dur) { return this.viewport.animate(anim || this.animationType, {scrollLeft: left, scrollTop: top}, dur || this.duration) },
 	
 	jumpTo: function (left, top) { this.viewport.scrollLeft = left; this.viewport.scrollTop = top },
-	jumpToFrame: function (n) { this.goToFrame(n, 'directJump') },
+	jumpToFrame: function (n) { var node = this.points[n]; if (node) this.jumpTo(node.offsetLeft, node.offsetTop) },
 	
 	updateNavigation: function ()
 	{
