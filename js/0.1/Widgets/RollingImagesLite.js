@@ -73,11 +73,9 @@ Programica.RollingImagesLite.prototype =
 	goNext: function () { if (this.current < this.points.length - 1) this.goToFrame(this.current + 1) },
 	my: function (cn) { return this.mainNode.getElementsByClassName(cn) },
 	
-	goInit: function (n)
+	goInit: function ()
 	{
-		var node = this.my('selected')[0]
-		node ? this.goToNode(node, 'directJump') : this.goToFrame(0, 'directJump')
-		return n
+		return this.goToFrame(0, 'directJump')
 	},
 	
 	goToFrame: function (n, anim, dur) { return this.points ? this.goToNode(this.points[n || 0], anim, dur) : null },
