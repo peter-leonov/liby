@@ -1,3 +1,3 @@
 // defining spaces
-if (!self.Programica) self.Programica = {version: '0.1', revision: '3120'}
+if (!self.Programica) self.Programica = {version: '0.2'}
 
