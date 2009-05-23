@@ -1,14 +1,4 @@
-// defining spaces
-
 function $ (id) { return document.getElementById(id) }
-function $E  (type, props)
-{
-	var node = document.createElement(type)
-	if (props)
-		for (var i in props)
-			node.setAttribute(i, props[i])
-	return node
-}
 
 $.onload = function (fn) { return self.addEventListener('load', fn, false) }
 $.include = function (src)
