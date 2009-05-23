@@ -6,11 +6,11 @@ if (!win.log)
 	win.log = function () {}
 
 if (!win.reportError)
-	win.reportError = win.log
+	win.reportError = function () {}
 
 
 
-// this is necesary because IE can`t normaly use Array.prototype.slice() as defined in Progrmica/prototype.js
+// this is necesary because IE can`t normaly use Array.prototype.slice(),
 // so this is a fix for our Array.copy :)
 Array.copy = function (s) { var d = []; if (s !== undef) for (var i = 0, len = s.length; i < len; i++) d[i] = s[i]; return d }
 
