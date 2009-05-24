@@ -54,7 +54,8 @@ Me.prototype.extend
 		}
 		
 		this.sync()
-		this.goInit()
+		if (this.conf.goInit !== false)
+			this.goInit()
 		
 		return this
 	},
