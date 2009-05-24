@@ -10,7 +10,7 @@ Me.prototype.extend
 ({
 	initialize: function ()
 	{
-		this.nodes = {}
+		this.nodes = {points:[]}
 		this.conf =
 		{
 			duration: 1,
@@ -43,7 +43,7 @@ Me.prototype.extend
 			me.autoTimer = setInterval(meGoPrev, me.conf.duration * 1000 * me.conf.auto + 150)
 			doc.addEventListener('mouseup', mouseup, false)
 		}
-
+		
 		this.nextmousedown = function (e)
 		{
 			e.preventDefault()
@@ -55,6 +55,8 @@ Me.prototype.extend
 		
 		this.sync()
 		this.goInit()
+		
+		return this
 	},
 	
 	sync: function ()
@@ -88,16 +90,23 @@ Me.prototype.extend
 	
 	guessCurrent: function (node)
 	{
-		var points = this.nodes.points
-		// change number of current node
-		for (var i = 0, il = points.length; i < il; i++)
-			if (points[i] == node)
-				this.setCurrent(i)
+		var n = this.nodes.points.indexOf(node)
+		if (n >= 0)
+			this.setCurrent(i)
 	},
 	
 	goInit: function (n) { this.goToFrame(n || 0, 'directJump'); return n },
 	
-	goToFrame: function (n, anim, dur) { return this.nodes.points ? this.goToNode(this.nodes.points[n || 0], anim, dur) : null },
+	goToFrame: function (n, anim, dur)
+	{
+		var node = this.nodes.points[n || 0]
+		if (node)
+		{
+			this.setCurrent(n)
+			return this.goToNode(node, anim, dur)
+		}
+		return null
+	},
 	
 	goToNode: function (node, anim, dur)
 	{
@@ -150,10 +159,12 @@ Me.prototype.extend
 	
 	setCurrent: function (num)
 	{
-		this.current = num
-		this.updateNavigation()
-		
-		this.dispatchSelect()
+		if (this.current !== num)
+		{
+			this.current = num
+			this.updateNavigation()
+			this.dispatchSelect()
+		}
 	},
 	
 	dispatchSelect: function (opts)
