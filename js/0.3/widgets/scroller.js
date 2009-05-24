@@ -86,6 +86,15 @@ Me.prototype.extend
 	goNext: function () { if (this.current < this.nodes.points.length - 1) this.goToFrame(this.current + 1) },
 	my: function (cn) { return this.nodes.main.getElementsByClassName(cn) },
 	
+	guessCurrent: function (node)
+	{
+		var points = this.nodes.points
+		// change number of current node
+		for (var i = 0, il = points.length; i < il; i++)
+			if (points[i] == node)
+				this.setCurrent(i)
+	},
+	
 	goInit: function (n) { this.goToFrame(n || 0, 'directJump'); return n },
 	
 	goToFrame: function (n, anim, dur) { return this.nodes.points ? this.goToNode(this.nodes.points[n || 0], anim, dur) : null },
@@ -94,12 +103,6 @@ Me.prototype.extend
 	{
 		if (!node)
 			return null
-		
-		var points = this.nodes.points
-		// change number of current node
-		for (var i = 0, il = points.length; i < il; i++)
-			if (points[i] == node)
-				this.setCurrent(i)
 		
 		return this.animateTo(node.offsetLeft, node.offsetTop, anim, dur)
 	},
@@ -114,6 +117,24 @@ Me.prototype.extend
 		var viewport = this.nodes.viewport
 		viewport.scrollLeft = left
 		viewport.scrollTop = top
+	},
+	
+	jumpToNode: function (node)
+	{
+		if (!node)
+			return null
+		
+		this.jumpTo(node.offsetLeft, node.offsetTop)
+	},
+	
+	jumpToFrame: function (n)
+	{
+		var node = this.nodes.points[n]
+		if (node)
+		{
+			this.setCurrent(n)
+			this.jumpToNode(node)
+		}
 	},
 	
 	updateNavigation: function ()
@@ -133,9 +154,6 @@ Me.prototype.extend
 		this.updateNavigation()
 		
 		this.dispatchSelect()
-		
-		// if (cp && cp.onselect)
-		// 	cp.onselect()
 	},
 	
 	dispatchSelect: function (opts)
