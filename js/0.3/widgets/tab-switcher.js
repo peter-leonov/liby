@@ -5,18 +5,6 @@ var Me = self[myName] = Class(myName)
 
 Me.mixIn(EventDriven)
 
-// eval(NodesShortcut())
-
-// function assert (val)
-// {
-// 	if (!val)
-// 	{
-// 		log(arguments.callee.caller)
-// 		try { throw new Error() }
-// 		catch (ex) { log(ex) }
-// 	}
-// }
-
 Me.prototype.extend
 ({
 	eventType: 'mousedown',
