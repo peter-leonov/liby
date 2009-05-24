@@ -62,11 +62,12 @@ function onpropertychange ()
 
 function fix_proto (node)
 {
-	var el = win.Element.prototype
+	var el = win.Element.prototype,
+		nn = node.nodeName
 	for (var p in el)
 		node[p] = el[p]
 	
-	if (node.nodeName == 'INPUT' || node.nodeName == 'SELECT' || node.nodeName == 'TEXTAREA')
+	if (nn === 'INPUT' || nn === 'SELECT' || nn === 'TEXTAREA')
 	{
 		// input onchange bubbling on forms
 		function onchange (e) { try { node.form.onchange(e) } catch (ex) {} }
@@ -74,7 +75,7 @@ function fix_proto (node)
 		ael.call(node, 'change', onchange)
 		ael.call(node, 'click',  onchange)
 	}
-	else if (node.nodeName == 'FORM')
+	else if (nn === 'FORM')
 	{
 		var hfel = HTMLFormElement.prototype
 		for (var p in hfel)
