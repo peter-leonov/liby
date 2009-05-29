@@ -1,12 +1,12 @@
 
-Programica.RollingImagesLite = function (node, prms)
+Programica.RollingImagesLite = function (node, conf)
 {
-	this.duration = 1
-	this.animationType = 'easeOutBack'
+	this.conf = {duration: 1, animationType: 'easeOutBack'}
+	Object.extend(this.conf, conf)
 	this.current = null
 	this.mainNode = node
 	this.mainNode.RollingImagesLite = this
-	Object.extend(this, prms)
+	
 	
 	var t = this
 	function mouseup (e)
@@ -21,7 +21,7 @@ Programica.RollingImagesLite = function (node, prms)
 		e.preventDefault()
 		clearInterval(t.svInt)
 		t.goPrev()
-		t.svInt = setInterval(function () { t.goPrev() }, t.duration * 1000 * 0.5 + 150)
+		t.svInt = setInterval(function () { t.goPrev() }, t.conf.duration * 1000 * 0.5 + 150)
 		document.addEventListener('mouseup', mouseup, false)
 	}
 	
@@ -30,12 +30,13 @@ Programica.RollingImagesLite = function (node, prms)
 		e.preventDefault()
 		clearInterval(t.svInt)
 		t.goNext()
-		t.svInt = setInterval(function () { t.goNext() }, t.duration * 1000 * 0.5 + 150)
+		t.svInt = setInterval(function () { t.goNext() }, t.conf.duration * 1000 * 0.5 + 150)
 		document.addEventListener('mouseup', mouseup, false)
 	}
 	
 	this.sync()
-	this.goInit()
+	if (this.conf.goInit !== false)
+		this.goInit()
 }
 
 Programica.RollingImagesLite.prototype =
@@ -73,11 +74,9 @@ Programica.RollingImagesLite.prototype =
 	goNext: function () { if (this.current < this.points.length - 1) this.goToFrame(this.current + 1) },
 	my: function (cn) { return this.mainNode.getElementsByClassName(cn) },
 	
-	goInit: function (n)
+	goInit: function ()
 	{
-		var node = this.my('selected')[0]
-		node ? this.goToNode(node, 'directJump') : this.goToFrame(0, 'directJump')
-		return n
+		return this.goToFrame(0, 'directJump')
 	},
 	
 	goToFrame: function (n, anim, dur) { return this.points ? this.goToNode(this.points[n || 0], anim, dur) : null },
@@ -99,9 +98,18 @@ Programica.RollingImagesLite.prototype =
 		return this.animateTo(node.offsetLeft, node.offsetTop, anim, dur)
 	},
 	
-	animateTo: function (left, top, anim, dur) { return this.viewport.animate(anim || this.animationType, {scrollLeft: left, scrollTop: top}, dur || this.duration) },
+	animateTo: function (left, top, anim, dur) { return this.viewport.animate(anim || this.conf.animationType, {scrollLeft: left, scrollTop: top}, dur || this.conf.duration) },
 	
 	jumpTo: function (left, top) { this.viewport.scrollLeft = left; this.viewport.scrollTop = top },
+	jumpToFrame: function (n)
+	{
+		var node = this.points[n]
+		if (node)
+		{
+			this.setCurrent(n)
+			this.jumpTo(node.offsetLeft, node.offsetTop)
+		}
+	},
 	
 	updateNavigation: function ()
 	{
