@@ -1,39 +1,44 @@
 // at this stage no fixes or wrappers are loaded from any lib
-// so you can see some dirty "cross browser" code here
 
-if (!(/Oops=disabled/.test(document.cookie)) && !window.console)
+;(function(){
+
+var report = 'http://oops.programica.ru/report?'
+
+function Oops (message, url, line, type)
 {
-	try { console.log('Oops enabled') } catch (ex) {}
-	
-	function Oops (message, url, line, type)
+	try // to fully describe an error
 	{
-		try // to fully describe an error
-		{
-			var href = 'http://oops.programica.ru/report',
-				esc = window.encodeURIComponent || window.escape,
-				q = '?url=' + esc(url + ':' + line) + '&message=' + esc(message) + '&session=' + Oops.session + '&type=' + (type || 'error')
-			
-			Oops.request(q)
-		}
-		catch (ex)
-		{
-			try // to scream for help
-			{
-				Oops.request(href + '?message=cant+report&type=error')
-			}
-			catch (ex) {}
-		}
+		var esc = window.encodeURIComponent || window.escape,
+			q = 'v=0.3&u=' + esc(url + ':' + line) + '&m=' + esc(message) + '&s=' + Oops.session + '&t=' + (type || 'error')
 		
-		return true
+		Oops.report(q)
 	}
-	
-	Oops.session = (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17)
-	Oops.request = function (src)
+	catch (ex)
 	{
-		var I = new Image(1,1)
-		I.src = src
-		I.onload = function () {}
+		try // to scream for help
+		{
+			Oops.report('message=cant+report&type=error')
+		}
+		catch (ex) {}
 	}
 	
+	return true
+}
+
+Oops.session = (new Date()).getTime().toString() + Math.round(Math.random() * 1E+17)
+Oops.report = function (data)
+{
+	var r = new Image(1,1)
+	r.src = report + data
+	r.onload = function () { Oops.log('error reported successfuly') }
+}
+
+Oops.log = function (str) { try { console.log(str) } catch (ex) {} }
+
+if (!/Oops=disabled/.test(document.cookie))
+{
+	Oops.log('Oops enabled')
 	window.onerror = Oops
 }
+
+})();
