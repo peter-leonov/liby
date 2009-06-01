@@ -2,7 +2,7 @@
 
 var Me = Programica.Form =
 {
-	form2hash: function (form, fa)
+	toHash: function (form, fa)
 	{
 		var hash = {}, isArray = {}, els = form.elements
 		
@@ -60,8 +60,5 @@ var Me = Programica.Form =
 		return hash;
 	}
 }
-
-// example: $('form').toHash()
-HTMLFormElement.prototype.toHash = function (fa) { return Me.form2hash(this, fa) }
 
 })();
