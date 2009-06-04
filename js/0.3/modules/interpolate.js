@@ -94,9 +94,8 @@ function interpolateJS (h)
 	{
 		b = parseOutJS(this), s = [], o = []
 		
-		if (b[0])
-			s[0] = b[0], o[0] = '($_$s[0])'
-			
+		s[0] = b[0]
+		o[0] = '($_$s[0])'
 		
 		for (i = 1; i < b.length; i+=2)
 		{
