@@ -6,24 +6,48 @@
 </head>
 <body>
 
-<form action="/act/event-form.cgi" method="post" target="ajax">
-	<div class="fields">
-		<label><input type="text" name="city" value="Москва"/></label>
-		<label><input type="text" name="first" value="Василий"/></label>
-		<label><input type="text" name="second" value="Пупкин"/></label>
-		<label><input type="text" name="email" value="gojpeg@yandex.ru"/></label>
-		<input type="hidden" name="event" value="mega-event-name!"/>
-		<input type="hidden" name="href" value="http://www.event.org/mega"/>
-	</div>
+<form id="test-from-1">
+		<input type="text" name="unicode" value="Юникод"/>
+		<input type="text" name="text" value="text"/>
+		<input type="hidden" name="hidden" value="hidden"/>
+		<select name="select-one">
+			<option value="select">not selected</option>
+			<option value="selected-one" selected="selected">selected-one</option>
+			<option value="select">not selected</option>
+			<option value="select">not selected</option>
+		</select>
+		<select multiple="multiple" name="select-multiple">
+			<option value="select">not selected</option>
+			<option selected="selected" value="selected">selected</option>
+			<option value="select">not selected</option>
+			<option selected="selected" value="selected">selected</option>
+			<option selected="selected" value="selected">selected</option>
+			<option value="select">not selected</option>
+		</select>
+		<select multiple="multiple" name="select-multiple-none">
+			<option value="select">not selected</option>
+			<option value="select">not selected</option>
+			<option value="select">not selected</option>
+		</select>
 </form>
 
 
 <!--[if IE 6]><script type="text/javascript" src="../programica/init.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../modules/cosy.js"></script>
 <script type="text/javascript" src="../modules/form.js"></script>
 <script type="text/javascript">
+	function ok (v, m) { v ? console.info(m) : console.error(m) }
+	var toHash = Programica.Form.toHash
 	
+	var hash = toHash($('test-from-1'))
+	log(hash)
+	ok(hash['unicode'] === 'Юникод', 'unicode')
+	ok(hash['text'] === 'text', 'text')
+	ok(hash['hidden'] === 'hidden', 'hidden')
+	ok(hash['select-one'] === 'selected-one', 'select-one')
+	ok(hash['select-multiple'].join(',') === 'selected,selected,selected', 'select-multiple')
 </script>
 </body>
 </html>
