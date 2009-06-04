@@ -4,7 +4,7 @@ var Me = Programica.Form =
 {
 	toHash: function (form, fa)
 	{
-		var hash = {}, isArray = {}, els = form.elements
+		var hash = {}, many = {}, push = ([]).push, els = form.elements
 		
 		for (var i = 0, l = els.length; i < l; i++)
 		{
@@ -19,43 +19,67 @@ var Me = Programica.Form =
 				case 'checkbox':
 				case 'radio':
 					if (node.checked)
-						val = node.value
+						val = [node.value]
 					else
 						continue
 					break
 				
 				case 'select-one':
-					val = node.options[node.selectedIndex].value
+					if (node.selectedIndex < 0)
+						continue
+					val = [node.options[node.selectedIndex].value]
+					break
+				
+				case 'select-multiple':
+					if (node.selectedIndex < 0)
+						continue
+					var options = node.options
+					val = []
+					for (var j = 0, jl = options.length; j < jl; j++)
+					{
+						var option = options[j]
+						if (option.selected)
+							val.push(option.value)
+					}
 					break
 				
 				default:
-					val = node.value
+					val = [node.value]
 			}
 			
 			if (fa)
 			{
 				if (name in hash)
-					hash[name].push(val)
+					push.apply(hash[name], val)
 				else
-					hash[name] = [val]
+					hash[name] = val
 			}
 			else
 			{
 				if (name in hash)
 				{
 					var v = hash[name]
-					if (isArray[name])
-						v.push(val)
+					if (many[name])
+						push.apply(v, val)
 					else
 					{
-						isArray[name] = true
-						hash[name] = [v, val]
+						hash[name] = val
+						val.unshift(v)
+						many[name] = true
 					}
 				}
 				else
-					hash[name] = val
+					hash[name] = val.length > 1 ? val : val[0]
 			}
 		}
+		
+		// if (!fa)
+		// 	for (var k in hash)
+		// 	{
+		// 		val = hash[k]
+		// 		if (val.length == 1)
+		// 			hash[k] = val[0]
+		// 	}
 		
 		return hash;
 	}
