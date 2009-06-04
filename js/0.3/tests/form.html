@@ -9,6 +9,7 @@
 <form id="test-from-1">
 		<input type="text" name="unicode" value="Юникод"/>
 		<input type="text" name="text" value="text"/>
+		<textarea name="textarea">textarea</textarea>
 		<input type="hidden" name="hidden" value="hidden"/>
 		<select name="select-one">
 			<option value="select">not selected</option>
@@ -29,10 +30,27 @@
 			<option value="select">not selected</option>
 			<option value="select">not selected</option>
 		</select>
+		<input type="text" name="double" value="one"/>
+		<select multiple="multiple" name="double">
+			<option selected="selected" value="two">two</option>
+			<option value="two">tree</option>
+		</select>
+		<input type="submit" value="unnamed"/>
+		<input type="image" value="empty-named" name=""/>
+</form>
+
+<form id="test-from-2">
+</form>
+
+<form id="test-from-3">
+	<input type="submit" value="unnamed"/>
 </form>
 
 
-<!--[if IE 6]><script type="text/javascript" src="../programica/init.js"></script><![endif]-->
+<!--[if IE 6]><script type="text/javascript" src="../programica/trident3.js"></script>
+<script type="text/javascript" src="../programica/trident3-xhr.js"></script><![endif]-->
+<!--[if IE 7]><script type="text/javascript" src="../programica/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/fixes/log.js"></script>
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../modules/cosy.js"></script>
@@ -45,9 +63,24 @@
 	log(hash)
 	ok(hash['unicode'] === 'Юникод', 'unicode')
 	ok(hash['text'] === 'text', 'text')
+	ok(hash['textarea'] === 'textarea', 'textarea')
 	ok(hash['hidden'] === 'hidden', 'hidden')
 	ok(hash['select-one'] === 'selected-one', 'select-one')
 	ok(hash['select-multiple'].join(',') === 'selected,selected,selected', 'select-multiple')
+	ok(hash['double'].join(',') === 'one,two', 'double')
+	ok(hash[undefined] === undefined, 'unnamed')
+	ok(hash[''] === undefined, 'empty-named')
+	
+	var hash = toHash($('test-from-2'))
+	var k = null
+	for (k in hash) log(hash)
+	ok(k === null, 'empty form')
+	
+	var hash = toHash($('test-from-3'))
+	var k = null
+	for (k in hash) log(hash)
+	ok(k === null, 'form with only unnamed input')
+	
 </script>
 </body>
 </html>
