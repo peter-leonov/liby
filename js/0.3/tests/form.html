@@ -15,6 +15,7 @@
 		<input type="checkbox" name="checkbox-unchecked" value="checkbox"/>
 		<input type="radio" name="radio" value="radio" checked="checked"/>
 		<input type="radio" name="radio-unchecked" value="radio-unchecked"/>
+		<button name="button" value="button">a button</button>
 		
 		<select name="select-one">
 			<option value="select">not selected</option>
@@ -55,6 +56,11 @@
 	<input type="submit" value="unnamed"/>
 </form>
 
+<form id="test-from-4">
+	<input type="submit" name="empty" value=""/>
+	<input type="submit" name="unvalued"/>
+</form>
+
 
 <!--[if IE 6]><script type="text/javascript" src="../programica/trident3.js"></script>
 <script type="text/javascript" src="../programica/trident3-xhr.js"></script><![endif]-->
@@ -78,6 +84,7 @@
 	ok(!('checkbox-unchecked' in hash), 'checkbox-unchecked')
 	ok(hash['radio'] === 'radio', 'radio')
 	ok(!('radio-unchecked' in hash), 'radio-unchecked')
+	ok(hash['button'] === 'button', 'button')
 	ok(hash['select-one'] === 'selected-one', 'select-one')
 	ok(hash['select-multiple'].join(',') === 'selected,selected,selected', 'select-multiple')
 	ok(hash['mixed'].join(',') === 'one,two,tree,four', 'mixed')
@@ -93,6 +100,11 @@
 	var k = null
 	for (k in hash) log(hash)
 	ok(k === null, 'form with only unnamed input')
+	
+	var hash = toHash($('test-from-4'))
+	log(hash)
+	ok(hash['empty'] === '', 'empty input')
+	ok(hash['unvalued'] === '', 'unvalued')
 	
 </script>
 </body>
