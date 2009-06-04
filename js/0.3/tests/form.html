@@ -11,6 +11,11 @@
 		<input type="text" name="text" value="text"/>
 		<textarea name="textarea">textarea</textarea>
 		<input type="hidden" name="hidden" value="hidden"/>
+		<input type="checkbox" name="checkbox" value="checkbox" checked="checked"/>
+		<input type="checkbox" name="checkbox-unchecked" value="checkbox"/>
+		<input type="radio" name="radio" value="radio" checked="checked"/>
+		<input type="radio" name="radio-unchecked" value="radio-unchecked"/>
+		
 		<select name="select-one">
 			<option value="select">not selected</option>
 			<option value="selected-one" selected="selected">selected-one</option>
@@ -30,11 +35,15 @@
 			<option value="select">not selected</option>
 			<option value="select">not selected</option>
 		</select>
-		<input type="text" name="double" value="one"/>
-		<select multiple="multiple" name="double">
+		
+		<input type="text" name="mixed" value="one"/>
+		<select multiple="multiple" name="mixed">
 			<option selected="selected" value="two">two</option>
-			<option value="two">tree</option>
+			<option value="none">none</option>
 		</select>
+		<input type="checkbox" name="mixed" value="tree" checked="checked"/>
+		<input type="radio" name="mixed" value="four" checked="checked"/>
+		
 		<input type="submit" value="unnamed"/>
 		<input type="image" value="empty-named" name=""/>
 </form>
@@ -65,11 +74,15 @@
 	ok(hash['text'] === 'text', 'text')
 	ok(hash['textarea'] === 'textarea', 'textarea')
 	ok(hash['hidden'] === 'hidden', 'hidden')
+	ok(hash['checkbox'] === 'checkbox', 'checkbox')
+	ok(!('checkbox-unchecked' in hash), 'checkbox-unchecked')
+	ok(hash['radio'] === 'radio', 'radio')
+	ok(!('radio-unchecked' in hash), 'radio-unchecked')
 	ok(hash['select-one'] === 'selected-one', 'select-one')
 	ok(hash['select-multiple'].join(',') === 'selected,selected,selected', 'select-multiple')
-	ok(hash['double'].join(',') === 'one,two', 'double')
-	ok(hash[undefined] === undefined, 'unnamed')
-	ok(hash[''] === undefined, 'empty-named')
+	ok(hash['mixed'].join(',') === 'one,two,tree,four', 'mixed')
+	ok(!(undefined in hash), 'unnamed')
+	ok(!('' in hash), 'empty-named')
 	
 	var hash = toHash($('test-from-2'))
 	var k = null
