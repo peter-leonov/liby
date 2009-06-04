@@ -4,7 +4,7 @@ var Me = Programica.Form =
 {
 	toHash: function (form, fa)
 	{
-		var hash = {}, many = {}, push = ([]).push, els = form.elements
+		var hash = {}, els = form.elements
 		
 		for (var i = 0, l = els.length; i < l; i++)
 		{
@@ -47,39 +47,19 @@ var Me = Programica.Form =
 					val = [node.value]
 			}
 			
-			if (fa)
-			{
-				if (name in hash)
-					push.apply(hash[name], val)
-				else
-					hash[name] = val
-			}
+			if (name in hash)
+				hash[name] = hash[name].concat(val)
 			else
-			{
-				if (name in hash)
-				{
-					var v = hash[name]
-					if (many[name])
-						push.apply(v, val)
-					else
-					{
-						hash[name] = val
-						val.unshift(v)
-						many[name] = true
-					}
-				}
-				else
-					hash[name] = val.length > 1 ? val : val[0]
-			}
+				hash[name] = val
 		}
 		
-		// if (!fa)
-		// 	for (var k in hash)
-		// 	{
-		// 		val = hash[k]
-		// 		if (val.length == 1)
-		// 			hash[k] = val[0]
-		// 	}
+		if (!fa)
+			for (var k in hash)
+			{
+				val = hash[k]
+				if (val.length == 1)
+					hash[k] = val[0]
+			}
 		
 		return hash;
 	}
