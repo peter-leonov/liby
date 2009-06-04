@@ -5,16 +5,20 @@
 function parseOutJS (src)
 {
 	// this trick is for IE only
-	src = src.split('')
-	var i = 0, len = src.length, c,
-		res = [], buff = '', open
+	/*@cc_on src = src.split('') @*/
+	var i = 0, len = src.length,
+		res = [], buf = ''
 	
 	// string
 	while (i < len)
 	{
-		c = src[i++]
+		var c = src[i++]
 		// backslash
-		if (c === '\\') { buff += src[i++]; continue }
+		if (c === '\\')
+		{
+			buf += src[i++]
+			continue
+		}
 		
 		// maybe code
 		if (c === '$')
@@ -23,58 +27,58 @@ function parseOutJS (src)
 			// block
 			if (c === '{')
 			{
-				res.push(buff)
-				buff = ''
-				open = 1
+				res.push(buf)
+				buf = ''
+				var open = 1
 				while (i < len)
 				{
 					c = src[i++]
 					// string ""
 					if (c === '"')
 					{
-						buff += c
+						buf += c
 						while (i < len)
 						{
 							c = src[i++]
 							// backslash
-							if (c === '\\') { buff += src[i++]; continue }
+							if (c === '\\') { buf += src[i++]; continue }
 							// end of string ""
 							if (c === '"') { break }
-							buff += c
+							buf += c
 						}
 					}
 					// string ''
 					if (c === "'")
 					{
-						buff += c
+						buf += c
 						while (i < len)
 						{
 							c = src[i++]
 							// backslash
-							if (c === '\\') { buff += src[i++]; continue }
+							if (c === '\\') { buf += src[i++]; continue }
 							// end of string ""
 							if (c === "'") { break }
-							buff += c
+							buf += c
 						}
 					}
 					// block
 					if (c === '{') { open++ }
 					// end of block
-					else if (c === '}' && !--open) { res.push(buff); buff = ''; break}
+					else if (c === '}' && !--open) { res.push(buf); buf = ''; break}
 					 
 					// if (c === '\\') { i++; continue }
-					buff += c
+					buf += c
 				}
 			}
 			// just one dollar ;)
 			else
-				buff += '$' + c
+				buf += '$' + c
 		}
 		else
-			buff += c
+			buf += c
 	}
 	
-	res.push(buff)
+	res.push(buf)
 	
 	return res
 }
@@ -87,7 +91,7 @@ function bake ($_$h, $_$s, $_$o)
 }
 
 var cache = {}
-function interpolateJS (h)
+function interpolate (h)
 {
 	var i, b, s, o, f = cache[this]
 	if (!f)
