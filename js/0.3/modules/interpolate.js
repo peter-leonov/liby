@@ -107,18 +107,29 @@ function interpolateJS (h)
 		
 		if (!b[b.length-1])
 			o.length--
-		f = cache[this] = bake(h, s, o)
+		try { f = cache[this] = bake(h, s, o) }
+		catch (ex)
+		{
+			log('Error while compiling string: "' + this + '"')
+			throw ex
+		}
 	}
 	try { return f.apply(this, arguments) }
-	catch (ex) { reportError(ex); return null }
+	catch (ex)
+	{
+		log('Error while executing string: "' + this + '"')
+		return null
+	}
 }
 
-interpolateJS.cache = cache
-String.prototype.interpolateJS = interpolateJS
+interpolate.cache = cache
+String.prototype.interpolate = interpolate
 String.parseOutJS = parseOutJS
 
-// alert('1${a}2${b}3${c}4'.interpolateJS({a:'A',b:'B',c:'C'}))
-// '${a{"a{\\\'a}\\"}a"b}c} wor$ld ${n{{{"\'"}}}n\'n\'}'.interpolateJS()
+// log('1${a}2${b}3${c}4'.interpolate({a:'A',b:'B',c:'C'}) === '1A2B3C4')
+// log('${a/*{"a{\\\'a}\\"}a"b}c*/} wor$ld ${n/*{{{"\'"}}}n\'n\'*/}'.interpolate({a:111,n:222}) === '111 wor$ld 222')
+// log('${a} text ${a} ${a} text ${b} ${b}'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333')
+// log('${a} text ${a} ${a} text ${b} ${b} text'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333 text')
 
 // // test for parseOutJS
 // var blocks = parseOutJS('"hello" \\${x} ${a{"a{\\\'a}\\"}a"b}c} wor$ld ${n{{{"\'"}}}n\'n\'}')
