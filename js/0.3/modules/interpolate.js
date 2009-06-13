@@ -5,16 +5,20 @@
 function parseOutJS (src)
 {
 	// this trick is for IE only
-	src = src.split('')
-	var i = 0, len = src.length, c,
-		res = [], buff = '', open
+	/*@cc_on src = src.split('') @*/
+	var i = 0, len = src.length,
+		res = [], buf = ''
 	
 	// string
 	while (i < len)
 	{
-		c = src[i++]
+		var c = src[i++]
 		// backslash
-		if (c === '\\') { buff += src[i++]; continue }
+		if (c === '\\')
+		{
+			buf += src[i++]
+			continue
+		}
 		
 		// maybe code
 		if (c === '$')
@@ -23,58 +27,58 @@ function parseOutJS (src)
 			// block
 			if (c === '{')
 			{
-				res.push(buff)
-				buff = ''
-				open = 1
+				res.push(buf)
+				buf = ''
+				var open = 1
 				while (i < len)
 				{
 					c = src[i++]
 					// string ""
 					if (c === '"')
 					{
-						buff += c
+						buf += c
 						while (i < len)
 						{
 							c = src[i++]
 							// backslash
-							if (c === '\\') { buff += src[i++]; continue }
+							if (c === '\\') { buf += src[i++]; continue }
 							// end of string ""
 							if (c === '"') { break }
-							buff += c
+							buf += c
 						}
 					}
 					// string ''
 					if (c === "'")
 					{
-						buff += c
+						buf += c
 						while (i < len)
 						{
 							c = src[i++]
 							// backslash
-							if (c === '\\') { buff += src[i++]; continue }
+							if (c === '\\') { buf += src[i++]; continue }
 							// end of string ""
 							if (c === "'") { break }
-							buff += c
+							buf += c
 						}
 					}
 					// block
 					if (c === '{') { open++ }
 					// end of block
-					else if (c === '}' && !--open) { res.push(buff); buff = ''; break}
+					else if (c === '}' && !--open) { res.push(buf); buf = ''; break}
 					 
 					// if (c === '\\') { i++; continue }
-					buff += c
+					buf += c
 				}
 			}
 			// just one dollar ;)
 			else
-				buff += '$' + c
+				buf += '$' + c
 		}
 		else
-			buff += c
+			buf += c
 	}
 	
-	res.push(buff)
+	res.push(buf)
 	
 	return res
 }
@@ -87,16 +91,15 @@ function bake ($_$h, $_$s, $_$o)
 }
 
 var cache = {}
-function interpolateJS (h)
+function interpolate (h)
 {
 	var i, b, s, o, f = cache[this]
 	if (!f)
 	{
 		b = parseOutJS(this), s = [], o = []
 		
-		if (b[0])
-			s[0] = b[0], o[0] = '($_$s[0])'
-			
+		s[0] = b[0]
+		o[0] = '($_$s[0])'
 		
 		for (i = 1; i < b.length; i+=2)
 		{
@@ -108,18 +111,29 @@ function interpolateJS (h)
 		
 		if (!b[b.length-1])
 			o.length--
-		f = cache[this] = bake(h, s, o)
+		try { f = cache[this] = bake(h, s, o) }
+		catch (ex)
+		{
+			log('Error while compiling string: "' + this + '"')
+			throw ex
+		}
 	}
 	try { return f.apply(this, arguments) }
-	catch (ex) { reportError(ex); return null }
+	catch (ex)
+	{
+		log('Error while executing string: "' + this + '"')
+		return null
+	}
 }
 
-interpolateJS.cache = cache
-String.prototype.interpolateJS = interpolateJS
+interpolate.cache = cache
+String.prototype.interpolate = interpolate
 String.parseOutJS = parseOutJS
 
-// alert('1${a}2${b}3${c}4'.interpolateJS({a:'A',b:'B',c:'C'}))
-// '${a{"a{\\\'a}\\"}a"b}c} wor$ld ${n{{{"\'"}}}n\'n\'}'.interpolateJS()
+// log('1${a}2${b}3${c}4'.interpolate({a:'A',b:'B',c:'C'}) === '1A2B3C4')
+// log('${a/*{"a{\\\'a}\\"}a"b}c*/} wor$ld ${n/*{{{"\'"}}}n\'n\'*/}'.interpolate({a:111,n:222}) === '111 wor$ld 222')
+// log('${a} text ${a} ${a} text ${b} ${b}'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333')
+// log('${a} text ${a} ${a} text ${b} ${b} text'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333 text')
 
 // // test for parseOutJS
 // var blocks = parseOutJS('"hello" \\${x} ${a{"a{\\\'a}\\"}a"b}c} wor$ld ${n{{{"\'"}}}n\'n\'}')
