@@ -41,6 +41,19 @@
 	ok(blocks[3] === 'n{{{"\'"}}}n\'n\'', 'blocks[3]')
 	ok(blocks[4] === '', 'blocks[4]')
 	ok(blocks.length == 5, 'blocks.length == 5')
+	
+	var str = 'text', hash = {}
+	console.time('interpolate')
+	for (var i = 0; i < 10000; i++)
+		str.interpolate(hash)
+	console.timeEnd('interpolate')
+	
+	var str = 'text${a}', hash = {a:'A'}
+	console.time('interpolate A')
+	for (var i = 0; i < 10000; i++)
+		str.interpolate(hash)
+	console.timeEnd('interpolate A')
+	
 </script>
 </body>
 </html>
