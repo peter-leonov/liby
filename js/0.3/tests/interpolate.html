@@ -16,6 +16,19 @@
 <script type="text/javascript" src="../modules/interpolate.js"></script>
 <script type="text/javascript">
 	function ok (v, m) { v ? console.info(m) : console.error(m) }
+	var times = {}
+	function time (name)
+	{
+		return times[name] = new Date()
+	}
+	function timeEnd (name)
+	{
+		var date = new Date(),
+			diff = date - times[name]
+		console.info(name + ': ' + diff + 'ms')
+		return diff
+	}
+	
 	
 	ok('1${a}2${b}3${c}4'.interpolate({a:'A',b:'B',c:'C'}) === '1A2B3C4', 'order in 1${a}2${b}3${c}4')
 	ok('${a}1${b}2${c}3'.interpolate({a:'A',b:'B',c:'C'}) === 'A1B2C3', 'order in ${a}1${b}2${c}3')
@@ -42,17 +55,19 @@
 	ok(blocks[4] === '', 'blocks[4]')
 	ok(blocks.length == 5, 'blocks.length == 5')
 	
-	var str = 'text', hash = {}
-	console.time('interpolate')
-	for (var i = 0; i < 10000; i++)
-		str.interpolate(hash)
-	console.timeEnd('interpolate')
 	
-	var str = 'text${a}', hash = {a:'A'}
-	console.time('interpolate A')
+	var hash = {a:'A'}
+	time('interpolate')
 	for (var i = 0; i < 10000; i++)
-		str.interpolate(hash)
-	console.timeEnd('interpolate A')
+		'text\\${a}'.interpolate(hash)
+	var textTime = timeEnd('interpolate')
+	
+	time('interpolate A')
+	for (var i = 0; i < 10000; i++)
+		'text${a}'.interpolate(hash)
+	var jsTime = timeEnd('interpolate A')
+	
+	ok(jsTime / textTime > 2, 'plaint two times faster then js')
 	
 </script>
 </body>
