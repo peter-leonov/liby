@@ -86,7 +86,7 @@ function parseOutJS (src)
 function bake ($_$h, $_$s, $_$code)
 {
 	"$_$h:nomunge, $_$s:nomunge, $_$code:nomunge"
-	return eval('(0, function($_$h){with($_$h){return ' + $_$code + '}})')
+	return eval('(0, function($_$h){with($_$h||{}){return ' + $_$code + '}})')
 }
 
 function compile (str, hash)
@@ -124,7 +124,7 @@ function compile (str, hash)
 }
 
 var cache = {}
-function interpolate (h)
+function interpolate ()
 {
 	var f = this in cache ? cache[this] : (cache[this] = compile(this))
 	
