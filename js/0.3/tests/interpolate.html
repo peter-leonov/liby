@@ -29,17 +29,23 @@
 		return diff
 	}
 	
+	var ABC = {a:'A',b:'B',c:'C'},
+		DEF = {a:'D',b:'E',c:'F'},
+		XYZ = {a:'X',b:'Y',c:'Z'}
 	
-	ok('1${a}2${b}3${c}4'.interpolate({a:'A',b:'B',c:'C'}) === '1A2B3C4', 'order in 1${a}2${b}3${c}4')
-	ok('${a}1${b}2${c}3'.interpolate({a:'A',b:'B',c:'C'}) === 'A1B2C3', 'order in ${a}1${b}2${c}3')
-	ok('${a}1${b}2${c}'.interpolate({a:'A',b:'B',c:'C'}) === 'A1B2C', 'order in ${a}1${b}2${c}')
-	ok('${a}${a}1${b}${b}2${c}${c}'.interpolate({a:'A',b:'B',c:'C'}) === 'AA1BB2CC', 'order in ${a}${a}1${b}${b}2${c}${c}')
+	ok('1${a}2${b}3${c}4'.interpolate(ABC) === '1A2B3C4', 'order in 1${a}2${b}3${c}4 (ABC)')
+	ok('1${a}2${b}3${c}4'.interpolate(XYZ) === '1X2Y3Z4', 'order in 1${a}2${b}3${c}4 (XYZ)')
+	ok('${a}1${b}2${c}3'.interpolate(ABC) === 'A1B2C3', 'order in ${a}1${b}2${c}3')
+	ok('${a}1${b}2${c}'.interpolate(ABC) === 'A1B2C', 'order in ${a}1${b}2${c}')
+	ok('${a}${a}1${b}${b}2${c}${c}'.interpolate(ABC) === 'AA1BB2CC', 'order in ${a}${a}1${b}${b}2${c}${c}')
 	
-	ok('${a}'.interpolate({a:'A',b:'B',c:'C'}) === 'A', 'alone')
-	ok(''.interpolate({a:'A',b:'B',c:'C'}) === '', 'empty')
-	ok('no js'.interpolate({a:'A',b:'B',c:'C'}) === 'no js', 'no js')
-	ok('1${a}'.interpolate({a:'A',b:'B',c:'C'}) === '1A', 'at the end')
-	ok('${a}1'.interpolate({a:'A',b:'B',c:'C'}) === 'A1', 'at the begin')
+	ok('${a}'.interpolate(ABC) === 'A', 'alone')
+	ok('${a}'.interpolate(DEF) === 'D', 'twice')
+	ok('${a}'.interpolate(XYZ) === 'X', 'tripple')
+	ok(''.interpolate(ABC) === '', 'empty')
+	ok('no js'.interpolate(ABC) === 'no js', 'no js')
+	ok('1${a}'.interpolate(ABC) === '1A', 'at the end')
+	ok('${a}1'.interpolate(ABC) === 'A1', 'at the begin')
 	ok('${a/*{"a{\\\'a}\\"}a"b}c*/} wor$ld ${n/*{{{"\'"}}}n\'n\'*/}'.interpolate({a:111,n:222}) === '111 wor$ld 222', 'nested curly braces')
 	ok('${a} text ${a} ${a} text ${b} ${b}'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333', 'multiple enties')
 	ok('${a} text ${a} ${a} text ${b} ${b} text'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333 text', 'multiple enties II')
@@ -55,19 +61,20 @@
 	ok(blocks[4] === '', 'blocks[4]')
 	ok(blocks.length == 5, 'blocks.length == 5')
 	
+	var cache = String.prototype.interpolate.cache
+	ok(typeof cache === 'object', 'interpolate.cache is an object')
 	
-	var hash = {a:'A'}
-	time('interpolate')
-	for (var i = 0; i < 10000; i++)
-		'text\\${a}'.interpolate(hash)
-	var textTime = timeEnd('interpolate')
 	
-	time('interpolate A')
-	for (var i = 0; i < 10000; i++)
-		'text${a}'.interpolate(hash)
-	var jsTime = timeEnd('interpolate A')
+	time('interpolate plain')
+	for (var i = 0; i < 1000; i++)
+		'text\\${a}'.interpolate(ABC)
+	var plainTime = timeEnd('interpolate plain')
 	
-	ok(jsTime / textTime > 2, 'plaint two times faster then js')
+	time('interpolate js')
+	for (var i = 0; i < 1000; i++)
+		'text${a}'.interpolate(ABC)
+	var jsTime = timeEnd('interpolate js')
+	ok(jsTime / plainTime > 2, 'js / plain > 2 ')
 	
 </script>
 </body>
