@@ -1,0 +1,45 @@
+html,body,table,
+h1,h2,h3,h4,
+p,form,
+fieldset,legend,
+ol,ul,li,dl,dt,dd{margin:0;padding:0;border:0;font-weight:normal;list-style:none}
+h1,h2,h3,h4,h5,h6{font-weight:normal;font-size:1em}
+td{font-size:1em;vertical-align:top}
+a{cursor:pointer;text-decoration:underline}
+a:hover{text-decoration:none}
+img{vertical-align:middle}
+input,select{vertical-align:baseline}
+a img{border:0}
+input,select,textarea{font:1em Arial,sans-serif}
+ul{list-style-type:none}
+table{border:0;border-collapse:collapse}
+table td{padding:0}
+body,html{position:relative;}
+html{height:100%;width:100%}
+body{font: 12px Arial,sans-serif}
+
+body { margin-left: 350px; padding: 15px; }
+
+#tests-output
+{
+	position: absolute;
+	position: fixed;
+	z-index: 100;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 320px;
+	background: #eee;
+	padding: 15px;
+	border-right: solid 1px #ccc;
+	line-height: 1.6em;
+}
+
+#tests-output li
+{
+	list-style-position: inside;
+	list-style-type: decimal;
+}
+
+#tests-output .ok { color: #082; }
+#tests-output .error { color: #c40; }
