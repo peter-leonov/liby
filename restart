@@ -1,0 +1,6 @@
+#!/bin/sh
+PROJ_ROOT=`echo $0 | perl -ne 'm~(.*)/~; print \$1'`
+
+$PROJ_ROOT/stop
+sleep 1
+$PROJ_ROOT/start

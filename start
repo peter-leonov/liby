@@ -1,11 +1,16 @@
-#!/usr/bin/ruby
+#!/bin/sh
 
-NGINX_PORT = 8004
-APACHE_PORT = 8104
+NAME="lib"
 
-require 'pmc/servers'
+PROJ_ROOT="/www/$NAME"
+NGINX="/usr/local/nginx/sbin/nginx"
+TYPE="$SERVER_TYPE"
 
-puts "Starting #{Servers::NAME} as #{Servers::TYPE}..."
+if [ "$TYPE" = "" ]; then
+	TYPE="developer"
+fi
 
-Servers.start 'nginx'
-# Servers.start 'apache'
+
+echo "Starting $NAME as $TYPE..."
+
+$NGINX -c "$PROJ_ROOT/nginx.$TYPE.conf"
