@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>form tests</title>
+</head>
+<body>
+
+
+<!--[if IE 6]><script type="text/javascript" src="../programica/trident3.js"></script>
+<script type="text/javascript" src="../programica/trident3-xhr.js"></script><![endif]-->
+<!--[if IE 7]><script type="text/javascript" src="../programica/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../modules/cosy.js"></script>
+<script type="text/javascript" src="../modules/event-target.js"></script>
+<script type="text/javascript">
+	;(function(){
+	function ok (v, m) { v ? console.info(m) : console.error(m) }
+	
+	var calls = 0
+	function handler (e) { calls++ }
+	
+	document.body.addEventListener('hide', handler,false)
+	ok(calls == 0, 'addEventListener does not call handler')
+	
+	var e = document.createEvent('UIEvents')
+	e.initEvent('hide', true, true)
+	document.body.dispatchEvent(e)
+	ok(calls == 1, 'dispatchEvent does call handler')
+	
+	})();
+</script>
+</body>
+</html>
