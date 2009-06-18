@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>interpolate tests</title>
+</head>
+<body>
+
+
+<!--[if IE 6]><script type="text/javascript" src="../programica/trident3.js"></script>
+<script type="text/javascript" src="../programica/trident3-xhr.js"></script><![endif]-->
+<!--[if IE 7]><script type="text/javascript" src="../programica/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../modules/interpolate.js"></script>
+<script type="text/javascript">
+	function ok (v, m) { v ? console.info(m) : console.error(m) }
+	var times = {}
+	function time (name)
+	{
+		return times[name] = new Date()
+	}
+	function timeEnd (name)
+	{
+		var date = new Date(),
+			diff = date - times[name]
+		console.info(name + ': ' + diff + 'ms')
+		return diff
+	}
+	
+	var ABC = {a:'A',b:'B',c:'C'},
+		DEF = {a:'D',b:'E',c:'F'},
+		XYZ = {a:'X',b:'Y',c:'Z'}
+	
+	ok('1${a}2${b}3${c}4'.interpolate(ABC) === '1A2B3C4', 'order in 1${a}2${b}3${c}4 (ABC)')
+	ok('1${a}2${b}3${c}4'.interpolate(XYZ) === '1X2Y3Z4', 'order in 1${a}2${b}3${c}4 (XYZ)')
+	ok('${a}1${b}2${c}3'.interpolate(ABC) === 'A1B2C3', 'order in ${a}1${b}2${c}3')
+	ok('${a}1${b}2${c}'.interpolate(ABC) === 'A1B2C', 'order in ${a}1${b}2${c}')
+	ok('${a}${a}1${b}${b}2${c}${c}'.interpolate(ABC) === 'AA1BB2CC', 'order in ${a}${a}1${b}${b}2${c}${c}')
+	
+	ok('${a}'.interpolate(ABC) === 'A', 'alone')
+	ok('${a}'.interpolate(DEF) === 'D', 'twice')
+	ok('${a}'.interpolate(XYZ) === 'X', 'tripple')
+	ok(''.interpolate(ABC) === '', 'empty')
+	ok('no js'.interpolate(ABC) === 'no js', 'no js')
+	ok('1${a}'.interpolate(ABC) === '1A', 'at the end')
+	ok('${a}1'.interpolate(ABC) === 'A1', 'at the begin')
+	ok('${a/*{"a{\\\'a}\\"}a"b}c*/} wor$ld ${n/*{{{"\'"}}}n\'n\'*/}'.interpolate({a:111,n:222}) === '111 wor$ld 222', 'nested curly braces')
+	ok('${a} text ${a} ${a} text ${b} ${b}'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333', 'multiple enties')
+	ok('${a} text ${a} ${a} text ${b} ${b} text'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333 text', 'multiple enties II')
+
+	// test for parseOutJS
+	var str = '"hello" \\${x} ${a{"a{\\\'a}\\"}a"b}c} wor$ld ${n{{{"\'"}}}n\'n\'}'
+	log('parseOutJS() for "' + str + '"')
+	var blocks = String.parseOutJS(str)
+	ok(blocks[0] === '"hello" ${x} ', 'blocks[0]')
+	ok(blocks[1] === 'a{"a{\'a}"}a"b}c', 'blocks[1]')
+	ok(blocks[2] === ' wor$ld ', 'blocks[2]')
+	ok(blocks[3] === 'n{{{"\'"}}}n\'n\'', 'blocks[3]')
+	ok(blocks[4] === '', 'blocks[4]')
+	ok(blocks.length == 5, 'blocks.length == 5')
+	
+	var cache = String.prototype.interpolate.cache
+	ok(typeof cache === 'object', 'interpolate.cache is an object')
+	
+	
+	time('interpolate plain')
+	for (var i = 0; i < 1000; i++)
+		'text\\${a}'.interpolate(ABC)
+	var plainTime = timeEnd('interpolate plain')
+	
+	time('interpolate js')
+	for (var i = 0; i < 1000; i++)
+		'text${a}'.interpolate(ABC)
+	var jsTime = timeEnd('interpolate js')
+	ok(jsTime / plainTime > 2, 'js / plain > 2 ')
+	
+</script>
+</body>
+</html>
