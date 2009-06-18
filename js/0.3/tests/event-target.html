@@ -2,35 +2,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-	<title>form tests</title>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>EventTarget tests</title>
 </head>
 <body>
 
-
-<!--[if IE 6]><script type="text/javascript" src="../programica/trident3.js"></script>
-<script type="text/javascript" src="../programica/trident3-xhr.js"></script><![endif]-->
-<!--[if IE 7]><script type="text/javascript" src="../programica/trident3.js"></script><![endif]-->
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/fixes/log.js"></script>
 <script type="text/javascript" src="../programica/init.js"></script>
-<script type="text/javascript" src="../modules/cosy.js"></script>
 <script type="text/javascript" src="../modules/event-target.js"></script>
+
+<script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-	;(function(){
-	function ok (v, m) { v ? console.info(m) : console.error(m) }
+	window.addEventListener('load', function () {
 	
-	var calls = 0
+	var calls = 0, exs
 	function handler (e) { calls++ }
+	exs = 0
+	try { document.body.addEventListener('hide', handler,false) }
+	catch (ex) { exs++ }
+	tests.ok(exs == 0, 'addEventListener does not throw an exception')
+	tests.ok(calls == 0, 'addEventListener does not call handler')
 	
-	document.body.addEventListener('hide', handler,false)
-	ok(calls == 0, 'addEventListener does not call handler')
+	exs = 0
+	try { var e = document.createEvent('UIEvents') }
+	catch (ex) { exs++ }
+	tests.ok(exs == 0, 'createEvent does not throw an exception')
 	
-	var e = document.createEvent('UIEvents')
-	e.initEvent('hide', true, true)
-	document.body.dispatchEvent(e)
-	ok(calls == 1, 'dispatchEvent does call handler')
+	exs = 0
+	try { e.initEvent('hide', true, true) }
+	catch (ex) { exs++ }
+	tests.ok(exs == 0, 'initEvent does not throw an exception')
 	
-	})();
+	if (exs)
+	{
+		tests.ok(0, 'too many exceptions, aborting')
+		return
+	}
+	
+	exs = 0
+	try { document.body.dispatchEvent(e) }
+	catch (ex) { exs++ }
+	tests.ok(exs == 0, 'dispatchEvent does not throw an exception')
+	tests.ok(calls == 1, 'dispatchEvent does call handler')
+	
+	tests.done()
+	
+	}, false)
 </script>
 </body>
 </html>
