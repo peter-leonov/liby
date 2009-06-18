@@ -83,7 +83,7 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 			this.onchange = function (e)
 			{
 				for (var i = 0; i < this.onchange.stack.length; i++)
-					this.onchange.stack[i].call(this, e || window.event)
+					this.onchange.stack[i].call(this, e || win.event)
 			}
 		
 		if (!this.onchange.stack)
@@ -135,7 +135,7 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 		{
 			for (var i = 0; i < onLoadListeners.length; i++)
 			{
-				if (onLoadListeners[i] != func)
+				if (onLoadListeners[i] === func)
 					onLoadListeners[i] = null
 			}
 		}
@@ -155,7 +155,7 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 			{
 				var listener = onLoadListeners[i]
 				if (listener)
-					listener(e)
+					listener.call(this, e)
 			}
 		},
 		true
