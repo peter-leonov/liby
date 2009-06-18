@@ -1,11 +1,20 @@
-#!/usr/bin/ruby
+#!/bin/sh
 
-NGINX_PORT = 8004
-APACHE_PORT = 8104
+NAME="lib"
 
-require 'pmc/servers'
+PROJ_ROOT="/www/$NAME"
+NGINX="/usr/local/nginx/sbin/nginx"
+TYPE="$SERVER_TYPE"
 
-puts "Stopping #{Servers::NAME} as #{Servers::TYPE}..."
+if [ "$TYPE" = "" ]; then
+	TYPE="developer"
+fi
 
-Servers.stop 'nginx'
-# Servers.stop 'apache'
+
+echo "Stopping $NAME as $TYPE..."
+# sending INT signal
+if [ -f $PROJ_ROOT/nginx.pid ]; then
+	kill -2 `cat $PROJ_ROOT/nginx.pid`
+else
+	echo "nginx was not started (no pid file found)"
+fi
