@@ -30,9 +30,66 @@ var times = {}
 
 var myName = 'tests', Me = self[myName] =
 {
-	eq: function (a, b, m) { a === b ? node('ok', m) : node('error', m, 'a: "' + a + '"\nb: "' + b + '"') },
-	ok: function (v, m) { v ? node('ok', m) : node('error', m, '"' + v + '"') },
-	info: function (m) { node('info', m) },
+	tests: 0,
+	errors: 0,
+	skiped: 0,
+	
+	plan: function (all, skips)
+	{
+		this.all = all
+		this.skip(skips || [])
+	},
+	skip: function (s)
+	{
+		var skips = this.skips || (this.skips = {})
+		for (var i = 0; i < s.length; i++)
+			skips[s[i]] = true
+	},
+	
+	error: function (m, d)
+	{
+		this.tests++
+		if (this.skips[this.tests])
+		{
+			this.skiped++
+			node('skip', m, d)
+		}
+		else
+		{
+			this.errors++
+			node('error', m, d)
+		}
+	},
+	
+	success: function (m, d)
+	{
+		this.tests++
+		node('success', m, d)
+	},
+	
+	info: function (m, d)
+	{
+		node('info', m, d)
+	},
+	
+	eq: function (a, b, m, s) { a === b ? this.success(m) : this.error(m, 'a: "' + a + '"\n\rb: "' + b + '"', s) },
+	eqarr: function (a, b, m, s)
+	{
+		good:
+		{
+			if (a.length !== b.length)
+				break good
+			for (var i = 0; i < a.length; i++)
+				if (!(a[i] === b[i]))
+					break good
+			
+			return this.success(m)
+		}
+		
+		this.error(m, 'a: [' + a.join(', ') + ']\n\rb: [' + b.join(', ') + ']', s)
+	},
+	ok: function (v, m, s) { v ? this.success(m) : this.error(m, '"' + v + '"', s) },
+	
 	
 	time: function (name)
 	{
@@ -47,7 +104,19 @@ var myName = 'tests', Me = self[myName] =
 		return diff
 	},
 	
-	done: function () {  }
+	done: function ()
+	{
+		this.info('done: ' + this.tests + ', errors: ' + this.errors + ', skiped: ' + this.skiped)
+		
+	}
 }
+
+var m, ua = navigator.userAgent
+
+Me.ua =
+	((m = /(MSIE) (\d+\.?\d*)/.exec(ua)) && m[0]) ||
+	((m = /(Firefox)\/(\d+\.\d+)/.exec(ua)) && m[1]+' '+m[2]) ||
+	((m = /(Opera)\/(\d+\.\d)/.exec(ua)) && m[1]+' '+m[2]) ||
+	((m = /Version\/(\d+\.\d) (Safari)\//.exec(ua)) && m[2]+' '+m[1])
 
 })();

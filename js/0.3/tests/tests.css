@@ -44,5 +44,8 @@ body { margin-left: 350px; padding: 15px; }
 
 #tests-output .result .description { display: block; padding-left: 1em; margin-bottom: 0.2em; }
 
-#tests-output .ok { color: #082; }
+#tests-output .info { color: #888; list-style: none; }
+#tests-output .success { color: #082; }
 #tests-output .error { color: #c40; }
+#tests-output .skip { color: #e80; }
+
