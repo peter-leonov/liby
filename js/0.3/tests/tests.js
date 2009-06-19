@@ -9,11 +9,18 @@ function startup ()
 	document.body.appendChild(outputNode)
 }
 
-function node (cn, m)
+function node (cn, m, desc)
 {
 	var row = doc.createElement('li')
-	row.className = cn
+	row.className = 'result ' + cn
 	row.appendChild(doc.createTextNode(m))
+	if (desc)
+	{
+		var d = doc.createElement('pre')
+		d.className = 'description'
+		d.appendChild(doc.createTextNode(desc))
+		row.appendChild(d)
+	}
 	outputNode.appendChild(row)
 }
 
@@ -23,7 +30,8 @@ var times = {}
 
 var myName = 'tests', Me = self[myName] =
 {
-	ok: function (v, m) { v ? node('ok', m) : node('error', m) },
+	eq: function (a, b, m) { a === b ? node('ok', m) : node('error', m, 'a: "' + a + '"\nb: "' + b + '"') },
+	ok: function (v, m) { v ? node('ok', m) : node('error', m, '"' + v + '"') },
 	info: function (m) { node('info', m) },
 	
 	time: function (name)

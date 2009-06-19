@@ -2,7 +2,7 @@ html,body,table,
 h1,h2,h3,h4,
 p,form,
 fieldset,legend,
-ol,ul,li,dl,dt,dd{margin:0;padding:0;border:0;font-weight:normal;list-style:none}
+ol,ul,li,dl,dt,dd,pre,code{margin:0;padding:0;border:0;font-weight:normal;list-style:none}
 h1,h2,h3,h4,h5,h6{font-weight:normal;font-size:1em}
 td{font-size:1em;vertical-align:top}
 a{cursor:pointer;text-decoration:underline}
@@ -10,7 +10,7 @@ a:hover{text-decoration:none}
 img{vertical-align:middle}
 input,select{vertical-align:baseline}
 a img{border:0}
-input,select,textarea{font:1em Arial,sans-serif}
+input,select,textarea,pre,code{font:1em Arial,sans-serif}
 ul{list-style-type:none}
 table{border:0;border-collapse:collapse}
 table td{padding:0}
@@ -32,14 +32,17 @@ body { margin-left: 350px; padding: 15px; }
 	background: #eee;
 	padding: 15px;
 	border-right: solid 1px #ccc;
-	line-height: 1.6em;
 }
 
-#tests-output li
+#tests-output .result
 {
-	list-style-position: inside;
-	list-style-type: decimal;
+	list-style: outside decimal;
+	margin-left: 2em;
 }
+#tests-output,
+#tests-output .result .description { line-height: 1.6em; }
+
+#tests-output .result .description { display: block; padding-left: 1em; margin-bottom: 0.2em; }
 
 #tests-output .ok { color: #082; }
 #tests-output .error { color: #c40; }
