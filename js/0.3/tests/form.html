@@ -75,19 +75,19 @@
 	var toHash = Programica.Form.toHash
 	
 	var hash = toHash($('test-from-1'))
-	log(hash)
-	tests.ok(hash['unicode'] === 'Юникод', 'unicode')
-	tests.ok(hash['text'] === 'text', 'text')
-	tests.ok(hash['textarea'] === 'textarea', 'textarea')
-	tests.ok(hash['hidden'] === 'hidden', 'hidden')
-	tests.ok(hash['checkbox'] === 'checkbox', 'checkbox')
+	
+	tests.eq(hash['unicode'], 'Юникод', 'unicode')
+	tests.eq(hash['text'], 'text', 'text')
+	tests.eq(hash['textarea'], 'textarea', 'textarea')
+	tests.eq(hash['hidden'], 'hidden', 'hidden')
+	tests.eq(hash['checkbox'], 'checkbox', 'checkbox')
 	tests.ok(!('checkbox-unchecked' in hash), 'checkbox-unchecked')
-	tests.ok(hash['radio'] === 'radio', 'radio')
+	tests.eq(hash['radio'], 'radio', 'radio')
 	tests.ok(!('radio-unchecked' in hash), 'radio-unchecked')
-	tests.ok(hash['button'] === 'button', 'button')
-	tests.ok(hash['select-one'] === 'selected-one', 'select-one')
-	tests.ok(hash['select-multiple'].join(',') === 'selected,selected,selected', 'select-multiple')
-	tests.ok(hash['mixed'].join(',') === 'one,two,tree,four', 'mixed')
+	tests.eq(hash['button'], 'button', 'button')
+	tests.eq(hash['select-one'], 'selected-one', 'select-one')
+	tests.eqarr(hash['select-multiple'], ['selected','selected','selected'], 'select-multiple')
+	tests.eqarr(hash['mixed'], ['one','two','tree','four'], 'mixed')
 	tests.ok(!(undefined in hash), 'unnamed')
 	tests.ok(!('' in hash), 'empty-named')
 	
@@ -102,9 +102,10 @@
 	tests.ok(k === null, 'form with only unnamed input')
 	
 	var hash = toHash($('test-from-4'))
-	log(hash)
-	tests.ok(hash['empty'] === '', 'empty input')
-	tests.ok(hash['unvalued'] === '', 'unvalued')
+	
+	tests.eq(hash['empty'], '', 'empty input')
+	tests.eq(hash['unvalued'], '', 'unvalued')
+	
 	}, false)
 </script>
 </body>
