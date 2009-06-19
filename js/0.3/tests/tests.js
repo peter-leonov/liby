@@ -9,9 +9,9 @@ function startup ()
 	document.body.appendChild(outputNode)
 }
 
-function node (cn, m, desc)
+function node (cn, m, desc, list)
 {
-	var row = doc.createElement('li')
+	var row = doc.createElement(list !== false ? 'li' : 'div')
 	row.className = 'result ' + cn
 	row.appendChild(doc.createTextNode(m))
 	if (desc)
@@ -67,10 +67,8 @@ var myName = 'tests', Me = self[myName] =
 		node('success', m, d)
 	},
 	
-	info: function (m, d)
-	{
-		node('info', m, d)
-	},
+	info: function (m, d) { node('info', m, d, false) },
+	log: function (m, d) { node('log', m, d, false) },
 	
 	eq: function (a, b, m, s) { a === b ? this.success(m) : this.error(m, 'a: "' + a + '"\n\rb: "' + b + '"', s) },
 	eqarr: function (a, b, m, s)
@@ -106,8 +104,7 @@ var myName = 'tests', Me = self[myName] =
 	
 	done: function ()
 	{
-		this.info('done: ' + this.tests + ', errors: ' + this.errors + ', skiped: ' + this.skiped)
-		
+		this.log('done: ' + this.tests + ', errors: ' + this.errors + ', skiped: ' + this.skiped)
 	}
 }
 
