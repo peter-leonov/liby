@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>form tests</title>
 </head>
 <body>
@@ -61,50 +62,50 @@
 	<input type="text" name="unvalued"/>
 </form>
 
-<!--[if IE 6]><script type="text/javascript" src="../programica/trident3.js"></script>
-<script type="text/javascript" src="../programica/trident3-xhr.js"></script><![endif]-->
-<!--[if IE 7]><script type="text/javascript" src="../programica/trident3.js"></script><![endif]-->
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/fixes/log.js"></script>
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../modules/cosy.js"></script>
 <script type="text/javascript" src="../modules/form.js"></script>
+
+<script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-	function ok (v, m) { v ? console.info(m) : console.error(m) }
+	window.addEventListener('load', function () {
 	var toHash = Programica.Form.toHash
 	
 	var hash = toHash($('test-from-1'))
 	log(hash)
-	ok(hash['unicode'] === 'Юникод', 'unicode')
-	ok(hash['text'] === 'text', 'text')
-	ok(hash['textarea'] === 'textarea', 'textarea')
-	ok(hash['hidden'] === 'hidden', 'hidden')
-	ok(hash['checkbox'] === 'checkbox', 'checkbox')
-	ok(!('checkbox-unchecked' in hash), 'checkbox-unchecked')
-	ok(hash['radio'] === 'radio', 'radio')
-	ok(!('radio-unchecked' in hash), 'radio-unchecked')
-	ok(hash['button'] === 'button', 'button')
-	ok(hash['select-one'] === 'selected-one', 'select-one')
-	ok(hash['select-multiple'].join(',') === 'selected,selected,selected', 'select-multiple')
-	ok(hash['mixed'].join(',') === 'one,two,tree,four', 'mixed')
-	ok(!(undefined in hash), 'unnamed')
-	ok(!('' in hash), 'empty-named')
+	tests.ok(hash['unicode'] === 'Юникод', 'unicode')
+	tests.ok(hash['text'] === 'text', 'text')
+	tests.ok(hash['textarea'] === 'textarea', 'textarea')
+	tests.ok(hash['hidden'] === 'hidden', 'hidden')
+	tests.ok(hash['checkbox'] === 'checkbox', 'checkbox')
+	tests.ok(!('checkbox-unchecked' in hash), 'checkbox-unchecked')
+	tests.ok(hash['radio'] === 'radio', 'radio')
+	tests.ok(!('radio-unchecked' in hash), 'radio-unchecked')
+	tests.ok(hash['button'] === 'button', 'button')
+	tests.ok(hash['select-one'] === 'selected-one', 'select-one')
+	tests.ok(hash['select-multiple'].join(',') === 'selected,selected,selected', 'select-multiple')
+	tests.ok(hash['mixed'].join(',') === 'one,two,tree,four', 'mixed')
+	tests.ok(!(undefined in hash), 'unnamed')
+	tests.ok(!('' in hash), 'empty-named')
 	
 	var hash = toHash($('test-from-2'))
 	var k = null
 	for (k in hash) log(hash)
-	ok(k === null, 'empty form')
+	tests.ok(k === null, 'empty form')
 	
 	var hash = toHash($('test-from-3'))
 	var k = null
 	for (k in hash) log(hash)
-	ok(k === null, 'form with only unnamed input')
+	tests.ok(k === null, 'form with only unnamed input')
 	
 	var hash = toHash($('test-from-4'))
 	log(hash)
-	ok(hash['empty'] === '', 'empty input')
-	ok(hash['unvalued'] === '', 'unvalued')
-	
+	tests.ok(hash['empty'] === '', 'empty input')
+	tests.ok(hash['unvalued'] === '', 'unvalued')
+	}, false)
 </script>
 </body>
 </html>
