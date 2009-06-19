@@ -31,7 +31,7 @@ var times = {}
 var myName = 'tests', Me = self[myName] =
 {
 	tests: 0,
-	errors: 0,
+	fails: 0,
 	skiped: 0,
 	
 	plan: function (all, skips)
@@ -46,7 +46,7 @@ var myName = 'tests', Me = self[myName] =
 			skips[s[i]] = true
 	},
 	
-	error: function (m, d)
+	fail: function (m, d)
 	{
 		this.tests++
 		if (this.skips[this.tests])
@@ -56,8 +56,8 @@ var myName = 'tests', Me = self[myName] =
 		}
 		else
 		{
-			this.errors++
-			node('error', m, d)
+			this.fails++
+			node('fail', m, d)
 		}
 	},
 	
@@ -70,7 +70,7 @@ var myName = 'tests', Me = self[myName] =
 	info: function (m, d) { node('info', m, d, false) },
 	log: function (m, d) { node('log', m, d, false) },
 	
-	eq: function (a, b, m, s) { a === b ? this.success(m) : this.error(m, 'a: "' + a + '"\n\rb: "' + b + '"', s) },
+	eq: function (a, b, m, s) { a === b ? this.success(m) : this.fail(m, 'a: "' + a + '"\n\rb: "' + b + '"', s) },
 	eqarr: function (a, b, m, s)
 	{
 		good:
@@ -84,9 +84,9 @@ var myName = 'tests', Me = self[myName] =
 			return this.success(m)
 		}
 		
-		this.error(m, 'a: [' + a.join(', ') + ']\n\rb: [' + b.join(', ') + ']', s)
+		this.fail(m, 'a: [' + a.join(', ') + ']\n\rb: [' + b.join(', ') + ']', s)
 	},
-	ok: function (v, m, s) { v ? this.success(m) : this.error(m, '"' + v + '"', s) },
+	ok: function (v, m, s) { v ? this.success(m) : this.fail(m, '"' + v + '"', s) },
 	
 	
 	time: function (name)
@@ -104,7 +104,8 @@ var myName = 'tests', Me = self[myName] =
 	
 	done: function ()
 	{
-		this.log('done: ' + this.tests + ', errors: ' + this.errors + ', skiped: ' + this.skiped)
+		this.log('done: ' + this.tests + ', failed: ' + this.fails + ', skiped: ' + this.skiped)
+		outputNode.className += this.fails ? 'failed' : 'successful'
 	}
 }
 

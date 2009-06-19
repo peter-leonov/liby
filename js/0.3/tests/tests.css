@@ -34,6 +34,9 @@ body { margin-left: 350px; padding: 15px; }
 	overflow: auto;
 }
 
+#tests-output.failed { background-color: #fee; }
+#tests-output.successful { background-color: #efe; }
+
 #tests-output .result
 {
 	list-style: outside decimal;
@@ -47,7 +50,7 @@ body { margin-left: 350px; padding: 15px; }
 #tests-output .log { color: #888; list-style: none; }
 #tests-output .info { color: #06d; list-style: none; }
 #tests-output .success { color: #082; }
-#tests-output .error { color: #c40; }
+#tests-output .fail { color: #c40; }
 #tests-output .skip { color: #e80; }
 
 
