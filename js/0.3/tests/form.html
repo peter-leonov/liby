@@ -72,6 +72,11 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
+	
+	tests.plan(18)
+	if (/IE 6/.test(tests.ua))
+		tests.skip([9])
+	
 	var toHash = Programica.Form.toHash
 	
 	var hash = toHash($('test-from-1'))
@@ -106,6 +111,7 @@
 	tests.eq(hash['empty'], '', 'empty input')
 	tests.eq(hash['unvalued'], '', 'unvalued')
 	
+	tests.done()
 	}, false)
 </script>
 </body>
