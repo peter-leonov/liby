@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>EventTarget tests</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/init.js"></script>
+
+<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript">
+	window.addEventListener('load', function () {
+	tests.plan(4)
+	if (!/IE [67]/.test(tests.ua))
+		tests.skip(['*'])
+	
+	tests.ok('uniqueID' in window, 'window.uniqueID is set')
+	tests.eq(window.uniqueID, window.uniqueID, 'window.uniqueID is a constant')
+	
+	tests.ok('__uniqueID' in document, 'document.__uniqueID is set')
+	tests.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
+	
+	tests.done()
+	}, false)
+</script>
+</body>
+</html>
