@@ -24,6 +24,38 @@ function node (cn, m, desc, list)
 	outputNode.appendChild(row)
 }
 
+var escapeChars = {'"': '\\"', '\\': '\\\\', '\n': '\\n', '\r': '\\r', '\t': '\\t', '\a': '\\a'}
+function escapeString (str)
+{
+	return str.replace(/(["\\\n\r\t\a])/g, function (v) { return escapeChars[v] })
+}
+
+function inspect (val)
+{
+	if (inspect.level > 3)
+		return
+	switch (typeof val)
+	{
+		case 'number':
+			return '' + val
+		case 'string':
+			return '"' + escapeString(val) + '"'
+		case 'object':
+			var elements = []
+			inspect.level++
+			if (val.constructor == Array)
+				for (var i = 0, il = val.length; i < il; i++)
+					elements.push(inspect(val[i]))
+			else
+				for (var k in val)
+					elements.push(escapeString(k) + ': ' + inspect(val[k]))
+			inspect.level--
+			return elements.join(', ')
+	}
+	
+}
+inspect.level = 0
+
 window.addEventListener('load', startup, false)
 
 var times = {}
@@ -73,7 +105,7 @@ var myName = 'tests', Me = self[myName] =
 	info: function (m, d) { node('info', m, d, false) },
 	log: function (m, d) { node('log', m, d, false) },
 	
-	eq: function (a, b, m, s) { a === b ? this.success(m) : this.fail(m, 'a: "' + a + '"\n\rb: "' + b + '"', s) },
+	eq: function (a, b, m, s) { a === b ? this.success(m) : this.fail(m, inspect(a) + ' !== ' + inspect(b), s) },
 	eqarr: function (a, b, m, s)
 	{
 		good:
@@ -87,7 +119,7 @@ var myName = 'tests', Me = self[myName] =
 			return this.success(m)
 		}
 		
-		this.fail(m, 'a: [' + a.join(', ') + ']\n\rb: [' + b.join(', ') + ']', s)
+		this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b), s)
 	},
 	ok: function (v, m, s) { v ? this.success(m) : this.fail(m, '"' + v + '"', s) },
 	
