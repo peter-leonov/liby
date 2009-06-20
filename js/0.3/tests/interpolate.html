@@ -23,36 +23,36 @@
 		DEF = {a:'D',b:'E',c:'F'},
 		XYZ = {a:'X',b:'Y',c:'Z'}
 	
-	tests.ok('1${a}2${b}3${c}4'.interpolate(ABC) === '1A2B3C4', 'order in 1${a}2${b}3${c}4 (ABC)')
-	tests.ok('1${a}2${b}3${c}4'.interpolate(XYZ) === '1X2Y3Z4', 'order in 1${a}2${b}3${c}4 (XYZ)')
-	tests.ok('${a}1${b}2${c}3'.interpolate(ABC) === 'A1B2C3', 'order in ${a}1${b}2${c}3')
-	tests.ok('${a}1${b}2${c}'.interpolate(ABC) === 'A1B2C', 'order in ${a}1${b}2${c}')
-	tests.ok('${a}${a}1${b}${b}2${c}${c}'.interpolate(ABC) === 'AA1BB2CC', 'order in ${a}${a}1${b}${b}2${c}${c}')
+	tests.eq('1${a}2${b}3${c}4'.interpolate(ABC), '1A2B3C4', 'order in 1${a}2${b}3${c}4 (ABC)')
+	tests.eq('1${a}2${b}3${c}4'.interpolate(XYZ), '1X2Y3Z4', 'order in 1${a}2${b}3${c}4 (XYZ)')
+	tests.eq('${a}1${b}2${c}3'.interpolate(ABC), 'A1B2C3', 'order in ${a}1${b}2${c}3')
+	tests.eq('${a}1${b}2${c}'.interpolate(ABC), 'A1B2C', 'order in ${a}1${b}2${c}')
+	tests.eq('${a}${a}1${b}${b}2${c}${c}'.interpolate(ABC), 'AA1BB2CC', 'order in ${a}${a}1${b}${b}2${c}${c}')
 	
-	tests.ok('${a}'.interpolate(ABC) === 'A', 'alone')
-	tests.ok('${a}'.interpolate(DEF) === 'D', 'twice')
-	tests.ok('${a}'.interpolate(XYZ) === 'X', 'tripple')
-	tests.ok(''.interpolate(ABC) === '', 'empty')
-	tests.ok('no js'.interpolate(ABC) === 'no js', 'no js')
-	tests.ok('1${a}'.interpolate(ABC) === '1A', 'at the end')
-	tests.ok('${a}1'.interpolate(ABC) === 'A1', 'at the begin')
-	tests.ok('${a/*{"a{\\\'a}\\"}a"b}c*/} wor$ld ${n/*{{{"\'"}}}n\'n\'*/}'.interpolate({a:111,n:222}) === '111 wor$ld 222', 'nested curly braces')
-	tests.ok('${a} text ${a} ${a} text ${b} ${b}'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333', 'multiple enties')
-	tests.ok('${a} text ${a} ${a} text ${b} ${b} text'.interpolate({a:2222, b: 333}) === '2222 text 2222 2222 text 333 333 text', 'multiple enties II')
+	tests.eq('${a}'.interpolate(ABC), 'A', 'alone')
+	tests.eq('${a}'.interpolate(DEF), 'D', 'twice')
+	tests.eq('${a}'.interpolate(XYZ), 'X', 'tripple')
+	tests.eq(''.interpolate(ABC), '', 'empty')
+	tests.eq('no js'.interpolate(ABC), 'no js', 'no js')
+	tests.eq('1${a}'.interpolate(ABC), '1A', 'at the end')
+	tests.eq('${a}1'.interpolate(ABC), 'A1', 'at the begin')
+	tests.eq('${a/*{"a{\\\'a}\\"}a"b}c*/} wor$ld ${n/*{{{"\'"}}}n\'n\'*/}'.interpolate({a:111,n:222}), '111 wor$ld 222', 'nested curly braces')
+	tests.eq('${a} text ${a} ${a} text ${b} ${b}'.interpolate({a:2222, b: 333}), '2222 text 2222 2222 text 333 333', 'multiple enties')
+	tests.eq('${a} text ${a} ${a} text ${b} ${b} text'.interpolate({a:2222, b: 333}), '2222 text 2222 2222 text 333 333 text', 'multiple enties II')
 
 	// test for parseOutJS
 	var str = '"hello" \\${x} ${a{"a{\\\'a}\\"}a"b}c} wor$ld ${n{{{"\'"}}}n\'n\'}'
 	log('parseOutJS() for "' + str + '"')
 	var blocks = String.parseOutJS(str)
-	tests.ok(blocks[0] === '"hello" ${x} ', 'blocks[0]')
-	tests.ok(blocks[1] === 'a{"a{\'a}"}a"b}c', 'blocks[1]')
-	tests.ok(blocks[2] === ' wor$ld ', 'blocks[2]')
-	tests.ok(blocks[3] === 'n{{{"\'"}}}n\'n\'', 'blocks[3]')
-	tests.ok(blocks[4] === '', 'blocks[4]')
-	tests.ok(blocks.length == 5, 'blocks.length == 5')
+	tests.eq(blocks[0], '"hello" ${x} ', 'blocks[0]')
+	tests.eq(blocks[1], 'a{"a{\'a}"}a"b}c', 'blocks[1]')
+	tests.eq(blocks[2], ' wor$ld ', 'blocks[2]')
+	tests.eq(blocks[3], 'n{{{"\'"}}}n\'n\'', 'blocks[3]')
+	tests.eq(blocks[4], '', 'blocks[4]')
+	tests.eq(blocks.length, 5, 'blocks.length === 5')
 	
 	var cache = String.prototype.interpolate.cache
-	tests.ok(typeof cache === 'object', 'interpolate.cache is an object')
+	tests.eq(typeof cache, 'object', 'interpolate.cache is an object')
 	
 	
 	tests.time('interpolate plain')
