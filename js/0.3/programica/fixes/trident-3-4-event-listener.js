@@ -34,11 +34,14 @@ function stopPropagation ()
 	return old
 }
 
+window.uniqueID = document.uniqueID
+// uniqueID is not a constant for document
+document.__uniqueID = document.uniqueID
+
+
 function getEventWrapper (node, type, func, dir)
 {
-	var pmc_uid = 'pmc::uniqueID'
-	node[pmc_uid] = node[pmc_uid] || node.uniqueID
-	var key = '__IEEventWrapper:' + type + ':' + dir + ':' + node[pmc_uid]
+	var key = '__IEEventWrapper:' + type + ':' + dir + ':' + (node.__uniqueID || node.uniqueID)
 	
 	if (func[key])
 		return func[key]
