@@ -30,14 +30,17 @@ var times = {}
 
 var myName = 'tests', Me = self[myName] =
 {
+	planed: 0,
 	tests: 0,
 	fails: 0,
 	skiped: 0,
+	skips: [],
 	
-	plan: function (all, skips)
+	plan: function (planed, skips)
 	{
-		this.all = all
-		this.skip(skips || [])
+		this.planed = planed
+		if (skips)
+			this.skip(skips)
 	},
 	skip: function (s)
 	{
@@ -49,7 +52,7 @@ var myName = 'tests', Me = self[myName] =
 	fail: function (m, d)
 	{
 		this.tests++
-		if (this.skips[this.tests])
+		if (this.skips['*'] || this.skips[this.tests])
 		{
 			this.skiped++
 			node('skip', m, d)
@@ -104,8 +107,8 @@ var myName = 'tests', Me = self[myName] =
 	
 	done: function ()
 	{
-		this.log('done: ' + this.tests + ', failed: ' + this.fails + ', skiped: ' + this.skiped)
-		outputNode.className += this.fails ? 'failed' : 'successful'
+		this.log('done: ' + this.tests + ', planed: ' + this.planed + ', failed: ' + this.fails + ', skiped: ' + this.skiped)
+		outputNode.className += this.fails || this.tests !== this.planed ? 'failed' : 'successful'
 	}
 }
 
