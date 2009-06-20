@@ -61,13 +61,6 @@ function getEventWrapper (node, type, func, dir)
 	}
 }
 
-function wrapOnEvent (node, ontype)
-{
-	var type = ontype.replace(/^on/, '')
-	if (node[ontype] && !node[ontype].isIEEventWrapper)
-		node[ontype] = getEventWrapper(node, type, node[ontype], false)
-}
-
 win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 {
 	dir = dir || false
