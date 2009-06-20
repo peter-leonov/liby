@@ -16,39 +16,39 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
+	tests.plan(6)
 	
 	var calls = 0, exs
 	function handler (e) { calls++ }
 	exs = 0
 	try { document.body.addEventListener('hide', handler,false) }
 	catch (ex) { exs++ }
-	tests.ok(exs == 0, 'addEventListener does not throw an exception')
-	tests.ok(calls == 0, 'addEventListener does not call handler')
+	tests.eq(exs, 0, 'addEventListener does not throw an exception')
+	tests.eq(calls, 0, 'addEventListener does not call handler')
 	
 	exs = 0
 	try { var e = document.createEvent('UIEvents') }
 	catch (ex) { exs++ }
-	tests.ok(exs == 0, 'createEvent does not throw an exception')
+	tests.eq(exs, 0, 'createEvent does not throw an exception')
 	
 	exs = 0
 	try { e.initEvent('hide', true, true) }
 	catch (ex) { exs++ }
-	tests.ok(exs == 0, 'initEvent does not throw an exception')
+	tests.eq(exs, 0, 'initEvent does not throw an exception')
 	
 	if (exs)
 	{
-		tests.ok(0, 'too many exceptions, aborting')
+		tests.log(0, 'too many exceptions, aborting')
 		return
 	}
 	
 	exs = 0
 	try { document.body.dispatchEvent(e) }
 	catch (ex) { exs++ }
-	tests.ok(exs == 0, 'dispatchEvent does not throw an exception')
-	tests.ok(calls == 1, 'dispatchEvent does call handler')
+	tests.eq(exs, 0, 'dispatchEvent does not throw an exception')
+	tests.eq(calls, 1, 'dispatchEvent does call handler')
 	
 	tests.done()
-	
 	}, false)
 </script>
 </body>
