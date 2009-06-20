@@ -70,25 +70,8 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	if (wrapper)
 		this.detachEvent('on' + type, wrapper)
 	
-	if (type == 'change' && this.tagName == 'FORM')
-	{
-		if (!this.onchange)
-			this.onchange = function (e)
-			{
-				for (var i = 0; i < this.onchange.stack.length; i++)
-					this.onchange.stack[i].call(this, e || win.event)
-			}
-		
-		if (!this.onchange.stack)
-			this.onchange.stack = []
-		
-		this.onchange.stack.push(wrapper)
-	}
-	else
-	{
-		this.attachEvent('on' + type, wrapper)
-		onBeforeUnload.stack.push([this, 'on' + type, wrapper])
-	}
+	this.attachEvent('on' + type, wrapper)
+	onBeforeUnload.stack.push([this, 'on' + type, wrapper])
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
@@ -101,6 +84,28 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 	if (wrapper)
 		this.detachEvent('on' + type, wrapper)
 }
+
+
+function initEvent (type, bubbles, cancelable)
+{
+	this.type = type
+	this.bubbles = bubbles
+	this.cancelable = cancelable
+}
+doc.createEvent = function ()
+{
+	var ne = doc.createEventObject()
+	ne.initEvent = initEvent
+	return ne
+}
+
+doc.dispatchEvent = Element.prototype.dispatchEvent = function (e)
+{
+	return this.fireEvent(e.type, e)
+}
+
+
+
 
 
 // fix for onload call order bug
@@ -155,31 +160,5 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 	)
 }
 
-function initEvent (type, bubbles, cancelable)
-{
-	this.type = type
-	this.bubbles = bubbles
-	this.cancelable = cancelable
-}
-doc.createEvent = function ()
-{
-	var ne = doc.createEventObject()
-	ne.initEvent = initEvent
-	return ne
-}
-
-doc.dispatchEvent = Element.prototype.dispatchEvent = function (e)
-{
-	if (e.type == 'change')
-		return this.onchange && this.onchange(e)
-	else
-		return this.fireEvent(e.type, e)
-}
-
-
-win.IEEventListener =
-{
-	getEventWrapper: getEventWrapper
-}
 
 })();
