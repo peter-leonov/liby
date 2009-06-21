@@ -14,15 +14,43 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(4)
+	// tests.plan(4)
 	if (!/IE [67]/.test(tests.ua))
 		tests.skip(['*'])
 	
+	var node = document.body, exception = null, calls = 0
+	function handler (e) { calls++ }
+	
+	try {
+	
+	tests.log('testing events wrapper internals')
 	tests.ok('uniqueID' in window, 'window.uniqueID is set')
 	tests.eq(window.uniqueID, window.uniqueID, 'window.uniqueID is a constant')
 	
+	tests.ok('uniqueID' in node, 'node.uniqueID is set')
+	tests.eq(node.uniqueID, node.uniqueID, 'node.uniqueID is a constant')
+	
 	tests.ok('__uniqueID' in document, 'document.__uniqueID is set')
 	tests.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
+	
+	
+	document.addEventListener('click', handler, false)
+	var e = document.createEvent('UIEvents')
+	e.initEvent('click', true, true)
+	node.dispatchEvent(e)
+	node.fireEvent('click', e)
+	tests.ok(calls === 1, 'start event is bubling')
+	
+	var e = document.createEvent('UIEvents')
+	e.initEvent('hide', true, true)
+	
+	node.addEventListener('hide', handler, false)
+	node.dispatchEvent(e)
+	
+	tests.ok(calls === 2, 'handler called ok')
+	
+	} catch (ex) { exception = ex }
+	tests.eq(exception, null, 'no exceptions was throwed')
 	
 	tests.done()
 	}, false)
