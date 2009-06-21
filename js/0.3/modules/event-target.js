@@ -1,8 +1,9 @@
 ;(function(){
 
-var myName = 'EventDriven',
-	Me = self[myName] = Module(myName),
-	MyEvent = Me.Event = Class(myName + '.Event')
+var myName = 'EventTarget',
+	Me = self[myName] = {},
+	MyEvent = Me.Event = Class(myName + '.Event'),
+	handlersProp = '__' + myName + 'Handlers'
 
 MyEvent.prototype = 
 {
@@ -38,7 +39,7 @@ function usefullDispatchEvent (e, data)
 		Object.extend(event, e)
 	
 	var handlers, harr, i, ret = true
-	if (handlers = this.__EventDrivenHandlers)
+	if (handlers = this[handlersProp])
 		if (harr = handlers[event.type])
 			for (i = 0, len = harr.length; i < len; i++)
 				harr[i].call(this, event)
@@ -55,7 +56,7 @@ Me.prototype =
 	addEventListener: function (type, listener, capture)
 	{
 		var handlers, harr
-		if (handlers = this.__EventDrivenHandlers)
+		if (handlers = this[handlersProp])
 		{
 			if (harr = handlers[type])
 				harr.indexOf(listener) < 0 ? harr.push(listener) : 1
@@ -63,7 +64,7 @@ Me.prototype =
 				handlers[type] = [listener]
 		}
 		else
-			(this.__EventDrivenHandlers = {})[type] = [listener]
+			(this[handlersProp] = {})[type] = [listener]
 		
 		this.dispatchEvent = usefullDispatchEvent
 	},
@@ -71,7 +72,7 @@ Me.prototype =
 	removeEventListener: function (type, listener, capture)
 	{
 		var handlers, harr, i, k, count
-		if (handlers = this.__EventDrivenHandlers)
+		if (handlers = this[handlersProp])
 			if (harr = handlers[type])
 			{
 				if ((i = harr.indexOf(listener)) >= 0)
