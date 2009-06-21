@@ -66,21 +66,29 @@ function getEventWrapper (node, type, func, dir)
 
 win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 {
-	dir = dir || false
-	type = eventConversion[type] || type
+	if (dir === undef)
+		dir = false
+	if (type in eventConversion)
+		type = eventConversion[type]
 	
 	var wrapper = getEventWrapper(this, type, func, dir)
 	if (wrapper)
 		this.detachEvent('on' + type, wrapper)
 	
+	if (!(type in supportedEvents))
+	{
+		// type = 
+		// alert(type)
+	}
 	this.attachEvent('on' + type, wrapper)
 	onBeforeUnload.stack.push([this, 'on' + type, wrapper])
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
 {
-	dir = dir || false
-	if (eventConversion[type])
+	if (dir === undef)
+		dir = false
+	if (type in eventConversion)
 		type = eventConversion[type]
 	
 	var wrapper = getEventWrapper(this, type, func, dir)
