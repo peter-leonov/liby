@@ -24,10 +24,10 @@ function node (cn, m, desc, list)
 	outputNode.appendChild(row)
 }
 
-var escapeChars = {'"': '\\"', '\\': '\\\\', '\n': '\\n', '\r': '\\r', '\t': '\\t', '\a': '\\a'}
+var escapeChars = {'"': '\\"', '\\': '\\\\', '\n': '\\n', '\r': '\\r', '\t': '\\t'}
 function escapeString (str)
 {
-	return str.replace(/(["\\\n\r\t\a])/g, function (v) { return escapeChars[v] })
+	return str.replace(/(["\\\n\r\t])/g, function (v) { return escapeChars[v] })
 }
 
 function inspect (val)
@@ -41,6 +41,8 @@ function inspect (val)
 		case 'string':
 			return '"' + escapeString(val) + '"'
 		case 'object':
+			if (val === null)
+				return 'null'
 			var elements = []
 			inspect.level++
 			if (val.constructor == Array)
@@ -140,7 +142,7 @@ var myName = 'tests', Me = self[myName] =
 	done: function ()
 	{
 		this.log('done: ' + this.tests + ', planed: ' + this.planed + ', failed: ' + this.fails + ', skiped: ' + this.skiped)
-		outputNode.className += this.fails || this.tests !== this.planed ? 'failed' : 'successful'
+		outputNode.className += this.fails || this.planed > 0 && this.tests !== this.planed ? 'failed' : 'successful'
 	}
 }
 

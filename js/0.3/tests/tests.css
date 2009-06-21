@@ -50,8 +50,9 @@ body { margin-left: 350px; padding: 15px; }
 #tests-output .log { color: #888; list-style: none; }
 #tests-output .info { color: #06d; list-style: none; }
 #tests-output .success { color: #082; }
-#tests-output .fail { color: #c40; }
-#tests-output .skip { color: #e80; }
+#tests-output .fail { color: #d40; font-weight: bold; }
+#tests-output .warning { color: #e80; }
+#tests-output .skip { color: #555; }
 
 
 /*<!--#if expr="$HTTP_USER_AGENT = /MSIE 6/" -->*/
