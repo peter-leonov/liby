@@ -42,7 +42,7 @@
 	tests.eq(typeof document.createEvent, 'function', 'document.createEvent is a function')
 	var e = document.createEvent('UIEvents')
 	tests.eq(typeof e, 'object', 'document.createEvent returns an object')
-	tests.eq(e.constructor, window.UIEvent, 'document.createEvent(UIEvents).constructor == UIEvent')
+	tests.eq(e.constructor, self.UIEvent, 'document.createEvent(UIEvents).constructor == UIEvent')
 	e.abcdef = 'abcdef'
 	tests.eq(e.abcdef, 'abcdef', 'event object supports custom fields')
 	
