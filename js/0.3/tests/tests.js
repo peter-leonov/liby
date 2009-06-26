@@ -108,6 +108,7 @@ var myName = 'tests', Me = self[myName] =
 	log: function (m, d) { node('log', m, d, false) },
 	
 	eq: function (a, b, m, s) { a === b ? this.success(m) : this.fail(m, inspect(a) + ' !== ' + inspect(b), s) },
+	ne: function (a, b, m, s) { a !== b ? this.success(m) : this.fail(m, inspect(a) + ' === ' + inspect(b), s) },
 	eqarr: function (a, b, m, s)
 	{
 		good:
