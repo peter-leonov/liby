@@ -36,19 +36,25 @@
 	tests.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
 	
 	
-	document.addEventListener('click', handler, false)
-	var e = document.createEvent('UIEvents')
-	e.initEvent('click', true, true)
-	node.dispatchEvent(e)
-	node.fireEvent('click', e)
-	tests.ok(calls === 1, 'start event is bubling')
+	// IE specific code
+	var type = 'beforeeditfocus'
+	document.attachEvent('on'+type, handler)
+	node.fireEvent('on' + type, document.createEventObject())
+	tests.ok(calls === 1, type + ' event is bubling')
 	
+	document.detachEvent('on'+type, handler)
+	node.fireEvent('on' + type, document.createEventObject())
+	tests.ok(calls === 1, type + ' detaching works')
+	
+	document.attachEvent('on'+type, function () { event.returnValue = false })
+	tests.ok(node.fireEvent('on' + type, document.createEventObject()) === false, type + ' returnValue works')
+	
+	
+	// standart DOM Event API
 	var e = document.createEvent('UIEvents')
 	e.initEvent('hide', true, true)
-	
 	node.addEventListener('hide', handler, false)
 	node.dispatchEvent(e)
-	
 	tests.ok(calls === 2, 'handler called ok')
 	
 	} catch (ex) { exception = ex }
