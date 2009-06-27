@@ -65,7 +65,10 @@
 	e.initEvent(type, true, true)
 	node.addEventListener(type, handler, false)
 	node.dispatchEvent(e)
-	tests.ok(calls === 1, 'custom handler called ok')
+	e2.initEvent(type2, true, true)
+	node.dispatchEvent(e2)
+	tests.eq(calls, 1, 'custom handler called once')
+	tests.eq(e2.type, type2, 'the event preserves its type')
 	
 	} catch (ex) { exception = ex }
 	tests.eq(exception, null, 'no exceptions was throwed')
