@@ -1,6 +1,6 @@
 (function(){
 
-var doc = document, win = window, undef
+var doc = document, docelem = doc.documentElement, body = doc.body, win = window, undef
 
 if (win.addEventListener || !win.attachEvent)
 	return
@@ -21,26 +21,52 @@ window.attachEvent('onbeforeunload', onBeforeUnload)
 var eventTransport = doc.__pmc__eventTransport = 'beforeeditfocus',
 	supportedEvents = {abort:1, activate:1, afterprint:1, afterupdate:1, beforeactivate:1, beforecopy:1, beforecut:1, beforedeactivate:1, beforeeditfocus:1, beforepaste:1, beforeprint:1, beforeunload:1, beforeupdate:1, blur:1, bounce:1, cellchange:1, change:1, click:1, contextmenu:1, controlselect:1, copy:1, cut:1, dataavailable:1, datasetchanged:1, datasetcomplete:1, dblclick:1, deactivate:1, drag:1, dragend:1, dragenter:1, dragleave:1, dragover:1, dragstart:1, drop:1, error:1, errorupdate:1, filterchange:1, finish:1, focus:1, focusin:1, focusout:1, hashchange:1, help:1, keydown:1, keypress:1, keyup:1, layoutcomplete:1, load:1, losecapture:1, message:1, mousedown:1, mouseenter:1, mouseleave:1, mousemove:1, mouseout:1, mouseover:1, mouseup:1, mousewheel:1, move:1, moveend:1, movestart:1, offline:1, online:1, page:1, paste:1, progress:1, propertychange:1, readystatechange:1, reset:1, resize:1, resizeend:1, resizestart:1, rowenter:1, rowexit:1, rowsdelete:1, rowsinserted:1, scroll:1, select:1, selectionchange:1, selectstart:1, start:1, stop:1, storage:1, storagecommit:1, submit:1, timeout:1, unload:1}
 
-function preventDefault ()
+var Event = win.Event = function (event)
 {
-	var old = this.returnValue
-	this.returnValue = false
-	return old
+	this.constructor = Event
 }
 
-function stopPropagation ()
+Event.prototype =
 {
-	var old = this.cancelBubble
-	this.cancelBubble = true
-	return old
+	initEvent: function (type, bubbles, cancelable)
+	{
+		this.type = type
+		this.bubbles = bubbles
+		this.cancelable = cancelable
+		this.timeStamp = +new Date()
+		// this.__pmc__event = event || doc.createEventObject()
+	},
+	
+	preventDefault: function ()
+	{
+		this.__pmc__event.returnValue = false
+	},
+	
+	stopPropagation: function ()
+	{
+		this.__pmc__event.cancelBubble = true
+	}
 }
+
 
 window.uniqueID = document.uniqueID
 // uniqueID is not a constant for document
 document.__uniqueID = document.uniqueID
 
+function getEventWrapper (e)
+{
+	var w = new Event()
+	
+	w.type = e.type
+	w.currentTarget = w.target = e.srcElement
+	w.detail = - e.wheelDelta / 30
+	w.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // body.scrollLeft
+	w.pageY = e.clientY + docelem.scrollTop  - body.clientTop // body.scrollTop
+	w.__pmc__event = e
+	return w
+}
 
-function getEventWrapper (node, type, func, dir)
+function getEventListenerWrapper (node, type, func, dir)
 {
 	var key = '__IEEventWrapper:' + type + ':' + dir + ':' + (node.__uniqueID || node.uniqueID)
 	
@@ -52,15 +78,12 @@ function getEventWrapper (node, type, func, dir)
 		{
 			if (e === undef)
 				e = event
-			e.currentTarget = e.target = e.srcElement
-			e.preventDefault = preventDefault
-			e.stopPropagation = stopPropagation
-			e.detail = - e.wheelDelta / 30
-			e.pageX = e.clientX + doc.documentElement.scrollLeft - doc.body.clientLeft // doc.body.scrollLeft
-			e.pageY = e.clientY + doc.documentElement.scrollTop  - doc.body.clientTop // doc.body.scrollTop
+			var w = e.__pmc__wrapper || (e.__pmc__wrapper = getEventWrapper(e))
+			if (type !== e.type)
+				return
 			func.call(node, e)
 		}
-		wrapper.isIEEventWrapper = true
+		wrapper.__pmc__eventWrapper = key
 		return wrapper
 	}
 }
@@ -70,13 +93,13 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	if (dir === undef)
 		dir = false
 	
-	var wrapper = getEventWrapper(this, type, func, dir)
+	var wrapper = getEventListenerWrapper(this, type, func, dir)
 	if (wrapper)
 		this.detachEvent('on' + type, wrapper)
 	
 	if (!(type in supportedEvents))
 	{
-		// type = 
+		type = eventTransport
 		// alert(type)
 	}
 	this.attachEvent('on' + type, wrapper)
@@ -88,30 +111,28 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 	if (dir === undef)
 		dir = false
 	
-	var wrapper = getEventWrapper(this, type, func, dir)
+	var wrapper = getEventListenerWrapper(this, type, func, dir)
+	if (!(type in supportedEvents))
+		type = eventTransport
 	if (wrapper)
 		this.detachEvent('on' + type, wrapper)
 }
 
-
-function initEvent (type, bubbles, cancelable)
-{
-	this.type = type
-	this.bubbles = bubbles
-	this.cancelable = cancelable
-}
-
 doc.createEvent = function (kind)
 {
-	var e = doc.createEventObject()
-	e.initEvent = initEvent
-	e.timeStamp = +new Date()
-	return e
+	return new Event()
 }
 
 doc.dispatchEvent = Element.prototype.dispatchEvent = function (e)
 {
-	return this.fireEvent(e.type, e)
+	var type = e.type
+	if (!(type in supportedEvents))
+	{
+		type = eventTransport
+		// alert(type)
+	}
+	
+	return this.fireEvent('on' + type, e)
 }
 
 
