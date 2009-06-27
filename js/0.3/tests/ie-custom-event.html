@@ -41,24 +41,24 @@
 	tests.log('event transport is "' + document.__pmc__eventTransport + '"')
 	calls = 0
 	
-	document.attachEvent('on'+type, handler)
+	document.attachEvent('on' + type, handler)
 	node.fireEvent('on' + type, document.createEventObject())
-	tests.ok(calls === 1, type + ' event is bubling')
+	tests.eq(calls, 1, type + ' event is bubling')
 	
 	node.focus()
-	tests.ok(calls === 1, 'focus() does not affects ' + type + ' event')
+	tests.eq(calls, 1, 'focus() does not affects ' + type + ' event')
 	
-	document.detachEvent('on'+type, handler)
+	document.detachEvent('on' + type, handler)
 	node.fireEvent('on' + type, document.createEventObject())
-	tests.ok(calls === 1, type + ' detaching works')
+	tests.eq(calls, 1, type + ' detaching works')
 	
-	document.attachEvent('on'+type, function () { event.returnValue = false })
+	document.attachEvent('on' + type, function () { event.returnValue = false })
 	tests.ok(node.fireEvent('on' + type, document.createEventObject()) === false, type + ' returnValue works')
 	
 	
 	// standart DOM Event API
-	var e = document.createEvent('UIEvents'),
-		type = 'hide'
+	var e = document.createEvent('UIEvents'), e2 = document.createEvent('UIEvents'),
+		type = 'hide', type2 = 'show'
 	tests.log('custom event is "' + type + '"')
 	calls = 0
 	
