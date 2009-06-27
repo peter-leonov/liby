@@ -34,7 +34,6 @@ Event.prototype =
 		this.bubbles = bubbles
 		this.cancelable = cancelable
 		this.timeStamp = +new Date()
-		// this.__pmc__event = event || doc.createEventObject()
 	},
 	
 	preventDefault: function ()
@@ -55,6 +54,8 @@ document.__uniqueID = document.uniqueID
 
 function getEventWrapper (e)
 {
+	if (e.__pmc__wrapper)
+		return e.__pmc__wrapper
 	var w = new Event()
 	
 	w.type = e.type
@@ -62,7 +63,10 @@ function getEventWrapper (e)
 	w.detail = - e.wheelDelta / 30
 	w.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // body.scrollLeft
 	w.pageY = e.clientY + docelem.scrollTop  - body.clientTop // body.scrollTop
+	
 	w.__pmc__event = e
+	e.__pmc__wrapper = w
+	
 	return w
 }
 
@@ -78,12 +82,13 @@ function getEventListenerWrapper (node, type, func, dir)
 		{
 			if (e === undef)
 				e = event
-			var w = e.__pmc__wrapper || (e.__pmc__wrapper = getEventWrapper(e))
-			if (type !== e.type)
+			
+			var w = getEventWrapper(e)
+			if (type !== w.type)
 				return
-			func.call(node, e)
+			func.call(node, w)
 		}
-		wrapper.__pmc__eventWrapper = key
+		wrapper.__pmc__eventListenerWrapper = key
 		return wrapper
 	}
 }
@@ -120,19 +125,19 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 
 doc.createEvent = function (kind)
 {
-	return new Event()
+	return getEventWrapper(doc.createEventObject())
 }
 
-doc.dispatchEvent = Element.prototype.dispatchEvent = function (e)
+doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 {
-	var type = e.type
+	var type = w.type
 	if (!(type in supportedEvents))
 	{
 		type = eventTransport
-		// alert(type)
+		// alert('dispatchEvent: ' + type)
 	}
 	
-	return this.fireEvent('on' + type, e)
+	return this.fireEvent('on' + type, w.__pmc__event)
 }
 
 
