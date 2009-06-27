@@ -7,6 +7,8 @@
 </head>
 <body>
 
+<button id="test-node-1">test node 1</button>
+
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/init.js"></script>
@@ -18,7 +20,7 @@
 	if (!/IE [67]/.test(tests.ua))
 		tests.skip(['*'])
 	
-	var node = document.body, exception = null, calls = 0
+	var node = document.getElementById('test-node-1'), exception = null, calls = 0
 	function handler (e) { calls++ }
 	
 	try {
