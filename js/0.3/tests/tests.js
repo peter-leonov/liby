@@ -34,6 +34,8 @@ function inspect (val)
 {
 	if (inspect.level > 3)
 		return
+	try
+	{
 	switch (typeof val)
 	{
 		case 'number':
@@ -45,15 +47,19 @@ function inspect (val)
 				return 'null'
 			var elements = []
 			inspect.level++
-			if (val.constructor == Array)
+			if (val.constructor === Array)
 				for (var i = 0, il = val.length; i < il; i++)
 					elements.push(inspect(val[i]))
-			else
+			else if (val.constructor === Object)
 				for (var k in val)
 					elements.push(escapeString(k) + ': ' + inspect(val[k]))
+			else
+				return String(val)
 			inspect.level--
 			return elements.join(', ')
 	}
+	}
+	catch (ex) { return 'error inspecting "' + val + '":' + ex }
 	
 }
 inspect.level = 0
