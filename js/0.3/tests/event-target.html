@@ -18,7 +18,7 @@
 <script type="text/javascript">
 	window.addEventListener('load', function () {
 	tests.plan(20)
-	tests.skip([3,4,5,11])
+	tests.skip([3,4,5,6,12])
 	
 	var node = document.body, type = 'hide', calls = 0, exception = null
 	function handler (e) { calls++ }
@@ -29,6 +29,7 @@
 	tests.eq(typeof EventTarget, 'object', 'EventTarget is an object')
 	// tests.eq(typeof EventException, 'object', 'EventException is an object')
 	tests.ne(self.Event, undefined, 'Event defined')
+	tests.ne(self.DocumentEvent, undefined, 'DocumentEvent defined')
 	tests.ne(self.UIEvent, undefined, 'UIEvent defined')
 	tests.ne(self.MouseEvent, undefined, 'MouseEvent defined')
 	tests.ne(self.KeyEvent, undefined, 'KeyEvent defined')
