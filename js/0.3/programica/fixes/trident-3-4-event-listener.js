@@ -109,14 +109,13 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 		dir = false
 	
 	var wrapper = getEventListenerWrapper(this, type, func, dir)
-	if (wrapper)
-		this.detachEvent('on' + type, wrapper)
-	
 	if (!(type in supportedEvents))
 	{
 		type = eventTransport
 		// alert(type)
 	}
+	if (wrapper)
+		this.detachEvent('on' + type, wrapper)
 	this.attachEvent('on' + type, wrapper)
 	onBeforeUnload.stack.push([this, 'on' + type, wrapper])
 }
