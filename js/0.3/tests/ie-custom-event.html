@@ -37,10 +37,16 @@
 	
 	
 	// IE specific code
-	var type = 'beforeeditfocus'
+	var type = document.__pmc__eventTransport
+	tests.log('event transport is "' + document.__pmc__eventTransport + '"')
+	calls = 0
+	
 	document.attachEvent('on'+type, handler)
 	node.fireEvent('on' + type, document.createEventObject())
 	tests.ok(calls === 1, type + ' event is bubling')
+	
+	node.focus()
+	tests.ok(calls === 1, 'focus() does not affects ' + type + ' event')
 	
 	document.detachEvent('on'+type, handler)
 	node.fireEvent('on' + type, document.createEventObject())
@@ -51,11 +57,15 @@
 	
 	
 	// standart DOM Event API
-	var e = document.createEvent('UIEvents')
-	e.initEvent('hide', true, true)
-	node.addEventListener('hide', handler, false)
+	var e = document.createEvent('UIEvents'),
+		type = 'hide'
+	tests.log('custom event is "' + type + '"')
+	calls = 0
+	
+	e.initEvent(type, true, true)
+	node.addEventListener(type, handler, false)
 	node.dispatchEvent(e)
-	tests.ok(calls === 2, 'handler called ok')
+	tests.ok(calls === 1, 'custom handler called ok')
 	
 	} catch (ex) { exception = ex }
 	tests.eq(exception, null, 'no exceptions was throwed')
