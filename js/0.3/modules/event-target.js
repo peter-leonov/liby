@@ -5,6 +5,31 @@ var myName = 'EventTarget',
 	handlersProp = '__' + myName + 'Handlers',
 	doc = document, undef
 
+// that is for FF, thinking bad about it...
+{
+	var eventClasses = [self.Event, self.UIEvent, self.MouseEvent, self.KeyboardEvent, self.MutationEvent]
+
+	function preventDefault ()
+	{
+		this.__pmc__preventDefault()
+		this.defaultPrevented = true
+	}
+
+	for (var i = 0; i < eventClasses.length; i++)
+	{
+		var cl = eventClasses[i]
+		if (cl)
+		{
+			var proto = cl.prototype
+			if (proto && proto.preventDefault !== preventDefault)
+			{
+				proto.__pmc__preventDefault = proto.preventDefault
+				proto.preventDefault = preventDefault
+			}
+		}
+	}
+}
+
 Me.prototype =
 {
 	addEventListener: function (type, listener, capture)
@@ -38,15 +63,20 @@ Me.prototype =
 	
 	dispatchEvent: function (e, data)
 	{
+		e.defaultPrevented = false
 		var handlers, harr, len
 		if ((handlers = this[handlersProp]))
 			if ((harr = handlers[e.type]))
 				if ((len = harr.length))
+				{
 					for (var i = 0; i < len; i++)
 						try { harr[i].call(this, e) }
 						catch (ex) { log(ex) }
-		
-		return !e.defaultPrevented
+					
+					return !e.defaultPrevented
+				}
+				else
+					return true
 	},
 	
 	dispatchEventData: function (type, data)
