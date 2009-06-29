@@ -57,6 +57,8 @@ function inspect (val)
 				return String(val)
 			inspect.level--
 			return elements.join(', ')
+		default:
+			return String(val)
 	}
 	}
 	catch (ex) { return 'error inspecting "' + val + '":' + ex }
