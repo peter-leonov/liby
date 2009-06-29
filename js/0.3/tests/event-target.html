@@ -7,92 +7,101 @@
 </head>
 <body>
 
+<button id="test-node-1">test node 1</button>
+<button id="test-node-2">test node 2</button>
+
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/fixes/log.js"></script>
 <script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../programica/prototype.js"></script>
 <script type="text/javascript" src="../programica/class.js"></script>
 <script type="text/javascript" src="../modules/event-target.js"></script>
 
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(24)
-	tests.skip([3,4,5,6,12])
+	tests.plan(17*4)
+	// tests.skip([3,4,5,6,12])
 	if (/IE [67]/.test(tests.ua))
-		tests.skip([21])
+		tests.skip([12, 29])
 	
-	var node = document.body, type = 'hide', calls = 0, exception = null
-	function handler (e) { calls++ }
+	function run (type, node)
+	{
+		var calls = 0, exception = null
+		function handler (e) { calls++ }
+		
+		try {
+		
+		tests.log('testing ' + node + ' interface')
+		tests.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
+		node.addEventListener(type, handler,false)
+		tests.eq(calls, 0, 'addEventListener does not call handler')
+		
+		var e = document.createEvent('UIEvent')
+		tests.eq(typeof e, 'object', 'document.createEvent returns an object')
+		e.abcdef = 'abcdef'
+		tests.eq(e.abcdef, 'abcdef', 'event object supports custom fields')
+		
+		tests.eq(typeof e.initEvent, 'function', 'event.initEvent is a function')
+		e.initEvent(type, true, true)
+		tests.eq(e.type, type, 'event.initEvent sets event type correctly')
+		
+		tests.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
+		node.dispatchEvent(e)
+		tests.eq(calls, 1, 'dispatchEvent does call handler')
+		e.initEvent(type, true, true)
+		node.dispatchEvent(e)
+		tests.eq(calls, 2, 'custom handler called ok twice')
+		
+		node.removeEventListener(type, handler, false)
+		// e = document.createEvent('UIEvent')
+		e.initEvent(type, true, true)
+		node.dispatchEvent(e)
+		tests.eq(calls, 2, 'removeEventListener works fine')
+		
+		node.addEventListener(type, handler, false)
+		node.addEventListener(type, handler, false)
+		e.initEvent(type, true, true)
+		node.dispatchEvent(e)
+		tests.eq(calls, 3, 'second addEventListener ignored')
+		
+		var order = []
+		node.addEventListener(type, function () { order.push('first') }, false)
+		node.addEventListener(type, function () { order.push('second') }, false)
+		node.addEventListener(type, function () { order.push('third') }, false)
+		node.addEventListener(type, function () { order.push('fourth') }, false)
+		e.initEvent(type, true, true)
+		node.dispatchEvent(e)
+		tests.eqarr(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
+		
+		var event1, event2, event3
+		node.addEventListener(type, function (e) { event1 = e; e.abc++ }, false)
+		node.addEventListener(type, function (e) { event2 = e; e.abc++ }, false)
+		node.addEventListener(type, function (e) { event3 = e; e.abc++ }, false)
+		e.initEvent(type, true, true)
+		e.abc = 0
+		node.dispatchEvent(e)
+		tests.eqarr([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
+		tests.eqarr(e.abc, 3, 'listeners can write custom fields')
+		
+		e.initEvent(type, true, true)
+		tests.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
+		node.addEventListener(type, function (e) { e.preventDefault() }, false)
+		e.initEvent(type, true, true)
+		tests.eq(node.dispatchEvent(e), false, 'preventDefault() invoked')
+		
+		} catch (ex) { exception = ex }
+		tests.eq(exception, null, 'no exceptions was throwed')
+	}
 	
-	try {
+	run('hide', document.getElementById('test-node-1'))
+	run('mouseover', document.getElementById('test-node-2'))
 	
-	tests.log('testing event base classes')
-	tests.eq(typeof EventTarget, 'object', 'EventTarget is an object')
-	// tests.eq(typeof EventException, 'object', 'EventException is an object')
-	tests.ne(self.Event, undefined, 'Event defined')
-	tests.ne(self.DocumentEvent, undefined, 'DocumentEvent defined')
-	tests.ne(self.UIEvent, undefined, 'UIEvent defined')
-	tests.ne(self.MouseEvent, undefined, 'MouseEvent defined')
-	tests.ne(self.KeyEvent, undefined, 'KeyEvent defined')
-	tests.ne(self.MutationEvent, undefined, 'MutationEvent defined')
-	
-	tests.log('testing public interface')
-	tests.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
-	node.addEventListener(type, handler,false)
-	tests.eq(calls, 0, 'addEventListener does not call handler')
-	
-	tests.eq(typeof document.createEvent, 'function', 'document.createEvent is a function')
-	var e = document.createEvent('UIEvent')
-	tests.eq(typeof e, 'object', 'document.createEvent returns an object')
-	tests.eq(e.constructor, self.UIEvent, 'document.createEvent(UIEvent).constructor == UIEvent')
-	e.abcdef = 'abcdef'
-	tests.eq(e.abcdef, 'abcdef', 'event object supports custom fields')
-	
-	tests.eq(typeof e.initEvent, 'function', 'event.initEvent is a function')
-	e.initEvent(type, true, true)
-	tests.eq(e.type, type, 'event.initEvent sets event type correctly')
-	
-	tests.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
-	node.dispatchEvent(e)
-	tests.eq(calls, 1, 'dispatchEvent does call handler')
-	e.initEvent(type, true, true)
-	node.dispatchEvent(e)
-	tests.eq(calls, 2, 'custom handler called ok twice')
-	
-	node.removeEventListener(type, handler, false)
-	// e = document.createEvent('UIEvent')
-	e.initEvent(type, true, true)
-	node.dispatchEvent(e)
-	tests.eq(calls, 2, 'removeEventListener works fine')
-	
-	node.addEventListener(type, handler, false)
-	node.addEventListener(type, handler, false)
-	e.initEvent(type, true, true)
-	node.dispatchEvent(e)
-	tests.eq(calls, 3, 'second addEventListener ignored')
-	
-	var order = []
-	node.addEventListener(type, function () { order.push('first') }, false)
-	node.addEventListener(type, function () { order.push('second') }, false)
-	node.addEventListener(type, function () { order.push('third') }, false)
-	node.addEventListener(type, function () { order.push('fourth') }, false)
-	e.initEvent(type, true, true)
-	node.dispatchEvent(e)
-	tests.eqarr(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
-	
-	var event1, event2, event3
-	node.addEventListener(type, function (e) { event1 = e; e.abc++ }, false)
-	node.addEventListener(type, function (e) { event2 = e; e.abc++ }, false)
-	node.addEventListener(type, function (e) { event3 = e; e.abc++ }, false)
-	e.initEvent(type, true, true)
-	e.abc = 0
-	node.dispatchEvent(e)
-	tests.eqarr([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
-	tests.eqarr(e.abc, 3, 'listeners can write custom fields')
-	
-	} catch (ex) { exception = ex }
-	tests.eq(exception, null, 'no exceptions was throwed')
+	var T = Class('T')
+	T.mixIn(EventTarget)
+	run('hide', new T())
+	run('mouseover', new T())
 	
 	tests.done()
 	}, false)
