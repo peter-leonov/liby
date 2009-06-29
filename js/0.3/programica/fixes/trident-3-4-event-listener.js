@@ -44,18 +44,18 @@ Event.prototype =
 	}
 }
 
-var DocumentEvent = win.DocumentEvent = function () { this.constructor = DocumentEvent }
-DocumentEvent.prototype = new Event()
+// var DocumentEvent = win.DocumentEvent = function () { this.constructor = DocumentEvent }
+// DocumentEvent.prototype = new Event()
 var UIEvent = win.UIEvent = function () { this.constructor = UIEvent }
 UIEvent.prototype = new Event()
 var MouseEvent = win.MouseEvent = function () { this.constructor = MouseEvent }
 MouseEvent.prototype = new Event()
-var KeyEvent = win.KeyEvent = function () { this.constructor = KeyEvent }
-KeyEvent.prototype = new Event()
+var KeyboardEvent = win.KeyboardEvent = function () { this.constructor = KeyboardEvent }
+KeyboardEvent.prototype = new Event()
 var MutationEvent = win.MutationEvent = function () { this.constructor = MutationEvent }
 MutationEvent.prototype = new Event()
 
-var eventConstructors = {Event:Event, DocumentEvent:DocumentEvent, UIEvent:UIEvent, MouseEvent:MouseEvent, KeyEvent:KeyEvent, MutationEvent:MutationEvent}
+var eventConstructors = {Event:Event, /*DocumentEvent:DocumentEvent,*/ UIEvent:UIEvent, MouseEvent:MouseEvent, KeyboardEvent:KeyboardEvent, MutationEvent:MutationEvent}
 
 
 window.uniqueID = document.uniqueID
