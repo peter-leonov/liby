@@ -27,6 +27,7 @@ Event.prototype =
 {
 	initEvent: function (type, bubbles, cancelable)
 	{
+		this.defaultPrevented = false
 		this.type = type
 		this.bubbles = bubbles
 		this.cancelable = cancelable
@@ -36,6 +37,7 @@ Event.prototype =
 	preventDefault: function ()
 	{
 		this.__pmc__event.returnValue = false
+		this.defaultPrevented = true
 	},
 	
 	stopPropagation: function ()
@@ -146,7 +148,8 @@ doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 		// alert('dispatchEvent: ' + type)
 	}
 	
-	return this.fireEvent('on' + type, w.__pmc__event)
+	this.fireEvent('on' + type, w.__pmc__event)
+	return !w.defaultPrevented
 }
 
 })();
