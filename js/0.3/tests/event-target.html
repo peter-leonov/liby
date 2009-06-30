@@ -21,24 +21,29 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(17*4)
+	tests.plan(19*4)
 	// tests.skip([3,4,5,6,12])
 	if (/IE [67]/.test(tests.ua))
-		tests.skip([12, 29])
+		tests.skip([13, 32])
 	
-	function run (type, node)
+	function run (kind, type, node)
 	{
-		var calls = 0, exception = null
+		var calls = 0, e, exception = null
 		function handler (e) { calls++ }
 		
 		try {
 		
-		tests.log('testing ' + node + ' interface')
+		e = document.createEvent(kind)
+		e.initEvent(type, true, true)
+		e.preventDefault()
+		tests.eq(e.defaultPrevented, undefined, 'single preventDefault() does not set defaultPrevented')
+		
+		tests.log('testing node "' + node.nodeName + '" with event type "' + type + '"')
 		tests.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
 		node.addEventListener(type, handler,false)
 		tests.eq(calls, 0, 'addEventListener does not call handler')
 		
-		var e = document.createEvent('UIEvent')
+		e = document.createEvent(kind)
 		tests.eq(typeof e, 'object', 'document.createEvent returns an object')
 		e.abcdef = 'abcdef'
 		tests.eq(e.abcdef, 'abcdef', 'event object supports custom fields')
@@ -50,18 +55,20 @@
 		tests.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
 		node.dispatchEvent(e)
 		tests.eq(calls, 1, 'dispatchEvent does call handler')
+		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
 		tests.eq(calls, 2, 'custom handler called ok twice')
 		
 		node.removeEventListener(type, handler, false)
-		// e = document.createEvent('UIEvent')
+		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
 		tests.eq(calls, 2, 'removeEventListener works fine')
 		
 		node.addEventListener(type, handler, false)
 		node.addEventListener(type, handler, false)
+		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
 		tests.eq(calls, 3, 'second addEventListener ignored')
@@ -71,6 +78,7 @@
 		node.addEventListener(type, function () { order.push('second') }, false)
 		node.addEventListener(type, function () { order.push('third') }, false)
 		node.addEventListener(type, function () { order.push('fourth') }, false)
+		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
 		tests.eqarr(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
@@ -79,29 +87,38 @@
 		node.addEventListener(type, function (e) { event1 = e; e.abc++ }, false)
 		node.addEventListener(type, function (e) { event2 = e; e.abc++ }, false)
 		node.addEventListener(type, function (e) { event3 = e; e.abc++ }, false)
+		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		e.abc = 0
 		node.dispatchEvent(e)
 		tests.eqarr([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
 		tests.eqarr(e.abc, 3, 'listeners can write custom fields')
 		
+		function prevent (e) { e.preventDefault() }
+		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		tests.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
-		node.addEventListener(type, function (e) { e.preventDefault() }, false)
+		node.addEventListener(type, prevent, false)
+		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		tests.eq(node.dispatchEvent(e), false, 'preventDefault() invoked')
+		node.removeEventListener(type, prevent, false)
+		e = document.createEvent(kind)
+		e.initEvent(type, true, true)
+		tests.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
 		
 		} catch (ex) { exception = ex }
 		tests.eq(exception, null, 'no exceptions was throwed')
 	}
 	
-	run('hide', document.getElementById('test-node-1'))
-	run('mouseover', document.getElementById('test-node-2'))
+	run('Event', 'hide', document.getElementById('test-node-1'))
+	run('MouseEvent', 'click', document.getElementById('test-node-2'))
 	
 	var T = Class('T')
+	T.prototype.initialize = function () { this.nodeName = 'object' }
 	T.mixIn(EventTarget)
-	run('hide', new T())
-	run('mouseover', new T())
+	run('Event', 'hide', new T())
+	run('MouseEvent', 'click', new T())
 	
 	tests.done()
 	}, false)
