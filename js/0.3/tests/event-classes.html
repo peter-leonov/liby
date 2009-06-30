@@ -18,23 +18,39 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(11)
-	
+	tests.plan(23)
+	UIEvent.prototype.preventDefault
+	delete UIEvent.prototype.preventDefault
 	tests.log('testing event base classes')
 	tests.ne(self.EventTarget, undefined, 'EventTarget defined')
 	tests.ne(self.EventException, undefined, 'EventException defined')
 	tests.ne(self.Event, undefined, 'Event defined')
-	tests.ne(self.DocumentEvent, undefined, 'DocumentEvent defined')
+	// tests.ne(self.DocumentEvent, undefined, 'DocumentEvent defined')
 	tests.ne(self.UIEvent, undefined, 'UIEvent defined')
 	tests.ne(self.MouseEvent, undefined, 'MouseEvent defined')
 	tests.ne(self.KeyboardEvent, undefined, 'KeyboardEvent defined')
 	tests.ne(self.MutationEvent, undefined, 'MutationEvent defined')
 	tests.eq(typeof document.createEvent, 'function', 'document.createEvent is a function')
 	
+	tests.eq(document.createEvent('Event').constructor, self.Event, 'Event.constructor')
 	tests.eq(document.createEvent('UIEvent').constructor, self.UIEvent, 'UIEvent.constructor')
 	tests.eq(document.createEvent('MouseEvent').constructor, self.MouseEvent, 'MouseEvent.constructor')
 	tests.eq(document.createEvent('KeyboardEvent').constructor, self.KeyboardEvent, 'KeyboardEvent.constructor')
 	tests.eq(document.createEvent('MutationEvent').constructor, self.MutationEvent, 'MutationEvent.constructor')
+	
+	Event.prototype.customProperty = 'works!'
+	tests.eq(document.createEvent('Event').customProperty, 'works!', 'Event.customProperty')
+	tests.eq(document.createEvent('UIEvent').customProperty, 'works!', 'UIEvent.customProperty')
+	tests.eq(document.createEvent('MouseEvent').customProperty, 'works!', 'MouseEvent.customProperty')
+	tests.eq(document.createEvent('KeyboardEvent').customProperty, 'works!', 'KeyboardEvent.customProperty')
+	tests.eq(document.createEvent('MutationEvent').customProperty, 'works!', 'MutationEvent.customProperty')
+	
+	Event.prototype.preventDefault = function () { return 'works!' }
+	tests.eq(document.createEvent('Event').preventDefault(), 'works!', 'Event.preventDefault()')
+	tests.eq(document.createEvent('UIEvent').preventDefault(), 'works!', 'UIEvent.preventDefault()')
+	tests.eq(document.createEvent('MouseEvent').preventDefault(), 'works!', 'MouseEvent.preventDefault()')
+	tests.eq(document.createEvent('KeyboardEvent').preventDefault(), 'works!', 'KeyboardEvent.preventDefault()')
+	tests.eq(document.createEvent('MutationEvent').preventDefault(), 'works!', 'MutationEvent.preventDefault()')
 	
 	tests.done()
 	}, false)
