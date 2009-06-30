@@ -87,8 +87,11 @@ var myName = 'tests', Me = self[myName] =
 	skip: function (s)
 	{
 		var skips = this.skips || (this.skips = {})
-		for (var i = 0; i < s.length; i++)
-			skips[s[i]] = true
+		if (s)
+			for (var i = 0; i < s.length; i++)
+				skips[s[i]] = true
+		else
+			skips[this.tests+1] = true
 	},
 	
 	fail: function (m, d)
