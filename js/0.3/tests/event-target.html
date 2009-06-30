@@ -21,10 +21,8 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(19*4)
-	// tests.skip([3,4,5,6,12])
-	if (/IE [67]/.test(tests.ua))
-		tests.skip([13, 32])
+	tests.plan(20*4)
+	
 	
 	function run (kind, type, node)
 	{
@@ -40,7 +38,7 @@
 		
 		tests.log('testing node "' + node.nodeName + '" with event type "' + type + '"')
 		tests.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
-		node.addEventListener(type, handler,false)
+		node.addEventListener(type, handler, false)
 		tests.eq(calls, 0, 'addEventListener does not call handler')
 		
 		e = document.createEvent(kind)
@@ -52,26 +50,40 @@
 		e.initEvent(type, true, true)
 		tests.eq(e.type, type, 'event.initEvent sets event type correctly')
 		
+		calls = 0
 		tests.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
 		node.dispatchEvent(e)
 		tests.eq(calls, 1, 'dispatchEvent does call handler')
+		
+		calls = 0
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		tests.eq(calls, 2, 'custom handler called ok twice')
+		tests.eq(calls, 1, 'handler called ok twice')
 		
+		calls = 0
+		e = document.createEvent(kind)
+		e.initEvent(type, true, true)
+		document.addEventListener(type, handler, false)
+		node.dispatchEvent(e)
+		tests.skip()
+		tests.eq(calls, 2, 'document handler called ok twice')
+		
+		calls = 0
 		node.removeEventListener(type, handler, false)
+		document.removeEventListener(type, handler, false)
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		tests.eq(calls, 2, 'removeEventListener works fine')
+		tests.eq(calls, 0, 'removeEventListener works fine')
 		
+		calls = 0
 		node.addEventListener(type, handler, false)
 		node.addEventListener(type, handler, false)
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		tests.eq(calls, 3, 'second addEventListener ignored')
+		tests.eq(calls, 1, 'second addEventListener ignored')
 		
 		var order = []
 		node.addEventListener(type, function () { order.push('first') }, false)
@@ -81,6 +93,8 @@
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
+		if (/IE [67]/.test(tests.ua))
+			tests.skip()
 		tests.eqarr(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
 		
 		var event1, event2, event3
