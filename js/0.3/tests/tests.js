@@ -45,18 +45,24 @@ function inspect (val)
 		case 'object':
 			if (val === null)
 				return 'null'
-			var elements = []
 			inspect.level++
 			if (val.constructor === Array)
+			{
+				var elements = []
 				for (var i = 0, il = val.length; i < il; i++)
 					elements.push(inspect(val[i]))
+				return '[' + elements.join(', ') + ']'
+			}
 			else if (val.constructor === Object)
+			{
+				var elements = []
 				for (var k in val)
 					elements.push(escapeString(k) + ': ' + inspect(val[k]))
+				return '{' + elements.join(', ') + '}'
+			}
 			else
 				return String(val)
 			inspect.level--
-			return elements.join(', ')
 		default:
 			return String(val)
 	}
