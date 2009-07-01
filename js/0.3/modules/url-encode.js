@@ -12,12 +12,12 @@ var myName = 'UrlEncode',
 	{
 		var res = {}
 	
-		var parts = String(string).split(/[;&]/)
-		for (var i=0; i < parts.length; i++)
+		var parts = String(string).split(this.paramDelimiterRex || this.paramDelimiter)
+		for (var i = 0; i < parts.length; i++)
 		{
-			var pair = parts[i].split('=')
-			var name = decode(pair[0])
-			var val = decode(pair[1] || '')
+			var pair = parts[i].split('='),
+				name = decode(pair[0]),
+				val = decode(pair[1] || '')
 		
 			if (forceArray)
 			{
