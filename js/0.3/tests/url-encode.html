@@ -34,19 +34,34 @@
 	tests.eq(UrlEncode.stringify(null), '', 'null')
 	tests.eq(UrlEncode.stringify(undefined), '', 'undefined')
 	
-	tests.log('array')
+	tests.log('stringify array')
 	tests.eq(UrlEncode.stringify([123, 456, 789]), '123&456&789', '[123, 456, 789] with default pd="&"')
 	UrlEncode.paramDelimiter = ';'
 	tests.eq(UrlEncode.stringify([123, 456, 789]), '123;456;789', '[123, 456, 789] with pd=";"')
-	tests.eq(UrlEncode.stringify(["abc", "def", "ghi"]), 'abc;def;ghi', '["abc", "def", "ghi"]')
+	tests.eq(UrlEncode.stringify(['abc', 'def', 'ghi']), 'abc;def;ghi', '["abc", "def", "ghi"]')
 	tests.eq(UrlEncode.stringify([0, '', undefined, null, false, true]), '0;;undefined;null;false;true', '[0, "", undefined, null, false, true]')
 	tests.eq(UrlEncode.stringify(['а', 'б', 'в']), '%D0%B0;%D0%B1;%D0%B2', '["а", "б", "в"]')
 	
-	tests.log('hash')
+	tests.log('stringify hash')
 	tests.eq(UrlEncode.stringify({a:1, b:2, c:3}), 'a=1;b=2;c=3', '{a:1, b:2, c:3}')
 	tests.eq(UrlEncode.stringify({a:1, b:2, c:[3,4]}), 'a=1;b=2;c=3;c=4', '{a:1, b:2, c:[3,4]}')
 	tests.eq(UrlEncode.stringify({a:{b:2}}), 'a=%5Bobject%5D', '{a:{b:2}}')
 	tests.eq(UrlEncode.stringify({а:'б'}), '%D0%B0=%D0%B1', '{а:"б"}')
+	
+	tests.log('parse array')
+	UrlEncode.paramDelimiter = '&'
+	tests.eqo(UrlEncode.parse('123&456&789'), {'123':'', '456':'', '789':''}, '[123, 456, 789] with pd="&"')
+	UrlEncode.paramDelimiter = ';'
+	tests.eqo(UrlEncode.parse('123;456;789'), {'123':'', '456':'', '789':''}, '[123, 456, 789] with pd=";"')
+	tests.eqo(UrlEncode.parse('abc;def;ghi'), {'abc':'', 'def':'', 'ghi':''}, '["abc", "def", "ghi"]')
+	tests.eqo(UrlEncode.parse('0;;undefined;null;false;true'), {'0':'', '':'', 'undefined':'', 'null':'', 'false':'', 'true':''}, '["0", "", "undefined", "null", "false", "true"]')
+	tests.eqo(UrlEncode.parse('%D0%B0;%D0%B1;%D0%B2'), {'а':'', 'б':'', 'в':''}, '["а", "б", "в"]')
+	
+	tests.log('parse hash')
+	tests.eqo(UrlEncode.parse('a=1;b=2;c=3'), {a:'1', b:'2', c:'3'}, '{a:1, b:2, c:3}')
+	tests.eqo(UrlEncode.parse('a=1;b=2;c=3;c=4'), {a:'1', b:'2', c:['3','4']}, 'a=1;b=2;c=3;c=4')
+	tests.eqo(UrlEncode.parse('a=%5Bobject%5D'), {a:'[object]'}, 'a=%5Bobject%5D')
+	tests.eqo(UrlEncode.parse('%D0%B0=%D0%B1'), {а:'б'}, '%D0%B0=%D0%B1')
 	
 	
 	tests.done()
