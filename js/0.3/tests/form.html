@@ -90,8 +90,8 @@
 	tests.ok(!('radio-unchecked' in hash), 'radio-unchecked')
 	tests.eq(hash['button'], 'button', 'button')
 	tests.eq(hash['select-one'], 'selected-one', 'select-one')
-	tests.eqarr(hash['select-multiple'], ['selected','selected','selected'], 'select-multiple')
-	tests.eqarr(hash['mixed'], ['one','two','tree','four'], 'mixed')
+	tests.eqo(hash['select-multiple'], ['selected','selected','selected'], 'select-multiple')
+	tests.eqo(hash['mixed'], ['one','two','tree','four'], 'mixed')
 	tests.ok(!(undefined in hash), 'unnamed')
 	tests.ok(!('' in hash), 'empty-named')
 	

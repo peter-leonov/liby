@@ -130,22 +130,7 @@ var myName = 'tests', Me = self[myName] =
 	
 	eq: function (a, b, m) { return a === b ? this.success(m) : this.fail(m, inspect(a) + ' !== ' + inspect(b)) },
 	ne: function (a, b, m) { return a !== b ? this.success(m) : this.fail(m, inspect(a) + ' === ' + inspect(b)) },
-	eqarr: function (a, b, m)
-	{
-		good:
-		{
-			if (a.length !== b.length)
-				break good
-			for (var i = 0; i < a.length; i++)
-				if (!(a[i] === b[i]))
-					break good
-			
-			return this.success(m)
-		}
-		
-		return this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b))
-	},
-	eqdeep: function (a, b, m)
+	eqo: function (a, b, m)
 	{
 		return inspect(a) === inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b))
 	},

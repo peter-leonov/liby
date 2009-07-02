@@ -95,7 +95,7 @@
 		node.dispatchEvent(e)
 		if (/IE [67]/.test(tests.ua))
 			tests.skip()
-		tests.eqarr(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
+		tests.eqo(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
 		
 		var event1, event2, event3
 		node.addEventListener(type, function (e) { event1 = e; e.abc++ }, false)
@@ -105,8 +105,8 @@
 		e.initEvent(type, true, true)
 		e.abc = 0
 		node.dispatchEvent(e)
-		tests.eqarr([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
-		tests.eqarr(e.abc, 3, 'listeners can write custom fields')
+		tests.eqo([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
+		tests.eqo(e.abc, 3, 'listeners can write custom fields')
 		
 		function prevent (e) { e.preventDefault() }
 		e = document.createEvent(kind)
