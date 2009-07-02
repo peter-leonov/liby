@@ -18,20 +18,20 @@ html{position:relative;}
 html{height:100%;width:100%}
 body{font: 12px Arial,sans-serif}
 
-body { margin-left: 450px; padding: 15px; }
 
 #tests-output
 {
-	position: fixed;
+/*	position: fixed;*/
+	float: left;
 	z-index: 100;
-	left: 0;
-	top: 0;
-	bottom: 0;
+/*	left: 0;*/
+/*	top: 0;*/
+/*	bottom: 0;*/
 	width: 420px;
 	background: #eee;
 	padding: 15px;
 	border-right: solid 1px #ccc;
-	overflow: auto;
+/*	overflow: auto;*/
 }
 
 #tests-output.failed { background-color: #fee; }
