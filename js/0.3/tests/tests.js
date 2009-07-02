@@ -30,47 +30,51 @@ function escapeString (str)
 	return str.replace(/(["\\\n\r\t])/g, function (v) { return escapeChars[v] })
 }
 
+var level = 0, indentWith = '	'
 function inspect (val)
 {
-	if (inspect.level > 3)
-		return
+	if (level++ > 10)
+		throw new Error('inspecting too deep: ' + inspect.level)
+	
+	var res, indent = new Array(level).join(indentWith)
 	try
 	{
-	switch (typeof val)
-	{
-		case 'number':
-			return '' + val
-		case 'string':
-			return '"' + escapeString(val) + '"'
-		case 'object':
-			if (val === null)
-				return 'null'
-			inspect.level++
-			if (val.constructor === Array)
-			{
-				var elements = []
-				for (var i = 0, il = val.length; i < il; i++)
-					elements.push(inspect(val[i]))
-				return '[' + elements.join(', ') + ']'
-			}
-			else if (val.constructor === Object)
-			{
-				var elements = []
-				for (var k in val)
-					elements.push(escapeString(k) + ': ' + inspect(val[k]))
-				return '{' + elements.join(', ') + '}'
-			}
-			else
-				return String(val)
-			inspect.level--
-		default:
-			return String(val)
+		switch (typeof val)
+		{
+			case 'string':
+				res = '"' + escapeString(val) + '"'
+				break
+			case 'object':
+				if (val === null)
+				{
+					res = 'null'
+					break
+				}
+				else if (val.constructor === Array)
+				{
+					var elements = []
+					for (var i = 0, il = val.length; i < il; i++)
+						elements.push(inspect(val[i]))
+					res = indent + '[\n' + indent + indentWith + elements.join(',\n' + indent + indentWith) + '\n' + indent + ']'
+					break
+				}
+				else if (val.constructor === Object)
+				{
+					var elements = []
+					for (var k in val)
+						elements.push(escapeString(k) + ': ' + inspect(val[k]))
+					res = indent + '{\n' + indent + indentWith + elements.join(',\n' + indent + indentWith) + '\n' + indent + '}'
+					break
+				}
+			default:
+				res = String(val)
+		}
 	}
-	}
-	catch (ex) { return 'error inspecting "' + val + '":' + ex }
+	catch (ex) { throw new Error('error inspecting "' + val + '":' + ex) }
 	
+	level--
+	return res
 }
-inspect.level = 0
 
 window.addEventListener('load', startup, false)
 
@@ -124,9 +128,9 @@ var myName = 'tests', Me = self[myName] =
 	info: function (m, d) { node('info', m, d, false) },
 	log: function (m, d) { node('log', m, d, false) },
 	
-	eq: function (a, b, m, s) { a === b ? this.success(m) : this.fail(m, inspect(a) + ' !== ' + inspect(b), s) },
-	ne: function (a, b, m, s) { a !== b ? this.success(m) : this.fail(m, inspect(a) + ' === ' + inspect(b), s) },
-	eqarr: function (a, b, m, s)
+	eq: function (a, b, m) { return a === b ? this.success(m) : this.fail(m, inspect(a) + ' !== ' + inspect(b)) },
+	ne: function (a, b, m) { return a !== b ? this.success(m) : this.fail(m, inspect(a) + ' === ' + inspect(b)) },
+	eqarr: function (a, b, m)
 	{
 		good:
 		{
@@ -139,9 +143,13 @@ var myName = 'tests', Me = self[myName] =
 			return this.success(m)
 		}
 		
-		this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b), s)
+		return this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b))
 	},
-	ok: function (v, m, s) { v ? this.success(m) : this.fail(m, '"' + v + '"', s) },
+	eqdeep: function (a, b, m)
+	{
+		return inspect(a) === inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b))
+	},
+	ok: function (v, m) { return v ? this.success(m) : this.fail(m, '"' + v + '"') },
 	
 	
 	time: function (name)
