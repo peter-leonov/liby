@@ -30,13 +30,13 @@ function escapeString (str)
 	return str.replace(/(["\\\n\r\t])/g, function (v) { return escapeChars[v] })
 }
 
-var level = 0, indentWith = '	'
+var level = 0, indc = '	'
 function inspect (val)
 {
 	if (level++ > 10)
 		throw new Error('inspecting too deep: ' + inspect.level)
 	
-	var res, indent = new Array(level).join(indentWith)
+	var res, ind = new Array(level).join(indc)
 	try
 	{
 		switch (typeof val)
@@ -55,15 +55,15 @@ function inspect (val)
 					var elements = []
 					for (var i = 0, il = val.length; i < il; i++)
 						elements.push(inspect(val[i]))
-					res = indent + '[\n' + indent + indentWith + elements.join(',\n' + indent + indentWith) + '\n' + indent + ']'
+					res = (level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + indc + elements.join(',\n\r' + ind + indc) + '\n\r' + ind + ']'
 					break
 				}
 				else if (val.constructor === Object)
 				{
 					var elements = []
 					for (var k in val)
-						elements.push(escapeString(k) + ': ' + inspect(val[k]))
-					res = indent + '{\n' + indent + indentWith + elements.join(',\n' + indent + indentWith) + '\n' + indent + '}'
+						elements.push(inspect(k) + ': ' + inspect(val[k]))
+					res = (level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + indc + elements.join(',\n\r' + ind + indc) + '\n\r' + ind + '}'
 					break
 				}
 			default:
@@ -134,7 +134,7 @@ var myName = 'tests', Me = self[myName] =
 	{
 		return inspect(a) === inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b))
 	},
-	ok: function (v, m) { return v ? this.success(m) : this.fail(m, '"' + v + '"') },
+	ok: function (v, m) { return v ? this.success(m) : this.fail(m, 'not ok: ' + inspect(v)) },
 	
 	
 	time: function (name)
