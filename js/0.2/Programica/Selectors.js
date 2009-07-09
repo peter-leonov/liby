@@ -1,4 +1,4 @@
-<!--#include file="Sizzle.js" -->
+<!--# include virtual="Sizzle.js" -->
 
 window.$$ = Sizzle
 
