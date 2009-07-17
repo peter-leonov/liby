@@ -226,6 +226,6 @@ PA.time = function (d)
 }
 
 
-<!--#include file="animation-types.js" -->
+<!--#include virtual="animation-types.js" -->
 
 })();
