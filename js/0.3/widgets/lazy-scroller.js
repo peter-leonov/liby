@@ -3,7 +3,7 @@
 var myName = 'LazyScroller',
 	Me = self[myName] = Class(myName)
 
-Me.mixIn(EventDriven)
+Me.mixIn(EventTarget)
 
 Me.prototype.extend
 ({

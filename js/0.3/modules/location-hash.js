@@ -61,6 +61,6 @@ Me.prototype =
 	}
 }
 
-EventDriven.mix(Me)
+EventTarget.mix(Me)
 
 })();

@@ -4,7 +4,7 @@ var myName = 'Scroller',
 	Me = self[myName] = Class(myName),
 	doc = document
 
-Me.mixIn(EventDriven)
+Me.mixIn(EventTarget)
 
 Me.prototype.extend
 ({

@@ -5,7 +5,7 @@ var myName = 'ScrollRangeFinder',
 	Me = self[myName] = Class(myName),
 	max = Math.max, sqrt = Math.sqrt
 
-Me.mixIn(EventDriven)
+Me.mixIn(EventTarget)
 
 Me.prototype.extend
 ({

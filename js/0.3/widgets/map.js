@@ -21,7 +21,7 @@ Me.prototype.extend
 	apiLoaded: function () { this.dispatchEvent('ready') }
 })
 
-Me.mixIn(EventDriven)
+Me.mixIn(EventTarget)
 
 eval(NodesShortcut())
 

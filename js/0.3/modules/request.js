@@ -5,7 +5,7 @@ var Me = Programica.Request = {},
 	statusEventNames = ['success', 'information', 'success', 'redirect', 'error', 'error'],
 	urlEncode = UrlEncode.stringify
 
-EventDriven.mix(XHR)
+EventTarget.mix(XHR)
 
 function onreadystatechange ()
 {
