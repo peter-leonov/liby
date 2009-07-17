@@ -135,6 +135,7 @@ var myName = 'tests', Me = self[myName] =
 		return inspect(a) === inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b))
 	},
 	ok: function (v, m) { return v ? this.success(m) : this.fail(m, 'not ok: ' + inspect(v)) },
+	no: function (v, m) { return !v ? this.success(m) : this.fail(m, 'not no: ' + inspect(v)) },
 	
 	
 	time: function (name)

@@ -21,7 +21,7 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(20*4)
+	tests.plan(22*4)
 	
 	
 	function run (kind, type, node)
@@ -30,6 +30,10 @@
 		function handler (e) { calls++ }
 		
 		try {
+		
+		tests.ne(typeof EventTarget, 'undefined', 'EventTarget defined')
+		// to date nor IE neither Opera support EventTarget
+		tests.no(node instanceof EventTarget, 'not instanceof EventTarget')
 		
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
@@ -66,8 +70,8 @@
 		e.initEvent(type, true, true)
 		document.addEventListener(type, handler, false)
 		node.dispatchEvent(e)
-		tests.skip()
-		tests.eq(calls, 2, 'document handler called ok twice')
+		tests.skip() // untill our EventTarget implements document dispatching
+		tests.eq(calls, 2, 'document handler called ok')
 		
 		calls = 0
 		node.removeEventListener(type, handler, false)
