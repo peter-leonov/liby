@@ -176,7 +176,7 @@ function getEventWrapper (node, type, func, dir)
 
 function IEFixes ()
 {
-	IEFixes.eventConversion = { DOMMouseScroll: 'mousewheel', unload: 'beforeunload' }
+	IEFixes.eventConversion = {DOMMouseScroll: 'mousewheel', unload: 'beforeunload', keypress: 'keydown'}
 	
 	window.attachEvent('onbeforeunload', IEFixes_onBeforeUnload)
 	
