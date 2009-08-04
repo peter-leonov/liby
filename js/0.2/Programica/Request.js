@@ -35,7 +35,7 @@ Me.post = function (url, params, callback, sync)
 	r.open('POST', url, !sync)
 	r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded') // ; charset=utf-8
 	// r.setRequestHeader('Content-length', data.length)
-	r.onreadystatechange = onreadystatechange
+	r.onreadystatechange = function () { return onreadystatechange.apply(r, arguments) }
 	if (callback)
 		r.addEventListener('load', callback, false)
 	r.send(data)
