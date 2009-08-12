@@ -312,11 +312,11 @@ var JSLINT = (function () {
             strict     : true, // require the "use strict"; pragma
             sub        : true, // if all forms of subscript notation are tolerated
             white      : true, // if strict whitespace rules apply
-            widget     : true  // if the Yahoo Widgets globals should be predefined
-            already    : true  // if a variable must be defined only once
-            name       : true  // if name in function statement must be defined
-            semicolon  : true  // do all semicolon checks
-            block      : true  // force blocks instead of simple statements
+            widget     : true, // if the Yahoo Widgets globals should be predefined
+            already    : true, // if a variable must be defined only once
+            name       : true, // if name in function statement must be defined
+            semicolon  : true, // do all semicolon checks
+            block      : true, // force blocks instead of simple statements
             construct  : true  // do check constructor goodness
         },
 
