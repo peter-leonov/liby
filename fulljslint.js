@@ -313,6 +313,11 @@ var JSLINT = (function () {
             sub        : true, // if all forms of subscript notation are tolerated
             white      : true, // if strict whitespace rules apply
             widget     : true  // if the Yahoo Widgets globals should be predefined
+            already    : true  // if a variable must be defined only once
+            name       : true  // if name in function statement must be defined
+            semicolon  : true  // do all semicolon checks
+            block      : true  // force blocks instead of simple statements
+            construct  : true  // do check constructor goodness
         },
 
 // browser contains a set of global names which are commonly provided by a
@@ -330,7 +335,9 @@ var JSLINT = (function () {
             console         : false,
             Debug           : false,
             defaultStatus   : false,
-            document        : false,
+            document        : true,
+            window          : true,
+            self            : true,
             event           : false,
             focus           : false,
             frames          : false,
@@ -1726,10 +1733,15 @@ var JSLINT = (function () {
 // Define t in the current function in the current scope.
 
         if (is_own(funct, t) && !funct['(global)']) {
-            warning(funct[t] === true ?
-                "'{a}' was used before it was defined." :
-                "'{a}' is already defined.",
-                nexttoken, t);
+            if (funct[t] === true) {
+                warning("'{a}' was used before it was defined.",
+                    nexttoken, t);
+            } else {
+                if (option.already) {
+                    warning("'{a}' is already defined.",
+                        nexttoken, t);
+                }
+            }
         }
         funct[t] = type;
         if (type === 'label') {
@@ -2315,7 +2327,9 @@ loop:   for (;;) {
             return i;
         }
         if (token.id === 'function' && nexttoken.id === '(') {
-            warning("Missing name in function statement.");
+            if (option.name) {
+                warning("Missing name in function statement.");
+            }
         } else {
             error("Expected an identifier and instead saw '{a}'.",
                     nexttoken, nexttoken.value);
@@ -2387,8 +2401,10 @@ loop:   for (;;) {
 
         if (!t.block) {
             if (nexttoken.id !== ';') {
-                warningAt("Missing semicolon.", token.line,
-                        token.from + token.value.length);
+                if (option.semicolon) {
+                    warningAt("Missing semicolon.", token.line,
+                            token.from + token.value.length);
+                }
             } else {
                 adjacent(token, nexttoken);
                 advance(';');
@@ -2478,7 +2494,9 @@ loop:   for (;;) {
         }
         while (!nexttoken.reach && nexttoken.id !== '(end)') {
             if (nexttoken.id === ';') {
-                warning("Unnecessary semicolon.");
+                if (option.semicolon) {
+                    warning("Unnecessary semicolon.");
+                }
                 advance(';');
             } else {
                 a.push(statement());
@@ -2512,8 +2530,10 @@ loop:   for (;;) {
             }
             advance('}', t);
         } else {
-            warning("Expected '{a}' and instead saw '{b}'.",
-                    nexttoken, '{', nexttoken.value);
+            if (option.block) {
+                warning("Expected '{a}' and instead saw '{b}'.",
+                        nexttoken, '{', nexttoken.value);
+            }
             noreach = true;
             a = [statement()];
             noreach = false;
@@ -4067,7 +4087,9 @@ loop:   for (;;) {
                 }
             } else {
                 if (c.id !== '.' && c.id !== '[' && c.id !== '(') {
-                    warning("Bad constructor.", token);
+                    if (option.construct) {
+                        warning("Bad constructor.", token);
+                    }
                 }
             }
         } else {

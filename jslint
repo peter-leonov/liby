@@ -27,16 +27,13 @@ function check (a)
 		quit(1)
 	}
 	
-	// input = eval('function () { ' + input + ' }').toString()
-	
-	var skip = /Missing name in function statement|Missing semicolon|Unnecessary semicolon|is already defined/
-	if (!JSLINT(input, {bitwise: true, forin: true, browser: true, evil: true, laxbreak: true}))
+	if (!JSLINT(input, {bitwise: true, forin: true, browser: true, evil: true, laxbreak: true, undef: true}))
 	{
 		var errors = JSLINT.errors
 		for (var i = 0; i < errors.length; i += 1)
 		{
 			var e = errors[i]
-			if (e && !skip.test(e.reason))
+			if (e)
 			{
 				print('Lint at line ' + (e.line) + ' character ' + (e.character) + ': ' + e.reason)
 				// print((e.evidence || '').replace(/^\s*(\S*(\s+\S+)*)\s*$/, '$1'))
@@ -49,7 +46,7 @@ function check (a)
 	// {
 	// 	print('jslint: No problems found in ' + a[0])
 	// 	quit()
-	//     }
+	// }
 }
 
 check(arguments);
