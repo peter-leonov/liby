@@ -27,6 +27,7 @@ function check (a)
 		quit(1)
 	}
 	
+	input = eval('function () { ' + input + ' }').toString()
 	if (!JSLINT(input, {bitwise: true, forin: true, browser: true, evil: true, laxbreak: true, undef: true}))
 	{
 		var errors = JSLINT.errors
@@ -35,7 +36,7 @@ function check (a)
 			var e = errors[i]
 			if (e)
 			{
-				print('Lint at line ' + (e.line) + ' character ' + (e.character) + ': ' + e.reason)
+				print('Lint at line ' + (e.line) + ': ' + e.reason)
 				// print((e.evidence || '').replace(/^\s*(\S*(\s+\S+)*)\s*$/, '$1'))
 				print('')
 			}
