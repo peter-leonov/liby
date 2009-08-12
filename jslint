@@ -27,29 +27,29 @@ function check (a)
 		quit(1)
 	}
 	
-	input = eval('function () { ' + input + ' }').toString()
+	// input = eval('function () { ' + input + ' }').toString()
 	
-	var skip = {'Missing name in function statement.': true}
+	var skip = /Missing name in function statement|Missing semicolon|Unnecessary semicolon|is already defined/
 	if (!JSLINT(input, {bitwise: true, forin: true, browser: true, evil: true, laxbreak: true}))
 	{
 		var errors = JSLINT.errors
 		for (var i = 0; i < errors.length; i += 1)
 		{
 			var e = errors[i]
-			if (e && !skip[e.reason])
+			if (e && !skip.test(e.reason))
 			{
-				print('Lint at line ' + (e.line + 1) + ' character ' + (e.character + 1) + ': ' + e.reason)
+				print('Lint at line ' + (e.line) + ' character ' + (e.character) + ': ' + e.reason)
 				// print((e.evidence || '').replace(/^\s*(\S*(\s+\S+)*)\s*$/, '$1'))
 				print('')
 			}
 		}
 		quit(2)
 	}
-	else
-	{
-		print('jslint: No problems found in ' + a[0])
-		quit()
-    }
+	// else
+	// {
+	// 	print('jslint: No problems found in ' + a[0])
+	// 	quit()
+	//     }
 }
 
 check(arguments);
