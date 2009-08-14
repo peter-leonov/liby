@@ -130,10 +130,8 @@ var myName = 'tests', Me = self[myName] =
 	
 	eq: function (a, b, m) { return a === b ? this.success(m) : this.fail(m, inspect(a) + ' !== ' + inspect(b)) },
 	ne: function (a, b, m) { return a !== b ? this.success(m) : this.fail(m, inspect(a) + ' === ' + inspect(b)) },
-	eqo: function (a, b, m)
-	{
-		return inspect(a) === inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b))
-	},
+	eqo: function (a, b, m) { return inspect(a) === inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b)) },
+	neo: function (a, b, m) { return inspect(a) !== inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b)) },
 	ok: function (v, m) { return v ? this.success(m) : this.fail(m, 'not ok: ' + inspect(v)) },
 	no: function (v, m) { return !v ? this.success(m) : this.fail(m, 'not no: ' + inspect(v)) },
 	
