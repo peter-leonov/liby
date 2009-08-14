@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Event classes tests</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<script type="text/javascript" src="../programica/init.js"></script>
+
+<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript">
+	window.addEventListener('load', function () {
+	tests.plan(5)
+	
+	var messed =
+	[
+		{x: 2, y: 0, z: 0},
+		{x: 2, y: 0, z: 1},
+		{x: 2, y: 0, z: 2},
+		{x: 2, y: 1, z: 0},
+		{x: 2, y: 1, z: 1},
+		{x: 2, y: 1, z: 2},
+		{x: 2, y: 2, z: 0},
+		{x: 2, y: 2, z: 1},
+		{x: 2, y: 2, z: 2},
+		
+		{x: 0, y: 0, z: 0},
+		{x: 0, y: 0, z: 1},
+		{x: 0, y: 0, z: 2},
+		{x: 0, y: 1, z: 0},
+		{x: 0, y: 1, z: 1},
+		{x: 0, y: 1, z: 2},
+		{x: 0, y: 2, z: 0},
+		{x: 0, y: 2, z: 1},
+		{x: 0, y: 2, z: 2},
+		
+		{x: 1, y: 0, z: 0},
+		{x: 1, y: 0, z: 1},
+		{x: 1, y: 0, z: 2},
+		{x: 1, y: 1, z: 0},
+		{x: 1, y: 1, z: 1},
+		{x: 1, y: 1, z: 2},
+		{x: 1, y: 2, z: 0},
+		{x: 1, y: 2, z: 1},
+		{x: 1, y: 2, z: 2}
+	]
+	
+	var sorted =
+	[
+		{x: 0, y: 0, z: 0},
+		{x: 0, y: 0, z: 1},
+		{x: 0, y: 0, z: 2},
+		{x: 0, y: 1, z: 0},
+		{x: 0, y: 1, z: 1},
+		{x: 0, y: 1, z: 2},
+		{x: 0, y: 2, z: 0},
+		{x: 0, y: 2, z: 1},
+		{x: 0, y: 2, z: 2},
+		
+		{x: 1, y: 0, z: 0},
+		{x: 1, y: 0, z: 1},
+		{x: 1, y: 0, z: 2},
+		{x: 1, y: 1, z: 0},
+		{x: 1, y: 1, z: 1},
+		{x: 1, y: 1, z: 2},
+		{x: 1, y: 2, z: 0},
+		{x: 1, y: 2, z: 1},
+		{x: 1, y: 2, z: 2},
+		
+		{x: 2, y: 0, z: 0},
+		{x: 2, y: 0, z: 1},
+		{x: 2, y: 0, z: 2},
+		{x: 2, y: 1, z: 0},
+		{x: 2, y: 1, z: 1},
+		{x: 2, y: 1, z: 2},
+		{x: 2, y: 2, z: 0},
+		{x: 2, y: 2, z: 1},
+		{x: 2, y: 2, z: 2}
+	]
+	
+	var backup = messed.slice()
+	
+	function x (a, b)
+	{
+		return a.x - b.x
+	}
+	
+	function y (a, b)
+	{
+		return a.y - b.y
+	}
+	
+	function z (a, b)
+	{
+		return a.z - b.z
+	}
+	
+	var m = messed.slice()
+	m.sort(z)
+	m.sort(y)
+	m.sort(x)
+	tests.eqo(m, sorted, 'multiple sorts as expected')
+	
+	var s = messed.slice()
+	s.sort(function (a, b) { return x(a, b) || y(a, b) || z(a, b) })
+	tests.eqo(s, sorted, 'single sorts as expected')
+	
+	
+	tests.eqo(m, s, 'multiple and single sorts acts as the same')
+	
+	tests.eqo(messed, backup, 'messed left untouched')
+	tests.eqo(messed, backup, 'messed not equals to sorted')
+	
+	log(messed[0])
+	
+	tests.done()
+	}, false)
+</script>
+</body>
+</html>
