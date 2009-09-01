@@ -45,7 +45,8 @@ body{font: 12px Arial,sans-serif}
 #tests-output,
 #tests-output .result .description { line-height: 1.6em; }
 
-#tests-output .result .description { display: block; padding-left: 1em; margin-bottom: 0.2em; }
+#tests-output .result .description { display: none; padding-left: 1em; margin-bottom: 0.2em; }
+#tests-output .result:hover .description { display: block; }
 
 #tests-output .log { color: #888; list-style: none; }
 #tests-output .info { color: #06d; list-style: none; }
