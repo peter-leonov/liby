@@ -144,10 +144,27 @@ var myName = 'tests', Me = self[myName] =
 	
 	timeEnd: function (name)
 	{
-		var date = new Date(),
-			diff = date - times[name]
+		var diff = new Date() - times[name]
 		this.info(name + ': ' + diff + 'ms')
 		return diff
+	},
+	
+	speed: function (f)
+	{
+		var count = 1
+		do
+		{
+			count *= 5
+			var begin = new Date()
+			for (var i = 0; i < count; i++)
+				f()
+			var diff = new Date() - begin
+		}
+		while (diff < 25)
+		
+		var speed = count * 1000 / diff
+		this.log('~ ' + Math.round(speed) + ' empty circles per second')
+		return speed
 	},
 	
 	done: function ()
