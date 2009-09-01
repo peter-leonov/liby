@@ -120,10 +120,23 @@
 	tests.eqo(s, sorted, 'single sorts as expected')
 	
 	
-	tests.eqo(m, s, 'multiple and single sorts acts as the same')
+	
+	var c = messed.slice()
+	tests.time('combined')
+	for (var i = 0; i < count; i++)
+	{
+		c.sort(combined)
+	}
+	var ctime = tests.timeEnd('combined')
+	tests.eqo(c, sorted, 'combined sorts as expected')
+	
+	
+	tests.eqo(s, m, 'single and multiple sorts acts the same')
+	tests.eqo(s, c, 'single and combined sorts acts the same')
 	tests.neo(m, messed, 'doublecheck: multiple is not messed')
 	tests.neo(s, messed, 'doublecheck: single is not messed')
 	tests.gt(mtime, stime, 'multiple takes more time then single')
+	tests.gt(mtime, stime, 'single takes more time then combined')
 	
 	tests.eqo(messed, backup, 'messed left untouched')
 	tests.eqo(messed, backup, 'messed not equals to sorted')
