@@ -15,7 +15,7 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(8)
+	tests.plan(11)
 	
 	var messed =
 	[
@@ -85,39 +85,36 @@
 	
 	var backup = messed.slice()
 	
-	function x (a, b)
-	{
-		return a.x - b.x
-	}
+	function x (a, b) { return a.x - b.x }
+	function y (a, b) { return a.y - b.y }
+	function z (a, b) { return a.z - b.z }
+	function single (a, b) { return x(a, b) || y(a, b) || z(a, b) }
+	function combined (a, b) { return a.x - b.x || a.y - b.y || a.z - b.z }
 	
-	function y (a, b)
-	{
-		return a.y - b.y
-	}
+	var temp = messed.slice(),
+		speed = tests.speed(function () { temp.sort(single) }),
+		count = Math.round(speed / 5)
 	
-	function z (a, b)
-	{
-		return a.z - b.z
-	}
+	tests.log('runs ' + count + ' times')
 	
 	var m = messed.slice()
 	tests.time('multiple')
-	for (var i = 0; i < 1000; i++)
+	for (var i = 0; i < count; i++)
 	{
-		m.sort(z)
-		m.sort(y)
+		m.sort(z),
+		m.sort(y),
 		m.sort(x)
 	}
 	var mtime = tests.timeEnd('multiple')
 	tests.eqo(m, sorted, 'multiple sorts as expected')
 	
 	
+	
 	var s = messed.slice()
-	function ssort (a, b) { return x(a, b) || y(a, b) || z(a, b) }
 	tests.time('single')
-	for (var i = 0; i < 1000; i++)
+	for (var i = 0; i < count; i++)
 	{
-		s.sort(ssort)
+		s.sort(single)
 	}
 	var stime = tests.timeEnd('single')
 	tests.eqo(s, sorted, 'single sorts as expected')
