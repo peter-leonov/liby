@@ -85,10 +85,10 @@
 	
 	var backup = messed.slice()
 	
-	function x (a, b) { return a.x - b.x }
-	function y (a, b) { return a.y - b.y }
-	function z (a, b) { return a.z - b.z }
-	function single (a, b) { return x(a, b) || y(a, b) || z(a, b) }
+	function byX (a, b) { return a.x - b.x }
+	function byY (a, b) { return a.y - b.y }
+	function byZ (a, b) { return a.z - b.z }
+	function single (a, b) { return byX(a, b) || byY(a, b) || byZ(a, b) }
 	function combined (a, b) { return a.x - b.x || a.y - b.y || a.z - b.z }
 	
 	var temp = messed.slice(),
@@ -101,9 +101,9 @@
 	tests.time('multiple')
 	for (var i = 0; i < count; i++)
 	{
-		m.sort(z),
-		m.sort(y),
-		m.sort(x)
+		m.sort(byZ)
+		m.sort(byY)
+		m.sort(byX)
 	}
 	var mtime = tests.timeEnd('multiple')
 	tests.eqo(m, sorted, 'multiple sorts as expected')
