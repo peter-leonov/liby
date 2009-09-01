@@ -128,8 +128,9 @@ var myName = 'tests', Me = self[myName] =
 	info: function (m, d) { node('info', m, d, false) },
 	log: function (m, d) { node('log', m, d, false) },
 	
-	eq: function (a, b, m) { return a === b ? this.success(m) : this.fail(m, inspect(a) + ' !== ' + inspect(b)) },
-	ne: function (a, b, m) { return a !== b ? this.success(m) : this.fail(m, inspect(a) + ' === ' + inspect(b)) },
+	eq: function (a, b, m) { return a === b ? this.success(m) : this.fail(m, inspect(a) + ' not === ' + inspect(b)) },
+	gt: function (a, b, m) { return a > b ? this.success(m) : this.fail(m, inspect(a) + ' not > ' + inspect(b)) },
+	ne: function (a, b, m) { return a !== b ? this.success(m) : this.fail(m, inspect(a) + ' not !== ' + inspect(b)) },
 	eqo: function (a, b, m) { return inspect(a) === inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b)) },
 	neo: function (a, b, m) { return inspect(a) !== inspect(b) ? this.success(m) : this.fail(m, 'a: ' + inspect(a) + '\n\rb: ' + inspect(b)) },
 	ok: function (v, m) { return v ? this.success(m) : this.fail(m, 'not ok: ' + inspect(v)) },
