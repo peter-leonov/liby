@@ -15,7 +15,7 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(5)
+	tests.plan(8)
 	
 	var messed =
 	[
@@ -101,17 +101,32 @@
 	}
 	
 	var m = messed.slice()
-	m.sort(z)
-	m.sort(y)
-	m.sort(x)
+	tests.time('multiple')
+	for (var i = 0; i < 1000; i++)
+	{
+		m.sort(z)
+		m.sort(y)
+		m.sort(x)
+	}
+	var mtime = tests.timeEnd('multiple')
 	tests.eqo(m, sorted, 'multiple sorts as expected')
 	
+	
 	var s = messed.slice()
-	s.sort(function (a, b) { return x(a, b) || y(a, b) || z(a, b) })
+	function ssort (a, b) { return x(a, b) || y(a, b) || z(a, b) }
+	tests.time('single')
+	for (var i = 0; i < 1000; i++)
+	{
+		s.sort(ssort)
+	}
+	var stime = tests.timeEnd('single')
 	tests.eqo(s, sorted, 'single sorts as expected')
 	
 	
 	tests.eqo(m, s, 'multiple and single sorts acts as the same')
+	tests.neo(m, messed, 'doublecheck: multiple is not messed')
+	tests.neo(s, messed, 'doublecheck: single is not messed')
+	tests.gt(mtime, stime, 'multiple takes more time then single')
 	
 	tests.eqo(messed, backup, 'messed left untouched')
 	tests.eqo(messed, backup, 'messed not equals to sorted')
