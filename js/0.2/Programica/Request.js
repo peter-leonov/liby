@@ -5,7 +5,7 @@ var Me = Programica.Request = {},
 	statusEventNames = ['success', 'information', 'success', 'redirect', 'error', 'error'],
 	urlEncode = UrlEncode.stringify
 
-EventDriven.mix(XHR)
+// EventDriven.mix(XHR)
 
 function onreadystatechange ()
 {
@@ -35,7 +35,8 @@ Me.post = function (url, params, callback, sync)
 	r.open('POST', url, !sync)
 	r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded') // ; charset=utf-8
 	// r.setRequestHeader('Content-length', data.length)
-	r.onreadystatechange = onreadystatechange
+	Object.extend(r, EventDriven.prototype) // dirty fix for FF 3.5
+	r.onreadystatechange = function () { return onreadystatechange.apply(r, arguments) }
 	if (callback)
 		r.addEventListener('load', callback, false)
 	r.send(data)

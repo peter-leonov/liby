@@ -1,9 +1,9 @@
-<!--#if expr="$HTTP_USER_AGENT = /Gecko\//" --><!--#include file="fixes/Gecko.js" --><!--#endif -->
-<!--#if expr="$HTTP_USER_AGENT = /Opera\//" --><!--#include file="fixes/Presto.js" --><!--#endif -->
-<!--#if expr="$HTTP_USER_AGENT = /WebKit\//" --><!--#include file="fixes/WebKit.js" --><!--#endif -->
+<!--#if expr="$HTTP_USER_AGENT = /Gecko\//" --><!--#include virtual="fixes/Gecko.js" --><!--#endif -->
+<!--#if expr="$HTTP_USER_AGENT = /Opera\//" --><!--#include virtual="fixes/Presto.js" --><!--#endif -->
+<!--#if expr="$HTTP_USER_AGENT = /WebKit\//" --><!--#include virtual="fixes/WebKit.js" --><!--#endif -->
 
 <!--#if expr="$HTTP_USER_AGENT = /MSIE [67]/" -->
-<!--#include file="fixes/Trident.XHR.js" -->
-<!--#include file="fixes/Trident.js" -->
+<!--#include virtual="fixes/Trident.XHR.js" -->
+<!--#include virtual="fixes/Trident.js" -->
 <!--#endif -->
-<!--#if expr="$HTTP_USER_AGENT = /MSIE 8/" --><!--#include file="fixes/Trident8.js" --><!--#endif -->
+<!--#if expr="$HTTP_USER_AGENT = /MSIE 8/" --><!--#include virtual="fixes/Trident8.js" --><!--#endif -->

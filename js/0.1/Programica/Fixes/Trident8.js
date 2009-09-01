@@ -25,7 +25,7 @@ function onBeforeUnload ()
 onBeforeUnload.stack = []
 
 
-var eventConversion = { DOMMouseScroll: 'mousewheel', unload: 'beforeunload' }
+var eventConversion = {DOMMouseScroll: 'mousewheel', unload: 'beforeunload', keypress: 'keydown'}
 
 function preventDefault ()
 {
