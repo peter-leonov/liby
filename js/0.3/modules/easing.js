@@ -1,15 +1,19 @@
 ;(function () {
 
-var Me = Programica.Easing = function (begin, end, motion, type, callback)
+var Me = Programica.Easing = function (begin, end, duration, motion, tick, complete)
 {
 	var me = this, frame = 0, total = duration * this.fps, last = total - 1,
 		delta = end - begin, step = delta / total
 	
 	this.tick = function ()
 	{
+		tick(motion(frame, begin, delta, last))
 		if (frame++ >= last)
+		{
 			me.stop()
-		callback(motion(frame, begin, delta, last))
+			if (complete)
+				complete()
+		}
 	}
 	
 }
@@ -81,6 +85,6 @@ Me.removeTimer = function (id)
 	}
 }
 
-Me.types = <!--#include virtual="easing-types.js" -->
+Me.motions = <!--#include virtual="easing-motions.js" -->
 
 })();
