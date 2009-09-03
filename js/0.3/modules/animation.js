@@ -28,14 +28,14 @@ var Easing = Programica.Easing, Me = Programica.Animation = function (node, moti
 	for (var i = 0; i < trans.length; i++)
 	{
 		var tr = trans[i]
-		var step = (function (tr)
+		function bakeStep (tr)
 		{
 			return function (value)
 			{
 				Me.setStyleProperty(node, tr.property, value, unit)
 			}
-		})(tr)
-		this.easings[i] = new Easing(tr.begin, tr.end, duration, motion, step, complete)
+		}
+		this.easings[i] = new Easing(tr.begin, tr.end, duration, motion, bakeStep(tr), complete)
 	}
 	
 }
