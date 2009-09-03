@@ -20,7 +20,7 @@ var Easing = Programica.Easing, Me = Programica.Animation = function (node, moti
 	this.trans = trans
 	this.unit = unit
 	this.running = false
-	this.complete = false
+	this.completed = 0
 	this.easings = []
 	
 	var me = this
@@ -28,12 +28,14 @@ var Easing = Programica.Easing, Me = Programica.Animation = function (node, moti
 	for (var i = 0; i < trans.length; i++)
 	{
 		var tr = trans[i]
-		function tick (value)
+		var step = (function (tr)
 		{
-			me.onstep()
-			Me.setStyleProperty(node, tr.property, value, unit)
-		}
-		this.easings[i] = new Easing(tr.begin, tr.end, duration, motion, tick, complete)
+			return function (value)
+			{
+				Me.setStyleProperty(node, tr.property, value, unit)
+			}
+		})(tr)
+		this.easings[i] = new Easing(tr.begin, tr.end, duration, motion, step, complete)
 	}
 	
 }
@@ -65,23 +67,17 @@ Element.prototype.animate = function (motion, props, duration, unit)
 
 Me.prototype =
 {
-	onstart: function () {},
 	oncomplete: function () {},
-	onstep: function () {},
 	start: function ()
 	{
-		// if animation is already started
-		if (this.running)
-			return this
-		
-		this.running = true
-		this.complete = false
-		
-		var easings = this.easings
-		for (var i = 0; i < easings.length; i++)
-			easings[i].start()
-		
-		this.onstart()
+		if (!this.running)
+		{
+			this.running = true
+			
+			var easings = this.easings
+			for (var i = 0; i < easings.length; i++)
+				easings[i].start()
+		}
 		return this
 	},
 	
@@ -95,8 +91,13 @@ Me.prototype =
 			for (var i = 0; i < easings.length; i++)
 				easings[i].stop()
 		}
-		
 		return this
+	},
+	
+	complete: function ()
+	{
+		if (++this.completed >= this.easings)
+			this.oncomplete()
 	}
 }
 

@@ -1,18 +1,18 @@
 ;(function () {
 
-var Me = Programica.Easing = function (begin, end, duration, motion, tick, complete)
+var Me = Programica.Easing = function (begin, end, duration, motion, onstep, oncomplete)
 {
-	var me = this, frame = 0, total = duration * this.fps, last = total - 1,
+	var me = this, frame = 0, total = duration * Me.fps, last = total - 1,
 		delta = end - begin, step = delta / total
 	
-	this.tick = function ()
+	this.step = function ()
 	{
-		tick(motion(frame, begin, delta, last))
+		onstep(motion(frame, begin, delta, last))
 		if (frame++ >= last)
 		{
 			me.stop()
-			if (complete)
-				complete()
+			if (oncomplete)
+				oncomplete()
 		}
 	}
 	
@@ -26,7 +26,7 @@ Me.prototype =
 		{
 			this.running = true
 			Me.removeTimer(this.timer)
-			this.timer = Me.addTimer(this.tick) // step is already a prepared callback
+			this.timer = Me.addTimer(this.step) // step is already a prepared callback
 		}
 		return this
 	},
@@ -39,9 +39,7 @@ Me.prototype =
 			Me.removeTimer(this.timer)
 		}
 		return this
-	},
-	
-	
+	}
 }
 
 
@@ -56,7 +54,7 @@ Me.tick = function (d)
 {
 	var timer
 	for (var k in timers)
-		if (t = timers[k])
+		if ((timer = timers[k]))
 			timer(d)
 }
 
