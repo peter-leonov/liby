@@ -1,19 +1,19 @@
 ;(function () {
 
-var Easing = Programica.Easing, Me = Programica.Animation = function (node, motion, duration, trans, unit)
+var Motion = Programica.Motion, Me = Programica.Animation = function (node, motion, duration, trans, unit)
 {
 	this.node = node
 	switch (typeof motion)
 	{
 		case 'string':
 			var name = motion
-			if (!(motion = Easing.motions[name]))
-				throw new Error('Unknown easing type name "' + name + '"')
+			if (!(motion = Motion.types[name]))
+				throw new Error('Unknown motion type name "' + name + '"')
 			break
 		case 'function':
 			break
 		default:
-			throw new Error('Easing type must be a string or a function, got "' + typeof motion + '"')
+			throw new Error('Motion type must be a string or a function, got "' + typeof motion + '"')
 	}
 	this.motion = motion
 	this.duration = duration
@@ -21,7 +21,7 @@ var Easing = Programica.Easing, Me = Programica.Animation = function (node, moti
 	this.unit = unit
 	this.running = false
 	this.completed = 0
-	this.easings = []
+	this.motions = []
 	
 	var me = this
 	function complete () { me.complete() }
@@ -35,7 +35,7 @@ var Easing = Programica.Easing, Me = Programica.Animation = function (node, moti
 				Me.setStyleProperty(node, tr.property, value, unit)
 			}
 		}
-		this.easings[i] = new Easing(tr.begin, tr.end, duration, motion, bakeStep(tr), complete)
+		this.motions[i] = new Motion(tr.begin, tr.end, duration, motion, bakeStep(tr), complete)
 	}
 	
 }
@@ -74,9 +74,9 @@ Me.prototype =
 		{
 			this.running = true
 			
-			var easings = this.easings
-			for (var i = 0; i < easings.length; i++)
-				easings[i].start()
+			var motions = this.motions
+			for (var i = 0; i < motions.length; i++)
+				motions[i].start()
 		}
 		return this
 	},
@@ -87,16 +87,16 @@ Me.prototype =
 		{
 			this.running = false
 			
-			var easings = this.easings
-			for (var i = 0; i < easings.length; i++)
-				easings[i].stop()
+			var motions = this.motions
+			for (var i = 0; i < motions.length; i++)
+				motions[i].stop()
 		}
 		return this
 	},
 	
 	complete: function ()
 	{
-		if (++this.completed >= this.easings)
+		if (++this.completed >= this.motions)
 			this.oncomplete()
 	}
 }

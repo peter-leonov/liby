@@ -1,6 +1,6 @@
 ;(function () {
 
-var Me = Programica.Easing = function (begin, end, duration, motion, onstep, oncomplete)
+var Me = Programica.Motion = function (begin, end, duration, motion, onstep, oncomplete)
 {
 	var me = this, frame = 0, total = duration * Me.fps, last = total - 1,
 		delta = end - begin, step = delta / total
@@ -83,6 +83,6 @@ Me.removeTimer = function (id)
 	}
 }
 
-Me.motions = <!--#include virtual="easing-motions.js" -->
+Me.types = <!--#include virtual="motion-types.js" -->
 
 })();
