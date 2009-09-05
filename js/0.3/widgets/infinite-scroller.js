@@ -55,7 +55,7 @@ Me.prototype.extend
 			
 			if (vx)
 			{
-				var mx = Math.pow(Math.abs(vx), 1.2) * 3 * inertia * (vx < 0 ? -1 : 1)
+				var mx = Math.pow(Math.abs(vx), 1.55) * inertia * (vx < 0 ? -1 : 1)
 				this.motion = new Motion(sx, sx + mx, inertia, Motion.types.easeOutQuad, this.motionX).start()
 			}
 		}
