@@ -5,20 +5,35 @@
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Infinite scroller tests</title>
 	<style>
-		#test-node-1 { position: absolute; left: 300px; top: 0; width: 50px; height: 50px; background-color: #444; }
+		#test-node-1 { position: relative; width: 600px; height: 250px; overflow: hidden; background-color: #ccc; }
+		#test-node-1 li { position: absolute; top: 0; width: 100%; height: 100%; }
+		#test-node-1 .p1 { background-color: #b00; left: 0; }
+		#test-node-1 .p2 { background-color: #0a0; left: 100%; }
+		#test-node-1 .p3 { background-color: #40c; left: 200%; }
+		#test-node-1 .p4 { background-color: #b08; left: 300%; }
+		#test-node-1 .p5 { background-color: #fb0; left: 400%; }
 	</style>
 </head>
 <body>
 
-<div id="test-node-1"></div>
+<ul id="test-node-1">
+	<li class="p1"></li>
+	<li class="p2"></li>
+	<li class="p3"></li>
+	<li class="p4"></li>
+	<li class="p5"></li>
+</ul>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/fixes/log.js"></script>
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
+<script type="text/javascript" src="../programica/class.js"></script>
+<script type="text/javascript" src="../modules/event-target.js"></script>
 <script type="text/javascript" src="../modules/motion.js"></script>
-<script type="text/javascript" src="../modules/animation.js"></script>
+<script type="text/javascript" src="../modules/draggable.js"></script>
+<script type="text/javascript" src="../widgets/infinite-scroller.js"></script>
 
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
@@ -27,10 +42,8 @@ window.addEventListener('load', function () {
 	
 	var node = document.getElementById('test-node-1')
 	
-	// tests.eq(typeof Programica.Motion, 'function', 'Programica.Motion is a function')
-	// var e = new Programica.Motion()
+	var is = new InfiniteScroller().bind(node)
 	
-	node.animate('easeOutQuad', {top: [200], left: [200]}, 1)
 	
 	tests.done()
 }, false)
