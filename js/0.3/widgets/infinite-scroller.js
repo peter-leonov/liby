@@ -43,20 +43,20 @@ Me.prototype.extend
 	ondragend: function (e)
 	{
 		var ms = e.data.movements.reverse(),
-			inertia = 0.7
+			power = 1
 		
-		if (ms[3]) // got at least three movements
+		if (ms[5]) // got at least three movements
 		{
 			
 			var root = this.nodes.root,
 				sx = this.startX - e.data.dx,
 				// approximating last three movements
-				vx = (ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx)
+				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx) + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 3
 			
 			if (vx)
 			{
-				var mx = Math.pow(Math.abs(vx), 1.55) * inertia * (vx < 0 ? -1 : 1)
-				this.motion = new Motion(sx, sx + mx, inertia, Motion.types.easeOutQuad, this.motionX).start()
+				var ix = Math.inertia(vx) * power
+				this.motion = new Motion(sx, sx + ix, power, Motion.types.easeOutQuad, this.motionX).start()
 			}
 		}
 		
