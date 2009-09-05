@@ -18,7 +18,7 @@ html{position:relative;}
 html{height:100%;width:100%}
 body{font: 12px Arial,sans-serif}
 
-body { padding-left: 450px; }
+body { padding-left: 465px; }
 
 #tests-output
 {
@@ -32,7 +32,7 @@ body { padding-left: 450px; }
 	width: 420px;
 	background: #eee;
 	padding: 15px;
-	border-right: solid 1px #ccc;
+/*	border-right: solid 1px #ccc;*/
 /*	overflow: auto;*/
 }
 
