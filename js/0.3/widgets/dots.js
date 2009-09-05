@@ -1,8 +1,8 @@
 ;(function(){
 
-var myName = 'Dots',doc = document, undef
+var myName = 'Dots', doc = document, undef
 
-Me = self[myName] =
+var Me = self[myName] =
 {
 	adjust: function (nodes, length)
 	{
