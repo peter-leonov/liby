@@ -3,7 +3,7 @@
 var myName = 'EventTarget',
 	Me = self[myName] = Module(myName),
 	handlersProp = '__' + myName + 'Handlers',
-	doc = document, undef
+	doc = document
 
 function preventDefault ()
 {
@@ -55,17 +55,15 @@ Me.prototype =
 					delete e.preventDefault
 					return !e.defaultPrevented
 				}
-				else
-					return true
+		
+		return true
 	},
 	
 	dispatchEventData: function (type, data)
 	{
-		var e = doc.createEvent()
-		e.initEvent(type)
-		if (data !== undef)
-			e.data = data
-		
+		var e = doc.createEvent('Event')
+		e.initEvent(type, true, true)
+		e.data = data
 		return this.dispatchEvent(e)
 	}
 }
