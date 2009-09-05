@@ -1,6 +1,6 @@
 ;(function () {
 
-var Me = Programica.Motion = function (begin, end, duration, motion, onstep, oncomplete)
+var Me = Motion = function (begin, end, duration, motion, onstep, oncomplete)
 {
 	var me = this, frame = 0, total = duration * Me.fps, last = total - 1,
 		delta = end - begin, step = delta / total

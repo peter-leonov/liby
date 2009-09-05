@@ -1,13 +1,13 @@
 ;(function () {
 
-var Motion = Programica.Motion, Me = Programica.Animation = function (node, motion, duration, trans, unit)
+var M = Motion, Me = Programica.Animation = function (node, motion, duration, trans, unit)
 {
 	this.node = node
 	switch (typeof motion)
 	{
 		case 'string':
 			var name = motion
-			if (!(motion = Motion.types[name]))
+			if (!(motion = M.types[name]))
 				throw new Error('Unknown motion type name "' + name + '"')
 			break
 		case 'function':
@@ -35,7 +35,7 @@ var Motion = Programica.Motion, Me = Programica.Animation = function (node, moti
 				Me.setStyleProperty(node, tr.property, value, unit)
 			}
 		}
-		this.motions[i] = new Motion(tr.begin, tr.end, duration, motion, bakeStep(tr), complete)
+		this.motions[i] = new M(tr.begin, tr.end, duration, motion, bakeStep(tr), complete)
 	}
 	
 }
