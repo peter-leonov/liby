@@ -18,7 +18,8 @@ Me.prototype.extend
 		this.mousemove = function (e) { me.onmove(e) }
 		this.mouseup = function (e) { me.onup(e) }
 		
-		node.addEventListener('mousedown', this.mousedown, false)
+		node.addEventListener('mousedown', this.mousedown, true)
+		node.addEventListener('selectstart', function (e) { e.preventDefault() }, false)
 		
 		return this
 	},
