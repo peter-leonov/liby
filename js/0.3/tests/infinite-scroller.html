@@ -5,26 +5,36 @@
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Infinite scroller tests</title>
 	<style>
-		#test-node-1 { position: relative; width: 600px; height: 250px; overflow: hidden; background-color: #ccc; }
-		#test-node-1 li { position: absolute; top: 0; width: 100%; height: 100%; color: #fff; font-size: 72px; text-align: center; line-height: 250px; }
-		#test-node-1 .p1 { background-color: #b40; left: 0; }
-		#test-node-1 .p2 { background-color: #0a0; left: 100%; }
-		#test-node-1 .p3 { background-color: #40c; left: 200%; }
-		#test-node-1 .p4 { background-color: #b08; left: 300%; }
-		#test-node-1 .p5 { background-color: #fb0; left: 400%; }
-		#test-node-1 .end { background-color: #b40; left: 500%; }
+	#test-node-1 { position: relative; width: 600px; height: 250px; overflow: hidden; background-color: #ccc; }
+	#test-node-1 .surface { width: 2200px; }
+	#test-node-1 .point { float: left; width: 360px; height: 100%; margin-right: 60px; }
+	#test-node-1 .point { color: #fff; font-size: 72px; text-align: center; line-height: 250px; }
+	#test-node-1 .p1 { background-color: #b40; }
+	#test-node-1 .p2 { background-color: #0a0; }
+	#test-node-1 .p3 { background-color: #40c; }
+	#test-node-1 .p4 { background-color: #b08; }
+	#test-node-1 .p5 { background-color: #fb0; }
+	#test-node-1 .tail { position: absolute; left: 350%; width: 600px; height: 100%; overflow: hidden; }
 	</style>
 </head>
 <body>
 
-<ul id="test-node-1">
-	<li class="p1">1</li>
-	<li class="p2">2</li>
-	<li class="p3">3</li>
-	<li class="p4">4</li>
-	<li class="p5">5</li>
-	<li class="end">tail</li>
+
+<div id="test-node-1">
+<ul class="surface">
+	<li><div class="point p1">1</div></li>
+	<li><div class="point p2">2</div></li>
+	<li><div class="point p3">3</div></li>
+	<li><div class="point p4">4</div></li>
+	<li><div class="point p5">5</div></li>
 </ul>
+<div class="tail">
+<ul class="surface">
+	<li><div class="point p1">1</div></li>
+	<li><div class="point p2">2</div></li>
+</ul>
+</div>
+</div>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->

@@ -14,6 +14,8 @@ Me.prototype.extend
 	{
 		this.nodes.root = root
 		this.globalX = root.scrollLeft
+		this.width = root.scrollWidth - root.offsetWidth
+		log(this.width)
 		
 		var draggable = this.draggable = new Draggable().bind(root)
 		
@@ -22,8 +24,13 @@ Me.prototype.extend
 		draggable.addEventListener('dragging',  function (e) { me.ondragging(e) }, false)
 		draggable.addEventListener('dragend',   function (e) { me.ondragend(e) }, false)
 		
-		this.setX = function (v) { me.globalX = v; root.scrollLeft = v < 0 ? 3000 + v % 3000 : v % 3000; }
-		this.setY = function (v) { root.scrollTop = v }
+		this.setX = function (v)
+		{
+			me.globalX = v
+			var w = me.width
+			root.scrollLeft = v < 0 ? w + v % w : v % w
+		}
+		// this.setY = function (v) { root.scrollTop = v }
 		
 		return this
 	},
@@ -46,7 +53,7 @@ Me.prototype.extend
 		var ms = e.data.movements.reverse(),
 			power = 1
 		
-		if (ms[5]) // got at least three movements
+		if (ms[5]) // got at least five movements
 		{
 			
 			var root = this.nodes.root,
