@@ -13,6 +13,7 @@ Me.prototype.extend
 	bind: function (root)
 	{
 		this.nodes.root = root
+		this.globalX = root.scrollLeft
 		
 		var draggable = this.draggable = new Draggable().bind(root)
 		
@@ -21,8 +22,8 @@ Me.prototype.extend
 		draggable.addEventListener('dragging',  function (e) { me.ondragging(e) }, false)
 		draggable.addEventListener('dragend',   function (e) { me.ondragend(e) }, false)
 		
-		this.motionX = function (v) { root.scrollLeft = v }
-		this.motionY = function (v) { root.scrollTop = v }
+		this.setX = function (v) { me.globalX = v; root.scrollLeft = v < 0 ? 3000 + v % 3000 : v % 3000; }
+		this.setY = function (v) { root.scrollTop = v }
 		
 		return this
 	},
@@ -31,13 +32,13 @@ Me.prototype.extend
 	{
 		if (this.motion)
 			this.motion.stop()
-		this.startX = this.nodes.root.scrollLeft
+		this.startX = this.globalX
 	},
 	
 	ondragging: function (e)
 	{
 		// log(e.data.dx)
-		this.nodes.root.scrollLeft = this.startX - e.data.dx
+		this.setX(this.startX - e.data.dx)
 	},
 	
 	ondragend: function (e)
@@ -49,19 +50,16 @@ Me.prototype.extend
 		{
 			
 			var root = this.nodes.root,
-				sx = this.startX - e.data.dx,
+				sx = this.globalX,
 				// approximating last three movements
 				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx) + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 3
 			
 			if (vx)
 			{
 				var ix = Math.inertia(vx) * power
-				this.motion = new Motion(sx, sx + ix, power, Motion.types.easeOutQuad, this.motionX).start()
+				this.motion = new Motion(sx, sx + ix, power, Motion.types.easeOutQuad, this.setX).start()
 			}
 		}
-		
-		
-		
 	}
 })
 

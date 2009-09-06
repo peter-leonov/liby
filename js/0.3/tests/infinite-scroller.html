@@ -6,22 +6,24 @@
 	<title>Infinite scroller tests</title>
 	<style>
 		#test-node-1 { position: relative; width: 600px; height: 250px; overflow: hidden; background-color: #ccc; }
-		#test-node-1 li { position: absolute; top: 0; width: 100%; height: 100%; }
-		#test-node-1 .p1 { background-color: #b00; left: 0; }
+		#test-node-1 li { position: absolute; top: 0; width: 100%; height: 100%; color: #fff; font-size: 72px; text-align: center; line-height: 250px; }
+		#test-node-1 .p1 { background-color: #b40; left: 0; }
 		#test-node-1 .p2 { background-color: #0a0; left: 100%; }
 		#test-node-1 .p3 { background-color: #40c; left: 200%; }
 		#test-node-1 .p4 { background-color: #b08; left: 300%; }
 		#test-node-1 .p5 { background-color: #fb0; left: 400%; }
+		#test-node-1 .end { background-color: #b40; left: 500%; }
 	</style>
 </head>
 <body>
 
 <ul id="test-node-1">
-	<li class="p1"></li>
-	<li class="p2"></li>
-	<li class="p3"></li>
-	<li class="p4"></li>
-	<li class="p5"></li>
+	<li class="p1">1</li>
+	<li class="p2">2</li>
+	<li class="p3">3</li>
+	<li class="p4">4</li>
+	<li class="p5">5</li>
+	<li class="end">tail</li>
 </ul>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
