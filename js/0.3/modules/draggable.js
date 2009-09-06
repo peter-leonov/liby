@@ -1,6 +1,6 @@
 ;(function(){
 
-var myName = 'Draggable',
+var myName = 'Moveable',
 	Me = self[myName] = Class(myName)
 
 Me.mixIn(EventTarget)
@@ -31,7 +31,7 @@ Me.prototype.extend
 		e.stopPropagation()
 		e.preventDefault()
 		
-		if (this.dispatchEventData('dragstart', {event: e}))
+		if (this.dispatchEventData('movestart', {event: e}))
 		{
 			this.startX = e.clientX
 			this.startY = e.clientY
@@ -87,7 +87,7 @@ Me.prototype.extend
 		{
 			this.lastDX = dx
 			this.lastDY = dy
-			this.dispatchEventData('dragging', {event: e, dx: dx, dy: dy})
+			this.dispatchEventData('move', {event: e, dx: dx, dy: dy})
 		}
 	},
 	
@@ -96,7 +96,7 @@ Me.prototype.extend
 		var dx = e.clientX - this.startX,
 			dy = e.clientY - this.startY
 		
-		if (this.dispatchEventData('dragend', {event: e, dx: dx, dy: dy, movements: this.movements}))
+		if (this.dispatchEventData('moveend', {event: e, dx: dx, dy: dy, movements: this.movements}))
 		{
 			e.stopPropagation()
 			e.preventDefault()

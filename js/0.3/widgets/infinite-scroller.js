@@ -16,13 +16,13 @@ Me.prototype.extend
 		this.globalX = root.scrollLeft
 		this.width = root.scrollWidth - root.clientWidth
 		
-		var draggable = this.draggable = new Draggable().bind(root)
-		draggable.softStart = true
+		var moveable = this.moveable = new Moveable().bind(root)
+		moveable.softStart = true
 		
 		var me = this
-		draggable.addEventListener('dragstart', function (e) { me.ondragstart(e) }, false)
-		draggable.addEventListener('dragging',  function (e) { me.ondragging(e) }, false)
-		draggable.addEventListener('dragend',   function (e) { me.ondragend(e) }, false)
+		moveable.addEventListener('movestart', function (e) { me.onmovestart(e) }, false)
+		moveable.addEventListener('move',  function (e) { me.onmoving(e) }, false)
+		moveable.addEventListener('moveend',   function (e) { me.onmoveend(e) }, false)
 		
 		this.setX = function (x)
 		{
@@ -35,19 +35,19 @@ Me.prototype.extend
 		return this
 	},
 	
-	ondragstart: function (e)
+	onmovestart: function (e)
 	{
 		if (this.motion)
 			this.motion.stop()
 		this.startX = this.globalX
 	},
 	
-	ondragging: function (e)
+	onmoving: function (e)
 	{
 		this.setX(this.startX - e.data.dx)
 	},
 	
-	ondragend: function (e)
+	onmoveend: function (e)
 	{
 		var ms = e.data.movements.reverse(),
 			power = 1
