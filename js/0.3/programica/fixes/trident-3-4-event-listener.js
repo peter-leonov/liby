@@ -73,6 +73,8 @@ function getEventWrapper (e, kind)
 	var w = new (eventConstructors[kind] || Event)()
 	
 	w.type = e.type
+	w.clientX = e.clientX
+	w.clientY = e.clientY
 	w.currentTarget = w.target = e.srcElement
 	w.detail = - e.wheelDelta / 30
 	w.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // body.scrollLeft
