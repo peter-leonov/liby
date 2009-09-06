@@ -102,7 +102,9 @@ function getEventListenerWrapper (node, type, func, dir)
 			var w = getEventWrapper(e)
 			if (type !== w.type)
 				return
+			w.__isDispatching = true
 			func.call(node, w)
+			delete w.__isDispatching
 		}
 		wrapper.__pmc__eventListenerWrapper = key
 		return wrapper
@@ -116,10 +118,7 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	
 	var wrapper = getEventListenerWrapper(this, type, func, dir)
 	if (!(type in supportedEvents))
-	{
 		type = eventTransport
-		// alert(type)
-	}
 	if (wrapper)
 		this.detachEvent('on' + type, wrapper)
 	this.attachEvent('on' + type, wrapper)
