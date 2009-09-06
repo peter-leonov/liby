@@ -17,6 +17,7 @@ Me.prototype.extend
 		this.width = root.scrollWidth - root.clientWidth
 		
 		var draggable = this.draggable = new Draggable().bind(root)
+		draggable.softStart = true
 		
 		var me = this
 		draggable.addEventListener('dragstart', function (e) { me.ondragstart(e) }, false)
