@@ -20,9 +20,10 @@ Me.prototype.extend
 		moveable.softStart = true
 		
 		var me = this
+		moveable.addEventListener('moveabout', function (e) { me.onmoveabout(e) }, false)
 		moveable.addEventListener('movestart', function (e) { me.onmovestart(e) }, false)
-		moveable.addEventListener('move',  function (e) { me.onmoving(e) }, false)
-		moveable.addEventListener('moveend',   function (e) { me.onmoveend(e) }, false)
+		moveable.addEventListener('move', function (e) { me.onmoving(e) }, false)
+		moveable.addEventListener('moveend', function (e) { me.onmoveend(e) }, false)
 		
 		this.setX = function (x)
 		{
@@ -32,6 +33,8 @@ Me.prototype.extend
 		}
 		// this.setY = function (v) { root.scrollTop = v }
 		
+		this.onMotionStop = function () { me.motionStoped = true }
+		
 		return this
 	},
 	
@@ -40,6 +43,16 @@ Me.prototype.extend
 		if (this.motion)
 			this.motion.stop()
 		this.startX = this.globalX
+	},
+	
+	onmoveabout: function ()
+	{
+		if (!this.motionStoped)
+		{
+			Moveable.dropClick()
+			if (this.motion)
+				this.motion.stop()
+		}
 	},
 	
 	onmoving: function (e)
@@ -63,7 +76,8 @@ Me.prototype.extend
 			if (vx)
 			{
 				var ix = Math.inertia(vx) * power
-				this.motion = new Motion(sx, sx + ix, power, Motion.types.easeOutQuad, this.setX).start()
+				this.motionStoped = false
+				this.motion = new Motion(sx, sx + ix, power, Motion.types.easeOutQuad, this.setX, this.onMotionStop).start()
 			}
 		}
 	}
