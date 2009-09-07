@@ -1,19 +1,16 @@
 ;(function () {
 
-var Me = Motion = function (begin, end, duration, motion, onstep, oncomplete)
+var Me = Motion = function (begin, end, duration, motion, onstep, onstop)
 {
 	var me = this, frame = 0, total = duration * Me.fps, last = total - 1,
 		delta = end - begin, step = delta / total
 	
+	this.onstop = onstop
 	this.step = function ()
 	{
 		onstep(motion(frame, begin, delta, last))
 		if (frame++ >= last)
-		{
-			me.stop()
-			if (oncomplete)
-				oncomplete()
-		}
+			me.stop(true)
 	}
 	
 }
@@ -31,12 +28,14 @@ Me.prototype =
 		return this
 	},
 	
-	stop: function ()
+	stop: function (comleted)
 	{
 		if (this.running)
 		{
 			this.running = false
 			Me.removeTimer(this.timer)
+			if (this.onstop)
+				this.onstop(comleted)
 		}
 		return this
 	}
