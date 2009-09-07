@@ -1,9 +1,23 @@
 ;(function(){
 
 var myName = 'Moveable',
-	Me = self[myName] = Class(myName)
+	Me = self[myName] = Class(myName),
+	dropClick = false
 
 Me.mixIn(EventTarget)
+
+
+function preventDefault (e){ e.preventDefault() }
+function onclick (e)
+{
+	if (dropClick)
+	{
+		e.preventDefault()
+		dropClick = false
+	}
+}
+Me.dropClick = function () { dropClick = true }
+document.addEventListener('click', onclick, true)
 
 Me.prototype.extend
 ({
@@ -21,21 +35,21 @@ Me.prototype.extend
 		this.mouseup2 = function (e) { me.onup2(e) }
 		
 		node.addEventListener('mousedown', this.mousedown, true)
-		node.addEventListener('selectstart', function (e) { e.preventDefault() }, false)
+		node.addEventListener('selectstart', preventDefault, true)
 		
 		return this
 	},
 	
 	ondown: function (e)
 	{
-		e.stopPropagation()
-		e.preventDefault()
-		
-		if (this.dispatchEventData('movestart', {event: e}))
+		if (this.dispatchEventData('moveabout', {event: e, mousedownEvent: this.mousedownEvent}))
 		{
 			this.startX = e.clientX
 			this.startY = e.clientY
 			this.movements = []
+			this.mousedownEvent = e
+			
+			e.preventDefault()
 			
 			document.addEventListener('mousemove', this.mousemove, true)
 			document.addEventListener('mouseup', this.mouseup, true)
@@ -51,26 +65,34 @@ Me.prototype.extend
 		
 		if (dx * dx > 9 || dy * dy > 9)
 		{
-			if (this.softStart)
+			if (this.dispatchEventData('movestart', {event: e, mousedownEvent: this.mousedownEvent}))
 			{
-				this.startX = e.clientX
-				this.startY = e.clientY
+				Me.dropClick()
+				log(true)
+				if (this.softStart)
+				{
+					this.startX = e.clientX
+					this.startY = e.clientY
+				}
+			
+				document.removeEventListener('mousemove', this.mousemove, true)
+				document.removeEventListener('mouseup', this.mouseup, true)
+			
+				document.addEventListener('mousemove', this.mousemove2, true)
+				document.addEventListener('mouseup', this.mouseup2, true)
+			
+				this.onmove2(e)
 			}
-			
-			document.removeEventListener('mousemove', this.mousemove, true)
-			document.removeEventListener('mouseup', this.mouseup, true)
-			
-			document.addEventListener('mousemove', this.mousemove2, true)
-			document.addEventListener('mouseup', this.mouseup2, true)
-			
-			this.onmove2(e)
 		}
+		else
+			this.dispatchEventData('movestarting', {event: e, mousedownEvent: this.mousedownEvent})
 	},
 	
 	onup: function (e)
 	{
 		document.removeEventListener('mousemove', this.mousemove, true)
 		document.removeEventListener('mouseup', this.mouseup, true)
+		this.mousedownEvent = null
 	},
 	
 	onmove2: function (e)
@@ -80,8 +102,8 @@ Me.prototype.extend
 		
 		this.movements.push({dx: dx, dy: dy})
 		
-		e.stopPropagation()
 		e.preventDefault()
+		e.stopPropagation()
 		
 		if (this.lastDX != dx || this.lastDY != dy)
 		{
@@ -98,12 +120,14 @@ Me.prototype.extend
 		
 		if (this.dispatchEventData('moveend', {event: e, dx: dx, dy: dy, movements: this.movements}))
 		{
-			e.stopPropagation()
 			e.preventDefault()
-		
+			e.stopPropagation()
+			
 			document.removeEventListener('mousemove', this.mousemove2, true)
 			document.removeEventListener('mouseup', this.mouseup2, true)
 		}
+		
+		this.mousedownEvent = null
 	}
 })
 
