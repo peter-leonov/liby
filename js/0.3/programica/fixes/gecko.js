@@ -8,3 +8,9 @@ if (self.console && self.console.log && self.console.error)
 }
 else
 	self.log = self.reportError = function () {  }
+
+if (!/привет/i.test("Привет"))
+{
+	RegExp.prototype.__pmc_test = RegExp.prototype.test
+	RegExp.prototype.test = function (str) { return this.__pmc_test(this.ignoreCase ? str.toLowerCase() : str) }
+}
