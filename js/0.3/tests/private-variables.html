@@ -17,7 +17,6 @@
 	window.addEventListener('load', function () {
 	tests.plan(6)
 	
-	
 	// first, the A
 	function A ()
 	{
@@ -88,32 +87,37 @@
 		method8: function () { this.variable1 += 8 }
 	}
 	
+	var count = tests.speed(function () { new C(); new D() }) / 5
+	
 	tests.time('C')
-	for (var i = 0; i < 10000; i++)
+	for (var i = 0; i < count; i++)
 		var c = new C()
 	var ctime = tests.timeEnd('C')
 	
 	tests.time('D')
-	for (var i = 0; i < 10000; i++)
+	for (var i = 0; i < count; i++)
 		var d = new D()
 	var dtime = tests.timeEnd('D')
 	
 	tests.ok(ctime > dtime * 5, 'new C >> new D')
 	
 	
+	
+	var count = tests.speed(function () { c.method8(); d.method8() }) / 5
+	
 	var c = new C()
 	tests.time('C')
-	for (var i = 0; i < 1000000; i++)
+	for (var i = 0; i < count; i++)
 		c.method8()
 	var ctime = tests.timeEnd('C')
 	
 	var d = new D()
 	tests.time('D')
-	for (var i = 0; i < 1000000; i++)
+	for (var i = 0; i < count; i++)
 		d.method8()
 	var dtime = tests.timeEnd('D')
 	
-	tests.ok((ctime + 1) / (dtime + 1) < 2, 'C#method8() ~= D#method8()')
+	tests.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() ~= || >> D#method8()')
 	
 	tests.done()
 	}, false)
