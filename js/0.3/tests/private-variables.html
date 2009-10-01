@@ -15,7 +15,7 @@
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
 	window.addEventListener('load', function () {
-	tests.plan(6)
+	tests.plan(7)
 	
 	// first, the A
 	function A ()
@@ -117,7 +117,27 @@
 		d.method8()
 	var dtime = tests.timeEnd('D')
 	
+	// semi-equal or much different
 	tests.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() ~= || >> D#method8()')
+	
+	
+	
+	var count = tests.speed(function () { d.variable1++ }) / 5
+	
+	var c = new C()
+	tests.time('C')
+	for (var i = 0; i < count; i++)
+		c.method8()
+	var ctime = tests.timeEnd('C')
+	
+	var d = new D()
+	tests.time('D')
+	for (var i = 0; i < count; i++)
+		d.variable1 += 8
+	var dtime = tests.timeEnd('D')
+	
+	// semi-equal or much different
+	tests.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() >> D#variable1')
 	
 	tests.done()
 	}, false)
