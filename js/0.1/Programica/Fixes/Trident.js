@@ -44,7 +44,10 @@ function IEFixes_fixThem (nodes)
 
 function IEFixes_fixThemAll ()
 {
+	if (IEFixes_fixThemAll.done)
+		return
 	IEFixes_fixThem(document.all)
+	IEFixes_fixThemAll.done = true
 }
 
 function IEFixes_onpropertychange6 ()
@@ -334,6 +337,19 @@ function IEFixes ()
 	}
 	
 	self.addEventListener('load', IEFixes_fixThemAll)
+	
+	// based on jQuery onready for IE
+	// based on the trick by Diego Perini (http://javascript.nwbox.com/IEContentLoaded/)
+	function checkready ()
+	{
+		try { document.documentElement.doScroll("left") }
+		catch (ex) { return }
+		
+		clearInterval(checkready.interval)
+		IEFixes_fixThemAll()
+		try { $.onready.run() } catch (ex) {}
+	}
+	checkready.interval = setInterval(checkready, 100)
 	
 	// for oldstyle popups
 	if (self.dialogArguments && self.dialogArguments.external)

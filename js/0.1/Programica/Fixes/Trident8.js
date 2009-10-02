@@ -117,5 +117,18 @@ if (!win.removeEventListener && win.detachEvent)
 			this.detachEvent('on' + type, wrapper)
 	}
 
+// based on jQuery onready for IE
+// based on the trick by Diego Perini (http://javascript.nwbox.com/IEContentLoaded/)
+function checkready ()
+{
+	try { document.documentElement.doScroll("left") }
+	catch (ex) { return }
+	
+	// IE8 gain native support for Element.prototype
+	// so IEFixes_fixThemAll is no more needed
+	clearInterval(checkready.interval)
+	try { $.onready.run() } catch (ex) {}
+}
+checkready.interval = setInterval(checkready, 100)
 
 })();
