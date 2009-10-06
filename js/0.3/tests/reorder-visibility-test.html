@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Event classes tests</title>
+	<style>
+	#test-2 { visibility: hidden; }
+	#test-3 { display: none; }
+	#test-4 { width: 100px; height: 100px; overflow: hidden; }
+	</style>
+</head>
+<body>
+
+<ul id="test-1"></ul>
+<ul id="test-2"></ul>
+<ul id="test-3"></ul>
+<ul id="test-4"></ul>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<script type="text/javascript" src="../programica/init.js"></script>
+
+<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript">
+	window.addEventListener('load', function () {
+	tests.plan(0)
+	
+	var globalTime = new Date()
+	
+	function fill (root)
+	{
+		var nodes = []
+		// tests.time('fill')
+		for (var i = 0; i < 5000; i++)
+			root.appendChild(nodes[i] = document.createElement('li')).appendChild(document.createTextNode(i))
+		// tests.timeEnd('fill')
+		return nodes
+	}
+	function job (root, nodes)
+	{
+		for (var i = 0, il = nodes.length; i < il; i++)
+			root.appendChild(nodes[i])
+	}
+	
+	tests.test(function ()
+	{
+		var root = document.getElementById('test-1'),
+			nodes = fill(root)
+		
+		// warming
+		// tests.time('warming')
+		job(root, nodes)
+		// tests.timeEnd('warming')
+		
+		tests.time('normal')
+		job(root, nodes)
+		tests.timeEnd('normal')
+		
+		
+		root.style.visibility = 'hidden'
+		tests.time('style.visibility = hidden')
+		job(root, nodes)
+		tests.timeEnd('style.visibility = hidden')
+		root.style.visibility = 'visible'
+		
+		root.style.display = 'none'
+		tests.time('style.display = none')
+		job(root, nodes)
+		tests.timeEnd('style.display = none')
+		root.style.display = 'block'
+	})
+	
+	
+	tests.test(function ()
+	{
+		var root = document.getElementById('test-2'),
+			nodes = fill(root)
+		
+		// warming
+		// tests.time('warming')
+		job(root, nodes)
+		// tests.timeEnd('warming')
+		
+		tests.time('visibility: hidden')
+		job(root, nodes)
+		this.next(function () { tests.timeEnd('visibility: hidden') })
+	})
+	
+	
+	tests.test(function ()
+	{
+		var root = document.getElementById('test-3'),
+			nodes = fill(root)
+		
+		// warming
+		// tests.time('warming')
+		job(root, nodes)
+		// tests.timeEnd('warming')
+		
+		tests.time('display: none')
+		job(root, nodes)
+		tests.timeEnd('display: none')
+	})
+	
+	
+	tests.test(function ()
+	{
+		var root = document.getElementById('test-4'),
+			nodes = fill(root)
+		
+		// warming
+		// tests.time('warming')
+		job(root, nodes)
+		// tests.timeEnd('warming')
+		
+		tests.time('overflow: hidden')
+		job(root, nodes)
+		tests.timeEnd('overflow: hidden')
+	})
+	
+	tests.start()
+	}, false)
+</script>
+</body>
+</html>
