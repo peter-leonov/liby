@@ -167,6 +167,47 @@ var myName = 'tests', Me = self[myName] =
 		return speed
 	},
 	
+	callbacks: [],
+	wait: 0,
+	test: function (callback)
+	{
+		this.callbacks.push(callback)
+	},
+	
+	next: function (callback, timeout)
+	{
+		if (callback)
+		{
+			this.run(callback, timeout)
+			this.wait++
+		}
+		else
+		{
+			callback = this.callbacks.shift()
+			if (callback)
+				this.run(callback, timeout)
+			else
+				this.done()
+		}
+	},
+	
+	run: function (callback, timeout)
+	{
+		var me = this
+		function run ()
+		{
+			if (callback.call(me) !== false)
+			{
+				if (this.wait > 0)
+					this.wait--
+				else
+					me.next()
+			}
+		}
+		setTimeout(run, timeout === undefined ? 0 : timeout)
+	},
+	
+	start: function () { this.next() },
 	done: function ()
 	{
 		this.log('done: ' + this.tests + ', planed: ' + this.planed + ', failed: ' + this.fails + ', skiped: ' + this.skiped)
