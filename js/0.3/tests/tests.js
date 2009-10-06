@@ -174,37 +174,44 @@ var myName = 'tests', Me = self[myName] =
 		this.callbacks.push(callback)
 	},
 	
-	next: function (callback, timeout)
-	{
-		if (callback)
-		{
-			this.run(callback, timeout)
-			this.wait++
-		}
-		else
-		{
-			callback = this.callbacks.shift()
-			if (callback)
-				this.run(callback, timeout)
-			else
-				this.done()
-		}
-	},
-	
-	run: function (callback, timeout)
+	async: function (callback, timeout)
 	{
 		var me = this
 		function run ()
 		{
 			if (callback.call(me) !== false)
 			{
-				if (this.wait > 0)
-					this.wait--
-				else
-					me.next()
+				me.wait--
+				me.next()
 			}
 		}
-		setTimeout(run, timeout === undefined ? 0 : timeout)
+		this.wait++
+		if (this.next.sync)
+			run()
+		else
+			setTimeout(run, timeout || 0)
+	},
+	
+	next: function (callback, timeout)
+	{
+		if (callback)
+			return this.async(callback, timeout)
+		else if (this.wait == 0)
+		{
+			var callback = this.callbacks.shift(),
+				me = this
+			if (callback)
+			{
+				function run ()
+				{
+					callback.call(me)
+					me.next()
+				}
+				setTimeout(run, 0)
+			}
+			else if (!this.doneTimeout)
+				this.doneTimeout = setTimeout(function () { me.done() }, 0)
+		}
 	},
 	
 	start: function () { this.next() },
