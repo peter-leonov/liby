@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Event classes tests</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<script type="text/javascript" src="../programica/init.js"></script>
+
+<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript">
+	window.addEventListener('load', function () {
+	tests.plan(0)
+	
+	function SuperArray () {}
+	SuperArray.prototype = new Array()
+	
+	
+	tests.time('super.push')
+	var arr = new SuperArray()
+	for (var i = 0; i < 100000; i++)
+		arr.push(i)
+	tests.timeEnd('super.push')
+	
+	tests.time('simple.push')
+	var arr = new Array()
+	for (var i = 0; i < 100000; i++)
+		arr.push(i)
+	tests.timeEnd('simple.push')
+	
+	tests.time('native.push')
+	var arr = []
+	for (var i = 0; i < 100000; i++)
+		arr.push(i)
+	tests.timeEnd('native.push')
+	
+	
+	
+	tests.time('super[]')
+	var arr = new SuperArray()
+	for (var i = 0; i < 100000; i++)
+		arr[i] = i
+	tests.timeEnd('super[]')
+	
+	tests.time('simple[]')
+	var arr = new Array()
+	for (var i = 0; i < 100000; i++)
+		arr[i] = i
+	tests.timeEnd('simple[]')
+	
+	tests.time('native[]')
+	var arr = []
+	for (var i = 0; i < 100000; i++)
+		arr[i] = i
+	tests.timeEnd('native[]')
+	
+	
+	
+	var arr = new SuperArray()
+	for (var i = 100000; i > 100; i--)
+		arr[i] = -i
+	tests.time('super.sort')
+	arr.sort()
+	tests.timeEnd('super.sort')
+	tests.eq(arr[0], -1000, 'super.sorts alphabeticaly')
+	
+	var arr = new Array()
+	for (var i = 100000; i > 100; i--)
+		arr[i] = -i
+	tests.time('simple.sort')
+	arr.sort()
+	tests.timeEnd('simple.sort')
+	tests.eq(arr[0], -1000, 'simple.sorts alphabeticaly')
+	
+	var arr = []
+	for (var i = 100000; i > 100; i--)
+		arr[i] = -i
+	tests.time('native.sort')
+	arr.sort()
+	tests.timeEnd('native.sort')
+	tests.eq(arr[0], -1000, 'native.sorts alphabeticaly')
+	
+	
+	tests.done()
+	}, false)
+</script>
+</body>
+</html>
