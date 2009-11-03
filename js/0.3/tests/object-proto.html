@@ -30,11 +30,17 @@
 	{
 		var res = []
 		for (var i = 0; i < count; i++)
-			res[i] = {a:1, b:2, c:3, d:4, e:5}
+			res[i] = {a:1, b:'2', c:3.0, d:[], e:{}}
 		return res
 	}
 	
-	var hashes = bakeObjects(10000)
+	var hashes = bakeObjects(1)
+	
+	var count = Math.round(tests.speed(function () { new A(); for (var k in hashes[0]) obj = hashes[0][k] }) / 20)
+	tests.log(count)
+	
+	hashes = bakeObjects(count)
+	
 	tests.time('new + for in')
 	for (var i = 0, il = hashes.length; i < il; i++)
 	{
@@ -68,12 +74,12 @@
 	tests.timeEnd('new + data')
 	
 	var proto = A.prototype
-	tests.time('new + __proto__')
+	tests.time('__proto__')
 	for (var i = 0, il = hashes.length; i < il; i++)
 	{
 		hashes[i].__proto__ = proto
 	}
-	tests.timeEnd('new + __proto__')
+	tests.timeEnd('__proto__')
 	
 	
 	
