@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" id="event-page" class="loading finans-bank-forum-2 status-archive">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Eval benchmark</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<script type="text/javascript" src="../programica/init.js"></script>
+
+<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript">
+	window.addEventListener('load', function () {
+	tests.plan(0)
+	
+	function small (a)
+	{
+		if (!a)
+			a = 321
+	}
+	
+	function medium (a)
+	{
+		if (!a)
+			a = 321
+		while (a--)
+		{
+			var b = "abc".test(/zx(c?.*)?/i) + 1 + a * 10 + "asasas"
+			if (a)
+				break
+			else
+				if (b)
+					log(b)
+			a++
+		}
+	}
+	
+	function bakeCode (str, count)
+	{
+		var code = []
+		for (var i = 0; i < count; i++)
+			code[i] = str
+		return code.join('\n')
+	}
+	
+	Function.prototype.body = function ()
+	{
+		return this.toString().replace(/^(.|\n)*?\{/, '').replace(/\}$/, '')
+	}
+	
+	var count = 10000
+	
+	alert(medium.body())
+	var code = bakeCode('1', count)
+	tests.time('1')
+	eval('if (false) { ' + code + ' }')
+	tests.timeEnd('1')
+	
+	var code = bakeCode('function yyy () { }', count)
+	tests.time('function')
+	eval('if (false) { ' + code + ' }')
+	tests.timeEnd('function')
+	
+	var code = bakeCode(small.body(), count)
+	tests.time('small')
+	eval('if (false) { ' + code + ' }')
+	tests.timeEnd('small')
+	
+	var code = bakeCode(medium.body(), count)
+	tests.time('medium')
+	eval('function xxx () { ' + code + ' }')
+	tests.timeEnd('medium')
+	
+	var code = bakeCode('// this is a long single string comment created for the testing purpose', count)
+	tests.time('// comment')
+	eval('function xxx () { \n' + code + '\n }')
+	tests.timeEnd('// comment')
+	
+	var code = bakeCode('// this is a long single string comment created for the testing purpose', count)
+	tests.time('// comment')
+	eval('function xxx () { /*' + code + '*/ }')
+	tests.timeEnd('// comment')
+	
+	tests.done()
+	}, false)
+</script>
+</body>
+</html>
