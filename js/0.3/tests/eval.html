@@ -17,73 +17,53 @@
 	window.addEventListener('load', function () {
 	tests.plan(0)
 	
-	function small (a)
-	{
-		if (!a)
-			a = 321
-	}
+	var small = 'if (!a) a = 321;',
+		medium = 'if(!a)a=321;while(a--){var b="abc".test(/zx(c?.*)?/i)+1+a*10+"asasas";if(a)break;else if(b)log(b);a++}'
 	
-	function medium (a)
-	{
-		if (!a)
-			a = 321
-		while (a--)
-		{
-			var b = "abc".test(/zx(c?.*)?/i) + 1 + a * 10 + "asasas"
-			if (a)
-				break
-			else
-				if (b)
-					log(b)
-			a++
-		}
-	}
-	
-	function bakeCode (str, count)
+	String.prototype.repeat = function (count)
 	{
 		var code = []
 		for (var i = 0; i < count; i++)
-			code[i] = str
-		return code.join('\n')
-	}
-	
-	Function.prototype.body = function ()
-	{
-		return this.toString().replace(/^(.|\n)*?\{/, '').replace(/\}$/, '')
+			code[i] = this
+		return code
 	}
 	
 	var count = 10000
 	
-	alert(medium.body())
-	var code = bakeCode('1', count)
-	tests.time('1')
+	var code = ('1').repeat(count).join(';')
+	tests.time('1+1+…+1')
 	eval('if (false) { ' + code + ' }')
-	tests.timeEnd('1')
+	tests.timeEnd('1+1+…+1')
 	
-	var code = bakeCode('function yyy () { }', count)
-	tests.time('function')
+	var code = ('function yyy () { }').repeat(count).join('\n')
+	tests.time('empty functions')
 	eval('if (false) { ' + code + ' }')
-	tests.timeEnd('function')
+	tests.timeEnd('empty functions')
 	
-	var code = bakeCode(small.body(), count)
+	var code = small.repeat(count).join('\n')
 	tests.time('small')
 	eval('if (false) { ' + code + ' }')
 	tests.timeEnd('small')
 	
-	var code = bakeCode(medium.body(), count)
+	var code = medium.repeat(count).join('\n')
 	tests.time('medium')
-	eval('function xxx () { ' + code + ' }')
+	eval('if (false) { ' + code + ' }')
 	tests.timeEnd('medium')
 	
-	var code = bakeCode('// this is a long single string comment created for the testing purpose', count)
+	var code = medium.repeat(count).join('\n')
+	tests.time('medium in function')
+	eval('function xxx () { ' + code + ' }')
+	tests.timeEnd('medium in function')
+	
+	var code = ('// var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
 	tests.time('// comment')
-	eval('function xxx () { \n' + code + '\n }')
+	eval('if (false) { \n' + code + '\n }')
 	tests.timeEnd('// comment')
 	
-	var code = bakeCode('// this is a long single string comment created for the testing purpose', count)
-	tests.time('// comment')
-	eval('function xxx () { /*' + code + '*/ }')
-	tests.timeEnd('// comment')
+	var code = ('var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
+	tests.time('/* comment */')
+	eval('if (false) { /*' + code + '*/ }')
+	tests.timeEnd('/* comment */')
 	
 	tests.done()
 	}, false)
