@@ -1,73 +1,59 @@
 ;(function(){
 
-var Me = Programica.Request = {},
-	XHR = XMLHttpRequest,
-	statusEventNames = ['success', 'information', 'success', 'redirect', 'error', 'error'],
-	urlEncode = UrlEncode.stringify
-
-EventTarget.mix(XHR)
+var myName = 'Request',
+	XHR = XMLHttpRequest, urlEncode = UrlEncode.stringify,
+	types = ['success', 'information', 'success', 'redirect', 'error', 'error'],
 
 function onreadystatechange ()
 {
 	if (this.readyState == 4)
+		if (this.callback)
+			this.callback({type: types[Math.floor(this.status / 100)]})
+}
+
+XHR.UNSENT = 0
+XHR.OPENED = 1
+XHR.HEADERS_RECEIVED = 2
+XHR.LOADING = 3
+XHR.DONE = 4
+
+var Me = self[myName] =
+{
+	onreadystatechange: onreadystatechange,
+	charset: 'utf-8',
+	post: function (url, params, callback, sync)
 	{
-		var status = Math.floor(this.status / 100),
-			type = statusEventNames[status]
+		var r = new XHR()
 		
-		this.dispatchEvent({type: 'load', request: this})
+		r.open('POST', url, !sync)
+		r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=' + this.charset)
+		r.onreadystatechange = onreadystatechange
+		if (callback)
+			r.callback = callback
+		r.send(urlEncode(params))
+		if (sync)
+			onreadystatechange.apply(r)
 		
-		if (type)
-			this.dispatchEvent({type: type, request: this})
-		else
-			throw new Error("wrong response status: " + this.status)
+		return r
+	},
+	
+	get: function (url, params, callback, sync)
+	{
+		var r = new XHR()
+		
+		if (params)
+			url += (url.indexOf('?') ? UrlEncode.paramDelimiter : '?') + urlEncode(params)
+		
+		r.open('GET', url, !sync)
+		r.onreadystatechange = onreadystatechange
+		if (callback)
+			r.callback = callback
+		r.send(null)
+		if (sync)
+			onreadystatechange.apply(r)
+		
+		return r
 	}
-}
-
-Object.extend(XHR, {UNSENT: 0, OPENED: 1, HEADERS_RECEIVED: 2, LOADING: 3, DONE: 4})
-
-Me.onreadystatechange = onreadystatechange
-
-Me.post = function (url, params, callback, sync)
-{
-	var r = new XHR(),
-		data = urlEncode(params)
-	
-	r.open('POST', url, !sync)
-	r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded') // ; charset=utf-8
-	// r.setRequestHeader('Content-length', data.length)
-	r.onreadystatechange = onreadystatechange
-	if (callback)
-		r.addEventListener('load', callback, false)
-	r.send(data)
-	if (sync)
-		onreadystatechange.apply(r)
-	
-	return r
-}
-
-Me.get = function (url, params, callback, sync)
-{
-	var r = new XHR()
-	
-	if (params)
-		url += '?' + urlEncode(params)
-	
-	r.open('GET', url, !sync)
-	r.onreadystatechange = onreadystatechange
-	if (callback)
-		r.addEventListener('load', callback, false)
-	r.send(null)
-	if (sync)
-		onreadystatechange.apply(r)
-	
-	return r
-}
-
-var $ = self.$
-if ($)
-{
-	$.post = Me.post
-	$.get = Me.get
 }
 
 
