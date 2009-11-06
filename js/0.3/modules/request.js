@@ -2,7 +2,7 @@
 
 var myName = 'Request',
 	XHR = XMLHttpRequest, urlEncode = UrlEncode.stringify,
-	types = ['success', 'information', 'success', 'redirect', 'error', 'error'],
+	types = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
 function onreadystatechange ()
 {
