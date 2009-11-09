@@ -96,7 +96,7 @@ Me.prototype =
 	
 	complete: function ()
 	{
-		if (++this.completed >= this.motions)
+		if (++this.completed >= this.motions.length)
 			this.oncomplete()
 	}
 }
