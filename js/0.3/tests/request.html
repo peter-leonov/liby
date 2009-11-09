@@ -23,8 +23,11 @@
 	var response
 	function callback (e) { response = this }
 	
-	Request.get('?', null, callback, true)
-	tests.eq(/<title>(.+?)<\/title>/.exec(response.responseText)[1], 'Request tests', 'title eq Request tests')
+	tests.test(function ()
+	{
+		Request.get('?', null, callback, true)
+		tests.eq(/<title>(.+?)<\/title>/.exec(response.responseText)[1], 'Request tests', 'title eq Request tests')
+	})
 	
 	tests.done()
 	}, false)
