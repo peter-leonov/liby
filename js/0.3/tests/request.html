@@ -15,22 +15,19 @@
 <script type="text/javascript" src="../modules/url-encode.js"></script>
 <script type="text/javascript" src="../modules/request.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="tests.next.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(1)
-	
+Tests.job(function (job)
+{
 	var response
 	function callback (e) { response = this }
 	
-	tests.test(function ()
+	job.test('simple GET', function (test)
 	{
 		Request.get('?', null, callback, true)
-		tests.eq(/<title>(.+?)<\/title>/.exec(response.responseText)[1], 'Request tests', 'title eq Request tests')
+		test.eq(/<title>(.+?)<\/title>/.exec(response.responseText)[1], 'Request tests')
 	})
-	
-	tests.done()
-	}, false)
+})
 </script>
 </body>
 </html>
