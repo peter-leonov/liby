@@ -30,15 +30,12 @@ Tests.job(function (job)
 		var a = node.animate('easeOutQuad', {top: [200], left: [200]}, 1)
 		a.oncomplete = function ()
 		{
-			test.eq(node.style.top, 200)
-			test.eq(node.style.left, 200)
+			test.eq(node.style.top, '200px')
+			test.eq(node.style.left, '200px')
+			test.done()
 		}
 		test.wait(5)
 	})
-	
-	
-	// tests.eq(typeof Programica.Motion, 'function', 'Programica.Motion is a function')
-	// var e = new Programica.Motion()
 })
 </script>
 </body>
