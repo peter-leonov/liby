@@ -2,12 +2,20 @@
 
 var doc = document
 
+function T (text) { return doc.createTextNode(text) }
+function N (tag, cn, text)
+{
+	var node = doc.createElement(tag)
+	if (cn !== undefined) node.className = cn
+	if (text !== undefined) node.appendChild(T(text))
+	return node
+}
 
 var myName = 'Tests', Me = self[myName] =
 {
 	onload: function ()
 	{
-		var outputNode = this.outputNode = doc.createElement('ul')
+		var outputNode = this.outputNode = N('ul')
 		outputNode.id = 'tests-output'
 		doc.body.appendChild(outputNode)
 		
@@ -16,12 +24,11 @@ var myName = 'Tests', Me = self[myName] =
 	
 	
 	jobs: [],
-	
 	job: function (f)
 	{
 		this.jobs.push(f)
 	},
-	
+
 	run: function ()
 	{
 		var jobs = this.jobs
@@ -31,9 +38,101 @@ var myName = 'Tests', Me = self[myName] =
 		this.next()
 	},
 	
+	tests: [],
+	test: function (name, callback)
+	{
+		var node = this.outputNode.appendChild(N('li')),
+			test = new this.Test().initialize(this, node, name, callback)
+		this.tests.push(test)
+		return test
+	},
 	
-	done: 0,
-	failed: 0,
+	
+	current: 0,
+	next: function ()
+	{
+		var test = this.tests[this.current++],
+			me = this
+		
+		if (test)
+			test.run()
+		else
+			setTimeout(function () { me.summary() }, 0)
+	},
+	
+	
+	info: function (m, d) { this.node('info', m, d, false) },
+	log: function (m, d) { this.node('log', m, d, false) },
+	summary: function ()
+	{
+		this.log('done: ' + this.done + ', failed: ' + this.failed)
+		this.outputNode.className += this.failed ? 'failed' : 'passed'
+	}
+}
+
+window.onload = function () { Tests.onload() }
+
+Tests.Test = function () {}
+Tests.Test.prototype =
+{
+	initialize: function (parent, node, name, callback)
+	{
+		this.node = node
+		this.parent = parent
+		this.name = name
+		this.callback = callback
+		this.results = []
+		return this
+	},
+	
+	// nwait: 0,
+	// async: function (callback, timeout)
+	// {
+	// 	var me = this
+	// 	function run ()
+	// 	{
+	// 		if (callback(me.kit) !== false)
+	// 		{
+	// 			me.nwait--
+	// 			me.next()
+	// 		}
+	// 	}
+	// 	this.nwait++
+	// 	if (this.next.sync)
+	// 		run()
+	// 	else
+	// 		setTimeout(run, timeout || 0)
+	// },
+	
+	run: function ()
+	{
+		var callback = this.callback,
+			me = this
+		if (callback)
+		{
+			function run ()
+			{
+				try
+				{
+					callback(me)
+					// me.pass(callback.testName)
+				}
+				catch (ex)
+				{
+					me.fail(callback.testName, ex.message)
+				}
+			}
+			setTimeout(run, 0)
+		}
+		else
+			this.fail('no callback present')
+	},
+	
+	wait: function (t)
+	{
+		log('wait ' + t)
+	},
+	
 	
 	fail: function (m, d)
 	{
@@ -42,10 +141,10 @@ var myName = 'Tests', Me = self[myName] =
 		this.node('fail', m, d)
 	},
 	
-	success: function (m, d)
+	pass: function (m, d)
 	{
 		this.done++
-		this.node('success', m, d)
+		this.node('pass', m, d)
 	},
 	
 	node: function (cn, m, desc, list)
@@ -64,89 +163,9 @@ var myName = 'Tests', Me = self[myName] =
 	},
 	
 	
-	callbacks: [],
-	nwait: 0,
-	
-	test: function (name, callback)
-	{
-		callback.testName = name
-		this.callbacks.push(callback)
-	},
-	
-	async: function (callback, timeout)
-	{
-		var me = this
-		function run ()
-		{
-			if (callback(me.kit) !== false)
-			{
-				me.nwait--
-				me.next()
-			}
-		}
-		this.nwait++
-		if (this.next.sync)
-			run()
-		else
-			setTimeout(run, timeout || 0)
-	},
-	
-	current: 0,
-	next: function (callback, timeout)
-	{
-		if (callback)
-			return this.async(callback, timeout)
-		else if (this.nwait == 0)
-		{
-			var callback = this.callbacks[this.current++],
-				me = this
-			if (callback)
-			{
-				function run ()
-				{
-					try
-					{
-						callback(me.kit)
-						me.success(callback.testName)
-					}
-					catch (ex)
-					{
-						me.fail(callback.testName, ex.message)
-					}
-					
-					me.next()
-				}
-				setTimeout(run, 0)
-			}
-			else if (!this.doneTimeout)
-				this.doneTimeout = setTimeout(function () { me.summary() }, 0)
-		}
-	},
-	
-	wait: function (t)
-	{
-		
-	},
-	
-	
-	info: function (m, d) { this.node('info', m, d, false) },
-	log: function (m, d) { this.node('log', m, d, false) },
-	summary: function ()
-	{
-		this.log('done: ' + this.done + ', failed: ' + this.failed)
-		this.outputNode.className += this.failed ? 'failed' : 'successful'
-	}
-}
-
-window.onload = function () { Tests.onload() }
-
-Tests.Test = function () {}
-Tests.Test.prototype =
-{
-	wait: function (t, d) { this.parent.wait(t, d) },
 	info: function (m, d) { this.parent.info(m, d) },
 	log: function (m, d) { this.parent.log(m, d) },
-	fail: function (m, d) { throw new this.parent.Fail(m, d) },
+	fail: function (m, d) { this.results.push({status: 'fail', message: m, description: d}) },
 	
 	ok: function (v, d) { if (!v) this.fail(m, 'false: ' + inspect(v)) },
 	no: function (v, d) { if (v)  this.fail(m, 'true: '  + inspect(v)) },
@@ -194,12 +213,6 @@ Tests.Test.prototype =
 		return speed
 	}
 }
-
-Tests.Fail = function (m)
-{
-	this.message = m
-}
-
 
 
 var escapeChars = {'"': '\\"', '\\': '\\\\', '\n': '\\n', '\r': '\\r', '\t': '\\t'}
