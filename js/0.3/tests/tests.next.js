@@ -41,7 +41,7 @@ var myName = 'Tests', Me = self[myName] =
 	tests: [],
 	test: function (name, callback)
 	{
-		var node = this.outputNode.appendChild(N('li')),
+		var node = this.outputNode.appendChild(N('li', 'test')),
 			test = new this.Test().initialize(this, node, name, callback)
 		this.tests.push(test)
 		return test
@@ -75,10 +75,12 @@ Test.prototype =
 {
 	initialize: function (parent, node, name, callback)
 	{
+		this.results = []
+		this.status = 'initialized'
+		
 		this.parent = parent
 		this.name = name
 		this.callback = callback
-		this.results = []
 		
 		this.view = new Test.View()
 		this.view.initialize(this, node)
@@ -114,26 +116,50 @@ Test.prototype =
 		{
 			function run ()
 			{
-				try
-				{
-					callback(me)
-					// me.pass(callback.testName)
-				}
+				try { callback(me) }
 				catch (ex)
 				{
-					me.fail(ex.message)
+					me.fail('exception raised', ex.message)
+					me.failed()
+					return
 				}
+				me.passed()
 			}
 			setTimeout(run, 0)
 		}
 		else
+		{
 			this.fail('no callback present')
+			this.failed()
+		}
+			
+	},
+	
+	done: function ()
+	{
+		
 	},
 	
 	wait: function (t)
 	{
 		log('wait ' + t)
 	},
+	
+	
+	failed: function ()
+	{
+		this.status = 'failed'
+		this.view.failed()
+		this.parent.next()
+	},
+	
+	passed: function ()
+	{
+		this.status = 'passed'
+		this.view.passed()
+		this.parent.next()
+	},
+	
 	
 	
 	log: function (m) { this.view.log(m) },
@@ -205,17 +231,19 @@ Test.View.prototype =
 		this.output.appendChild(N('dt', 'title', name))
 	},
 	
-	node: function (cn, m, desc)
+	line: function (cn, m, desc)
 	{
-		var row = this.output.appendChild(N('dd', 'result ' + cn, m))
+		var row = this.output.appendChild(N('dd', 'line ' + cn, m))
 		if (desc)
 			row.appendChild(N('pre', 'description', desc))
 	},
 	
-	fail: function (m, d) { this.node('fail', m, d) },
-	pass: function (m, d) { this.node('pass', m, d) },
-	info: function (m, d) { this.node('info', m, d) },
-	log:  function (m, d) { this.node('log', m, d) }
+	failed: function () { this.main.className += ' failed' },
+	passed: function () { this.main.className += ' passed' },
+	fail: function (m, d) { this.line('fail', m, d) },
+	pass: function (m, d) { this.line('pass', m, d) },
+	info: function (m, d) { this.line('info', m, d) },
+	log:  function (m, d) { this.line('log', m, d) }
 }
 
 

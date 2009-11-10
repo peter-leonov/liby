@@ -39,21 +39,25 @@ body { padding-left: 465px; }
 #tests-output.failed { background-color: #fee; }
 #tests-output.passed { background-color: #efe; }
 
-#tests-output .result
+#tests-output .test .title { font-weight: bold; }
+#tests-output .test.failed .title { color: #d40; }
+#tests-output .test.passed .title { color: #082; }
+
+#tests-output .line
 {
 	list-style: outside decimal;
 	margin-left: 2em;
 }
 #tests-output,
-#tests-output .result .description { line-height: 1.6em; }
+#tests-output .line .description { line-height: 1.6em; }
 
-#tests-output .result .description { display: none; padding-left: 1em; margin-bottom: 0.2em; }
-#tests-output .result:hover .description { display: block; }
+#tests-output .line .description { display: none; padding-left: 1em; margin-bottom: 0.2em; }
+#tests-output .line	:hover .description { display: block; }
 
 #tests-output .log { color: #888; list-style: none; }
 #tests-output .info { color: #06d; list-style: none; }
 #tests-output .pass { color: #082; }
-#tests-output .fail { color: #d40; font-weight: bold; }
+#tests-output .fail { color: #d40; }
 #tests-output .warning { color: #e80; }
 #tests-output .skip { color: #555; }
 
