@@ -15,7 +15,7 @@ var myName = 'Tests', Me = self[myName] =
 {
 	onload: function ()
 	{
-		var outputNode = this.outputNode = N('ul')
+		var outputNode = this.outputNode = N('ol')
 		outputNode.id = 'tests-output'
 		doc.body.appendChild(outputNode)
 		
@@ -61,27 +61,29 @@ var myName = 'Tests', Me = self[myName] =
 	},
 	
 	
-	info: function (m, d) { this.node('info', m, d, false) },
-	log: function (m, d) { this.node('log', m, d, false) },
 	summary: function ()
 	{
-		this.log('done: ' + this.done + ', failed: ' + this.failed)
+		// this.log('done: ' + this.done + ', failed: ' + this.failed)
 		this.outputNode.className += this.failed ? 'failed' : 'passed'
 	}
 }
 
-window.onload = function () { Tests.onload() }
+window.onload = function () { Me.onload() }
 
-Tests.Test = function () {}
-Tests.Test.prototype =
+var Test = Me.Test = function () {}
+Test.prototype =
 {
 	initialize: function (parent, node, name, callback)
 	{
-		this.node = node
 		this.parent = parent
 		this.name = name
 		this.callback = callback
 		this.results = []
+		
+		this.view = new Test.View()
+		this.view.initialize(this, node)
+		this.view.title(this.name)
+		
 		return this
 	},
 	
@@ -119,7 +121,7 @@ Tests.Test.prototype =
 				}
 				catch (ex)
 				{
-					me.fail(callback.testName, ex.message)
+					me.fail(ex.message)
 				}
 			}
 			setTimeout(run, 0)
@@ -134,38 +136,13 @@ Tests.Test.prototype =
 	},
 	
 	
+	log: function (m) { this.view.log(m) },
+	info: function (m) { this.view.info(m) },
 	fail: function (m, d)
 	{
-		this.done++
-		this.failed++
-		this.node('fail', m, d)
+		this.results.push({status: 'fail', message: m, description: d})
+		this.view.fail(m, d)
 	},
-	
-	pass: function (m, d)
-	{
-		this.done++
-		this.node('pass', m, d)
-	},
-	
-	node: function (cn, m, desc, list)
-	{
-		var row = doc.createElement(list !== false ? 'li' : 'div')
-		row.className = 'result ' + cn
-		row.appendChild(doc.createTextNode(m))
-		if (desc)
-		{
-			var d = doc.createElement('pre')
-			d.className = 'description'
-			d.appendChild(doc.createTextNode(desc))
-			row.appendChild(d)
-		}
-		this.outputNode.appendChild(row)
-	},
-	
-	
-	info: function (m, d) { this.parent.info(m, d) },
-	log: function (m, d) { this.parent.log(m, d) },
-	fail: function (m, d) { this.results.push({status: 'fail', message: m, description: d}) },
 	
 	ok: function (v, d) { if (!v) this.fail(m, 'false: ' + this.inspect(v)) },
 	no: function (v, d) { if (v)  this.fail(m, 'true: '  + this.inspect(v)) },
@@ -209,9 +186,36 @@ Tests.Test.prototype =
 		while (diff < 25)
 		
 		var speed = count * 1000 / diff
-		// this.log('~ ' + Math.round(speed) + ' circles per second')
 		return speed
 	}
+}
+
+Test.View = function () {}
+Test.View.prototype =
+{
+	initialize: function (parent, main)
+	{
+		this.parent = parent
+		this.main = main
+		this.output = main.appendChild(N('dl'))
+	},
+	
+	title: function (name)
+	{
+		this.output.appendChild(N('dt', 'title', name))
+	},
+	
+	node: function (cn, m, desc)
+	{
+		var row = this.output.appendChild(N('dd', 'result ' + cn, m))
+		if (desc)
+			row.appendChild(N('pre', 'description', desc))
+	},
+	
+	fail: function (m, d) { this.node('fail', m, d) },
+	pass: function (m, d) { this.node('pass', m, d) },
+	info: function (m, d) { this.node('info', m, d) },
+	log:  function (m, d) { this.node('log', m, d) }
 }
 
 
@@ -267,7 +271,7 @@ function inspect (val)
 	return res
 }
 
-Tests.Test.prototype.inspect = inspect
+Test.prototype.inspect = inspect
 
 var m, ua = navigator.userAgent
 
