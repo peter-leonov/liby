@@ -167,19 +167,19 @@ Tests.Test.prototype =
 	log: function (m, d) { this.parent.log(m, d) },
 	fail: function (m, d) { this.results.push({status: 'fail', message: m, description: d}) },
 	
-	ok: function (v, d) { if (!v) this.fail(m, 'false: ' + inspect(v)) },
-	no: function (v, d) { if (v)  this.fail(m, 'true: '  + inspect(v)) },
+	ok: function (v, d) { if (!v) this.fail(m, 'false: ' + this.inspect(v)) },
+	no: function (v, d) { if (v)  this.fail(m, 'true: '  + this.inspect(v)) },
 	
-	eq: function (a, b, d) { if (a !== b) this.fail(inspect(a) + ' !== ' + inspect(b), d) },
-	ne: function (a, b, d) { if (a === b) this.fail(inspect(a) + ' === ' + inspect(b), d) },
+	eq: function (a, b, d) { if (a !== b) this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d) },
+	ne: function (a, b, d) { if (a === b) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
 	
-	eqo: function (a, b, d) { if (inspect(a) !== inspect(b)) this.fail(inspect(a) + ' !== ' + inspect(b), d) },
-	neo: function (a, b, d) { if (inspect(a) === inspect(b)) this.fail(inspect(a) + ' === ' + inspect(b), d) },
+	eqo: function (a, b, d) { if (this.inspect(a) !== this.inspect(b)) this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d) },
+	neo: function (a, b, d) { if (this.inspect(a) === this.inspect(b)) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
 	
-	lt: function (a, b, d) { if (a >= b) this.fail(inspect(a) + ' >= ' + inspect(b), d) },
-	lte: function (a, b, d) { if (a > b) this.fail(inspect(a) + ' > '  + inspect(b), d) },
-	gte: function (a, b, d) { if (a < b) this.fail(inspect(a) + ' < '  + inspect(b), d) },
-	gt: function (a, b, d) { if (a <= b) this.fail(inspect(a) + ' <= ' + inspect(b), d) },
+	lt: function (a, b, d) { if (a >= b) this.fail(this.inspect(a) + ' >= ' + this.inspect(b), d) },
+	lte: function (a, b, d) { if (a > b) this.fail(this.inspect(a) + ' > '  + this.inspect(b), d) },
+	gte: function (a, b, d) { if (a < b) this.fail(this.inspect(a) + ' < '  + this.inspect(b), d) },
+	gt: function (a, b, d) { if (a <= b) this.fail(this.inspect(a) + ' <= ' + this.inspect(b), d) },
 	
 	
 	_times: {},
@@ -267,6 +267,7 @@ function inspect (val)
 	return res
 }
 
+Tests.Test.prototype.inspect = inspect
 
 var m, ua = navigator.userAgent
 
