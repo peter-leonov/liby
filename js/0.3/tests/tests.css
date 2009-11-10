@@ -51,8 +51,7 @@ body { padding-left: 465px; }
 #tests-output,
 #tests-output .line .description { line-height: 1.6em; }
 
-#tests-output .line .description { display: none; padding-left: 1em; margin-bottom: 0.2em; }
-#tests-output .line	:hover .description { display: block; }
+#tests-output .line .description { padding-left: 1em; margin-bottom: 0.2em; }
 
 #tests-output .log { color: #888; list-style: none; }
 #tests-output .info { color: #06d; list-style: none; }

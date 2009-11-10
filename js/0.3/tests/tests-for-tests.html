@@ -29,27 +29,38 @@ Tests.job(function (job)
 		a + 1
 	})
 	
-	job.test('empty callback')
+	job.test('manual', function (test)
+	{
+		test.log(123)
+		test.info(123)
+		test.pass(123)
+		test.fail(123)
+	})
 	
 	
 	job.test('node.animate', function (test)
 	{
 		var node = document.getElementById('test-node-1')
-		var a = node.animate('easeOutQuad', {top: [200], left: [200]}, 1)
+		var a = node.animate('easeOutQuad', {top: [200], left: [400]}, 1)
 		a.oncomplete = function ()
 		{
-			test.eq(node.style.top, '200px')
-			test.eq(node.style.left, '200px')
+			test.eq(node.style.top, '200px', 'top')
+			test.eq(node.style.left, '400px', 'left')
 			test.done()
 		}
-		test.log(123)
-		test.info(123)
 		test.wait(5)
 	})
 	
-	job.test('second', function (test)
+	job.test('passing', function (test)
 	{
 		test.ok(true)
+		test.no(false)
+	})
+	
+	job.test('failing', function (test)
+	{
+		test.ok(false)
+		test.no(true)
 	})
 	
 	

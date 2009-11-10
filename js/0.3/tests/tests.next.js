@@ -41,6 +41,8 @@ var myName = 'Tests', Me = self[myName] =
 	tests: [],
 	test: function (name, callback)
 	{
+		if (typeof callback !== 'function')
+			throw new Error('callback is not present')
 		var node = this.outputNode.appendChild(N('li', 'test')),
 			test = new this.Test().initialize(this, node, name, callback)
 		this.tests.push(test)
@@ -110,29 +112,19 @@ Test.prototype =
 	
 	run: function ()
 	{
-		var callback = this.callback,
-			me = this
-		if (callback)
+		var me = this
+		function run ()
 		{
-			function run ()
+			try { me.callback(me) }
+			catch (ex)
 			{
-				try { callback(me) }
-				catch (ex)
-				{
-					me.fail('exception raised', ex.message)
-					me.failed()
-					return
-				}
-				me.passed()
+				me.fail('exception raised', ex.message)
+				me.failed()
+				return
 			}
-			setTimeout(run, 0)
+			me.passed()
 		}
-		else
-		{
-			this.fail('no callback present')
-			this.failed()
-		}
-			
+		setTimeout(run, 0)
 	},
 	
 	done: function ()
@@ -164,16 +156,41 @@ Test.prototype =
 	
 	log: function (m) { this.view.log(m) },
 	info: function (m) { this.view.info(m) },
+	pass: function (m, d)
+	{
+		this.results.push({status: 'pass', message: m, description: d})
+		this.view.pass(m, d)
+	},
 	fail: function (m, d)
 	{
 		this.results.push({status: 'fail', message: m, description: d})
 		this.view.fail(m, d)
 	},
 	
-	ok: function (v, d) { if (!v) this.fail(m, 'false: ' + this.inspect(v)) },
-	no: function (v, d) { if (v)  this.fail(m, 'true: '  + this.inspect(v)) },
 	
-	eq: function (a, b, d) { if (a !== b) this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d) },
+	ok: function (v, d)
+	{
+		if (v)
+			this.pass(this.inspect(v) + ' is true', d)
+		else
+			this.fail(this.inspect(v) + ' is false', d)
+	},
+	
+	no: function (v, d)
+	{
+		if (!v)
+			this.pass(this.inspect(v) + ' is false', d)
+		else
+			this.fail(this.inspect(v) + ' is true', d)
+	},
+	
+	eq: function (a, b, d)
+	{
+		if (a === b)
+			this.pass(this.inspect(a) + ' === ' + this.inspect(b), d)
+		else
+			this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d)
+	},
 	ne: function (a, b, d) { if (a === b) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
 	
 	eqo: function (a, b, d) { if (this.inspect(a) !== this.inspect(b)) this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d) },
