@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Infinite scroller tests</title>
 	<style>
-		#test-node-1 { position: absolute; left: 300px; top: 0; width: 50px; height: 50px; background-color: #444; }
+		#test-node-1 { position: absolute; left: 500px; top: 0; width: 50px; height: 50px; background-color: #444; }
 	</style>
 </head>
 <body>
@@ -27,14 +27,27 @@ Tests.job(function (job)
 	job.test('node.animate', function (test)
 	{
 		var node = document.getElementById('test-node-1')
-		var a = node.animate('easeOutQuad', {top: [200], left: [200]}, 1)
+		var a = node.animate('easeOutQuad', {top: [200], left: [700]}, 1)
 		a.oncomplete = function ()
 		{
 			test.eq(node.style.top, '200px')
-			test.eq(node.style.left, '200px')
+			test.eq(node.style.left, '700px')
 			test.done()
 		}
 		test.wait(5)
+	})
+	
+	job.test('quick', function (test)
+	{
+		var node = document.getElementById('test-node-1')
+		var a = node.animate('easeOutQuad', {top: [300], left: [600]}, 0.001)
+		a.oncomplete = function ()
+		{
+			test.eq(node.style.top, '300px', 'top')
+			test.eq(node.style.left, '600px', 'left')
+			test.done()
+		}
+		test.wait(1)
 	})
 })
 </script>
