@@ -20,20 +20,26 @@
 <script type="text/javascript" src="../modules/motion.js"></script>
 <script type="text/javascript" src="../modules/animation.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="tests.next.js"></script>
 <script type="text/javascript">
-window.addEventListener('load', function () {
-	tests.plan(0)
+Tests.job(function (job)
+{
+	job.test('node.animate', function (test)
+	{
+		var node = document.getElementById('test-node-1')
+		var a = node.animate('easeOutQuad', {top: [200], left: [200]}, 1)
+		a.oncomplete = function ()
+		{
+			test.eq(node.style.top, 200)
+			test.eq(node.style.left, 200)
+		}
+		test.wait(5)
+	})
 	
-	var node = document.getElementById('test-node-1')
 	
 	// tests.eq(typeof Programica.Motion, 'function', 'Programica.Motion is a function')
 	// var e = new Programica.Motion()
-	
-	node.animate('easeOutQuad', {top: [200], left: [200]}, 1)
-	
-	tests.done()
-}, false)
+})
 </script>
 </body>
 </html>

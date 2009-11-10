@@ -65,7 +65,8 @@ var myName = 'Tests', Me = self[myName] =
 	
 	
 	callbacks: [],
-	wait: 0,
+	nwait: 0,
+	
 	test: function (name, callback)
 	{
 		callback.testName = name
@@ -79,11 +80,11 @@ var myName = 'Tests', Me = self[myName] =
 		{
 			if (callback(me.kit) !== false)
 			{
-				me.wait--
+				me.nwait--
 				me.next()
 			}
 		}
-		this.wait++
+		this.nwait++
 		if (this.next.sync)
 			run()
 		else
@@ -95,7 +96,7 @@ var myName = 'Tests', Me = self[myName] =
 	{
 		if (callback)
 			return this.async(callback, timeout)
-		else if (this.wait == 0)
+		else if (this.nwait == 0)
 		{
 			var callback = this.callbacks[this.current++],
 				me = this
@@ -122,6 +123,12 @@ var myName = 'Tests', Me = self[myName] =
 		}
 	},
 	
+	wait: function (t)
+	{
+		
+	},
+	
+	
 	info: function (m, d) { this.node('info', m, d, false) },
 	log: function (m, d) { this.node('log', m, d, false) },
 	summary: function ()
@@ -133,10 +140,10 @@ var myName = 'Tests', Me = self[myName] =
 
 window.onload = function () { Tests.onload() }
 
-Tests.kit =
+Tests.Test = function () {}
+Tests.Test.prototype =
 {
-	parent: Tests,
-	
+	wait: function (t, d) { this.parent.wait(t, d) },
 	info: function (m, d) { this.parent.info(m, d) },
 	log: function (m, d) { this.parent.log(m, d) },
 	fail: function (m, d) { throw new this.parent.Fail(m, d) },
