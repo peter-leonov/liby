@@ -37,7 +37,7 @@ body { padding-left: 465px; }
 }
 
 #tests-output.failed { background-color: #fee; }
-#tests-output.successful { background-color: #efe; }
+#tests-output.passed { background-color: #efe; }
 
 #tests-output .result
 {
@@ -52,7 +52,7 @@ body { padding-left: 465px; }
 
 #tests-output .log { color: #888; list-style: none; }
 #tests-output .info { color: #06d; list-style: none; }
-#tests-output .success { color: #082; }
+#tests-output .pass { color: #082; }
 #tests-output .fail { color: #d40; font-weight: bold; }
 #tests-output .warning { color: #e80; }
 #tests-output .skip { color: #555; }
