@@ -75,6 +75,8 @@ window.onload = function () { Me.onload() }
 var Test = Me.Test = function () {}
 Test.prototype =
 {
+	status: 'new',
+	
 	initialize: function (parent, node, name, callback)
 	{
 		this.results = []
@@ -113,58 +115,92 @@ Test.prototype =
 	run: function ()
 	{
 		var me = this
-		function run ()
-		{
-			try { me.callback(me) }
-			catch (ex)
-			{
-				me.fail('exception raised', ex.message)
-				me.failed()
-				return
-			}
-			me.passed()
-		}
-		setTimeout(run, 0)
+		setTimeout(function () { me._run() }, 0)
 	},
 	
-	done: function ()
+	_run: function ()
 	{
+		try
+		{
+			this.callback(this)
+		}
+		catch (ex)
+		{
+			this.fail(ex.message, 'got exception')
+		}
 		
+		if (!this.timer)
+			this.report()
+	},
+	
+	async: function (f)
+	{
+		setTimeout(f, 1)
+		this.wait()
 	},
 	
 	wait: function (t)
 	{
-		log('wait ' + t)
+		if (this.timer)
+			clearTimeout(this.timer)
+		
+		if (t)
+		{
+			var me = this
+			this.timer = setTimeout(function () { me.timedOut() }, t * 1000)
+		}
+		
+		this.setStatus('waiting')
 	},
 	
-	
-	failed: function ()
+	timedOut: function ()
 	{
-		this.status = 'failed'
-		this.view.failed()
-		this.parent.next()
+		delete this.timer
+		this.fail('test timed out')
+		this.report()
 	},
 	
-	passed: function ()
+	done: function ()
 	{
-		this.status = 'passed'
-		this.view.passed()
-		this.parent.next()
+		if (this.timer)
+			clearTimeout(this.timer)
+		delete this.timer
+		
+		this.report()
 	},
-	
 	
 	
 	log: function (m) { this.view.log(m) },
 	info: function (m) { this.view.info(m) },
+	
 	pass: function (m, d)
 	{
 		this.results.push({status: 'pass', message: m, description: d})
 		this.view.pass(m, d)
 	},
+	
 	fail: function (m, d)
 	{
 		this.results.push({status: 'fail', message: m, description: d})
 		this.view.fail(m, d)
+	},
+	
+	report: function ()
+	{
+		var results = this.results,
+			status = 'passed'
+		for (var i = 0; i < results.length; i++)
+			if (results[i].status == 'fail')
+				status = 'failed'
+		
+		this.setStatus(status)
+		this.parent.next()
+	},
+	
+	setStatus: function (s)
+	{
+		this.status = s
+		this.view.setStatus(s)
 	},
 	
 	
@@ -173,7 +209,7 @@ Test.prototype =
 		if (v)
 			this.pass(this.inspect(v) + ' is true', d)
 		else
-			this.fail(this.inspect(v) + ' is false', d)
+			this.fail(this.inspect(v) + ' is not true', d)
 	},
 	
 	no: function (v, d)
@@ -181,7 +217,7 @@ Test.prototype =
 		if (!v)
 			this.pass(this.inspect(v) + ' is false', d)
 		else
-			this.fail(this.inspect(v) + ' is true', d)
+			this.fail(this.inspect(v) + ' is not false', d)
 	},
 	
 	eq: function (a, b, d)
@@ -248,15 +284,21 @@ Test.View.prototype =
 		this.output.appendChild(N('dt', 'title', name))
 	},
 	
-	line: function (cn, m, desc)
+	setStatus: function (s)
 	{
-		var row = this.output.appendChild(N('dd', 'line ' + cn, m))
-		if (desc)
-			row.appendChild(N('pre', 'description', desc))
+		var main = this.main
+		if (this.lastStatus)
+			main.className = main.className.replace(' ' + this.lastStatus + ' ', ' ' + s + ' ')
+		else
+			main.className += ' ' + s + ' '
+		this.lastStatus = s
 	},
 	
-	failed: function () { this.main.className += ' failed' },
-	passed: function () { this.main.className += ' passed' },
+	line: function (cn, m, desc)
+	{
+		var row = this.output.appendChild(N('dd', 'line ' + cn, desc ? desc + ': ' + m : m))
+	},
+	
 	fail: function (m, d) { this.line('fail', m, d) },
 	pass: function (m, d) { this.line('pass', m, d) },
 	info: function (m, d) { this.line('info', m, d) },
