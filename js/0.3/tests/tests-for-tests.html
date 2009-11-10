@@ -3,22 +3,13 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>Infinite scroller tests</title>
-	<style>
-		#test-node-1 { position: absolute; left: 300px; top: 0; width: 50px; height: 50px; background-color: #444; }
-	</style>
+	<title>Tests for tests</title>
 </head>
 <body>
-
-<div id="test-node-1"></div>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
-<script type="text/javascript" src="../programica/prototype.js"></script>
-<script type="text/javascript" src="../modules/motion.js"></script>
-<script type="text/javascript" src="../modules/animation.js"></script>
 
 <script type="text/javascript" src="tests.next.js"></script>
 <script type="text/javascript">
@@ -31,25 +22,38 @@ Tests.job(function (job)
 	
 	job.test('manual', function (test)
 	{
+		test.time('all')
 		test.log(123)
 		test.info(123)
 		test.pass(123)
 		test.fail(123)
+		test.timeEnd('all')
 	})
 	
 	
-	job.test('node.animate', function (test)
+	job.test('timer passing', function (test)
 	{
-		var node = document.getElementById('test-node-1')
-		var a = node.animate('easeOutQuad', {top: [200], left: [400]}, 1)
-		a.oncomplete = function ()
+		function job ()
 		{
-			test.eq(node.style.top, '200px', 'top')
-			test.eq(node.style.left, '400px', 'left')
+			test.ok(true)
 			test.done()
 		}
-		test.wait(5)
+		setTimeout(job, 10)
+		test.wait(1)
 	})
+	
+	job.test('timer failing', function (test)
+	{
+		test.wait(0.01)
+	})
+	
+	
+	job.test('async', function (test)
+	{
+		test.time('normal')
+		this.async(function () { test.timeEnd('normal'); test.done() })
+	})
+	
 	
 	job.test('passing', function (test)
 	{
