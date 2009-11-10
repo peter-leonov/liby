@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Infinite scroller tests</title>
+	<style>
+		#test-node-1 { position: absolute; left: 300px; top: 0; width: 50px; height: 50px; background-color: #444; }
+	</style>
+</head>
+<body>
+
+<div id="test-node-1"></div>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../programica/prototype.js"></script>
+<script type="text/javascript" src="../modules/motion.js"></script>
+<script type="text/javascript" src="../modules/animation.js"></script>
+
+<script type="text/javascript" src="tests.next.js"></script>
+<script type="text/javascript">
+Tests.job(function (job)
+{
+	job.test('exception', function (test)
+	{
+		a + 1
+	})
+	
+	
+	job.test('node.animate', function (test)
+	{
+		var node = document.getElementById('test-node-1')
+		var a = node.animate('easeOutQuad', {top: [200], left: [200]}, 1)
+		a.oncomplete = function ()
+		{
+			test.eq(node.style.top, '200px')
+			test.eq(node.style.left, '200px')
+			test.done()
+		}
+		test.log(123)
+		test.info(123)
+		test.wait(5)
+	})
+	
+	job.test('second', function (test)
+	{
+		test.ok(true)
+	})
+	
+	
+	// tests.eq(typeof Programica.Motion, 'function', 'Programica.Motion is a function')
+	// var e = new Programica.Motion()
+})
+</script>
+</body>
+</html>
