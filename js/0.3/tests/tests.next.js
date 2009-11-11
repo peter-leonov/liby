@@ -30,12 +30,20 @@ var myName = 'Tests', Me = self[myName] =
 	},
 	
 	tests: [],
-	test: function (name, callback)
+	test: function (name, conf, callback)
 	{
+		if (arguments.length == 2)
+		{
+			callback = conf
+			conf = undefined
+		}
+		
 		if (typeof callback !== 'function')
 			throw new Error('callback is not present')
+		
 		var node = this.outputNode.appendChild(N('li', 'test')),
 			test = new this.Test().initialize(this, node, name, callback)
+		test.conf = conf
 		this.tests.push(test)
 		return test
 	},
@@ -64,8 +72,13 @@ var myName = 'Tests', Me = self[myName] =
 	
 	summary: function ()
 	{
+		var tests = this.tests, failed = 0
+		for (var i = 0; i < tests.length; i++)
+			if (tests[i].status == 'failed' && !tests[i].conf.failing)
+				failed++
+		
 		// this.log('done: ' + this.done + ', failed: ' + this.failed)
-		this.outputNode.className += this.failed ? 'failed' : 'passed'
+		this.outputNode.className += failed ? 'failed' : 'passed'
 	}
 }
 
@@ -79,6 +92,7 @@ Test.prototype =
 	
 	initialize: function (parent, node, name, callback)
 	{
+		this.conf = {}
 		this.results = []
 		this.status = 'initialized'
 		
