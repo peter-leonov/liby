@@ -13,13 +13,23 @@ function N (tag, cn, text)
 
 var myName = 'Tests', Me = self[myName] =
 {
+	nodes: {},
 	onload: function ()
 	{
-		var outputNode = this.outputNode = N('ol')
-		outputNode.id = 'tests-output'
-		doc.body.appendChild(outputNode)
+		var main = this.nodes.main = N('dl')
+		main.id = 'tests-output'
+		doc.body.appendChild(main)
 		
-		this.summaryNode = this.outputNode.appendChild(N('h1', 'summary'))
+		var head = this.nodes.head = N('dt', 'head', 'running…')
+		main.appendChild(head)
+		
+		var body = this.nodes.body = N('dd', 'body')
+		main.appendChild(body)
+		
+		var output = this.nodes.output = N('ol')
+		body.appendChild(output)
+		
+		
 		
 		this.run()
 	},
@@ -43,7 +53,7 @@ var myName = 'Tests', Me = self[myName] =
 		if (typeof callback !== 'function')
 			throw new Error('callback is not present')
 		
-		var node = this.outputNode.appendChild(N('li', 'test'))
+		var node = this.nodes.output.appendChild(N('li', 'test'))
 		
 		var test = new this.Test().initialize(this, node, name, callback)
 		if (conf)
@@ -63,12 +73,15 @@ var myName = 'Tests', Me = self[myName] =
 			tests[i].run()
 	},
 	
+	total: 0,
 	finished: function ()
 	{
 		var tests = this.tests, unfinished = 0
 		for (var i = 0; i < tests.length; i++)
 			if (!tests[i].finished)
 				unfinished++
+		
+		this.total++
 		
 		if (unfinished == 0)
 			this.summary()
@@ -84,8 +97,12 @@ var myName = 'Tests', Me = self[myName] =
 				else
 					failed++
 		
-		this.summaryNode.appendChild(T('done: ' + this.tests.length + ', failed: ' + failed + (ignored ? ' (' + ignored + ' ignored)' : '')))
-		this.outputNode.className += failed ? 'failed' : 'passed'
+		var nodes = this.nodes
+		var text = 'done: ' + this.total + ' of ' + this.tests.length
+		text += (failed || ignored) ? ', failed: ' + failed + (ignored ? ' (' + ignored + ' ignored)' : '') : '.'
+		
+		nodes.head.firstChild.nodeValue = text
+		nodes.main.className += failed ? 'failed' : 'passed'
 	}
 }
 

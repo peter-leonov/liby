@@ -16,31 +16,34 @@ table{border:0;border-collapse:collapse}
 table td{padding:0}
 html{position:relative;}
 html{height:100%;width:100%}
-body{font: 12px Arial,sans-serif}
-
-body { padding-left: 465px; }
+body{font: 12px Arial,sans-serif;}
 
 #tests-output
 {
-/*	position: fixed;*/
 	position: absolute;
-	float: left;
-	z-index: 100;
+	z-index: -1;
 	left: 0;
 	top: 0;
-/*	bottom: 0;*/
-	width: 420px;
-	background: #eee;
-	padding: 15px;
-/*	border-right: solid 1px #ccc;*/
-/*	overflow: auto;*/
-	line-height: 1.6em;
+	width: 100%;
 }
 
-#tests-output.failed { background-color: #fee; }
-#tests-output.passed { background-color: #efe; }
+#tests-output .head { height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
+#tests-output.failed,
+#tests-output.passed { z-index: 65535; }
+#tests-output.failed .head { background-color: #d40; }
+#tests-output.passed .head { background-color: #082; }
 
-#tests-output .summary { font-size: 1.75em; font-weight: bold; margin: 0 0 0.5em 0; }
+
+#tests-output .body
+{
+	line-height: 1.6em;
+	padding: 10px 15px 5px 15px;
+	background: #f8f8f8;
+/*	border-right: solid 1px #f0f0f0;*/
+	border-bottom: solid 1px #f0f0f0;
+/*	-moz-border-radius-bottomright: 8px;
+	-webkit-border-bottom-right-radius: 8px;*/
+}
 
 #tests-output .test { margin: 0 0 0.75em 0 }
 #tests-output .test .title { font-size: 1.5em; color: #555; }
