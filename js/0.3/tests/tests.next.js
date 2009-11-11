@@ -28,15 +28,6 @@ var myName = 'Tests', Me = self[myName] =
 	{
 		this.jobs.push(f)
 	},
-
-	run: function ()
-	{
-		var jobs = this.jobs
-		for (var i = 0; i < jobs.length; i++)
-			jobs[i](this)
-		
-		this.next()
-	},
 	
 	tests: [],
 	test: function (name, callback)
@@ -49,19 +40,27 @@ var myName = 'Tests', Me = self[myName] =
 		return test
 	},
 	
-	
-	current: 0,
-	next: function ()
+	run: function ()
 	{
-		var test = this.tests[this.current++],
-			me = this
+		var jobs = this.jobs
+		for (var i = 0; i < jobs.length; i++)
+			jobs[i](this)
 		
-		if (test)
-			test.run()
-		else
-			setTimeout(function () { me.summary() }, 0)
+		var tests = this.tests
+		for (var i = 0; i < tests.length; i++)
+			tests[i].run()
 	},
 	
+	finished: function ()
+	{
+		var tests = this.tests, wait = 0
+		for (var i = 0; i < tests.length; i++)
+			if (!tests[i].finished)
+				wait++
+		
+		if (wait == 0)
+			this.summary()
+	},
 	
 	summary: function ()
 	{
@@ -76,6 +75,7 @@ var Test = Me.Test = function () {}
 Test.prototype =
 {
 	status: 'new',
+	finished: false,
 	
 	initialize: function (parent, node, name, callback)
 	{
@@ -97,7 +97,7 @@ Test.prototype =
 		var sched = this.sched = new Scheduler().initialize()
 		
 		var me = this
-		sched.oncomplete = function () { me.report() }
+		sched.oncomplete = function () { me.done() }
 		sched.add(function () { me._run(me.callback) })
 	},
 	
@@ -118,34 +118,33 @@ Test.prototype =
 		this.sched.add(f, d)
 	},
 	
-	wait: function (t)
+	wait: function (d)
 	{
-		if (this.timer)
-			clearTimeout(this.timer)
-		
-		if (t)
-		{
-			var me = this
-			this.timer = setTimeout(function () { me.timedOut() }, t)
-		}
-		
+		var me = this
+		this.sched.add(function () { me.timedOut() }, d === undefined ? -1 : d)
 		this.setStatus('waiting')
 	},
 	
 	timedOut: function ()
 	{
-		delete this.timer
 		this.fail('test timed out')
-		this.report()
+		this.done()
 	},
 	
 	done: function ()
 	{
-		if (this.timer)
-			clearTimeout(this.timer)
-		delete this.timer
+		this.sched.abort()
 		
-		this.report()
+		
+		var results = this.results,
+			status = 'passed'
+		for (var i = 0; i < results.length; i++)
+			if (results[i].status == 'fail')
+				status = 'failed'
+		
+		this.setStatus(status)
+		this.finished = true
+		this.parent.finished(this)
 	},
 	
 	
@@ -162,18 +161,6 @@ Test.prototype =
 	{
 		this.results.push({status: 'fail', message: m, description: d})
 		this.view.fail(m, d)
-	},
-	
-	report: function ()
-	{
-		var results = this.results,
-			status = 'passed'
-		for (var i = 0; i < results.length; i++)
-			if (results[i].status == 'fail')
-				status = 'failed'
-		
-		this.setStatus(status)
-		this.parent.next()
 	},
 	
 	setStatus: function (s)
@@ -295,7 +282,7 @@ Scheduler.prototype =
 	
 	initialize: function ()
 	{
-		this.entries = []
+		this.statuses = []
 		return this
 	},
 	
@@ -304,39 +291,40 @@ Scheduler.prototype =
 		if (this.completed)
 			throw new Error('scheduler is complete')
 		
-		var wrapper = this.wrap(f),
-			timer = setTimeout(wrapper, d || 0),
-			entry = {wrapper: wrapper, callback: f, timer: timer, delay: d, num: this.current}
+		var num = this.current++
 		
-		return wrapper.entry = this.entries[this.current++] = entry
-	},
-	
-	wrap: function (f)
-	{
 		var me = this
-		function wrapper ()
+		function caller ()
 		{
 			try
 			{
-				f(me)
+				f(me, num)
 			}
 			catch (ex)
 			{
-				me.onerror(ex, f)
+				me.onerror(ex, num)
 			}
-			me.finished(wrapper, f)
+			me.finished(num)
 		}
-		return wrapper
+		
+		if (d !== -1)
+			var timer = setTimeout(caller, d || 0)
+		else
+			timer = -1
+		
+		this.statuses[num] = timer
+		
+		return num
 	},
 	
-	finished: function (w, f)
+	finished: function (num)
 	{
-		var entries = this.entries
-		delete entries[w.entry.num]
+		var statuses = this.statuses
+		delete statuses[num]
 		
 		var count = 0
-		for (var i = 0; i < entries.length; i++)
-			if (entries[i])
+		for (var i = 0; i < statuses.length; i++)
+			if (i in statuses)
 				count++
 		
 		if (count == 0)
@@ -345,6 +333,15 @@ Scheduler.prototype =
 			this.completed = true
 			setTimeout(function () { me.oncomplete() }, 0)
 		}
+	},
+	
+	abort: function ()
+	{
+		var statuses = this.statuses
+		
+		for (var i = 0; i < statuses.length; i++)
+			if (i in statuses)
+				clearTimeout(statuses[i])
 	}
 }
 
