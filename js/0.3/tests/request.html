@@ -19,14 +19,26 @@
 <script type="text/javascript">
 Tests.job(function (job)
 {
-	var response
-	function callback (e) { response = this }
-	
-	job.test('simple GET', function (test)
+	job.test('sync GET', function (test)
 	{
+		function callback (e)
+		{
+			test.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+		}
 		Request.get('?', null, callback, true)
-		test.eq(/<title>(.+?)<\/title>/.exec(response.responseText)[1], 'Request tests')
 	})
+	
+	job.test('async GET', function (test)
+	{
+		function callback (e)
+		{
+			test.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+			test.done()
+		}
+		Request.get('?', null, callback)
+		test.wait(1000)
+	})
+	
 })
 </script>
 </body>
