@@ -86,57 +86,36 @@ Test.prototype =
 		this.name = name
 		this.callback = callback
 		
-		this.view = new Test.View()
-		this.view.initialize(this, node)
+		this.view = new Test.View().initialize(this, node)
 		this.view.title(this.name)
 		
 		return this
 	},
 	
-	// nwait: 0,
-	// async: function (callback, timeout)
-	// {
-	// 	var me = this
-	// 	function run ()
-	// 	{
-	// 		if (callback(me.kit) !== false)
-	// 		{
-	// 			me.nwait--
-	// 			me.next()
-	// 		}
-	// 	}
-	// 	this.nwait++
-	// 	if (this.next.sync)
-	// 		run()
-	// 	else
-	// 		setTimeout(run, timeout || 0)
-	// },
-	
 	run: function ()
 	{
+		var sched = this.sched = new Scheduler().initialize()
+		
 		var me = this
-		setTimeout(function () { me._run() }, 0)
+		sched.oncomplete = function () { me.report() }
+		sched.add(function () { me._run(me.callback) })
 	},
 	
-	_run: function ()
+	_run: function (f)
 	{
 		try
 		{
-			this.callback(this)
+			f(this)
 		}
 		catch (ex)
 		{
 			this.fail(ex.message, 'got exception')
 		}
-		
-		if (!this.timer)
-			this.report()
 	},
 	
-	async: function (f)
+	async: function (f, d)
 	{
-		setTimeout(f, 1)
-		this.wait()
+		this.sched.add(f, d)
 	},
 	
 	wait: function (t)
@@ -147,7 +126,7 @@ Test.prototype =
 		if (t)
 		{
 			var me = this
-			this.timer = setTimeout(function () { me.timedOut() }, t * 1000)
+			this.timer = setTimeout(function () { me.timedOut() }, t)
 		}
 		
 		this.setStatus('waiting')
@@ -277,6 +256,7 @@ Test.View.prototype =
 		this.parent = parent
 		this.main = main
 		this.output = main.appendChild(N('dl'))
+		return this
 	},
 	
 	title: function (name)
@@ -304,6 +284,70 @@ Test.View.prototype =
 	info: function (m, d) { this.line('info', m, d) },
 	log:  function (m, d) { this.line('log', m, d) }
 }
+
+var Scheduler = Me.Scheduler = function () {}
+Scheduler.prototype =
+{
+	oncomplete: function () {},
+	onerror: function () {},
+	current: 0,
+	completed: false,
+	
+	initialize: function ()
+	{
+		this.entries = []
+		return this
+	},
+	
+	add: function (f, d)
+	{
+		if (this.completed)
+			throw new Error('scheduler is complete')
+		
+		var wrapper = this.wrap(f),
+			timer = setTimeout(wrapper, d || 0),
+			entry = {wrapper: wrapper, callback: f, timer: timer, delay: d, num: this.current}
+		
+		return wrapper.entry = this.entries[this.current++] = entry
+	},
+	
+	wrap: function (f)
+	{
+		var me = this
+		function wrapper ()
+		{
+			try
+			{
+				f(me)
+			}
+			catch (ex)
+			{
+				me.onerror(ex, f)
+			}
+			me.finished(wrapper, f)
+		}
+		return wrapper
+	},
+	
+	finished: function (w, f)
+	{
+		var entries = this.entries
+		delete entries[w.entry.num]
+		
+		var count = 0
+		for (var i = 0; i < entries.length; i++)
+			if (entries[i])
+				count++
+		
+		if (count == 0)
+		{
+			var me = this
+			this.completed = true
+			setTimeout(function () { me.oncomplete() }, 0)
+		}
+	}
+}
+
 
 
 var escapeChars = {'"': '\\"', '\\': '\\\\', '\n': '\\n', '\r': '\\r', '\t': '\\t'}

@@ -44,14 +44,14 @@ Tests.job(function (job)
 	
 	job.test('timer failing', function (test)
 	{
-		test.wait(0.01)
+		test.wait(10000)
 	})
 	
 	
 	job.test('async', function (test)
 	{
 		test.time('normal')
-		this.async(function () { test.timeEnd('normal'); test.done() })
+		test.async(function () { test.timeEnd('normal'); test.done() })
 	})
 	
 	
