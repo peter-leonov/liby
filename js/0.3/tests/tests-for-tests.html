@@ -15,12 +15,12 @@
 <script type="text/javascript">
 Tests.job(function (job)
 {
-	job.test('exception', function (test)
+	job.test('exception', {failing: true}, function (test)
 	{
 		a + 1
 	})
 	
-	job.test('manual', function (test)
+	job.test('manual', {failing: true}, function (test)
 	{
 		test.time('all')
 		test.log(123)
@@ -43,7 +43,7 @@ Tests.job(function (job)
 	})
 	
 	
-	job.test('timer failing', function (test)
+	job.test('timer failing', {failing: true}, function (test)
 	{
 		test.wait(10)
 	})
@@ -71,7 +71,7 @@ Tests.job(function (job)
 		test.no(false)
 	})
 	
-	job.test('failing', function (test)
+	job.test('failing', {failing: true}, function (test)
 	{
 		test.ok(false)
 		test.no(true)
