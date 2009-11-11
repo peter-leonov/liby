@@ -30,6 +30,20 @@ Tests.job(function (job)
 		test.timeEnd('all')
 	})
 	
+	job.test('empty', function (test) {})
+	
+	job.test('passing', function (test)
+	{
+		test.ok(true)
+		test.no(false)
+	})
+	
+	job.test('failing', {failing: true}, function (test)
+	{
+		test.ok(false)
+		test.no(true)
+	})
+	
 	
 	job.test('timer passing', function (test)
 	{
@@ -51,35 +65,37 @@ Tests.job(function (job)
 	
 	job.test('infinite timer', function (test)
 	{
+		function job ()
+		{
+			test.ok(true)
+			test.done()
+		}
+		setTimeout(job, 10)
 		test.wait()
-		setTimeout(function () { test.done() }, 10)
 	})
 	
 	
 	job.test('async', function (test)
 	{
-		test.time('normal')
-		test.async(function () { test.timeEnd('normal'); test.done() })
+		function job () { test.ok(true) }
+		test.async(job)
 	})
 	
 	
-	job.test('empty', function (test) {})
-	
-	job.test('passing', function (test)
+	job.test('async many times', function (test)
 	{
-		test.ok(true)
-		test.no(false)
+		test.async(function () { test.ok(1) })
+		test.async(function () { test.ok(2) })
+		test.async(function () { test.ok(3) })
 	})
 	
-	job.test('failing', {failing: true}, function (test)
+	job.test('the same async many times', function (test)
 	{
-		test.ok(false)
-		test.no(true)
+		function job () { test.ok(1) }
+		test.async(job)
+		test.async(job)
+		test.async(job)
 	})
-	
-	
-	// tests.eq(typeof Programica.Motion, 'function', 'Programica.Motion is a function')
-	// var e = new Programica.Motion()
 })
 </script>
 </body>
