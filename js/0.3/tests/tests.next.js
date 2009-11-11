@@ -19,6 +19,8 @@ var myName = 'Tests', Me = self[myName] =
 		outputNode.id = 'tests-output'
 		doc.body.appendChild(outputNode)
 		
+		this.summaryNode = this.outputNode.appendChild(N('h1', 'summary'))
+		
 		this.run()
 	},
 	
@@ -74,12 +76,15 @@ var myName = 'Tests', Me = self[myName] =
 	
 	summary: function ()
 	{
-		var tests = this.tests, failed = 0
+		var tests = this.tests, failed = 0, ignored = 0
 		for (var i = 0; i < tests.length; i++)
-			if (tests[i].status == 'failed' && !tests[i].conf.failing)
-				failed++
+			if (tests[i].status == 'failed')
+				if (tests[i].conf.failing)
+					ignored++
+				else
+					failed++
 		
-		// this.log('done: ' + this.done + ', failed: ' + this.failed)
+		this.summaryNode.appendChild(T('done: ' + this.tests.length + ', failed: ' + failed + (ignored ? ' (' + ignored + ' ignored)' : '')))
 		this.outputNode.className += failed ? 'failed' : 'passed'
 	}
 }
