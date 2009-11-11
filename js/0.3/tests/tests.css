@@ -38,11 +38,7 @@ body{font: 12px Arial,sans-serif;}
 {
 	line-height: 1.6em;
 	padding: 10px 15px 5px 15px;
-	background: #f8f8f8;
-/*	border-right: solid 1px #f0f0f0;*/
-	border-bottom: solid 1px #f0f0f0;
-/*	-moz-border-radius-bottomright: 8px;
-	-webkit-border-bottom-right-radius: 8px;*/
+	background: #fff;
 }
 
 #tests-output .test { margin: 0 0 0.75em 0 }
