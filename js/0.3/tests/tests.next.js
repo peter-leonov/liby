@@ -111,6 +111,7 @@ Test.prototype =
 		this.view.title(this.name)
 		
 		this.sched = new Scheduler().initialize()
+		this.sched.parent = this
 		var me = this
 		this.sched.oncomplete = function () { me.done() }
 		this.sched.onerror = function (ex) { me.fail(ex.message, 'got an error form scheduler') }
@@ -306,6 +307,7 @@ Scheduler.prototype =
 	onerror: function () {},
 	current: 0,
 	completed: false,
+	aborted: false,
 	
 	initialize: function ()
 	{
@@ -331,7 +333,8 @@ Scheduler.prototype =
 			{
 				me.onerror(ex, num)
 			}
-			me.finished(num)
+			if (!me.aborted)
+				me.finished(num)
 		}
 		
 		if (d !== -1)
@@ -350,6 +353,7 @@ Scheduler.prototype =
 			throw new Error('finished() after completed')
 		
 		var timers = this.timers
+		clearTimeout(timers[num])
 		delete timers[num]
 		
 		var count = 0
@@ -369,8 +373,6 @@ Scheduler.prototype =
 		if (this.completed)
 			return
 		
-		this.completed = true
-		
 		if (this.comleteTimer)
 			clearTimeout(this.comleteTimer)
 		
@@ -380,6 +382,8 @@ Scheduler.prototype =
 			clearTimeout(timers[k])
 			delete timers[k]
 		}
+		
+		this.aborted = true
 	}
 }
 
