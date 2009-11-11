@@ -39,12 +39,20 @@ Tests.job(function (job)
 			test.done()
 		}
 		setTimeout(job, 10)
-		test.wait(1)
+		test.wait(1000)
 	})
+	
 	
 	job.test('timer failing', function (test)
 	{
-		test.wait(10000)
+		test.wait(10)
+	})
+	
+	
+	job.test('infinite timer', function (test)
+	{
+		test.wait()
+		setTimeout(function () { test.done() }, 10)
 	})
 	
 	
@@ -54,6 +62,8 @@ Tests.job(function (job)
 		test.async(function () { test.timeEnd('normal'); test.done() })
 	})
 	
+	
+	job.test('empty', function (test) {})
 	
 	job.test('passing', function (test)
 	{
