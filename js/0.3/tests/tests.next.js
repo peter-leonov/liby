@@ -41,9 +41,11 @@ var myName = 'Tests', Me = self[myName] =
 		if (typeof callback !== 'function')
 			throw new Error('callback is not present')
 		
-		var node = this.outputNode.appendChild(N('li', 'test')),
-			test = new this.Test().initialize(this, node, name, callback)
-		test.conf = conf
+		var node = this.outputNode.appendChild(N('li', 'test'))
+		
+		var test = new this.Test().initialize(this, node, name, callback)
+		if (conf)
+			test.conf = conf
 		this.tests.push(test)
 		return test
 	},
@@ -61,12 +63,12 @@ var myName = 'Tests', Me = self[myName] =
 	
 	finished: function ()
 	{
-		var tests = this.tests, wait = 0
+		var tests = this.tests, unfinished = 0
 		for (var i = 0; i < tests.length; i++)
 			if (!tests[i].finished)
-				wait++
+				unfinished++
 		
-		if (wait == 0)
+		if (unfinished == 0)
 			this.summary()
 	},
 	
@@ -106,7 +108,7 @@ Test.prototype =
 		this.sched = new Scheduler().initialize()
 		var me = this
 		this.sched.oncomplete = function () { me.done() }
-		this.sched.onerror = function (ex) { me.fail(ex.message, 'got an exception form scheduler') }
+		this.sched.onerror = function (ex) { me.fail(ex.message, 'got an error form scheduler') }
 		
 		return this
 	},
@@ -151,12 +153,16 @@ Test.prototype =
 	{
 		this.sched.abort()
 		
-		
 		var results = this.results,
+			status = 'empty'
+		
+		if (results.length)
+		{
 			status = 'passed'
-		for (var i = 0; i < results.length; i++)
-			if (results[i].status == 'fail')
-				status = 'failed'
+			for (var i = 0; i < results.length; i++)
+				if (results[i].status == 'fail')
+					status = 'failed'
+		}
 		
 		this.setStatus(status)
 		this.finished = true
@@ -298,14 +304,14 @@ Scheduler.prototype =
 	
 	initialize: function ()
 	{
-		this.statuses = []
+		this.timers = {}
 		return this
 	},
 	
 	add: function (f, d)
 	{
 		if (this.completed)
-			throw new Error('scheduler is complete')
+			throw new Error('add after completed')
 		
 		var num = this.current++
 		
@@ -328,36 +334,47 @@ Scheduler.prototype =
 		else
 			timer = -1
 		
-		this.statuses[num] = timer
+		this.timers[num] = timer
 		
 		return num
 	},
 	
 	finished: function (num)
 	{
-		var statuses = this.statuses
-		delete statuses[num]
+		if (this.completed)
+			throw new Error('finished() after completed')
+		
+		var timers = this.timers
+		delete timers[num]
 		
 		var count = 0
-		for (var i = 0; i < statuses.length; i++)
-			if (i in statuses)
-				count++
+		for (var k in timers)
+			count++
 		
 		if (count == 0)
 		{
 			var me = this
 			this.completed = true
-			setTimeout(function () { me.oncomplete() }, 0)
+			this.comleteTimer = setTimeout(function () { me.oncomplete() }, 0)
 		}
 	},
 	
 	abort: function ()
 	{
-		var statuses = this.statuses
+		if (this.completed)
+			return
 		
-		for (var i = 0; i < statuses.length; i++)
-			if (i in statuses)
-				clearTimeout(statuses[i])
+		this.completed = true
+		
+		if (this.comleteTimer)
+			clearTimeout(this.comleteTimer)
+		
+		var timers = this.timers
+		for (var k in timers)
+		{
+			clearTimeout(timers[k])
+			delete timers[k]
+		}
 	}
 }
 
