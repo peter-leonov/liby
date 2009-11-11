@@ -89,20 +89,30 @@ var myName = 'Tests', Me = self[myName] =
 	
 	summary: function ()
 	{
-		var tests = this.tests, failed = 0, ignored = 0
+		var tests = this.tests, failed = 0, ignored = 0, passed = 0
 		for (var i = 0; i < tests.length; i++)
-			if (tests[i].status == 'failed')
-				if (tests[i].conf.failing)
+		{
+			var test = tests[i]
+			if (test.status == 'failed')
+			{
+				failed++
+				if (test.conf.failing)
 					ignored++
-				else
-					failed++
+			}
+			else if (test.status == 'passed')
+				passed++
+		}
 		
 		var nodes = this.nodes
-		var text = 'done: ' + this.total + ' of ' + this.tests.length
-		text += (failed || ignored) ? ', failed: ' + failed + (ignored ? ' (' + ignored + ' ignored)' : '') : '.'
+		var text = passed + ' passed'
+		if (failed || ignored)
+			text += ', ' + failed + ' failed'
+		if (ignored)
+		 	text += ', ' + ignored + ' ignored'
+		text += ', ' + this.total + ' of ' + this.tests.length + ' done'
 		
 		nodes.head.firstChild.nodeValue = text
-		nodes.main.className += failed ? 'failed' : 'passed'
+		nodes.main.className += failed > ignored ? 'failed' : 'passed'
 	}
 }
 

@@ -27,7 +27,7 @@ body{font: 12px Arial,sans-serif;}
 	width: 100%;
 }
 
-#tests-output .head { height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
+#tests-output .head { min-height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
 #tests-output.failed,
 #tests-output.passed { z-index: 65535; }
 #tests-output.failed .head { background-color: #d40; }
@@ -37,12 +37,12 @@ body{font: 12px Arial,sans-serif;}
 #tests-output .body
 {
 	line-height: 1.6em;
-	padding: 10px 15px 5px 40px;
+	padding: 20px 15px 5px 40px;
 	background: #fff;
 	color: #aaa;
 }
 
-#tests-output .test { margin: 0 0 0.75em 0; list-style: outside decimal; }
+#tests-output .test { margin: 0 0 1.2em 0; list-style: outside decimal; }
 #tests-output .test .title { font-size: 1.5em; color: #555; }
 #tests-output .test.waiting .title { color: #000; }
 #tests-output .test.failed .title { color: #d40; }
