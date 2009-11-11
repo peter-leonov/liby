@@ -89,16 +89,18 @@ Test.prototype =
 		this.view = new Test.View().initialize(this, node)
 		this.view.title(this.name)
 		
+		this.sched = new Scheduler().initialize()
+		var me = this
+		this.sched.oncomplete = function () { me.done() }
+		this.sched.onerror = function (ex) { me.fail(ex.message, 'got an exception form scheduler') }
+		
 		return this
 	},
 	
 	run: function ()
 	{
-		var sched = this.sched = new Scheduler().initialize()
-		
 		var me = this
-		sched.oncomplete = function () { me.done() }
-		sched.add(function () { me._run(me.callback) })
+		this.sched.add(function () { me._run(me.callback) })
 	},
 	
 	_run: function (f)
@@ -109,7 +111,7 @@ Test.prototype =
 		}
 		catch (ex)
 		{
-			this.fail(ex.message, 'got exception')
+			this.fail(ex.message, 'got an exception')
 		}
 	},
 	
