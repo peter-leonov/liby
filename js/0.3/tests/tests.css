@@ -37,11 +37,12 @@ body{font: 12px Arial,sans-serif;}
 #tests-output .body
 {
 	line-height: 1.6em;
-	padding: 10px 15px 5px 15px;
+	padding: 10px 15px 5px 40px;
 	background: #fff;
+	color: #aaa;
 }
 
-#tests-output .test { margin: 0 0 0.75em 0 }
+#tests-output .test { margin: 0 0 0.75em 0; list-style: outside decimal; }
 #tests-output .test .title { font-size: 1.5em; color: #555; }
 #tests-output .test.waiting .title { color: #000; }
 #tests-output .test.failed .title { color: #d40; }
