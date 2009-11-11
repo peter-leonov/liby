@@ -45,6 +45,7 @@ body { padding-left: 465px; }
 #tests-output .test.waiting .title { color: #000; }
 #tests-output .test.failed .title { color: #d40; }
 #tests-output .test.passed .title { color: #082; }
+#tests-output .test.empty .title { color: #06d; }
 
 #tests-output .line
 {
