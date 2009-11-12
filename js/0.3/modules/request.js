@@ -27,7 +27,8 @@ var Me = self[myName] =
 		
 		r.open('POST', url, !sync)
 		r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=' + this.charset)
-		r.onreadystatechange = onreadystatechange
+		if (!sync)
+			r.onreadystatechange = onreadystatechange
 		if (callback)
 			r.callback = callback
 		r.send(urlEncode(params))
@@ -45,7 +46,8 @@ var Me = self[myName] =
 			url += (url.indexOf('?') ? UrlEncode.paramDelimiter : '?') + urlEncode(params)
 		
 		r.open('GET', url, !sync)
-		r.onreadystatechange = onreadystatechange
+		if (!sync)
+			r.onreadystatechange = onreadystatechange
 		if (callback)
 			r.callback = callback
 		r.send(null)
