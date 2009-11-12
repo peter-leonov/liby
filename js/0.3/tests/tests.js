@@ -504,6 +504,21 @@ function inspect (val)
 
 Test.prototype.inspect = inspect
 
+
+var s = self
+if (!self.log)
+{
+	if (s.console && s.console.firebug)
+		s.log = console.log
+	else if (s.opera && s.opera.postError)
+		s.log = function () { return s.opera.postError(arguments) }
+	else if (s.console && s.console.log)
+		s.log = function () { return s.console.log(Array.prototype.slice.call(arguments).join(', ')) }
+	else
+		s.log = function () {}
+}
+
+
 var m, ua = navigator.userAgent
 
 Me.ua =
