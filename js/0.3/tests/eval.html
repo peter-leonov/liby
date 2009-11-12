@@ -7,16 +7,10 @@
 </head>
 <body>
 
-<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
-
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(0)
-	
+Tests.job(function (job)
+{
 	var small = 'if (!a) a = 321;',
 		medium = 'if(!a)a=321;while(a--){var b="abc".test(/zx(c?.*)?/i)+1+a*10+"asasas";if(a)break;else if(b)log(b);a++}'
 	
@@ -30,43 +24,52 @@
 	
 	var count = 10000
 	
-	var code = ('1').repeat(count).join(';')
-	tests.time('1+1+…+1')
-	eval('if (false) { ' + code + ' }')
-	tests.timeEnd('1+1+…+1')
 	
-	var code = ('function yyy () { }').repeat(count).join('\n')
-	tests.time('empty functions')
-	eval('if (false) { ' + code + ' }')
-	tests.timeEnd('empty functions')
+	job.test('simple', function (test)
+	{
+		var code = ('1').repeat(count).join(';')
+		test.time('1+1+…+1')
+		eval('if (false) { ' + code + ' }')
+		test.timeEnd('1+1+…+1')
+		
+	})
 	
-	var code = small.repeat(count).join('\n')
-	tests.time('small')
-	eval('if (false) { ' + code + ' }')
-	tests.timeEnd('small')
+	job.test('functions', function (test)
+	{
+		var code = ('function yyy () { }').repeat(count).join('\n')
+		test.time('empty functions')
+		eval('if (false) { ' + code + ' }')
+		test.timeEnd('empty functions')
+		
+		var code = small.repeat(count).join('\n')
+		test.time('small')
+		eval('if (false) { ' + code + ' }')
+		test.timeEnd('small')
+		
+		var code = medium.repeat(count).join('\n')
+		test.time('medium')
+		eval('if (false) { ' + code + ' }')
+		test.timeEnd('medium')
+		
+		var code = medium.repeat(count).join('\n')
+		test.time('medium in function')
+		eval('function xxx () { ' + code + ' }')
+		test.timeEnd('medium in function')
+	})
 	
-	var code = medium.repeat(count).join('\n')
-	tests.time('medium')
-	eval('if (false) { ' + code + ' }')
-	tests.timeEnd('medium')
-	
-	var code = medium.repeat(count).join('\n')
-	tests.time('medium in function')
-	eval('function xxx () { ' + code + ' }')
-	tests.timeEnd('medium in function')
-	
-	var code = ('// var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
-	tests.time('// comment')
-	eval('if (false) { \n' + code + '\n }')
-	tests.timeEnd('// comment')
-	
-	var code = ('var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
-	tests.time('/* comment */')
-	eval('if (false) { /*' + code + '*/ }')
-	tests.timeEnd('/* comment */')
-	
-	tests.done()
-	}, false)
+	job.test('comments', function (test)
+	{
+		var code = ('// var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
+		test.time('// comment')
+		eval('if (false) { \n' + code + '\n }')
+		test.timeEnd('// comment')
+		
+		var code = ('var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
+		test.time('/* comment */')
+		eval('if (false) { /*' + code + '*/ }')
+		test.timeEnd('/* comment */')
+	})
+})
 </script>
 </body>
 </html>

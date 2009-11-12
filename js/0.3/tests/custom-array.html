@@ -3,91 +3,87 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>Event classes tests</title>
+	<title>Custom array class tests</title>
 </head>
 <body>
 
-<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
-
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(0)
-	
+Tests.job(function (job)
+{
 	function SuperArray () {}
 	SuperArray.prototype = new Array()
 	
+	job.test('push', function (test)
+	{
+		test.time('super.push')
+		var arr = new SuperArray()
+		for (var i = 0; i < 100000; i++)
+			arr.push(i)
+		test.timeEnd('super.push')
+		
+		test.time('simple.push')
+		var arr = new Array()
+		for (var i = 0; i < 100000; i++)
+			arr.push(i)
+		test.timeEnd('simple.push')
+		
+		test.time('native.push')
+		var arr = []
+		for (var i = 0; i < 100000; i++)
+			arr.push(i)
+		test.timeEnd('native.push')
+	})
 	
-	tests.time('super.push')
-	var arr = new SuperArray()
-	for (var i = 0; i < 100000; i++)
-		arr.push(i)
-	tests.timeEnd('super.push')
+	job.test('access', function (test)
+	{
+		test.time('super[]')
+		var arr = new SuperArray()
+		for (var i = 0; i < 100000; i++)
+			arr[i] = i
+		test.timeEnd('super[]')
+		
+		test.time('simple[]')
+		var arr = new Array()
+		for (var i = 0; i < 100000; i++)
+			arr[i] = i
+		test.timeEnd('simple[]')
+		
+		test.time('native[]')
+		var arr = []
+		for (var i = 0; i < 100000; i++)
+			arr[i] = i
+		test.timeEnd('native[]')
+	})
 	
-	tests.time('simple.push')
-	var arr = new Array()
-	for (var i = 0; i < 100000; i++)
-		arr.push(i)
-	tests.timeEnd('simple.push')
+	job.test('sort', function (test)
+	{
+		var arr = new SuperArray()
+		for (var i = 100000; i > 100; i--)
+			arr[i] = -i
+		test.time('super.sort')
+		arr.sort()
+		test.timeEnd('super.sort')
+		test.eq(arr[0], -1000, 'super.sorts alphabeticaly')
+		
+		var arr = new Array()
+		for (var i = 100000; i > 100; i--)
+			arr[i] = -i
+		test.time('simple.sort')
+		arr.sort()
+		test.timeEnd('simple.sort')
+		test.eq(arr[0], -1000, 'simple.sorts alphabeticaly')
+		
+		var arr = []
+		for (var i = 100000; i > 100; i--)
+			arr[i] = -i
+		test.time('native.sort')
+		arr.sort()
+		test.timeEnd('native.sort')
+		test.eq(arr[0], -1000, 'native.sorts alphabeticaly')
+	})
 	
-	tests.time('native.push')
-	var arr = []
-	for (var i = 0; i < 100000; i++)
-		arr.push(i)
-	tests.timeEnd('native.push')
-	
-	
-	
-	tests.time('super[]')
-	var arr = new SuperArray()
-	for (var i = 0; i < 100000; i++)
-		arr[i] = i
-	tests.timeEnd('super[]')
-	
-	tests.time('simple[]')
-	var arr = new Array()
-	for (var i = 0; i < 100000; i++)
-		arr[i] = i
-	tests.timeEnd('simple[]')
-	
-	tests.time('native[]')
-	var arr = []
-	for (var i = 0; i < 100000; i++)
-		arr[i] = i
-	tests.timeEnd('native[]')
-	
-	
-	
-	var arr = new SuperArray()
-	for (var i = 100000; i > 100; i--)
-		arr[i] = -i
-	tests.time('super.sort')
-	arr.sort()
-	tests.timeEnd('super.sort')
-	tests.eq(arr[0], -1000, 'super.sorts alphabeticaly')
-	
-	var arr = new Array()
-	for (var i = 100000; i > 100; i--)
-		arr[i] = -i
-	tests.time('simple.sort')
-	arr.sort()
-	tests.timeEnd('simple.sort')
-	tests.eq(arr[0], -1000, 'simple.sorts alphabeticaly')
-	
-	var arr = []
-	for (var i = 100000; i > 100; i--)
-		arr[i] = -i
-	tests.time('native.sort')
-	arr.sort()
-	tests.timeEnd('native.sort')
-	tests.eq(arr[0], -1000, 'native.sorts alphabeticaly')
-	
-	
-	tests.done()
-	}, false)
+})
 </script>
 </body>
 </html>
