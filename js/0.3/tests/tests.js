@@ -261,7 +261,14 @@ Test.prototype =
 		else
 			this.fail([this.inspect(a), '!==', this.inspect(b)], d)
 	},
-	ne: function (a, b, d) { if (a === b) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
+	
+	ne: function (a, b, d)
+	{
+		if (a !== b)
+			this.pass(this.inspect(a) + ' !== ' + this.inspect(b), d)
+		else
+			this.fail(this.inspect(a) + ' === ' + this.inspect(b), d)
+	},
 	
 	eqo: function (a, b, d) { if (this.inspect(a) !== this.inspect(b)) this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d) },
 	neo: function (a, b, d) { if (this.inspect(a) === this.inspect(b)) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
