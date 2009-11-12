@@ -229,25 +229,25 @@ Test.prototype =
 	ok: function (v, d)
 	{
 		if (v)
-			this.pass(this.inspect(v) + ' is true', d)
+			this.pass([this.inspect(v), 'is true'], d)
 		else
-			this.fail(this.inspect(v) + ' is not true', d)
+			this.fail([this.inspect(v), 'is not true'], d)
 	},
 	
 	no: function (v, d)
 	{
 		if (!v)
-			this.pass(this.inspect(v) + ' is false', d)
+			this.pass([this.inspect(v), 'is false'], d)
 		else
-			this.fail(this.inspect(v) + ' is not false', d)
+			this.fail([this.inspect(v), 'is not false'], d)
 	},
 	
 	eq: function (a, b, d)
 	{
 		if (a === b)
-			this.pass(this.inspect(a) + ' === ' + this.inspect(b), d)
+			this.pass([this.inspect(a), '===', this.inspect(b)], d)
 		else
-			this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d)
+			this.fail([this.inspect(a), '!==', this.inspect(b)], d)
 	},
 	ne: function (a, b, d) { if (a === b) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
 	
@@ -319,7 +319,22 @@ Test.View.prototype =
 	
 	line: function (cn, m, desc)
 	{
-		var row = this.output.appendChild(N('dd', 'line ' + cn, desc ? desc + ': ' + m : m))
+		var row = this.output.appendChild(N('dd', 'line ' + cn))
+		
+		if (desc !== undefined)
+			row.appendChild(T(desc + ': '))
+		
+		if (m.constructor === Array)
+		{
+			for (var i = 0; i < m.length; i++)
+			{
+				var elem = m[i]
+				// if (elem)
+				row.appendChild(T(elem))
+			}
+		}
+		else
+			row.appendChild(T(m))
 	},
 	
 	fail: function (m, d) { this.line('fail', m, d) },
