@@ -104,14 +104,15 @@ var myName = 'Tests', Me = self[myName] =
 		}
 		
 		var nodes = this.nodes
-		var text = passed + ' passed'
-		if (failed || ignored)
-			text += ', ' + failed + ' failed'
+		var text = [passed + ' passed']
+		if (failed)
+			text.push(failed + ' failed')
 		if (ignored)
-		 	text += ', ' + ignored + ' ignored'
-		text += ', ' + this.total + ' of ' + this.tests.length + ' done'
+			text.push(ignored + ' ignored')
+		if (this.total != this.tests.length)
+			text.push(this.total + ' of ' + this.tests.length + ' done')
 		
-		nodes.head.firstChild.nodeValue = text
+		nodes.head.firstChild.nodeValue = text.join(', ') + '.'
 		
 		nodes.main.className += failed > ignored ? ' failed' : (passed ? ' passed' : '')
 	}
