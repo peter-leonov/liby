@@ -30,7 +30,6 @@ var myName = 'Tests', Me = self[myName] =
 		body.appendChild(output)
 		
 		
-		
 		this.run()
 	},
 	
@@ -148,10 +147,10 @@ Test.prototype =
 		return this
 	},
 	
-	run: function ()
+	run: function (delay)
 	{
 		var me = this
-		this.sched.add(function () { me._run(me.callback) })
+		this.sched.add(function () { me._run(me.callback) }, delay)
 	},
 	
 	_run: function (f)
