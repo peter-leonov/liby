@@ -188,8 +188,14 @@ Test.prototype =
 	{
 		this.sched.abort()
 		
-		var results = this.results,
+		var results = this.results, expect = this.conf.expect,
 			status = 'empty'
+		
+		if (expect !== undefined)
+			if (expect == results.length)
+				status = 'passed'
+			else
+				this.fail(expect + ' expected but ' + results.length + ' run')
 		
 		if (results.length)
 		{
@@ -202,6 +208,11 @@ Test.prototype =
 		this.setStatus(status)
 		this.finished = true
 		this.parent.finished(this)
+	},
+	
+	expect: function (amount)
+	{
+		this.conf.expect = amount
 	},
 	
 	
