@@ -21,6 +21,7 @@ Tests.job(function (job)
 {
 	job.test('sync GET', function (test)
 	{
+		test.expect(1)
 		function callback (e)
 		{
 			test.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
@@ -30,6 +31,7 @@ Tests.job(function (job)
 	
 	job.test('async GET', function (test)
 	{
+		test.expect(1)
 		function callback (e)
 		{
 			test.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
