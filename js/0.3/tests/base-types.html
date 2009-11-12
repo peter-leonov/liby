@@ -39,11 +39,19 @@ Tests.job(function (job)
 	
 	job.test('falses', function (test)
 	{
-		try { (null).constructor }
-		catch (ex) { test.pass('null ' + ex.message) }
+		try
+		{
+			(null).constructor
+			test.fail('null has a constructor')
+		}
+		catch (ex) { test.pass(['null', ex.message]) }
 		
-		try { (undefined).constructor }
-		catch (ex) { test.pass('undefined ' + ex.message) }
+		try
+		{
+			(undefined).constructor
+			test.fail('undefined has a constructor')
+		}
+		catch (ex) { test.pass(['undefined', ex.message]) }
 	})
 	
 	
