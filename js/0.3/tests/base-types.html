@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Base types tests</title>
+</head>
+<body>
+
+<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript">
+Tests.job(function (job)
+{
+	job.test('constructors', function (test)
+	{
+		test.eq((false).constructor, Boolean, 'Boolean')
+		test.eq((true).constructor, Boolean, 'Boolean')
+		
+		test.eq((1).constructor, Number, 'Number')
+		test.eq((1.0).constructor, Number, 'Number')
+		test.eq((1e-10).constructor, Number, 'Number')
+		
+		test.eq(('').constructor, String, 'String')
+		
+		test.eq((function () {}).constructor, Function, 'Function')
+		
+		test.eq(([]).constructor, Array, 'Array')
+		test.eq((new Array()).constructor, Array, 'Array')
+		
+		test.eq(({}).constructor, Object, 'Object')
+		test.eq((new Object()).constructor, Object, 'Object')
+		
+		test.eq((new Date()).constructor, Date, 'Date')
+		
+		test.eq((/abc/).constructor, RegExp, 'RegExp')
+		test.eq((new RegExp()).constructor, RegExp, 'RegExp')
+	})
+	
+	job.test('falses', function (test)
+	{
+		try { (null).constructor }
+		catch (ex) { test.pass('null ' + ex.message) }
+		
+		try { (undefined).constructor }
+		catch (ex) { test.pass('undefined ' + ex.message) }
+	})
+	
+	
+	job.test('prototypes', function (test)
+	{
+		Boolean.prototype.xxx1 = 123
+		test.eq((false).xxx1, 123, 'Boolean')
+		test.eq((true).xxx1, 123, 'Boolean')
+		delete Boolean.prototype.xxx1
+		test.eq((false).xxx1, undefined, 'Boolean deleted')
+		test.eq((true).xxx1, undefined, 'Boolean deleted')
+		
+		
+		Number.prototype.xxx2 = 123
+		test.eq((1).xxx2, 123, 'Number')
+		test.eq((1.0).xxx2, 123, 'Number')
+		test.eq((1e-10).xxx2, 123, 'Number')
+		delete Number.prototype.xxx2
+		test.eq((1).xxx2, undefined, 'Number')
+		test.eq((1.0).xxx2, undefined, 'Number')
+		test.eq((1e-10).xxx2, undefined, 'Number')
+		
+		String.prototype.xxx3 = 123
+		test.eq(('').xxx3, 123, 'String')
+		delete String.prototype.xxx3
+		test.eq(('').xxx3, undefined, 'String')
+		
+		Function.prototype.xxx4 = 123
+		test.eq((function () {}).xxx4, 123, 'Function')
+		delete Function.prototype.xxx4
+		test.no('xxx4' in (function () {}), 'Function')
+		
+		Array.prototype.xxx5 = 123
+		test.eq(([]).xxx5, 123, 'Array')
+		test.eq((new Array()).xxx5, 123, 'Array')
+		delete Array.prototype.xxx5
+		test.no('xxx5' in ([]), 'Array')
+		test.no('xxx5' in (new Array()), 'Array')
+		
+		Object.prototype.xxx6 = 123
+		test.eq(({}).xxx6, 123, 'Object')
+		delete Object.prototype.xxx6
+		test.no('xxx6' in ({}), 'Object')
+		
+		Date.prototype.xxx7 = 123
+		test.eq((new Date()).xxx7, 123, 'Date')
+		delete Date.prototype.xxx7
+		test.eq((new Date()).xxx7, undefined, 'Date')
+		
+		RegExp.prototype.xxx8 = 123
+		test.eq((/abc/).xxx8, 123, 'RegExp')
+		test.eq((new RegExp()).xxx8, 123, 'RegExp')
+		delete RegExp.prototype.xxx8
+		test.no('xxx8' in (/abc/), 'RegExp')
+		test.no('xxx8' in (new RegExp()), 'RegExp')
+	})
+})
+</script>
+</body>
+</html>
