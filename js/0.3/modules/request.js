@@ -28,12 +28,12 @@ var Me = self[myName] =
 		r.open('POST', url, !sync)
 		r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=' + this.charset)
 		if (!sync)
-			r.onreadystatechange = onreadystatechange
+			r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
 		if (callback)
 			r.callback = callback
 		r.send(urlEncode(params))
 		if (sync)
-			onreadystatechange.apply(r)
+			onreadystatechange.call(r)
 		
 		return r
 	},
@@ -47,12 +47,12 @@ var Me = self[myName] =
 		
 		r.open('GET', url, !sync)
 		if (!sync)
-			r.onreadystatechange = onreadystatechange
+			r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
 		if (callback)
 			r.callback = callback
 		r.send(null)
 		if (sync)
-			onreadystatechange.apply(r)
+			onreadystatechange.call(r) // called for FF 3.5, 3.6
 		
 		return r
 	}
