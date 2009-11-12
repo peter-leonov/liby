@@ -1,15 +1,15 @@
 ;(function () {
 
-var Me = Motion = function (begin, end, duration, motion, onstep, onstop)
+var M = Math, Me = Motion = function (begin, end, duration, motion, onstep, onstop)
 {
-	var me = this, frame = 0, total = duration * Me.fps, last = total - 1,
-		delta = end - begin, step = delta / total
+	var me = this, frame = 0, total = M.ceil(duration * Me.fps), delta = end - begin
 	
 	this.onstop = onstop
+	this.onstep = onstep
 	this.step = function ()
 	{
-		onstep(motion(frame, begin, delta, last))
-		if (frame++ >= last)
+		me.onstep(motion(frame, begin, delta, total))
+		if (frame++ >= total)
 			me.stop(true)
 	}
 	
