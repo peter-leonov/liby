@@ -330,9 +330,9 @@ Test.View.prototype =
 	{
 		var main = this.main
 		if (this.lastStatus)
-			main.className = main.className.replace(' ' + this.lastStatus + ' ', ' ' + s + ' ')
+			main.className = main.className.replace(' ' + this.lastStatus, ' ' + s)
 		else
-			main.className += ' ' + s + ' '
+			main.className += ' ' + s
 		this.lastStatus = s
 	},
 	
