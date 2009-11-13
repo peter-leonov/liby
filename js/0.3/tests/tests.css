@@ -28,8 +28,7 @@ body{font: 12px Arial,sans-serif;}
 }
 
 #tests-output .head { min-height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
-#tests-output.failed,
-#tests-output.passed { z-index: 65535; }
+#tests-output.done { z-index: 65535; }
 #tests-output.failed .head { background-color: #d40; }
 #tests-output.passed .head { background-color: #082; }
 

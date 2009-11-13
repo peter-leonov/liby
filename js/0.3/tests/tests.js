@@ -113,7 +113,7 @@ var myName = 'Tests', Me = self[myName] =
 		
 		nodes.head.firstChild.nodeValue = text
 		
-		nodes.main.className += failed > ignored ? ' failed' : (passed ? ' passed' : '')
+		nodes.main.className += 'done' + (failed > ignored ? ' failed' : (passed ? ' passed' : ''))
 	}
 }
 
