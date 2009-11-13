@@ -1,9 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>form tests</title>
+	<title>Form tests</title>
 </head>
 <body>
 
@@ -71,47 +72,53 @@
 
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(18)
-	if (/IE 6/.test(tests.ua))
-		tests.skip([9])
-	
+Tests.job(function (job)
+{
 	var toHash = Programica.Form.toHash
 	
-	var hash = toHash($('test-from-1'))
+	job.test('form 1', function (t)
+	{
+		var hash = toHash($('test-from-1'))
+		t.eq(hash['unicode'], 'Юникод', 'unicode')
+		t.eq(hash['text'], 'text', 'text')
+		t.eq(hash['textarea'], 'textarea', 'textarea')
+		t.eq(hash['hidden'], 'hidden', 'hidden')
+		t.eq(hash['checkbox'], 'checkbox', 'checkbox')
+		t.ok(!('checkbox-unchecked' in hash), 'checkbox-unchecked')
+		t.eq(hash['radio'], 'radio', 'radio')
+		t.ok(!('radio-unchecked' in hash), 'radio-unchecked')
+		t.eq(hash['button'], 'button', 'button')
+		t.eq(hash['select-one'], 'selected-one', 'select-one')
+		t.eqo(hash['select-multiple'], ['selected','selected','selected'], 'select-multiple')
+		t.eqo(hash['mixed'], ['one','two','tree','four'], 'mixed')
+		t.ok(!(undefined in hash), 'unnamed')
+		t.ok(!('' in hash), 'empty-named')
+	})
 	
-	tests.eq(hash['unicode'], 'Юникод', 'unicode')
-	tests.eq(hash['text'], 'text', 'text')
-	tests.eq(hash['textarea'], 'textarea', 'textarea')
-	tests.eq(hash['hidden'], 'hidden', 'hidden')
-	tests.eq(hash['checkbox'], 'checkbox', 'checkbox')
-	tests.ok(!('checkbox-unchecked' in hash), 'checkbox-unchecked')
-	tests.eq(hash['radio'], 'radio', 'radio')
-	tests.ok(!('radio-unchecked' in hash), 'radio-unchecked')
-	tests.eq(hash['button'], 'button', 'button')
-	tests.eq(hash['select-one'], 'selected-one', 'select-one')
-	tests.eqo(hash['select-multiple'], ['selected','selected','selected'], 'select-multiple')
-	tests.eqo(hash['mixed'], ['one','two','tree','four'], 'mixed')
-	tests.ok(!(undefined in hash), 'unnamed')
-	tests.ok(!('' in hash), 'empty-named')
+	job.test('form 2', function (t)
+	{
+		var hash = toHash($('test-from-2'))
+		var k = null
+		for (k in hash) log(hash)
+		t.ok(k === null, 'empty form')
+	})
 	
-	var hash = toHash($('test-from-2'))
-	var k = null
-	for (k in hash) log(hash)
-	tests.ok(k === null, 'empty form')
+	job.test('form 3', function (t)
+	{
+		var hash = toHash($('test-from-3'))
+		var k = null
+		for (k in hash) log(hash)
+		t.ok(k === null, 'form with only unnamed input')
+	})
 	
-	var hash = toHash($('test-from-3'))
-	var k = null
-	for (k in hash) log(hash)
-	tests.ok(k === null, 'form with only unnamed input')
+	job.test('form 4', function (t)
+	{
+		var hash = toHash($('test-from-4'))
+		t.eq(hash['empty'], '', 'empty input')
+		t.eq(hash['unvalued'], '', 'unvalued')
+	})
 	
-	var hash = toHash($('test-from-4'))
-	
-	tests.eq(hash['empty'], '', 'empty input')
-	tests.eq(hash['unvalued'], '', 'unvalued')
-	
-	tests.done()
-	}, false)
+})
 </script>
 </body>
 </html>

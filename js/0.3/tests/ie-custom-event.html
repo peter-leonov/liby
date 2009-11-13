@@ -1,80 +1,88 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>EventTarget tests</title>
+	<title>IE custom event tests</title>
 </head>
 <body>
 
 <button id="test-node-1">test node 1</button>
+<button id="test-node-2">test node 2</button>
+<button id="test-node-3">test node 3</button>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/init.js"></script>
 
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(13)
-	if (!/IE [67]/.test(tests.ua))
-		tests.skip(['*'])
+Tests.job(function (job)
+{
+	if (!/IE [678]/.test(Tests.ua))
+	{
+		job.test('IE only tests', function (t) { t.ok('this is ' + navigator.userAgent) })
+		return
+	}
 	
-	var node = document.getElementById('test-node-1'), exception = null, calls = 0
-	function handler (e) { calls++ }
+	job.test('uniqueID', function (t)
+	{
+		var node = document.getElementById('test-node-1'), calls = 0
+		t.log('testing events wrapper internals')
+		t.ok('uniqueID' in window, 'window.uniqueID is set')
+		t.eq(window.uniqueID, window.uniqueID, 'window.uniqueID is a constant')
+		
+		t.ok('uniqueID' in node, 'node.uniqueID is set')
+		t.eq(node.uniqueID, node.uniqueID, 'node.uniqueID is a constant')
+		
+		t.ok('__uniqueID' in document, 'document.__uniqueID is set')
+		t.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
+	})
 	
-	try {
-	
-	tests.log('testing events wrapper internals')
-	tests.ok('uniqueID' in window, 'window.uniqueID is set')
-	tests.eq(window.uniqueID, window.uniqueID, 'window.uniqueID is a constant')
-	
-	tests.ok('uniqueID' in node, 'node.uniqueID is set')
-	tests.eq(node.uniqueID, node.uniqueID, 'node.uniqueID is a constant')
-	
-	tests.ok('__uniqueID' in document, 'document.__uniqueID is set')
-	tests.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
-	
-	
-	// IE specific code
-	var type = document.__pmc__eventTransport
-	tests.log('event transport is "' + document.__pmc__eventTransport + '"')
-	calls = 0
-	
-	document.attachEvent('on' + type, handler)
-	node.fireEvent('on' + type, document.createEventObject())
-	tests.eq(calls, 1, type + ' event is bubling')
-	
-	node.focus()
-	tests.eq(calls, 1, 'focus() does not affects ' + type + ' event')
-	
-	document.detachEvent('on' + type, handler)
-	node.fireEvent('on' + type, document.createEventObject())
-	tests.eq(calls, 1, type + ' detaching works')
-	
-	document.attachEvent('on' + type, function () { event.returnValue = false })
-	tests.ok(node.fireEvent('on' + type, document.createEventObject()) === false, type + ' returnValue works')
+	job.test('transport event', function (t)
+	{
+		var node = document.getElementById('test-node-2'), calls = 0
+		function handler (e) { calls++ }
+		
+		var type = document.__pmc__eventTransport
+		t.log('event transport is "' + document.__pmc__eventTransport + '"')
+		
+		document.attachEvent('on' + type, handler)
+		node.fireEvent('on' + type, document.createEventObject())
+		t.eq(calls, 1, type + ' event is bubling')
+		
+		node.focus()
+		t.eq(calls, 1, 'focus() does not affects ' + type + ' event')
+		
+		document.detachEvent('on' + type, handler)
+		node.fireEvent('on' + type, document.createEventObject())
+		t.eq(calls, 1, type + ' detaching works')
+		
+		document.attachEvent('on' + type, function () { event.returnValue = false })
+		t.ok(node.fireEvent('on' + type, document.createEventObject()) === false, type + ' returnValue works')
+		
+	})
 	
 	
-	// standart DOM Event API
-	var e = document.createEvent('UIEvents'), e2 = document.createEvent('UIEvents'),
-		type = 'hide', type2 = 'show'
-	tests.log('custom event is "' + type + '"')
-	calls = 0
-	
-	e.initEvent(type, true, true)
-	node.addEventListener(type, handler, false)
-	node.dispatchEvent(e)
-	e2.initEvent(type2, true, true)
-	node.dispatchEvent(e2)
-	tests.eq(calls, 1, 'custom handler called once')
-	tests.eq(e2.type, type2, 'the event preserves its type')
-	
-	} catch (ex) { exception = ex }
-	tests.eq(exception, null, 'no exceptions was throwed')
-	
-	tests.done()
-	}, false)
+	job.test('simple DOM Events tests', function (t)
+	{
+		var node = document.getElementById('test-node-3'), calls = 0
+		function handler (e) { calls++ }
+		
+		var e = document.createEvent('UIEvents'), e2 = document.createEvent('UIEvents'),
+			type = 'hide', type2 = 'show'
+		t.log('custom event is "' + type + '"')
+		
+		e.initEvent(type, true, true)
+		node.addEventListener(type, handler, false)
+		node.dispatchEvent(e)
+		e2.initEvent(type2, true, true)
+		node.dispatchEvent(e2)
+		t.eq(calls, 1, 'custom handler called once')
+		t.eq(e2.type, type2, 'the event preserves its type')
+	})
+})
 </script>
 </body>
 </html>
