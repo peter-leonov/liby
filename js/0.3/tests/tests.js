@@ -259,6 +259,21 @@ Test.prototype =
 	gte: function (a, b, d) { if (a < b) this.fail(this.inspect(a) + ' < '  + this.inspect(b), d) },
 	gt: function (a, b, d) { if (a <= b) this.fail(this.inspect(a) + ' <= ' + this.inspect(b), d) },
 	
+	instance: function (a, b, d)
+	{
+		if (a instanceof b)
+			this.pass([this.inspect(a), 'instanceof', this.inspect(b)], d)
+		else
+			this.fail([this.inspect(a), 'is not instanceof', this.inspect(b)], d)
+	},
+	
+	notinstance: function (a, b, d)
+	{
+		if (!(a instanceof b))
+			this.pass([this.inspect(a), 'is not instanceof', this.inspect(b)], d)
+		else
+			this.fail([this.inspect(a), 'instanceof', this.inspect(b)], d)
+	},
 	
 	_times: {},
 	time: function (name)
