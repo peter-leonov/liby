@@ -14,14 +14,12 @@ input,select,textarea,pre,code{font:1em Arial,sans-serif}
 ul{list-style-type:none}
 table{border:0;border-collapse:collapse}
 table td{padding:0}
-html{position:relative;}
 html{height:100%;width:100%}
 body{font: 12px Arial,sans-serif;}
 
 #tests-output
 {
 	position: absolute;
-	z-index: -1;
 	left: 0;
 	top: 0;
 	width: 100%;

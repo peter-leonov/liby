@@ -1,4 +1,3 @@
-if (!self.XMLHttpRequest)
 (function(){
 
 function chooseXMLHTTP ()

@@ -30,7 +30,6 @@ var myName = 'Tests', Me = self[myName] =
 		body.appendChild(output)
 		
 		
-		
 		this.run()
 	},
 	
@@ -104,14 +103,15 @@ var myName = 'Tests', Me = self[myName] =
 		}
 		
 		var nodes = this.nodes
-		var text = passed + ' passed'
-		if (failed || ignored)
-			text += ', ' + failed + ' failed'
+		var text = [passed + ' passed']
+		if (failed)
+			text.push(failed + ' failed')
 		if (ignored)
-		 	text += ', ' + ignored + ' ignored'
-		text += ', ' + this.total + ' of ' + this.tests.length + ' done'
+			text.push(ignored + ' ignored')
+		if (this.total != this.tests.length)
+			text.push(this.total + ' of ' + this.tests.length + ' done')
 		
-		nodes.head.firstChild.nodeValue = text
+		nodes.head.firstChild.nodeValue = text.join(', ') + '.'
 		
 		nodes.main.className += 'done' + (failed > ignored ? ' failed' : (passed ? ' passed' : ''))
 	}
@@ -147,10 +147,10 @@ Test.prototype =
 		return this
 	},
 	
-	run: function ()
+	run: function (delay)
 	{
 		var me = this
-		this.sched.add(function () { me._run(me.callback) })
+		this.sched.add(function () { me._run(me.callback) }, delay)
 	},
 	
 	_run: function (f)
@@ -187,8 +187,14 @@ Test.prototype =
 	{
 		this.sched.abort()
 		
-		var results = this.results,
+		var results = this.results, expect = this.conf.expect,
 			status = 'empty'
+		
+		if (expect !== undefined)
+			if (expect == results.length)
+				status = 'passed'
+			else
+				this.fail(expect + ' expected but ' + results.length + ' run')
 		
 		if (results.length)
 		{
@@ -201,6 +207,11 @@ Test.prototype =
 		this.setStatus(status)
 		this.finished = true
 		this.parent.finished(this)
+	},
+	
+	expect: function (amount)
+	{
+		this.conf.expect = amount
 	},
 	
 	
@@ -249,7 +260,14 @@ Test.prototype =
 		else
 			this.fail([this.inspect(a), '!==', this.inspect(b)], d)
 	},
-	ne: function (a, b, d) { if (a === b) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
+	
+	ne: function (a, b, d)
+	{
+		if (a !== b)
+			this.pass(this.inspect(a) + ' !== ' + this.inspect(b), d)
+		else
+			this.fail(this.inspect(a) + ' === ' + this.inspect(b), d)
+	},
 	
 	eqo: function (a, b, d) { if (this.inspect(a) !== this.inspect(b)) this.fail(this.inspect(a) + ' !== ' + this.inspect(b), d) },
 	neo: function (a, b, d) { if (this.inspect(a) === this.inspect(b)) this.fail(this.inspect(a) + ' === ' + this.inspect(b), d) },
@@ -326,9 +344,9 @@ Test.View.prototype =
 	{
 		var main = this.main
 		if (this.lastStatus)
-			main.className = main.className.replace(' ' + this.lastStatus + ' ', ' ' + s + ' ')
+			main.className = main.className.replace(' ' + this.lastStatus, ' ' + s)
 		else
-			main.className += ' ' + s + ' '
+			main.className += ' ' + s
 		this.lastStatus = s
 	},
 	
@@ -500,6 +518,21 @@ function inspect (val)
 }
 
 Test.prototype.inspect = inspect
+
+
+var s = self
+if (!self.log)
+{
+	if (s.console && s.console.firebug)
+		s.log = console.log
+	else if (s.opera && s.opera.postError)
+		s.log = function () { return s.opera.postError(arguments) }
+	else if (s.console && s.console.log)
+		s.log = function () { return s.console.log(Array.prototype.slice.call(arguments).join(', ')) }
+	else
+		s.log = function () {}
+}
+
 
 var m, ua = navigator.userAgent
 

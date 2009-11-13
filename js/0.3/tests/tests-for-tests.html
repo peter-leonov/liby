@@ -43,6 +43,20 @@ Tests.job(function (job)
 	})
 	
 	
+	job.test('expect:', {failing: true, expect: 0}, function (test)
+	{
+		test.ok(true)
+	})
+	
+	
+	job.test('expect()', function (test)
+	{
+		test.expect(2)
+		test.ok(true)
+		test.ok(true)
+	})
+	
+	
 	job.test('timer passing', function (test)
 	{
 		function job ()

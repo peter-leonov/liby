@@ -58,13 +58,14 @@ Tests.job(function (job)
 	
 	job.test('sort', function (test)
 	{
+		test.expect(3)
 		var arr = new SuperArray()
 		for (var i = 100000; i > 100; i--)
 			arr[i] = -i
 		test.time('super.sort')
 		arr.sort()
 		test.timeEnd('super.sort')
-		test.eq(arr[0], -1000, 'super.sorts alphabeticaly')
+		test.ne(arr[0], -1000, 'super.sort does not sort')
 		
 		var arr = new Array()
 		for (var i = 100000; i > 100; i--)
@@ -72,7 +73,7 @@ Tests.job(function (job)
 		test.time('simple.sort')
 		arr.sort()
 		test.timeEnd('simple.sort')
-		test.eq(arr[0], -1000, 'simple.sorts alphabeticaly')
+		test.eq(arr[0], -1000, 'simple.sort')
 		
 		var arr = []
 		for (var i = 100000; i > 100; i--)
@@ -80,7 +81,7 @@ Tests.job(function (job)
 		test.time('native.sort')
 		arr.sort()
 		test.timeEnd('native.sort')
-		test.eq(arr[0], -1000, 'native.sorts alphabeticaly')
+		test.eq(arr[0], -1000, 'native.sort')
 	})
 	
 })
