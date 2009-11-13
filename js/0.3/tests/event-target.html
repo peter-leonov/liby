@@ -1,9 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>EventTarget tests</title>
+	<title>Partial EventTarget tests</title>
 </head>
 <body>
 
@@ -16,62 +17,58 @@
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
 <script type="text/javascript" src="../programica/class.js"></script>
-<script type="text/javascript" src="../modules/event-target.js"></script>
+<!-- <script type="text/javascript" src="../modules/event-target.js"></script> -->
 
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(22*4)
-	
-	
-	function run (kind, type, node)
+Tests.job(function (job)
+{
+	function run (t, kind, type, node)
 	{
 		var calls = 0, e, exception = null
 		function handler (e) { calls++ }
 		
-		try {
-		
-		tests.ne(typeof EventTarget, 'undefined', 'EventTarget defined')
-		// to date nor IE neither Opera support EventTarget
-		tests.no(node instanceof EventTarget, 'not instanceof EventTarget')
+		// t.ok(self.EventTarget, 'EventTarget defined')
+		// // to date nor IE and Safari neither Opera support EventTarget
+		// if (self.EventTarget)
+		// 	t.ok(node instanceof self.EventTarget, 'instanceof EventTarget')
 		
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		e.preventDefault()
-		tests.eq(e.defaultPrevented, undefined, 'single preventDefault() does not set defaultPrevented')
+		t.eq(e.defaultPrevented, undefined, 'single preventDefault() does not set defaultPrevented')
 		
-		tests.log('testing node "' + node.nodeName + '" with event type "' + type + '"')
-		tests.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
+		t.log('testing node "' + node.nodeName + '" with event type "' + type + '"')
+		t.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
 		node.addEventListener(type, handler, false)
-		tests.eq(calls, 0, 'addEventListener does not call handler')
+		t.eq(calls, 0, 'addEventListener does not call handler')
 		
 		e = document.createEvent(kind)
-		tests.eq(typeof e, 'object', 'document.createEvent returns an object')
+		t.eq(typeof e, 'object', 'document.createEvent returns an object')
 		e.abcdef = 'abcdef'
-		tests.eq(e.abcdef, 'abcdef', 'event object supports custom fields')
+		t.eq(e.abcdef, 'abcdef', 'event object supports custom fields')
 		
-		tests.eq(typeof e.initEvent, 'function', 'event.initEvent is a function')
+		t.eq(typeof e.initEvent, 'function', 'event.initEvent is a function')
 		e.initEvent(type, true, true)
-		tests.eq(e.type, type, 'event.initEvent sets event type correctly')
+		t.eq(e.type, type, 'event.initEvent sets event type correctly')
 		
 		calls = 0
-		tests.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
+		t.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
 		node.dispatchEvent(e)
-		tests.eq(calls, 1, 'dispatchEvent does call handler')
+		t.eq(calls, 1, 'dispatchEvent does call handler')
 		
 		calls = 0
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		tests.eq(calls, 1, 'handler called ok twice')
+		t.eq(calls, 1, 'handler called ok twice')
 		
 		calls = 0
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		document.addEventListener(type, handler, false)
 		node.dispatchEvent(e)
-		tests.skip() // untill our EventTarget implements document dispatching
-		tests.eq(calls, 2, 'document handler called ok')
+		t.eq(calls, 2, 'document handler called ok')
 		
 		calls = 0
 		node.removeEventListener(type, handler, false)
@@ -79,7 +76,7 @@
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		tests.eq(calls, 0, 'removeEventListener works fine')
+		t.eq(calls, 0, 'removeEventListener works fine')
 		
 		calls = 0
 		node.addEventListener(type, handler, false)
@@ -87,7 +84,7 @@
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		tests.eq(calls, 1, 'second addEventListener ignored')
+		t.eq(calls, 1, 'second addEventListener ignored')
 		
 		var order = []
 		node.addEventListener(type, function () { order.push('first') }, false)
@@ -97,9 +94,7 @@
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		if (/IE [67]/.test(tests.ua))
-			tests.skip()
-		tests.eqo(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
+		t.eqo(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
 		
 		var event1, event2, event3
 		node.addEventListener(type, function (e) { event1 = e; e.abc++ }, false)
@@ -109,37 +104,49 @@
 		e.initEvent(type, true, true)
 		e.abc = 0
 		node.dispatchEvent(e)
-		tests.eqo([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
-		tests.eqo(e.abc, 3, 'listeners can write custom fields')
+		t.eqo([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
+		t.eqo(e.abc, 3, 'listeners can write custom fields')
 		
 		function prevent (e) { e.preventDefault() }
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
-		tests.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
+		t.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
 		node.addEventListener(type, prevent, false)
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
-		tests.eq(node.dispatchEvent(e), false, 'preventDefault() invoked')
+		t.eq(node.dispatchEvent(e), false, 'preventDefault() invoked')
 		node.removeEventListener(type, prevent, false)
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
-		tests.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
-		
-		} catch (ex) { exception = ex }
-		tests.eq(exception, null, 'no exceptions was throwed')
+		t.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
 	}
 	
-	run('Event', 'hide', document.getElementById('test-node-1'))
-	run('MouseEvent', 'click', document.getElementById('test-node-2'))
 	
-	var T = Class('T')
-	T.prototype.initialize = function () { this.nodeName = 'object' }
-	T.mixIn(EventTarget)
-	run('Event', 'hide', new T())
-	run('MouseEvent', 'click', new T())
+	job.test('Event: hide on node', function (test)
+	{
+		run(test, 'Event', 'hide', document.getElementById('test-node-1'))
+	})
 	
-	tests.done()
-	}, false)
+	job.test('MouseEvent: click on node', function (test)
+	{
+		run(test, 'MouseEvent', 'click', document.getElementById('test-node-2'))
+	})
+	
+	
+	// var T = Class('T')
+	// T.prototype.initialize = function () { this.nodeName = 'object' }
+	// T.mixIn(EventTarget)
+	// 
+	// job.test('EventTarget: hide on EventTarget instance', function (test)
+	// {
+	// 	run(test, 'Event', 'hide', new T())
+	// })
+	// 
+	// job.test('MouseEvent: click on EventTarget instance', function (test)
+	// {
+	// 	run(test, 'MouseEvent', 'click', new T())
+	// })
+})
 </script>
 </body>
 </html>
