@@ -58,6 +58,9 @@ Me.prototype =
 	
 	add: function (job, delay)
 	{
+		if (this.completed)
+			return
+		
 		var children = this.children
 		
 		if (typeof job === 'function')
