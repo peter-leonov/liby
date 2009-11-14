@@ -16,10 +16,10 @@ Me.prototype =
 {
 	completed: false,
 	
-	onerror: function (ex)
+	onerror: function (ex, job)
 	{
 		if (this.parent)
-			this.parent.onerror(ex)
+			this.parent.onerror(ex, job || this)
 		else
 			throw ex
 	},
