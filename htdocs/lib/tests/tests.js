@@ -81,14 +81,14 @@ Test.prototype =
 	status: 'new',
 	finished: false,
 	
-	initialize: function (parent, name, callback)
+	initialize: function (parent, name, conf, callback)
 	{
-		this.conf = {}
+		this.conf = conf || {}
 		this.results = []
 		this.status = 'initialized'
 		
 		this.parent = parent
-		this.name = name
+		this.name = name || '(untitled)'
 		this.callback = callback
 		
 		this.view = new Test.View().initialize(this.name)
@@ -189,16 +189,13 @@ Test.prototype =
 		{
 			callback = name
 			conf = undefined
-			name = '(untitled)'
 		}
 		
 		if (typeof callback !== 'function')
 			throw new Error('callback is not present')
 		
 		var test = new Test()
-		test.initialize(this, name, callback)
-		if (conf)
-			test.conf = conf
+		test.initialize(this, name, conf, callback)
 		
 		this.view.node(test.view.nodes.main)
 		this.cascade.add(test.cascade)
