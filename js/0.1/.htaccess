@@ -1,3 +1,0 @@
-Options +Includes
-AddHandler server-parsed .js
-AddHandler server-parsed .xhtml
