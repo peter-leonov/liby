@@ -11,7 +11,7 @@
 <script type="text/javascript" src="../modules/cascade.js"></script>
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (job)
 {
 	job.test('exception', {failing: true}, function (test)
 	{
@@ -66,6 +66,35 @@ Tests.job(function (job)
 		}
 		setTimeout(job, 10)
 		test.wait(1000)
+	})
+	
+	
+	job.test('cascade', function (t)
+	{
+		t.test('nested 1', function (t)
+		{
+			t.test('nested 1.1', function (t)
+			{
+				t.ok(true, 'description')
+			})
+			t.test('nested 1.2', function (t)
+			{
+				t.ok(true, 'description')
+			})
+		})
+		
+		t.test('nested 2', function (t)
+		{
+			t.test('nested 2.1', function (t)
+			{
+				t.ok(true, 'description')
+				t.test('nested 2.1.1', function (t)
+				{
+					t.ok(true, 'description')
+				})
+			})
+		})
+		
 	})
 	
 	

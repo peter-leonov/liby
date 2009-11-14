@@ -16,74 +16,29 @@ var myName = 'Tests', Me = self[myName] =
 	nodes: {},
 	onload: function ()
 	{
-		var main = this.nodes.main = N('dl')
+		var main = this.nodes.main = N('div')
 		main.id = 'tests-output'
 		doc.body.appendChild(main)
-		
-		var head = this.nodes.head = N('dt', 'head', 'running…')
-		main.appendChild(head)
-		
-		var body = this.nodes.body = N('dd', 'body')
-		main.appendChild(body)
-		
-		var output = this.nodes.output = N('ol')
-		body.appendChild(output)
-		
 		
 		this.run()
 	},
 	
 	
-	jobs: [],
-	job: function (f)
+	test: function (f)
 	{
-		this.jobs.push(f)
-	},
-	
-	tests: [],
-	test: function (name, conf, callback)
-	{
-		if (arguments.length == 2)
-		{
-			callback = conf
-			conf = undefined
-		}
-		
-		if (typeof callback !== 'function')
-			throw new Error('callback is not present')
-		
-		var node = this.nodes.output.appendChild(N('li', 'test'))
-		
-		var test = new this.Test().initialize(this, node, name, callback)
-		if (conf)
-			test.conf = conf
-		this.tests.push(test)
-		return test
+		this.callback = f
 	},
 	
 	run: function ()
 	{
-		var jobs = this.jobs
-		for (var i = 0; i < jobs.length; i++)
-			jobs[i](this)
-		
-		var tests = this.tests
-		for (var i = 0; i < tests.length; i++)
-			tests[i].run()
+		var test = this.mainTest = new this.Test().initialize(this, this.nodes.main, 'main', this.callback)
+		test.run()
 	},
 	
 	total: 0,
 	finished: function ()
 	{
-		var tests = this.tests, unfinished = 0
-		for (var i = 0; i < tests.length; i++)
-			if (!tests[i].finished)
-				unfinished++
-		
-		this.total++
-		
-		if (unfinished == 0)
-			this.summary()
+		log('all done')
 	},
 	
 	summary: function ()
@@ -213,6 +168,28 @@ Test.prototype =
 	{
 		this.conf.expect = amount
 	},
+	
+	
+	test: function (name, conf, callback)
+	{
+		if (arguments.length == 2)
+		{
+			callback = conf
+			conf = undefined
+		}
+		
+		if (typeof callback !== 'function')
+			throw new Error('callback is not present')
+		
+		var node = this.view.main.appendChild(N('li', 'test'))
+		
+		var test = new Test().initialize(this, node, name, callback)
+		if (conf)
+			test.conf = conf
+		
+		return test
+	},
+	
 	
 	
 	log: function (m) { this.view.log(m) },
