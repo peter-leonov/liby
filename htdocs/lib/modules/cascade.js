@@ -27,7 +27,7 @@ Me.prototype =
 	oncomplete: function ()
 	{
 		if (this.parent)
-			this.parent.finished(this)
+			this.parent.sigchild(this)
 	},
 	
 	run: function (delay)
@@ -53,7 +53,7 @@ Me.prototype =
 			this.onerror(ex)
 		}
 		
-		this.finished()
+		this.sigchild()
 	},
 	
 	add: function (job, delay)
@@ -70,7 +70,7 @@ Me.prototype =
 		return children.push(job)
 	},
 	
-	finished: function ()
+	sigchild: function ()
 	{
 		if (this.completed)
 			return
@@ -98,7 +98,7 @@ Me.prototype =
 			for (var i = 0; i < children.length; i++)
 				children[i].stop()
 			
-			this.finished()
+			this.sigchild()
 		}
 		
 		return this.completed
