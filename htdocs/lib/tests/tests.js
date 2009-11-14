@@ -138,11 +138,11 @@ Test.prototype =
 		this.view = new Test.View().initialize(this, node)
 		this.view.title(this.name)
 		
-		this.sched = new Scheduler().initialize()
-		this.sched.parent = this
+		var c = this.cascade = new Cascade()
+		c.parent = this
 		var me = this
-		this.sched.oncomplete = function () { me.done() }
-		this.sched.onerror = function (ex) { me.fail(ex.message, 'got an error form scheduler') }
+		c.oncomplete = function () { me.done() }
+		c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
 		
 		return this
 	},
@@ -150,7 +150,7 @@ Test.prototype =
 	run: function (delay)
 	{
 		var me = this
-		this.sched.add(function () { me._run(me.callback) }, delay)
+		this.cascade.add(function () { me._run(me.callback) }, delay)
 	},
 	
 	_run: function (f)
@@ -167,13 +167,13 @@ Test.prototype =
 	
 	async: function (f, d)
 	{
-		this.sched.add(f, d)
+		this.cascade.add(f, d)
 	},
 	
 	wait: function (d)
 	{
 		var me = this
-		this.sched.add(function () { me.timedOut() }, d === undefined ? -1 : d)
+		this.cascade.add(function () { me.timedOut() }, d === undefined ? -1 : d)
 		this.setStatus('waiting')
 	},
 	
@@ -185,7 +185,7 @@ Test.prototype =
 	
 	done: function ()
 	{
-		this.sched.abort()
+		this.cascade.stop()
 		
 		var results = this.results, expect = this.conf.expect,
 			status = 'empty'
