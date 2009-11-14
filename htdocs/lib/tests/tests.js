@@ -196,7 +196,7 @@ Test.prototype =
 		if (conf)
 			test.conf = conf
 		
-		this.view.nodes.output.appendChild(test.view.nodes.main)
+		this.view.node(test.view.nodes.main)
 		this.cascade.add(test.cascade)
 		test.run()
 		
@@ -353,6 +353,12 @@ Test.View.prototype =
 		else
 			main.className += ' ' + s
 		this.lastStatus = s
+	},
+	
+	node: function (node)
+	{
+		var row = this.nodes.output.appendChild(N('li', 'line'))
+		row.appendChild(node)
 	},
 	
 	line: function (cn, m, desc)
