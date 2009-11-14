@@ -13,6 +13,37 @@
 <script type="text/javascript">
 Tests.test(function (job)
 {
+	job.test('cascade', function (t)
+	{
+		t.test('nested 1', function (t)
+		{
+			t.test('nested 1.1', function (t)
+			{
+				t.ok(true, 'description')
+				t.async(function () { t.done() }, 1000)
+				t.wait(5000)
+			})
+			t.test('nested 1.2', function (t)
+			{
+				t.ok(true, 'description')
+			})
+		})
+		
+		t.test('nested 2', function (t)
+		{
+			t.test('nested 2.1', function (t)
+			{
+				t.ok(true, 'description')
+				t.test('nested 2.1.1', function (t)
+				{
+					t.ok(true, 'description')
+				})
+			})
+		})
+		
+	})
+	
+	
 	job.test('exception', {failing: true}, function (test)
 	{
 		a + 1
@@ -66,35 +97,6 @@ Tests.test(function (job)
 		}
 		setTimeout(job, 10)
 		test.wait(1000)
-	})
-	
-	
-	job.test('cascade', function (t)
-	{
-		t.test('nested 1', function (t)
-		{
-			t.test('nested 1.1', function (t)
-			{
-				t.ok(true, 'description')
-			})
-			t.test('nested 1.2', function (t)
-			{
-				t.ok(true, 'description')
-			})
-		})
-		
-		t.test('nested 2', function (t)
-		{
-			t.test('nested 2.1', function (t)
-			{
-				t.ok(true, 'description')
-				t.test('nested 2.1.1', function (t)
-				{
-					t.ok(true, 'description')
-				})
-			})
-		})
-		
 	})
 	
 	
