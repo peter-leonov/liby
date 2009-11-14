@@ -105,7 +105,8 @@ Test.prototype =
 	run: function (delay)
 	{
 		var me = this
-		this.cascade.add(function () { me._run(me.callback) }, delay)
+		this.cascade.job = function () { me._run(me.callback) }
+		this.cascade.run(delay)
 	},
 	
 	_run: function (f)
