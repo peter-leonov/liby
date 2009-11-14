@@ -35,6 +35,72 @@ Tests.job(function (job)
 		}
 		t.wait(1000)
 	})
+	
+	job.test('cascade', function (t)
+	{
+		var order = []
+		
+		var c = new Cascade(function (c)
+		{
+			order.push(0)
+			
+			c.add(function (c)
+			{
+				order.push(0.1)
+				c.add(function (c) { order.push(1) })
+				c.add(function (c) { order.push(2) })
+			})
+			
+			c.add(function (c)
+			{
+				order.push(0.2)
+				c.add(function (c) { order.push(3) })
+				c.add(function (c) { order.push(4) })
+				c.add(function (c) { order.push(5) })
+			})
+		})
+		
+		c.oncomplete = function ()
+		{
+			t.eqo(order, [0, 0.1, 0.2, 1, 2, 3, 4, 5])
+			t.done()
+		}
+		t.wait(1000)
+	})
+	
+	job.test('stop', function (t)
+	{
+		var order = []
+		
+		var c = new Cascade(function (c)
+		{
+			order.push(0)
+			
+			c.add(function (c)
+			{
+				order.push(0.1)
+				c.add(function (c) { order.push(1) })
+				c.add(function (c) { order.push(2); c.add(function (c) { order.push(2.2) }) })
+				c.stop()
+				c.add(function (c) { order.push(2.1) })
+			})
+			
+			c.add(function (c)
+			{
+				order.push(0.2)
+				c.add(function (c) { order.push(3) })
+				c.add(function (c) { order.push(4) })
+				c.add(function (c) { order.push(5) })
+			})
+		})
+		
+		c.oncomplete = function ()
+		{
+			t.eqo(order, [0, 0.1, 0.2, 2.1, 3, 4, 5])
+			t.done()
+		}
+		t.wait(1000)
+	})
 })
 </script>
 </body>
