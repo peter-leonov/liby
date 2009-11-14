@@ -31,12 +31,12 @@ var myName = 'Tests', Me = self[myName] =
 	
 	run: function ()
 	{
-		var test = this.mainTest = new this.Test().initialize(this, this.nodes.main, 'main', this.callback)
+		var test = this.mainTest = new this.Test().initialize(this, 'main', this.callback)
+		this.nodes.main.appendChild(test.view.nodes.main)
 		test.run()
 	},
 	
-	total: 0,
-	finished: function ()
+	sigchild: function ()
 	{
 		log('all done')
 	},
@@ -80,7 +80,7 @@ Test.prototype =
 	status: 'new',
 	finished: false,
 	
-	initialize: function (parent, node, name, callback)
+	initialize: function (parent, name, callback)
 	{
 		this.conf = {}
 		this.results = []
@@ -90,11 +90,10 @@ Test.prototype =
 		this.name = name
 		this.callback = callback
 		
-		this.view = new Test.View().initialize(this, node)
-		this.view.title(this.name)
+		this.view = new Test.View().initialize(this.name)
 		
 		var c = this.cascade = new Cascade()
-		c.parent = this
+		// c.parent = this
 		var me = this
 		c.oncomplete = function () { me.done() }
 		c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
@@ -116,7 +115,7 @@ Test.prototype =
 		}
 		catch (ex)
 		{
-			this.fail(ex.message, 'got an exception')
+			this.fail([ex.message, ex.fileName, ex.lineNumber], 'got an exception')
 		}
 	},
 	
@@ -161,14 +160,18 @@ Test.prototype =
 		
 		this.setStatus(status)
 		this.finished = true
-		this.parent.finished(this)
+		this.parent.sigchild(this)
 	},
 	
-	expect: function (amount)
+	sigchild: function (test)
 	{
-		this.conf.expect = amount
+		log(test.name, test)
+		var status = test.status
+		if (status === 'failed')
+			this.fail()
+		else if (status === 'passed')
+			this.pass()
 	},
-	
 	
 	test: function (name, conf, callback)
 	{
@@ -177,20 +180,30 @@ Test.prototype =
 			callback = conf
 			conf = undefined
 		}
+		else if (arguments.length == 1)
+		{
+			callback = name
+			conf = undefined
+			name = '(untitled)'
+		}
 		
 		if (typeof callback !== 'function')
 			throw new Error('callback is not present')
 		
-		var node = this.view.main.appendChild(N('li', 'test'))
-		
-		var test = new Test().initialize(this, node, name, callback)
+		var test = new Test()
+		test.initialize(this, name, callback)
 		if (conf)
 			test.conf = conf
+		
+		this.view.nodes.output.appendChild(test.view.nodes.main)
+		this.cascade.add(test.cascade)
+		test.run()
 		
 		return test
 	},
 	
 	
+	expect: function (amount) { this.conf.expect = amount },
 	
 	log: function (m) { this.view.log(m) },
 	info: function (m) { this.view.info(m) },
@@ -198,13 +211,15 @@ Test.prototype =
 	pass: function (m, d)
 	{
 		this.results.push({status: 'pass', message: m, description: d})
-		this.view.pass(m, d)
+		if (m || d)
+			this.view.pass(m, d)
 	},
 	
 	fail: function (m, d)
 	{
 		this.results.push({status: 'fail', message: m, description: d})
-		this.view.fail(m, d)
+		if (m || d)
+			this.view.fail(m, d)
 	},
 	
 	setStatus: function (s)
@@ -317,22 +332,21 @@ Test.prototype =
 Test.View = function () {}
 Test.View.prototype =
 {
-	initialize: function (parent, main)
+	initialize: function (name)
 	{
-		this.parent = parent
-		this.main = main
-		this.output = main.appendChild(N('dl'))
+		var nodes = this.nodes = {}
+		
+		nodes.main = N('dl', 'test')
+		nodes.head = nodes.main.appendChild(N('dt', 'head', name))
+		nodes.body = nodes.main.appendChild(N('dt', 'body'))
+		nodes.output = nodes.body.appendChild(N('ol'))
+		
 		return this
-	},
-	
-	title: function (name)
-	{
-		this.output.appendChild(N('dt', 'title', name))
 	},
 	
 	setStatus: function (s)
 	{
-		var main = this.main
+		var main = this.nodes.main
 		if (this.lastStatus)
 			main.className = main.className.replace(' ' + this.lastStatus, ' ' + s)
 		else
@@ -342,7 +356,7 @@ Test.View.prototype =
 	
 	line: function (cn, m, desc)
 	{
-		var row = this.output.appendChild(N('dd', 'line ' + cn))
+		var row = this.nodes.output.appendChild(N('li', 'line ' + cn))
 		
 		if (desc !== undefined)
 			row.appendChild(T(desc + ': '))
@@ -353,7 +367,7 @@ Test.View.prototype =
 			{
 				var elem = m[i]
 				// if (elem)
-				row.appendChild(T(elem))
+				row.appendChild(T(elem + ' '))
 			}
 		}
 		else

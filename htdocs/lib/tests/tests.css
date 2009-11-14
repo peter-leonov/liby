@@ -25,16 +25,17 @@ body{font: 12px Arial,sans-serif;}
 	width: 100%;
 }
 
-#tests-output .head { min-height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
+#tests-output > .test > .head { min-height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
 #tests-output.done { z-index: 65535; }
-#tests-output.failed .head { background-color: #d40; }
-#tests-output.passed .head { background-color: #082; }
+
+#tests-output > .test.failed > .head { background-color: #d40; }
+#tests-output > .test.passed > .head { background-color: #082; }
 
 
 #tests-output .body
 {
 	line-height: 1.6em;
-	padding: 20px 15px 5px 40px;
+	padding: 0 0 0 12px;
 	background: #fff;
 	color: #aaa;
 }
