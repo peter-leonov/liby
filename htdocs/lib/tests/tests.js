@@ -141,6 +141,9 @@ Test.prototype =
 	
 	done: function ()
 	{
+		if (this.finished)
+			return
+		
 		this.cascade.stop()
 		
 		var results = this.results, expect = this.conf.expect,
