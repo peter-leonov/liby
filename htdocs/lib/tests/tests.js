@@ -31,7 +31,8 @@ var myName = 'Tests', Me = self[myName] =
 	
 	run: function ()
 	{
-		var test = this.mainTest = new this.Test().initialize(this, 'main', this.callback)
+		var title = doc.getElementsByTagName('title')[0]
+		var test = this.mainTest = new this.Test().initialize(this, title ? title.firstChild.nodeValue : 'main', null, this.callback)
 		this.nodes.main.appendChild(test.view.nodes.main)
 		test.run()
 	},
