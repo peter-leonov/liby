@@ -1,89 +1,126 @@
 ;(function () {
 
-var myName = 'Cascade', Me = self[myName] = function () {}
+var myName = 'Cascade', Me = self[myName] = function (job, delay)
+{
+	this.timers = {}
+	this.data = {}
+	this.children = []
+	
+	if (job)
+	{
+		this.job = job
+		this.run(delay)
+	}
+}
 Me.prototype =
 {
-	oncomplete: function () {},
-	onerror: function () {},
-	current: 0,
 	completed: false,
-	aborted: false,
 	
-	initialize: function ()
+	onerror: function (ex)
 	{
-		this.timers = {}
-		return this
-	},
-	
-	add: function (f, d)
-	{
-		if (this.completed)
-			throw new Error('add after completed')
-		
-		var num = this.current++
-		
-		var me = this
-		function caller ()
-		{
-			try
-			{
-				f(me, num)
-			}
-			catch (ex)
-			{
-				me.onerror(ex, num)
-			}
-			if (!me.aborted)
-				me.finished(num)
-		}
-		
-		if (d !== -1)
-			var timer = setTimeout(caller, d || 0)
+		if (this.parent)
+			this.parent.onerror(ex)
 		else
-			timer = -1
-		
-		this.timers[num] = timer
-		
-		return num
+			throw ex
 	},
 	
-	finished: function (num)
+	oncomplete: function ()
 	{
-		if (this.completed)
-			throw new Error('finished() after completed')
+		if (this.parent)
+			this.parent.finished(this)
+	},
+	
+	run: function (delay)
+	{
+		if (delay === undefined)
+			delay = 0
 		
-		var timers = this.timers
-		clearTimeout(timers[num])
-		delete timers[num]
-		
-		var count = 0
-		for (var k in timers)
-			count++
-		
-		if (count == 0)
+		if (delay >= 0)
 		{
 			var me = this
-			this.completed = true
-			this.comleteTimer = setTimeout(function () { me.oncomplete() }, 0)
+			this.timer('job', function () { me._run() }, delay)
 		}
 	},
 	
-	abort: function ()
+	_run: function ()
+	{
+		try
+		{
+			this.job.call(this.data, this)
+		}
+		catch (ex)
+		{
+			this.onerror(ex)
+		}
+		
+		this.finished()
+	},
+	
+	add: function (job, delay)
+	{
+		var children = this.children
+		
+		if (typeof job === 'function')
+			job = new Me(job, delay)
+		else
+			if (children.indexOf(job) >= 0)
+				return -1
+		
+		job.parent = this
+		return children.push(job)
+	},
+	
+	finished: function ()
 	{
 		if (this.completed)
 			return
 		
-		if (this.comleteTimer)
-			clearTimeout(this.comleteTimer)
+		var children = this.children, count = 0
+		for (var i = 0; i < children.length; i++)
+			if (!children[i].completed)
+				count++
 		
+		if (count == 0)
+		{
+			this.completed = true
+			var me = this
+			this.timer('completed', function () { me.oncomplete() }, 0)
+		}
+	},
+	
+	stop: function ()
+	{
+		if (!this.completed)
+		{
+			this.timersClear()
+			
+			var children = this.children, count = 0
+			for (var i = 0; i < children.length; i++)
+				children[i].stop()
+			
+			this.finished()
+		}
+		
+		return this.completed
+	},
+	
+	timer: function (name, func, delay)
+	{
+		var timers = this.timers
+		if (timers[name])
+			clearTimeout(timers[name])
+		
+		return timers[name] = setTimeout(func, delay)
+	},
+	
+	timersClear: function ()
+	{
 		var timers = this.timers
 		for (var k in timers)
 		{
 			clearTimeout(timers[k])
 			delete timers[k]
 		}
-		
-		this.aborted = true
 	}
 }
 
