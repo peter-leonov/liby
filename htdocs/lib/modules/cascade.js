@@ -12,6 +12,7 @@ var myName = 'Cascade', Me = self[myName] = function (job, delay)
 		this.run(delay)
 	}
 }
+Me.running = 0
 Me.prototype =
 {
 	completed: false,
@@ -32,6 +33,8 @@ Me.prototype =
 	
 	run: function (delay)
 	{
+		Me.running++
+		
 		if (delay === undefined)
 			delay = 0
 		
@@ -86,6 +89,7 @@ Me.prototype =
 		if (count == 0)
 		{
 			this.completed = true
+			Me.running--
 			var me = this
 			this.timer('completed', function () { me.oncomplete() }, 0)
 		}
