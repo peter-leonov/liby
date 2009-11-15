@@ -20,8 +20,8 @@ Tests.test(function (job)
 			t.test('nested 1.1', function (t)
 			{
 				t.ok(true, 'description')
-				t.async(function () { t.done() }, 1000)
-				t.wait(5000)
+				t.async(function () { t.done() }, 500)
+				t.wait(1000)
 			})
 			t.test('nested 1.2', function (t)
 			{
