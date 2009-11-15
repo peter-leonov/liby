@@ -27,7 +27,7 @@ Tests.test(function (t)
 	var count = 10000
 	
 	
-	t.test('simple', function (test)
+	t.test('simple', function (t)
 	{
 		var code = ('1').repeat(count).join(';')
 		t.time('1+1+…+1')
@@ -36,7 +36,7 @@ Tests.test(function (t)
 		
 	})
 	
-	t.test('functions', function (test)
+	t.test('functions', function (t)
 	{
 		var code = ('function yyy () { }').repeat(count).join('\n')
 		t.time('empty functions')
@@ -59,7 +59,7 @@ Tests.test(function (t)
 		t.timeEnd('medium in function')
 	})
 	
-	t.test('comments', function (test)
+	t.test('comments', function (t)
 	{
 		var code = ('// var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
 		t.time('// comment')
