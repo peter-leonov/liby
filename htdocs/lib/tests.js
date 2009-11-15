@@ -124,7 +124,7 @@ Test.prototype =
 		
 		var ok = true
 		for (var i = 0; i < results.length; i++)
-			if (results[i].status == 'fail')
+			if (results[i].status == 'failed')
 				ok = false
 		
 		if (this.conf.failing)
