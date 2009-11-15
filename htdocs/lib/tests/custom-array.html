@@ -2,86 +2,88 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Custom array class tests</title>
 </head>
 <body>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
 	function SuperArray () {}
 	SuperArray.prototype = new Array()
 	
-	job.test('push', function (test)
+	t.test('push', function (t)
 	{
-		test.time('super.push')
+		t.time('super.push')
 		var arr = new SuperArray()
 		for (var i = 0; i < 100000; i++)
 			arr.push(i)
-		test.timeEnd('super.push')
+		t.timeEnd('super.push')
 		
-		test.time('simple.push')
+		t.time('simple.push')
 		var arr = new Array()
 		for (var i = 0; i < 100000; i++)
 			arr.push(i)
-		test.timeEnd('simple.push')
+		t.timeEnd('simple.push')
 		
-		test.time('native.push')
+		t.time('native.push')
 		var arr = []
 		for (var i = 0; i < 100000; i++)
 			arr.push(i)
-		test.timeEnd('native.push')
+		t.timeEnd('native.push')
 	})
 	
-	job.test('access', function (test)
+	t.test('access', function (t)
 	{
-		test.time('super[]')
+		t.time('super[]')
 		var arr = new SuperArray()
 		for (var i = 0; i < 100000; i++)
 			arr[i] = i
-		test.timeEnd('super[]')
+		t.timeEnd('super[]')
 		
-		test.time('simple[]')
+		t.time('simple[]')
 		var arr = new Array()
 		for (var i = 0; i < 100000; i++)
 			arr[i] = i
-		test.timeEnd('simple[]')
+		t.timeEnd('simple[]')
 		
-		test.time('native[]')
+		t.time('native[]')
 		var arr = []
 		for (var i = 0; i < 100000; i++)
 			arr[i] = i
-		test.timeEnd('native[]')
+		t.timeEnd('native[]')
 	})
 	
-	job.test('sort', function (test)
+	t.test('sort', function (t)
 	{
-		test.expect(3)
+		t.expect(3)
 		var arr = new SuperArray()
 		for (var i = 100000; i > 100; i--)
 			arr[i] = -i
-		test.time('super.sort')
+		t.time('super.sort')
 		arr.sort()
-		test.timeEnd('super.sort')
-		test.ne(arr[0], -1000, 'super.sort does not sort')
+		t.timeEnd('super.sort')
+		t.ne(arr[0], -1000, 'super.sort does not sort')
 		
 		var arr = new Array()
 		for (var i = 100000; i > 100; i--)
 			arr[i] = -i
-		test.time('simple.sort')
+		t.time('simple.sort')
 		arr.sort()
-		test.timeEnd('simple.sort')
-		test.eq(arr[0], -1000, 'simple.sort')
+		t.timeEnd('simple.sort')
+		t.eq(arr[0], -1000, 'simple.sort')
 		
 		var arr = []
 		for (var i = 100000; i > 100; i--)
 			arr[i] = -i
-		test.time('native.sort')
+		t.time('native.sort')
 		arr.sort()
-		test.timeEnd('native.sort')
-		test.eq(arr[0], -1000, 'native.sort')
+		t.timeEnd('native.sort')
+		t.eq(arr[0], -1000, 'native.sort')
 	})
 	
 })

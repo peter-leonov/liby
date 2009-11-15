@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Event classes tests</title>
 </head>
@@ -15,57 +16,58 @@
 <script type="text/javascript" src="../programica/class.js"></script>
 <script type="text/javascript" src="../modules/event-target.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
-	job.test('deleted preventDefault()', function (test)
+	t.test('deleted preventDefault()', function (t)
 	{
-		test.eq(typeof document.createEvent, 'function', 'document.createEvent is a function')
-		test.eq(typeof UIEvent.prototype.preventDefault, 'function')
+		t.eq(typeof document.createEvent, 'function', 'document.createEvent is a function')
+		t.eq(typeof UIEvent.prototype.preventDefault, 'function')
 		delete UIEvent.prototype.preventDefault
-		test.eq(document.createEvent('Event').preventDefault, undefined, 'preventDefault must be undefined')
+		t.eq(document.createEvent('Event').preventDefault, undefined, 'preventDefault must be undefined')
 	})
 	
-	job.test('event base classes', function (test)
+	t.test('event base classes', function (t)
 	{
-		test.ne(self.EventTarget, undefined, 'EventTarget defined')
-		test.ne(self.EventException, undefined, 'EventException defined')
-		test.ne(self.Event, undefined, 'Event defined')
-		test.ne(self.DocumentEvent, undefined, 'DocumentEvent defined')
-		test.ne(self.UIEvent, undefined, 'UIEvent defined')
-		test.ne(self.MouseEvent, undefined, 'MouseEvent defined')
-		test.ne(self.KeyboardEvent, undefined, 'KeyboardEvent defined')
-		test.ne(self.MutationEvent, undefined, 'MutationEvent defined')
+		t.ne(self.EventTarget, undefined, 'EventTarget defined')
+		t.ne(self.EventException, undefined, 'EventException defined')
+		t.ne(self.Event, undefined, 'Event defined')
+		t.ne(self.DocumentEvent, undefined, 'DocumentEvent defined')
+		t.ne(self.UIEvent, undefined, 'UIEvent defined')
+		t.ne(self.MouseEvent, undefined, 'MouseEvent defined')
+		t.ne(self.KeyboardEvent, undefined, 'KeyboardEvent defined')
+		t.ne(self.MutationEvent, undefined, 'MutationEvent defined')
 	})
 	
-	job.test('constructor', function (test)
+	t.test('constructor', function (t)
 	{
-		test.eq(document.createEvent('Event').constructor, self.Event, 'Event.constructor')
-		test.eq(document.createEvent('UIEvent').constructor, self.UIEvent, 'UIEvent.constructor')
-		test.eq(document.createEvent('MouseEvent').constructor, self.MouseEvent, 'MouseEvent.constructor')
-		test.eq(document.createEvent('KeyboardEvent').constructor, self.KeyboardEvent, 'KeyboardEvent.constructor')
-		test.eq(document.createEvent('MutationEvent').constructor, self.MutationEvent, 'MutationEvent.constructor')
+		t.eq(document.createEvent('Event').constructor, self.Event, 'Event.constructor')
+		t.eq(document.createEvent('UIEvent').constructor, self.UIEvent, 'UIEvent.constructor')
+		t.eq(document.createEvent('MouseEvent').constructor, self.MouseEvent, 'MouseEvent.constructor')
+		t.eq(document.createEvent('KeyboardEvent').constructor, self.KeyboardEvent, 'KeyboardEvent.constructor')
+		t.eq(document.createEvent('MutationEvent').constructor, self.MutationEvent, 'MutationEvent.constructor')
 	})
 	
-	job.test('Event.property', function (test)
+	t.test('Event.property', function (t)
 	{
 		Event.prototype.customProperty = 'works!'
-		test.eq(document.createEvent('Event').customProperty, 'works!', 'Event.customProperty')
-		test.eq(document.createEvent('UIEvent').customProperty, 'works!', 'UIEvent.customProperty')
-		test.eq(document.createEvent('MouseEvent').customProperty, 'works!', 'MouseEvent.customProperty')
-		test.eq(document.createEvent('KeyboardEvent').customProperty, 'works!', 'KeyboardEvent.customProperty')
-		test.eq(document.createEvent('MutationEvent').customProperty, 'works!', 'MutationEvent.customProperty')
+		t.eq(document.createEvent('Event').customProperty, 'works!', 'Event.customProperty')
+		t.eq(document.createEvent('UIEvent').customProperty, 'works!', 'UIEvent.customProperty')
+		t.eq(document.createEvent('MouseEvent').customProperty, 'works!', 'MouseEvent.customProperty')
+		t.eq(document.createEvent('KeyboardEvent').customProperty, 'works!', 'KeyboardEvent.customProperty')
+		t.eq(document.createEvent('MutationEvent').customProperty, 'works!', 'MutationEvent.customProperty')
 	})
 	
-	job.test('custom preventDefault()', function (test)
+	t.test('custom preventDefault()', function (t)
 	{
 		Event.prototype.preventDefault = function () { return 'works!' }
-		test.eq(document.createEvent('Event').preventDefault(), 'works!', 'Event.preventDefault()')
-		test.eq(document.createEvent('UIEvent').preventDefault(), 'works!', 'UIEvent.preventDefault()')
-		test.eq(document.createEvent('MouseEvent').preventDefault(), 'works!', 'MouseEvent.preventDefault()')
-		test.eq(document.createEvent('KeyboardEvent').preventDefault(), 'works!', 'KeyboardEvent.preventDefault()')
-		test.eq(document.createEvent('MutationEvent').preventDefault(), 'works!', 'MutationEvent.preventDefault()')
+		t.eq(document.createEvent('Event').preventDefault(), 'works!', 'Event.preventDefault()')
+		t.eq(document.createEvent('UIEvent').preventDefault(), 'works!', 'UIEvent.preventDefault()')
+		t.eq(document.createEvent('MouseEvent').preventDefault(), 'works!', 'MouseEvent.preventDefault()')
+		t.eq(document.createEvent('KeyboardEvent').preventDefault(), 'works!', 'KeyboardEvent.preventDefault()')
+		t.eq(document.createEvent('MutationEvent').preventDefault(), 'works!', 'MutationEvent.preventDefault()')
 	})
 })
 </script>

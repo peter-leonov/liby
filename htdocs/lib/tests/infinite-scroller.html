@@ -39,8 +39,6 @@
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
 <script type="text/javascript" src="../programica/class.js"></script>
 <script type="text/javascript" src="../modules/event-target.js"></script>
@@ -49,11 +47,12 @@
 <script type="text/javascript" src="../modules/moveable.js"></script>
 <script type="text/javascript" src="../widgets/infinite-scroller.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
-	job.test('untitled', function (t)
+	t.test('untitled', function (t)
 	{
 		var node = document.getElementById('test-node-1')
 		

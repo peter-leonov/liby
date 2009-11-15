@@ -1,22 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>Event classes tests</title>
+	<title>Private class variables tests</title>
 </head>
 <body>
 
-<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(7)
-	
+Tests.test(function (t)
+{
 	// first, the A
 	function A ()
 	{
@@ -35,8 +32,8 @@
 	a2.setPriv('from a2')
 	
 	// getting: all works well
-	tests.eq(a1.getPriv(), 'from a1', 'direct var 1')
-	tests.eq(a2.getPriv(), 'from a2', 'direct var 2')
+	t.eq(a1.getPriv(), 'from a1', 'direct var 1')
+	t.eq(a2.getPriv(), 'from a2', 'direct var 2')
 	
 	
 	// then a subclass had been exists
@@ -52,8 +49,8 @@
 	b2.setPriv('from b2')
 	
 	// getting: error b1 and b2 shares the same private variable priv from the B.prototype
-	tests.eq(b1.getPriv(), 'from b2', 'subclass var 1 = var 2')
-	tests.eq(b2.getPriv(), 'from b2', 'subclass var 2')
+	t.eq(b1.getPriv(), 'from b2', 'subclass var 1 = var 2')
+	t.eq(b2.getPriv(), 'from b2', 'subclass var 2')
 	
 	
 	// all work will be perform in constructor,
@@ -87,60 +84,58 @@
 		method8: function () { this.variable1 += 8 }
 	}
 	
-	var count = tests.speed(function () { new C(); new D() }) / 5
+	var count = t.speed(function () { new C(); new D() }) / 5
 	
-	tests.time('C')
+	t.time('C')
 	for (var i = 0; i < count; i++)
 		var c = new C()
-	var ctime = tests.timeEnd('C')
+	var ctime = t.timeEnd('C')
 	
-	tests.time('D')
+	t.time('D')
 	for (var i = 0; i < count; i++)
 		var d = new D()
-	var dtime = tests.timeEnd('D')
+	var dtime = t.timeEnd('D')
 	
-	tests.ok(ctime > dtime * 5, 'new C >> new D')
+	t.ok(ctime > dtime * 5, 'new C >> new D')
 	
 	
 	
-	var count = tests.speed(function () { c.method8(); d.method8() }) / 5
+	var count = t.speed(function () { c.method8(); d.method8() }) / 5
 	
 	var c = new C()
-	tests.time('C')
+	t.time('C')
 	for (var i = 0; i < count; i++)
 		c.method8()
-	var ctime = tests.timeEnd('C')
+	var ctime = t.timeEnd('C')
 	
 	var d = new D()
-	tests.time('D')
+	t.time('D')
 	for (var i = 0; i < count; i++)
 		d.method8()
-	var dtime = tests.timeEnd('D')
+	var dtime = t.timeEnd('D')
 	
 	// semi-equal or much different
-	tests.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() ~= || >> D#method8()')
+	t.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() ~= || >> D#method8()')
 	
 	
 	
-	var count = tests.speed(function () { d.variable1++ }) / 5
+	var count = t.speed(function () { d.variable1++ }) / 5
 	
 	var c = new C()
-	tests.time('C')
+	t.time('C')
 	for (var i = 0; i < count; i++)
 		c.method8()
-	var ctime = tests.timeEnd('C')
+	var ctime = t.timeEnd('C')
 	
 	var d = new D()
-	tests.time('D')
+	t.time('D')
 	for (var i = 0; i < count; i++)
 		d.variable1 += 8
-	var dtime = tests.timeEnd('D')
+	var dtime = t.timeEnd('D')
 	
 	// semi-equal or much different
-	tests.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() >> D#variable1')
-	
-	tests.done()
-	}, false)
+	t.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() >> D#variable1')
+})
 </script>
 </body>
 </html>

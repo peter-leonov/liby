@@ -8,105 +8,106 @@
 </head>
 <body>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
-	job.test('constructors', function (test)
+	t.test('constructors', function (t)
 	{
-		test.eq((false).constructor, Boolean, 'Boolean')
-		test.eq((true).constructor, Boolean, 'Boolean')
+		t.eq((false).constructor, Boolean, 'Boolean')
+		t.eq((true).constructor, Boolean, 'Boolean')
 		
-		test.eq((1).constructor, Number, 'Number')
-		test.eq((1.0).constructor, Number, 'Number')
-		test.eq((1e-10).constructor, Number, 'Number')
+		t.eq((1).constructor, Number, 'Number')
+		t.eq((1.0).constructor, Number, 'Number')
+		t.eq((1e-10).constructor, Number, 'Number')
 		
-		test.eq(('').constructor, String, 'String')
+		t.eq(('').constructor, String, 'String')
 		
-		test.eq((function () {}).constructor, Function, 'Function')
+		t.eq((function () {}).constructor, Function, 'Function')
 		
-		test.eq(([]).constructor, Array, 'Array')
-		test.eq((new Array()).constructor, Array, 'Array')
+		t.eq(([]).constructor, Array, 'Array')
+		t.eq((new Array()).constructor, Array, 'Array')
 		
-		test.eq(({}).constructor, Object, 'Object')
-		test.eq((new Object()).constructor, Object, 'Object')
+		t.eq(({}).constructor, Object, 'Object')
+		t.eq((new Object()).constructor, Object, 'Object')
 		
-		test.eq((new Date()).constructor, Date, 'Date')
+		t.eq((new Date()).constructor, Date, 'Date')
 		
-		test.eq((/abc/).constructor, RegExp, 'RegExp')
-		test.eq((new RegExp()).constructor, RegExp, 'RegExp')
+		t.eq((/abc/).constructor, RegExp, 'RegExp')
+		t.eq((new RegExp()).constructor, RegExp, 'RegExp')
 	})
 	
-	job.test('falses', function (test)
+	t.test('falses', function (t)
 	{
 		try
 		{
 			(null).constructor
-			test.fail('null has a constructor')
+			t.fail('null has a constructor')
 		}
-		catch (ex) { test.pass(['null', ex.message]) }
+		catch (ex) { t.pass(['null', ex.message]) }
 		
 		try
 		{
 			(undefined).constructor
-			test.fail('undefined has a constructor')
+			t.fail('undefined has a constructor')
 		}
-		catch (ex) { test.pass(['undefined', ex.message]) }
+		catch (ex) { t.pass(['undefined', ex.message]) }
 	})
 	
 	
-	job.test('prototypes', function (test)
+	t.test('prototypes', function (t)
 	{
 		Boolean.prototype.xxx1 = 123
-		test.eq((false).xxx1, 123, 'Boolean')
-		test.eq((true).xxx1, 123, 'Boolean')
+		t.eq((false).xxx1, 123, 'Boolean')
+		t.eq((true).xxx1, 123, 'Boolean')
 		delete Boolean.prototype.xxx1
-		test.eq((false).xxx1, undefined, 'Boolean deleted')
-		test.eq((true).xxx1, undefined, 'Boolean deleted')
+		t.eq((false).xxx1, undefined, 'Boolean deleted')
+		t.eq((true).xxx1, undefined, 'Boolean deleted')
 		
 		
 		Number.prototype.xxx2 = 123
-		test.eq((1).xxx2, 123, 'Number')
-		test.eq((1.0).xxx2, 123, 'Number')
-		test.eq((1e-10).xxx2, 123, 'Number')
+		t.eq((1).xxx2, 123, 'Number')
+		t.eq((1.0).xxx2, 123, 'Number')
+		t.eq((1e-10).xxx2, 123, 'Number')
 		delete Number.prototype.xxx2
-		test.eq((1).xxx2, undefined, 'Number')
-		test.eq((1.0).xxx2, undefined, 'Number')
-		test.eq((1e-10).xxx2, undefined, 'Number')
+		t.eq((1).xxx2, undefined, 'Number')
+		t.eq((1.0).xxx2, undefined, 'Number')
+		t.eq((1e-10).xxx2, undefined, 'Number')
 		
 		String.prototype.xxx3 = 123
-		test.eq(('').xxx3, 123, 'String')
+		t.eq(('').xxx3, 123, 'String')
 		delete String.prototype.xxx3
-		test.eq(('').xxx3, undefined, 'String')
+		t.eq(('').xxx3, undefined, 'String')
 		
 		Function.prototype.xxx4 = 123
-		test.eq((function () {}).xxx4, 123, 'Function')
+		t.eq((function () {}).xxx4, 123, 'Function')
 		delete Function.prototype.xxx4
-		test.no('xxx4' in (function () {}), 'Function')
+		t.no('xxx4' in (function () {}), 'Function')
 		
 		Array.prototype.xxx5 = 123
-		test.eq(([]).xxx5, 123, 'Array')
-		test.eq((new Array()).xxx5, 123, 'Array')
+		t.eq(([]).xxx5, 123, 'Array')
+		t.eq((new Array()).xxx5, 123, 'Array')
 		delete Array.prototype.xxx5
-		test.no('xxx5' in ([]), 'Array')
-		test.no('xxx5' in (new Array()), 'Array')
+		t.no('xxx5' in ([]), 'Array')
+		t.no('xxx5' in (new Array()), 'Array')
 		
 		Object.prototype.xxx6 = 123
-		test.eq(({}).xxx6, 123, 'Object')
+		t.eq(({}).xxx6, 123, 'Object')
 		delete Object.prototype.xxx6
-		test.no('xxx6' in ({}), 'Object')
+		t.no('xxx6' in ({}), 'Object')
 		
 		Date.prototype.xxx7 = 123
-		test.eq((new Date()).xxx7, 123, 'Date')
+		t.eq((new Date()).xxx7, 123, 'Date')
 		delete Date.prototype.xxx7
-		test.eq((new Date()).xxx7, undefined, 'Date')
+		t.eq((new Date()).xxx7, undefined, 'Date')
 		
 		RegExp.prototype.xxx8 = 123
-		test.eq((/abc/).xxx8, 123, 'RegExp')
-		test.eq((new RegExp()).xxx8, 123, 'RegExp')
+		t.eq((/abc/).xxx8, 123, 'RegExp')
+		t.eq((new RegExp()).xxx8, 123, 'RegExp')
 		delete RegExp.prototype.xxx8
-		test.no('xxx8' in (/abc/), 'RegExp')
-		test.no('xxx8' in (new RegExp()), 'RegExp')
+		t.no('xxx8' in (/abc/), 'RegExp')
+		t.no('xxx8' in (new RegExp()), 'RegExp')
 	})
 })
 </script>

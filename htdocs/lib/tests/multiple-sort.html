@@ -1,22 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>Event classes tests</title>
+	<title>Multiple sort tests</title>
 </head>
 <body>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(11)
-	
+Tests.test(function (t)
+{
 	var messed =
 	[
 		{x: 2, y: 0, z: 0},
@@ -92,59 +91,55 @@
 	function combined (a, b) { return a.x - b.x || a.y - b.y || a.z - b.z }
 	
 	var temp = messed.slice(),
-		speed = tests.speed(function () { temp.sort(single) }),
+		speed = t.speed(function () { temp.sort(single) }),
 		count = Math.round(speed / 5)
 	
-	tests.log('runs ' + count + ' times')
+	t.log('runs ' + count + ' times')
 	
 	var m = messed.slice()
-	tests.time('multiple')
+	t.time('multiple')
 	for (var i = 0; i < count; i++)
 	{
 		m.sort(byZ)
 		m.sort(byY)
 		m.sort(byX)
 	}
-	var mtime = tests.timeEnd('multiple')
-	tests.eqo(m, sorted, 'multiple sorts as expected')
+	var mtime = t.timeEnd('multiple')
+	t.eqo(m, sorted, 'multiple sorts as expected')
 	
 	
 	
 	var s = messed.slice()
-	tests.time('single')
+	t.time('single')
 	for (var i = 0; i < count; i++)
 	{
 		s.sort(single)
 	}
-	var stime = tests.timeEnd('single')
-	tests.eqo(s, sorted, 'single sorts as expected')
+	var stime = t.timeEnd('single')
+	t.eqo(s, sorted, 'single sorts as expected')
 	
 	
 	
 	var c = messed.slice()
-	tests.time('combined')
+	t.time('combined')
 	for (var i = 0; i < count; i++)
 	{
 		c.sort(combined)
 	}
-	var ctime = tests.timeEnd('combined')
-	tests.eqo(c, sorted, 'combined sorts as expected')
+	var ctime = t.timeEnd('combined')
+	t.eqo(c, sorted, 'combined sorts as expected')
 	
 	
-	tests.eqo(s, m, 'single and multiple sorts acts the same')
-	tests.eqo(s, c, 'single and combined sorts acts the same')
-	tests.neo(m, messed, 'doublecheck: multiple is not messed')
-	tests.neo(s, messed, 'doublecheck: single is not messed')
-	tests.gt(mtime, stime, 'multiple takes more time then single')
-	tests.gt(mtime, stime, 'single takes more time then combined')
+	t.eqo(s, m, 'single and multiple sorts acts the same')
+	t.eqo(s, c, 'single and combined sorts acts the same')
+	t.neo(m, messed, 'doublecheck: multiple is not messed')
+	t.neo(s, messed, 'doublecheck: single is not messed')
+	t.gt(mtime, stime, 'multiple takes more time then single')
+	t.gt(mtime, stime, 'single takes more time then combined')
 	
-	tests.eqo(messed, backup, 'messed left untouched')
-	tests.eqo(messed, backup, 'messed not equals to sorted')
-	
-	log(messed[0])
-	
-	tests.done()
-	}, false)
+	t.eqo(messed, backup, 'messed left untouched')
+	t.eqo(messed, backup, 'messed not equals to sorted')
+})
 </script>
 </body>
 </html>

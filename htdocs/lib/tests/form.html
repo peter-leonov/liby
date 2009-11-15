@@ -64,19 +64,19 @@
 </form>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../modules/cosy.js"></script>
 <script type="text/javascript" src="../modules/form.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
 	var toHash = Programica.Form.toHash
 	
-	job.test('form 1', function (t)
+	t.test('form 1', function (t)
 	{
 		var hash = toHash($('test-from-1'))
 		t.eq(hash['unicode'], 'Юникод', 'unicode')
@@ -95,7 +95,7 @@ Tests.job(function (job)
 		t.ok(!('' in hash), 'empty-named')
 	})
 	
-	job.test('form 2', function (t)
+	t.test('form 2', function (t)
 	{
 		var hash = toHash($('test-from-2'))
 		var k = null
@@ -103,7 +103,7 @@ Tests.job(function (job)
 		t.ok(k === null, 'empty form')
 	})
 	
-	job.test('form 3', function (t)
+	t.test('form 3', function (t)
 	{
 		var hash = toHash($('test-from-3'))
 		var k = null
@@ -111,7 +111,7 @@ Tests.job(function (job)
 		t.ok(k === null, 'form with only unnamed input')
 	})
 	
-	job.test('form 4', function (t)
+	t.test('form 4', function (t)
 	{
 		var hash = toHash($('test-from-4'))
 		t.eq(hash['empty'], '', 'empty input')

@@ -18,43 +18,42 @@
 <div id="test-node-2"></div>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/init.js"></script>
-<script type="text/javascript" src="../programica/prototype.js"></script>
 <script type="text/javascript" src="../modules/motion.js"></script>
 <script type="text/javascript" src="../modules/animation.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
-	job.test('node.animate', function (test)
+	t.test('node.animate', function (t)
 	{
-		test.expect(2)
+		t.expect(2)
 		var node = document.getElementById('test-node-1')
 		var a = node.animate('easeOutQuad', {top: [100], left: [50]}, 0.25)
 		a.oncomplete = function ()
 		{
-			test.eq(node.style.top, '100px')
-			test.eq(node.style.left, '50px')
-			test.done()
+			t.eq(node.style.top, '100px')
+			t.eq(node.style.left, '50px')
+			t.done()
 		}
-		test.wait(5000)
+		t.wait(5000)
 	})
 	
-	job.test('quick', function (test)
+	t.test('quick', function (t)
 	{
-		test.expect(2)
+		t.expect(2)
 		var node = document.getElementById('test-node-2')
 		var a = node.animate('easeOutQuad', {top: [50], left: [100]}, 0.01)
 		a.oncomplete = function ()
 		{
-			test.eq(node.style.top, '50px', 'top')
-			test.eq(node.style.left, '100px', 'left')
-			test.done()
+			t.eq(node.style.top, '50px', 'top')
+			t.eq(node.style.left, '100px', 'left')
+			t.done()
 		}
-		test.wait(100)
+		t.wait(100)
 	})
 })
 </script>

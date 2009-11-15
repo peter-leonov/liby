@@ -1,23 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>Event classes tests</title>
+	<title>Spidermonkey JIT bug test</title>
 </head>
 <body>
 
-<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
-
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(1)
-	
-	
+Tests.test(function (t)
+{
 	function calculate (arr)
 	{
 		var hash = {}
@@ -46,10 +41,8 @@
 	
 	
 	// semi-equal or much different
-	tests.ok(ok, 'jit fails on float point numbers')
-	
-	tests.done()
-	}, false)
+	t.ok(ok, 'jit fails on float point numbers')
+})
 </script>
 </body>
 </html>

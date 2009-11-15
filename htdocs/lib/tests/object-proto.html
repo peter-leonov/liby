@@ -1,30 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>object.__poto__ tests</title>
 </head>
 <body>
 
-<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-	tests.plan(2)
-	
+Tests.test(function (t)
+{
 	function A () {}
 	A.prototype = {xxx:777}
 	
 	var obj = {}
-	tests.eq(obj.xxx, undefined, 'xxx is undefined')
+	t.eq(obj.xxx, undefined, 'xxx is undefined')
 	
 	obj.__proto__ = A.prototype
-	tests.eq(obj.xxx, 777, 'xxx is 777')
+	t.eq(obj.xxx, 777, 'xxx is 777')
 	
 	function bakeObjects (count)
 	{
@@ -36,12 +33,12 @@
 	
 	var hashes = bakeObjects(1)
 	
-	var count = Math.round(tests.speed(function () { new A(); for (var k in hashes[0]) obj = hashes[0][k] }) / 20)
-	tests.log(count)
+	var count = Math.round(t.speed(function () { new A(); for (var k in hashes[0]) obj = hashes[0][k] }) / 20)
+	t.log(count)
 	
 	hashes = bakeObjects(count)
 	
-	tests.time('new + for in')
+	t.time('new + for in')
 	for (var i = 0, il = hashes.length; i < il; i++)
 	{
 		var obj = new A(),
@@ -49,9 +46,9 @@
 		for (var k in hash)
 			obj[k] = hash[k]
 	}
-	tests.timeEnd('new + for in')
+	t.timeEnd('new + for in')
 	
-	tests.time('new + keys')
+	t.time('new + keys')
 	for (var i = 0, il = hashes.length; i < il; i++)
 	{
 		var obj = new A(),
@@ -63,28 +60,24 @@
 		obj.d = hash.d
 		obj.e = hash.e
 	}
-	tests.timeEnd('new + keys')
+	t.timeEnd('new + keys')
 	
-	tests.time('new + data')
+	t.time('new + data')
 	for (var i = 0, il = hashes.length; i < il; i++)
 	{
 		var obj = new A()
 		obj.data = hashes[i]
 	}
-	tests.timeEnd('new + data')
+	t.timeEnd('new + data')
 	
 	var proto = A.prototype
-	tests.time('__proto__')
+	t.time('__proto__')
 	for (var i = 0, il = hashes.length; i < il; i++)
 	{
 		hashes[i].__proto__ = proto
 	}
-	tests.timeEnd('__proto__')
-	
-	
-	
-	tests.done()
-	}, false)
+	t.timeEnd('__proto__')
+})
 </script>
 </body>
 </html>

@@ -2,14 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Eval benchmark</title>
 </head>
 <body>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
 	var small = 'if (!a) a = 321;',
 		medium = 'if(!a)a=321;while(a--){var b="abc".test(/zx(c?.*)?/i)+1+a*10+"asasas";if(a)break;else if(b)log(b);a++}'
@@ -25,49 +27,49 @@ Tests.job(function (job)
 	var count = 10000
 	
 	
-	job.test('simple', function (test)
+	t.test('simple', function (test)
 	{
 		var code = ('1').repeat(count).join(';')
-		test.time('1+1+…+1')
+		t.time('1+1+…+1')
 		eval('if (false) { ' + code + ' }')
-		test.timeEnd('1+1+…+1')
+		t.timeEnd('1+1+…+1')
 		
 	})
 	
-	job.test('functions', function (test)
+	t.test('functions', function (test)
 	{
 		var code = ('function yyy () { }').repeat(count).join('\n')
-		test.time('empty functions')
+		t.time('empty functions')
 		eval('if (false) { ' + code + ' }')
-		test.timeEnd('empty functions')
+		t.timeEnd('empty functions')
 		
 		var code = small.repeat(count).join('\n')
-		test.time('small')
+		t.time('small')
 		eval('if (false) { ' + code + ' }')
-		test.timeEnd('small')
+		t.timeEnd('small')
 		
 		var code = medium.repeat(count).join('\n')
-		test.time('medium')
+		t.time('medium')
 		eval('if (false) { ' + code + ' }')
-		test.timeEnd('medium')
+		t.timeEnd('medium')
 		
 		var code = medium.repeat(count).join('\n')
-		test.time('medium in function')
+		t.time('medium in function')
 		eval('function xxx () { ' + code + ' }')
-		test.timeEnd('medium in function')
+		t.timeEnd('medium in function')
 	})
 	
-	job.test('comments', function (test)
+	t.test('comments', function (test)
 	{
 		var code = ('// var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
-		test.time('// comment')
+		t.time('// comment')
 		eval('if (false) { \n' + code + '\n }')
-		test.timeEnd('// comment')
+		t.timeEnd('// comment')
 		
 		var code = ('var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
-		test.time('/* comment */')
+		t.time('/* comment */')
 		eval('if (false) { /*' + code + '*/ }')
-		test.timeEnd('/* comment */')
+		t.timeEnd('/* comment */')
 	})
 })
 </script>

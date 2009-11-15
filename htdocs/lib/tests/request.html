@@ -1,7 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Request tests</title>
 </head>
@@ -12,30 +13,31 @@
 <script type="text/javascript" src="../modules/url-encode.js"></script>
 <script type="text/javascript" src="../modules/request.js"></script>
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
-	job.test('sync GET', function (test)
+	t.test('sync GET', function (t)
 	{
-		test.expect(1)
+		t.expect(1)
 		function callback (e)
 		{
-			test.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
 		}
 		Request.get('?', null, callback, true)
 	})
 	
-	job.test('async GET', function (test)
+	t.test('async GET', function (t)
 	{
-		test.expect(1)
+		t.expect(1)
 		function callback (e)
 		{
-			test.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
-			test.done()
+			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+			t.done()
 		}
 		Request.get('?', null, callback)
-		test.wait(1000)
+		t.wait(1000)
 	})
 	
 })

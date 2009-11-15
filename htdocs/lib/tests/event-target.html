@@ -19,9 +19,10 @@
 <script type="text/javascript" src="../programica/class.js"></script>
 <!-- <script type="text/javascript" src="../modules/event-target.js"></script> -->
 
-<script type="text/javascript" src="tests.js"></script>
+<script type="text/javascript" src="../modules/cascade.js"></script>
+<script type="text/javascript" src="../tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
 	function run (t, kind, type, node)
 	{
@@ -122,14 +123,14 @@ Tests.job(function (job)
 	}
 	
 	
-	job.test('Event: hide on node', function (test)
+	t.test('Event: hide on node', function (t)
 	{
-		run(test, 'Event', 'hide', document.getElementById('test-node-1'))
+		run(t, 'Event', 'hide', document.getElementById('test-node-1'))
 	})
 	
-	job.test('MouseEvent: click on node', function (test)
+	t.test('MouseEvent: click on node', function (t)
 	{
-		run(test, 'MouseEvent', 'click', document.getElementById('test-node-2'))
+		run(t, 'MouseEvent', 'click', document.getElementById('test-node-2'))
 	})
 	
 	
@@ -137,14 +138,14 @@ Tests.job(function (job)
 	// T.prototype.initialize = function () { this.nodeName = 'object' }
 	// T.mixIn(EventTarget)
 	// 
-	// job.test('EventTarget: hide on EventTarget instance', function (test)
+	// t.test('EventTarget: hide on EventTarget instance', function (t)
 	// {
-	// 	run(test, 'Event', 'hide', new T())
+	// 	run(t, 'Event', 'hide', new T())
 	// })
 	// 
-	// job.test('MouseEvent: click on EventTarget instance', function (test)
+	// t.test('MouseEvent: click on EventTarget instance', function (t)
 	// {
-	// 	run(test, 'MouseEvent', 'click', new T())
+	// 	run(t, 'MouseEvent', 'click', new T())
 	// })
 })
 </script>
