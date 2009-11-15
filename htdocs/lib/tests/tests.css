@@ -25,11 +25,16 @@ body{font: 12px Arial,sans-serif;}
 	width: 100%;
 }
 
-#tests-output > .test > .head { min-height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
+#tests-output > .test > .head,
+#tests-output > .test > .summary { background-color: #888; color: #fff; }
+#tests-output > .test > .head { min-height: 26px; padding: 10px 15px 0; font-size: 1.75em; font-weight: bold; }
+#tests-output > .test > .summary { min-height: 20px; padding: 0 15px 5px; font-size: 1.3em; }
 #tests-output > .done { z-index: 65535; }
 
-#tests-output > .test.failed > .head { background-color: #d40; color: #fff; }
-#tests-output > .test.passed > .head { background-color: #082; color: #fff; }
+#tests-output > .test.failed > .head,
+#tests-output > .test.failed > .summary { background-color: #d40; color: #fff; }
+#tests-output > .test.passed > .head,
+#tests-output > .test.passed > .summary { background-color: #082; color: #fff; }
 
 
 #tests-output .body
@@ -40,8 +45,9 @@ body{font: 12px Arial,sans-serif;}
 	color: #aaa;
 }
 
-#tests-output .test .test { margin: 0 0 1.2em 0; list-style: outside decimal; }
+#tests-output .test .test { margin: 0.4em 0 0.8em; list-style: outside decimal; }
 #tests-output .test .test .head { font-size: 1.5em; color: #555; }
+#tests-output .test .test .summary { display: none; }
 #tests-output .test .test.waiting .head { color: #000; }
 #tests-output .test .test.failed .head { color: #d40; }
 #tests-output .test .test.passed .head { color: #082; }

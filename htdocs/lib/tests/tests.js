@@ -41,36 +41,6 @@ var myName = 'Tests', Me = self[myName] =
 	sigchild: function ()
 	{
 		this.oncomplete()
-	},
-	
-	summary: function ()
-	{
-		var tests = this.tests, failed = 0, ignored = 0, passed = 0
-		for (var i = 0; i < tests.length; i++)
-		{
-			var test = tests[i]
-			if (test.status == 'failed')
-			{
-				failed++
-				if (test.conf.failing)
-					ignored++
-			}
-			else if (test.status == 'passed')
-				passed++
-		}
-		
-		var nodes = this.nodes
-		var text = [passed + ' passed']
-		if (failed)
-			text.push(failed + ' failed')
-		if (ignored)
-			text.push(ignored + ' ignored')
-		if (this.total != this.tests.length)
-			text.push(this.total + ' of ' + this.tests.length + ' done')
-		
-		nodes.head.firstChild.nodeValue = text.join(', ') + '.'
-		
-		nodes.main.className += 'done' + (failed > ignored ? ' failed' : (passed ? ' passed' : ''))
 	}
 }
 
@@ -161,6 +131,7 @@ Test.prototype =
 		
 		this.setStatus(ok ? 'passed' : 'failed')
 		this.finished = true
+		this.summary()
 		this.parent.sigchild(this)
 	},
 	
@@ -199,6 +170,27 @@ Test.prototype =
 		return test
 	},
 	
+	summary: function ()
+	{
+		var results = this.results, failed = 0, passed = 0
+		for (var total = 0; total < results.length; total++)
+		{
+			var res = results[total]
+			if (res.status == 'failed')
+				failed++
+			else if (res.status == 'passed')
+				passed++
+		}
+		
+		var text = [passed + ' passed']
+		if (failed)
+			text.push(failed + ' failed')
+		
+		text.push(total + ' done')
+		
+		this.view.summary(text.join(', ') + '.')
+	},
+	
 	
 	expect: function (amount) { this.conf.expect = amount },
 	
@@ -207,14 +199,14 @@ Test.prototype =
 	
 	pass: function (m, d)
 	{
-		this.results.push({status: 'pass', message: m, description: d})
+		this.results.push({status: 'passed', message: m, description: d})
 		if (m || d)
 			this.view.pass(m, d)
 	},
 	
 	fail: function (m, d)
 	{
-		this.results.push({status: 'fail', message: m, description: d})
+		this.results.push({status: 'failed', message: m, description: d})
 		if (m || d)
 			this.view.fail(m, d)
 	},
@@ -335,6 +327,7 @@ Test.View.prototype =
 		
 		nodes.main = N('dl', 'test')
 		nodes.head = nodes.main.appendChild(N('dt', 'head', name))
+		nodes.summary = nodes.main.appendChild(N('dt', 'summary'))
 		nodes.body = nodes.main.appendChild(N('dt', 'body'))
 		nodes.output = nodes.body.appendChild(N('ol'))
 		
@@ -349,6 +342,11 @@ Test.View.prototype =
 		else
 			main.className += ' ' + s
 		this.lastStatus = s
+	},
+	
+	summary: function (text)
+	{
+		this.nodes.summary.appendChild(T(text))
 	},
 	
 	node: function (node)
