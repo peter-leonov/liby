@@ -158,6 +158,7 @@ Test.prototype =
 		{
 			callback = name
 			conf = undefined
+			name = undefined
 		}
 		
 		if (typeof callback !== 'function')
@@ -299,7 +300,7 @@ Test.prototype =
 	timeEnd: function (name)
 	{
 		var diff = new Date() - this._times[name]
-		this.info(name + ': ' + diff + 'ms')
+		this.info((name || 'time') + ': ' + diff + 'ms')
 		return diff
 	},
 	
