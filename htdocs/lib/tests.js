@@ -32,8 +32,10 @@ var myName = 'Tests', Me = self[myName] =
 	
 	run: function ()
 	{
-		var title = doc.getElementsByTagName('title')[0]
-		var test = this.mainTest = new this.Test().initialize(this, title ? title.firstChild.nodeValue : 'main', null, this.callback)
+		try { var title = doc.getElementsByTagName('title')[0].firstChild.nodeValue }
+		catch (ex) { title = 'main' }
+		
+		var test = this.mainTest = new this.Test().initialize(this, title, null, this.callback)
 		this.nodes.main.appendChild(test.view.nodes.main)
 		test.run()
 	},
@@ -451,6 +453,19 @@ if (!self.log)
 		s.log = function () {}
 }
 
+if (!Array.prototype.indexOf)
+Array.prototype.indexOf = function(v, i)
+{
+	var len = this.length,
+		i = N(i) || 0
+	i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
+
+	for (; i < len; i++)
+		if (i in this && this[i] === v)
+			return i
+	return -1
+}
+
 
 var m, ua = navigator.userAgent
 
@@ -461,4 +476,3 @@ Me.ua =
 	((m = /Version\/(\d+\.\d) (Safari)\//.exec(ua)) && m[2]+' '+m[1])
 
 })();
-<!--# include virtual="modules/cascade.js" -->
