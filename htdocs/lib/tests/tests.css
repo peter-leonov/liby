@@ -26,10 +26,10 @@ body{font: 12px Arial,sans-serif;}
 }
 
 #tests-output > .test > .head { min-height: 30px; padding: 10px 15px 5px 15px; font-size: 1.75em; font-weight: bold; background-color: #888; color: #fff; }
-#tests-output.done { z-index: 65535; }
+#tests-output > .done { z-index: 65535; }
 
-#tests-output > .test.failed > .head { background-color: #d40; }
-#tests-output > .test.passed > .head { background-color: #082; }
+#tests-output > .test.failed > .head { background-color: #d40; color: #fff; }
+#tests-output > .test.passed > .head { background-color: #082; color: #fff; }
 
 
 #tests-output .body
@@ -40,12 +40,11 @@ body{font: 12px Arial,sans-serif;}
 	color: #aaa;
 }
 
-#tests-output .test { margin: 0 0 1.2em 0; list-style: outside decimal; }
-#tests-output .test .head { font-size: 1.5em; color: #555; }
-#tests-output .test.waiting > .head { color: #000; }
-#tests-output .test.failed > .head { color: #d40; }
-#tests-output .test.passed > .head { color: #082; }
-#tests-output .test.empty > .head { color: #06d; }
+#tests-output .test .test { margin: 0 0 1.2em 0; list-style: outside decimal; }
+#tests-output .test .test .head { font-size: 1.5em; color: #555; }
+#tests-output .test .test.waiting .head { color: #000; }
+#tests-output .test .test.failed .head { color: #d40; }
+#tests-output .test .test.passed .head { color: #082; }
 
 #tests-output .line
 {
