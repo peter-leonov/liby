@@ -23,6 +23,7 @@ var myName = 'Tests', Me = self[myName] =
 		this.run()
 	},
 	
+	oncomplete: function () {},
 	
 	test: function (f)
 	{
@@ -39,7 +40,7 @@ var myName = 'Tests', Me = self[myName] =
 	
 	sigchild: function ()
 	{
-		log('all done')
+		this.oncomplete()
 	},
 	
 	summary: function ()
