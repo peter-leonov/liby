@@ -23,7 +23,10 @@ body{font: 12px Arial,sans-serif;}
 	left: 0;
 	top: 0;
 	width: 100%;
+	background-color: #fff;
 }
+
+#tests-output.done { z-index: 65535; }
 
 #tests-output > .test > .head,
 #tests-output > .test > .summary { background-color: #888; color: #fff; }

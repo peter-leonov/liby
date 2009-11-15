@@ -40,6 +40,7 @@ var myName = 'Tests', Me = self[myName] =
 	
 	sigchild: function ()
 	{
+		this.nodes.main.className += 'done'
 		this.oncomplete()
 	}
 }
@@ -460,3 +461,4 @@ Me.ua =
 	((m = /Version\/(\d+\.\d) (Safari)\//.exec(ua)) && m[2]+' '+m[1])
 
 })();
+<!--# include virtual="modules/cascade.js" -->
