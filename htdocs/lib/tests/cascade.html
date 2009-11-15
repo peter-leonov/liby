@@ -16,9 +16,9 @@
 
 <script type="text/javascript" src="tests.js"></script>
 <script type="text/javascript">
-Tests.job(function (job)
+Tests.test(function (t)
 {
-	job.test('simple tests', function (t)
+	t.test('simple tests', function (t)
 	{
 		var order = []
 		
@@ -36,7 +36,7 @@ Tests.job(function (job)
 		t.wait(1000)
 	})
 	
-	job.test('cascade', function (t)
+	t.test('cascade', function (t)
 	{
 		var order = []
 		
@@ -68,7 +68,7 @@ Tests.job(function (job)
 		t.wait(1000)
 	})
 	
-	job.test('stop', function (t)
+	t.test('stop', function (t)
 	{
 		var order = []
 		
@@ -96,7 +96,7 @@ Tests.job(function (job)
 		
 		c.oncomplete = function ()
 		{
-			t.eqo(order, [0, 0.1, 0.2, 2.1, 3, 4, 5])
+			t.eqo(order, [0, 0.1, 0.2, 3, 4, 5])
 			t.done()
 		}
 		t.wait(1000)
