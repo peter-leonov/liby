@@ -25,10 +25,13 @@ Me.prototype =
 			throw ex
 	},
 	
-	oncomplete: function ()
+	oncomplete: function () {},
+	_oncomplete: function ()
 	{
 		if (this.parent)
 			this.parent.sigchild(this)
+		
+		this.oncomplete()
 	},
 	
 	run: function (delay)
@@ -91,7 +94,7 @@ Me.prototype =
 			this.completed = true
 			Me.running--
 			var me = this
-			this.timer('completed', function () { me.oncomplete() }, 0)
+			this.timer('completed', function () { me._oncomplete() }, 0)
 		}
 	},
 	
