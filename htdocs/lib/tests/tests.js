@@ -95,7 +95,6 @@ Test.prototype =
 		this.view = new Test.View().initialize(this.name)
 		
 		var c = this.cascade = new Cascade()
-		// c.parent = this
 		var me = this
 		c.oncomplete = function () { me.done() }
 		c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
@@ -147,31 +146,26 @@ Test.prototype =
 		
 		this.cascade.stop()
 		
-		var results = this.results, expect = this.conf.expect,
-			status = 'empty'
+		var results = this.results, expect = this.conf.expect
 		
-		if (expect !== undefined)
-			if (expect == results.length)
-				status = 'passed'
-			else
-				this.fail(expect + ' expected but ' + results.length + ' run')
+		if (expect !== undefined && expect != results.length)
+			this.fail(expect + ' expected but ' + results.length + ' run')
 		
-		if (results.length)
-		{
-			status = 'passed'
-			for (var i = 0; i < results.length; i++)
-				if (results[i].status == 'fail')
-					status = 'failed'
-		}
+		var ok = true
+		for (var i = 0; i < results.length; i++)
+			if (results[i].status == 'fail')
+				ok = false
 		
-		this.setStatus(status)
+		if (this.conf.failing)
+			ok = !ok
+		
+		this.setStatus(ok ? 'passed' : 'failed')
 		this.finished = true
 		this.parent.sigchild(this)
 	},
 	
 	sigchild: function (test)
 	{
-		log(test.name, test)
 		var status = test.status
 		if (status === 'failed')
 			this.fail()
