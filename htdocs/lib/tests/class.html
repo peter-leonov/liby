@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Class tests</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../programica/prototype.js"></script>
+<script type="text/javascript" src="../programica/class.js"></script>
+
+<!--# include virtual="tests.includes.html" -->
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('create(…)', function (t)
+	{
+		var prototype = {x:123}, className = 'A'
+		function constructor () { this.y }
+		var A = Class.create(className, prototype, constructor)
+		
+		t.eq(A.className, className, 'name')
+		t.eq(A.prototype, prototype, 'prototype')
+		t.eq(A, constructor, 'constructor')
+		t.eq(A.prototype.constructor, constructor, 'prototype.constructor')
+	})
+	
+	t.test('create()', function (t)
+	{
+		var A = Class.create()
+		A.prototype.initialize = function () { this.args = arguments }
+		t.eq(A.className, '[anonymous Class]', 'name')
+		t.instance(A.prototype, Class.Object, 'prototype')
+		t.eqo(Class.Object.prototype, {}, 'prototype clear')
+		
+		var a = new A()
+		t.eqo(a, A.prototype, 'constructor')
+		t.eqo(a, A.prototype, 'clear constructor')
+		t.ne(Class.create(), A, 'different constructors')
+	})
+	
+	t.test('constructor', function (t)
+	{
+		var A = Class.create('A')
+		var a = new A()
+		
+		t.eq(a.constructor, A)
+		t.eq(a.constructor.prototype, A.prototype)
+		// until browsers support
+		t.eq(a.constructor.prototype.constructor, A)
+	})
+	
+	t.test('prototype', function (t)
+	{
+		var A = Class.create('A')
+		var a = new A()
+		
+		A.prototype.met = function () { return 'met' }
+		t.eq(a.met(), 'met')
+	})
+	
+	t.test('Class.Object.prototype', function (t)
+	{
+		Class.Object.prototype.met = function () { return 'met' }
+		
+		t.eq(new (Class.create('A'))().met(), 'met')
+		t.eq(new (Class.create('B'))().met(), 'met')
+	})
+	
+	t.test('super', function (t)
+	{
+		var A = Class.create('A')
+		A.prototype.meth = function (x) { return x + ' from A' }
+		
+		var B = Class.create('B', new A())
+		B.prototype.meth = function () { return A.prototype.meth.apply(this, arguments) + ' from B' }
+		
+		var C = Class.create('C', new B())
+		
+		var D = Class.create('D', new C())
+		D.prototype.meth = function () { return C.prototype.meth.apply(this, arguments) + ' from D' }
+		
+		var d = new D()
+		
+		t.eq(d.meth(123), '123 from A from B from D', 'met')
+	})
+})
+</script>
+</body>
+</html>
