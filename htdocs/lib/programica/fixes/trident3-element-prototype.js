@@ -46,5 +46,6 @@ doc.createElement = function (type) { return fixNode(doc.createElementReal(type)
 
 // events must be fixed at this point to preserve handlers call order
 win.addEventListener('load', function () { fixNodes(doc.all) })
+document.__fixNodes = fixNodes
 
 })();
