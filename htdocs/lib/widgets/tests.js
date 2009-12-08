@@ -61,7 +61,7 @@ Reporter.prototype =
 		var nodes = this.nodes = {}
 		
 		nodes.main = N('dl', 'test')
-		nodes.head = nodes.main.appendChild(N('dt', 'head', name))
+		nodes.head = nodes.main.appendChild(N('dt', 'head'))
 		nodes.summary = nodes.main.appendChild(N('dt', 'summary'))
 		nodes.body = nodes.main.appendChild(N('dt', 'body'))
 		nodes.output = nodes.body.appendChild(N('ol'))
@@ -72,8 +72,13 @@ Reporter.prototype =
 	create: function ()
 	{
 		var reporter = new Reporter().initialize()
-		this.nodes.main.appendChild(reporter.nodes.main)
+		this.node(reporter.nodes.main)
 		return reporter
+	},
+	
+	name: function (name)
+	{
+		this.nodes.head.appendChild(T(name))
 	},
 	
 	setStatus: function (s)
