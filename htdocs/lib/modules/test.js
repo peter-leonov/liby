@@ -332,9 +332,17 @@ function inspect (val)
 				}
 				else if (val.constructor === Object)
 				{
-					var elements = []
+					var keys = []
 					for (var k in val)
+						keys.push(k)
+					keys.sort()
+					
+					var elements = []
+					for (var i = 0, il = keys.length; i < il; i++)
+					{
+						var k = keys[i]
 						elements.push(inspect(k) + ': ' + inspect(val[k]))
+					}
 					res = (level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + indc + elements.join(',\n\r' + ind + indc) + '\n\r' + ind + '}'
 					break
 				}
