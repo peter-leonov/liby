@@ -1,5 +1,6 @@
 // based on json2 (http://www.JSON.org/json2.js)
-;(function(){
+if (!self.JSON)
+(function(){
 
 // Format integers to have at least two digits.
 function f (n) { return n < 10 ? '0' + n : n }
