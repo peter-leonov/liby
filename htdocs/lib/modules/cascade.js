@@ -1,10 +1,11 @@
 ;(function () {
 
-var myName = 'Cascade', Me = self[myName] = function (job, delay)
+var myName = 'Cascade', Me = self[myName] = function (job, delay, holder)
 {
 	this.timers = {}
 	this.data = {}
 	this.children = []
+	this.holder = holder || window
 	
 	if (job)
 	{
@@ -116,19 +117,19 @@ Me.prototype =
 	
 	timer: function (name, func, delay)
 	{
-		var timers = this.timers
+		var timers = this.timers, holder = this.holder
 		if (timers[name])
-			clearTimeout(timers[name])
+			holder.clearTimeout(timers[name])
 		
-		return timers[name] = setTimeout(func, delay)
+		return timers[name] = holder.setTimeout(func, delay)
 	},
 	
 	timersClear: function ()
 	{
-		var timers = this.timers
+		var timers = this.timers, holder = this.holder
 		for (var k in timers)
 		{
-			clearTimeout(timers[k])
+			holder.clearTimeout(timers[k])
 			delete timers[k]
 		}
 	}
