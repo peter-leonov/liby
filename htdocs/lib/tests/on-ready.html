@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>On Ready tests</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../programica/prototype.js"></script>
+<script type="text/javascript" src="../modules/cosy.js"></script>
+<script type="text/javascript" src="../modules/on-ready.js"></script>
+
+<!--# include virtual="tests.includes.html" -->
+<script type="text/javascript">
+
+var loadOrder = [], onloadTime, onreadyTime
+
+Tests.test(function (t)
+{
+	t.test('load order', function (t)
+	{
+		t.eqo(loadOrder, ['script1', 'script2', 'onready1', 'onready2', 'onload1', 'onload2'])
+	})
+	
+	t.test('onload vs. onready delay', function (t)
+	{
+		t.gt(onloadTime - onreadyTime, 1000)
+	})
+})
+
+loadOrder.push('script1')
+
+document.write('<img src="/slow/autumn.jpg?nc=' + Math.random() + '"/>')
+
+$.onload(function () { loadOrder.push('onload1'); onloadTime = new Date() })
+$.onready(function () { loadOrder.push('onready1'); onreadyTime = new Date() })
+$.onload(function () { loadOrder.push('onload2') })
+$.onready(function () { loadOrder.push('onready2') })
+
+</script>
+
+<script type="text/javascript">
+loadOrder.push('script2')
+</script>
+
+</body>
+</html>
