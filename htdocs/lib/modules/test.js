@@ -243,6 +243,22 @@ Me.prototype =
 			this.fail([this.inspect(a), 'instanceof', this.inspect(b)], d)
 	},
 	
+	type: function (a, b, d)
+	{
+		if (typeof a === b)
+			this.pass([this.inspect(a), 'typeof', this.inspect(b)], d)
+		else
+			this.fail([this.inspect(a), 'is not typeof', this.inspect(b)], d)
+	},
+	
+	nottype: function (a, b, d)
+	{
+		if (!(typeof a === b))
+			this.pass([this.inspect(a), 'is not typeof', this.inspect(b)], d)
+		else
+			this.fail([this.inspect(a), 'typeof', this.inspect(b)], d)
+	},
+	
 	_times: {},
 	time: function (name)
 	{
