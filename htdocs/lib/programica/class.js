@@ -1,6 +1,6 @@
 ;(function(){
 
-var myName = 'Class',
+var myName = 'Class', count = 0,
 	Me = self[myName] = function () {}
 
 Me.create = function (name, proto, klass)
@@ -8,7 +8,7 @@ Me.create = function (name, proto, klass)
 	if (!klass)
 		klass = function () {}
 	
-	klass.className = name || '[anonymous ' + myName + ']'
+	klass.className = name || '[anonymous ' + myName + ' ' + ++count + ']'
 	klass.prototype = proto || new Me.Object()
 	klass.prototype.constructor = klass
 	
