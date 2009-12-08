@@ -22,6 +22,8 @@ Me.prototype =
 		c.oncomplete = function () { me.done() }
 		c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
 		
+		reporter.name(name)
+		
 		return this
 	},
 	
