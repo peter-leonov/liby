@@ -34,7 +34,8 @@ Tests.test(function (t)
 	{
 		var A = Class.create()
 		A.prototype.initialize = function () { this.args = arguments }
-		t.eq(A.className, '[anonymous Class]', 'name')
+		t.eq(A.className, '[anonymous Class 1]', 'name')
+		t.eq(Class.create().className, '[anonymous Class 2]', 'name')
 		t.instance(A.prototype, Class.Object, 'prototype')
 		t.eqo(Class.Object.prototype, {}, 'prototype clear')
 		
