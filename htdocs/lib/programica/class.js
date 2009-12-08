@@ -1,33 +1,23 @@
 ;(function(){
 
-var myName = 'Class'
-var Me = self[myName] = function (name, sup)
+var myName = 'Class',
+	Me = self[myName] = function () {}
+
+Me.create = function (name, proto, klass)
 {
-	var klass = function ()
-	{
-		this.constructor = klass//arguments.callee
-		this.initialize.apply(this, arguments)
-		// try { this.initialize.apply(this, arguments) }
-		// catch (ex) { throw new Error(name + ': ' + ex.message) }
-	}
+	if (!klass)
+		klass = function () {}
 	
-	klass.className = name || '[anonimous ' + myName + ']'
-	klass.prototype = new (sup || Me.Object)()
-	klass.constructor = Me
+	klass.className = name || '[anonymous ' + myName + ']'
+	klass.prototype = proto || new Me.Object()
+	klass.prototype.constructor = klass
 	
 	return klass
 }
 
 Me.className = myName
 Me.Object = function () {}
-Me.Object.prototype =
-{
-	initialize: function () {},
-	extend: function (s) { if (s) for (var p in s) this[p] = s[p]; return this }
-}
-
-// Me.supercall(this, 'initialize', [arg1, arg2, arg3...])
-Function.prototype.supercall = function (o, n, a) { this.prototype.constructor.prototype[n].apply(o, a) }
+Me.Object.prototype = {}
 
 })();
 
