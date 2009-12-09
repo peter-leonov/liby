@@ -127,7 +127,11 @@ Tests.test(function (t)
 	
 	t.test('etc', function (t)
 	{
-		
+		var prop
+		function A () { prop = this.prop }
+		A.prototype.prop = 123
+		new A()
+		t.eq(prop, 123, 'prototype applies before constructor')
 		t.ne((function () {}).prototype, (function () {}).prototype, 'different default prototypes')
 	})
 	
