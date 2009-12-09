@@ -19,7 +19,8 @@ Me.prototype =
 		model.parent = view.parent = controller.parent = this
 	},
 	
-	bind: function () {}
+	bind: function () {},
+	initialize: function () {}
 }
 
 self[myName] = Me
@@ -46,7 +47,13 @@ Me.setup = function (name, klass, parent)
 
 Me.create = function (name, parent)
 {
-	return this.setup(name, function () {}, parent)
+	function klass ()
+	{
+		this.__mvc_interlink()
+		this.initialize()
+	}
+	
+	return this.setup(name, klass, parent)
 }
 
 })();

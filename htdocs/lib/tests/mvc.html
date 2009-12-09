@@ -39,9 +39,26 @@ Tests.test(function (t)
 		t.instance(new A(), MVC, 'className')
 	})
 	
-	t.test('model & view & controller', function (t)
+	t.test('create(): model & view & controller', function (t)
 	{
 		var A = MVC.create('A')
+		
+		var a = new A()
+		
+		t.instance(a.view, MVC.View)
+		t.instance(a.controller, MVC.Controller)
+		t.instance(a.model, MVC.Model)
+		t.notinstance(a.view, MVC.Model)
+		
+		t.instance(a.view, A.View)
+		t.instance(a.controller, A.Controller)
+		t.instance(a.model, A.Model)
+	})
+	
+	t.test('setup(): model & view & controller', function (t)
+	{
+		function A () {}
+		MVC.setup('A', A)
 		
 		var a = new A()
 		t.eq(a.view, undefined, 'view')
@@ -82,7 +99,6 @@ Tests.test(function (t)
 		var B = MVC.create('B', A)
 		
 		var b = new B()
-		b.__mvc_interlink()
 		
 		t.instance(b, MVC)
 		t.instance(b, A)
