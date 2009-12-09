@@ -1,21 +1,21 @@
-// MVC
 ;(function(){
 
-var myName = 'MVC'
-var ME = self[myName] = Class(myName)
-ME.prototype.extend
+var myName = 'MVC', Me = self[myName] = Class.create(myName)
+Me.prototype.extend
 ({
 	initialize: function ()
 	{
-		var model = this.model = new this.constructor.Model(),
-			view = this.view = new this.constructor.View(),
-			controller = this.controller = new this.constructor.Controller()
+		var constructor = this.constructor,
+			model = this.model = new constructor.Model(),
+			view = this.view = new constructor.View(),
+			controller = this.controller = new constructor.Controller()
 		
 		model.view = controller.view = view
 		view.controller = controller
 		controller.model = model
 		model.parent = view.parent = controller.parent = this
 		
+		// arguments comes from new Widget(arguments) call
 		this.bind.apply(this, arguments)
 		
 		return this
@@ -24,16 +24,16 @@ ME.prototype.extend
 	bind: function () {}
 })
 
-ME.Model = Class(myName + '.Model')
-ME.View = Class(myName + '.View')
-ME.Controller = Class(myName + '.Controller')
+Me.Model = Class.create(myName + '.Model')
+Me.View = Class.create(myName + '.View')
+Me.Controller = Class.create(myName + '.Controller')
 
-ME.create = function (name)
+Me.create = function (name)
 {
-	var widget = Class(name, ME)
-	widget.Model = Class(name + '.Model', this.Model)
-	widget.View = Class(name + '.View', this.View)
-	widget.Controller = Class(name + '.Controller', this.Controller)
+	var widget = Class.create(name, Me)
+	widget.Model = Class.create(name + '.Model', this.Model)
+	widget.View = Class.create(name + '.View', this.View)
+	widget.Controller = Class.create(name + '.Controller', this.Controller)
 	
 	return widget
 }
