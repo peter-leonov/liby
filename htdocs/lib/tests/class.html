@@ -21,13 +21,11 @@ Tests.test(function (t)
 	t.test('create(…)', function (t)
 	{
 		var prototype = {x:123}, className = 'A'
-		function constructor () { this.y }
-		var A = Class.create(className, prototype, constructor)
+		var A = Class.create(className)
 		
 		t.eq(A.className, className, 'name')
-		t.eq(A.prototype, prototype, 'prototype')
-		t.eq(A, constructor, 'constructor')
-		t.eq(A.prototype.constructor, constructor, 'prototype.constructor')
+		t.eqo(A.prototype, {}, 'clear prototype')
+		t.eq(A.prototype.constructor, A, 'prototype.constructor')
 	})
 	
 	t.test('create()', function (t)
@@ -36,8 +34,7 @@ Tests.test(function (t)
 		A.prototype.initialize = function () { this.args = arguments }
 		t.eq(A.className, '[anonymous Class 1]', 'name')
 		t.eq(Class.create().className, '[anonymous Class 2]', 'name')
-		t.instance(A.prototype, Class.Object, 'prototype')
-		t.eqo(Class.Object.prototype, {}, 'prototype clear')
+		t.instance(A.prototype, Object, 'prototype')
 		
 		var a = new A()
 		t.eqo(a, A.prototype, 'constructor')
@@ -63,14 +60,6 @@ Tests.test(function (t)
 		
 		A.prototype.met = function () { return 'met' }
 		t.eq(a.met(), 'met')
-	})
-	
-	t.test('Class.Object.prototype', function (t)
-	{
-		Class.Object.prototype.met = function () { return 'met' }
-		
-		t.eq(new (Class.create('A'))().met(), 'met')
-		t.eq(new (Class.create('B'))().met(), 'met')
 	})
 	
 	t.test('super', function (t)

@@ -3,21 +3,22 @@
 var myName = 'Class', count = 0,
 	Me = self[myName] = function () {}
 
-Me.create = function (name, proto, klass)
+Me.setup = function (name, klass)
 {
-	if (!klass)
-		klass = function () {}
-	
 	klass.className = name || '[anonymous ' + myName + ' ' + ++count + ']'
-	klass.prototype = proto || new Me.Object()
 	klass.prototype.constructor = klass
-	
 	return klass
 }
 
+Me.create = function (name, proto)
+{
+	var klass = function () {}
+	if (proto)
+		klass.prototype = proto
+	return this.setup(name, klass)
+}
+
 Me.className = myName
-Me.Object = function () {}
-Me.Object.prototype = {}
 
 })();
 
