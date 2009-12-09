@@ -332,74 +332,82 @@ Me.prototype =
 	level: 0,
 	indc: '	',
 	
+	inspect: function (val)
+	{
+		try
+		{
+			return this.walk(val)
+		}
+		catch (ex)
+		{
+			throw new Error('error inspecting "' + val + '":' + ex)
+		}
+	},
+	
 	walk: function (val)
 	{
 		if (++this.level >= this.deep)
 			throw new Error('inspecting too deep: ' + this.level)
 		
 		var res, ind = new Array(this.level).join(this.indc)
-		try
+		switch (typeof val)
 		{
-			switch (typeof val)
-			{
-				case 'string':
-					res = '"' + escapeString(val) + '"'
+			case 'string':
+				res = '"' + escapeString(val) + '"'
+				break
+			case 'object':
+				if (val === null)
+				{
+					res = 'null'
 					break
-				case 'object':
-					if (val === null)
-					{
-						res = 'null'
-						break
-					}
+				}
+				
+				if (val.constructor === Date)
+				{
+					res = val.toString() + ' (' + (+val) + ')'
+					break
+				}
+				
+				if (val.constructor === RegExp)
+				{
+					res = val.toString()
+					break
+				}
+				
+				// remember complex objects
+				var seen = this.seen, num = seen.indexOf(val)
+				if (num >= 0)
+					return '#' + num
+				seen.push(val)
+				
+				if (val.constructor === Array)
+				{
+					var elements = []
+					for (var i = 0, il = val.length; i < il; i++)
+						elements.push(this.walk(val[i]))
+					res = (this.level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + ']'
+					break
+				}
+				
+				// any other Object
+				{
+					var keys = []
+					for (var k in val)
+						keys.push(k)
+					keys.sort()
 					
-					if (val.constructor === Date)
+					var elements = []
+					for (var i = 0, il = keys.length; i < il; i++)
 					{
-						res = val.toString() + ' (' + (+val) + ')'
-						break
+						var k = keys[i]
+						elements.push(this.walk(k) + ': ' + this.walk(val[k]))
 					}
-					
-					if (val.constructor === RegExp)
-					{
-						res = val.toString()
-						break
-					}
-					
-					// remember complex objects
-					var seen = this.seen, num = seen.indexOf(val)
-					if (num >= 0)
-						return '#' + num
-					seen.push(val)
-					
-					if (val.constructor === Array)
-					{
-						var elements = []
-						for (var i = 0, il = val.length; i < il; i++)
-							elements.push(this.walk(val[i]))
-						res = (this.level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + ']'
-						break
-					}
-					
-					// any other Object
-					{
-						var keys = []
-						for (var k in val)
-							keys.push(k)
-						keys.sort()
-						
-						var elements = []
-						for (var i = 0, il = keys.length; i < il; i++)
-						{
-							var k = keys[i]
-							elements.push(this.walk(k) + ': ' + this.walk(val[k]))
-						}
-						res = (this.level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + '}'
-						break
-					}
-				default:
-					res = String(val)
-			}
+					res = (this.level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + '}'
+					break
+				}
+			default:
+				res = String(val)
 		}
-		catch (ex) { throw new Error('error inspecting "' + val + '":' + ex) }
 		
 		this.level--
 		return res
@@ -411,7 +419,7 @@ self[myName] = Me
 Test.prototype.inspect = function (val)
 {
 	var me = new Me()
-	return me.walk.apply(me, arguments)
+	return me.inspect.apply(me, arguments)
 }
 
 
