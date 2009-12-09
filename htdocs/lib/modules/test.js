@@ -330,7 +330,11 @@ function inspect (val)
 					res = (level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + indc + elements.join(',\n\r' + ind + indc) + '\n\r' + ind + ']'
 					break
 				}
-				else if (val.constructor === Object)
+				else if (val.constructor === Date)
+					res = val.toString() + ' (' + (+val) + ')'
+				else if (val.constructor === RegExp)
+					res = val.toString()
+				else // any other Object
 				{
 					var keys = []
 					for (var k in val)
