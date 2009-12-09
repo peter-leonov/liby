@@ -108,6 +108,23 @@ Tests.test(function (t)
 		t.no('xxx8' in (/abc/), 'RegExp')
 		t.no('xxx8' in (new RegExp()), 'RegExp')
 	})
+	
+	t.test('hasOwnProperty', function (t)
+	{
+		function A () { this.x = 1 }
+		A.prototype.y = 2
+		var a = new A()
+		
+		t.eq(a.x, 1)
+		t.eq(a.y, 2)
+		t.ok(a.hasOwnProperty('x'))
+		t.no(a.hasOwnProperty('y'))
+		delete a.x
+		t.no(a.hasOwnProperty('x'))
+		a.x = 1
+		t.ok(a.hasOwnProperty('x'))
+	})
+	
 })
 </script>
 </body>
