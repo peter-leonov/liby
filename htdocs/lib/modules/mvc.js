@@ -1,9 +1,12 @@
 ;(function(){
 
-var myName = 'MVC', Me = self[myName] = Class.create(myName)
-Me.prototype.extend
-({
-	initialize: function ()
+var myName = 'MVC'
+
+function Me () {}
+
+Me.prototype =
+{
+	__mvc_interlink: function ()
 	{
 		var constructor = this.constructor,
 			model = this.model = new constructor.Model(),
@@ -14,28 +17,33 @@ Me.prototype.extend
 		view.controller = controller
 		controller.model = model
 		model.parent = view.parent = controller.parent = this
-		
-		// arguments comes from new Widget(arguments) call
-		this.bind.apply(this, arguments)
-		
-		return this
 	},
 	
 	bind: function () {}
-})
+}
+
+self[myName] = Me
+Class.setup(myName, Me)
 
 Me.Model = Class.create(myName + '.Model')
 Me.View = Class.create(myName + '.View')
 Me.Controller = Class.create(myName + '.Controller')
 
+Me.setup = function (name, constructor)
+{
+	constructor.prototype = new Me()
+	Class.setup(name, constructor)
+	
+	constructor.Model = Class.create(name + '.Model', new Me.Model())
+	constructor.View = Class.create(name + '.View', new Me.View())
+	constructor.Controller = Class.create(name + '.Controller', new Me.Controller())
+	
+	return constructor
+}
+
 Me.create = function (name)
 {
-	var widget = Class.create(name, Me)
-	widget.Model = Class.create(name + '.Model', this.Model)
-	widget.View = Class.create(name + '.View', this.View)
-	widget.Controller = Class.create(name + '.Controller', this.Controller)
-	
-	return widget
+	return this.setup(name, function () {})
 }
 
 })();

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Untitled tests</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../programica/prototype.js"></script>
+<script type="text/javascript" src="../programica/class.js"></script>
+<script type="text/javascript" src="../modules/mvc.js"></script>
+
+<!--# include virtual="tests.includes.html" -->
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('create()', function (t)
+	{
+		var A = MVC.create('A')
+		
+		t.eq(A.className, 'A', 'className')
+		t.instance(new A(), MVC, 'className')
+	})
+	
+	t.test('setup()', function (t)
+	{
+		function A ()
+		{
+			this.abc = 123
+		}
+		MVC.setup('A', A)
+		
+		t.eq(A.className, 'A', 'className')
+		t.instance(new A(), MVC, 'className')
+	})
+	
+	t.test('inheritance', function (t)
+	{
+		var A = MVC.create('A')
+		
+		t.type(A, 'function')
+		t.instance(new A(), MVC)
+		
+		t.type(A.View, 'function')
+		t.instance(new A.View(), MVC.View)
+		
+		t.type(A.Controller, 'function')
+		t.instance(new A.Controller(), MVC.Controller)
+		
+		t.type(A.Model, 'function')
+		t.instance(new A.Model(), MVC.Model)
+	})
+	
+	t.test('model & view & controller', function (t)
+	{
+		var A = MVC.create('A')
+		
+		var a = new A()
+		t.eq(a.view, undefined, 'view')
+		t.eq(a.controller, undefined, 'controller')
+		t.eq(a.model, undefined, 'model')
+		
+		a.__mvc_interlink()
+		t.instance(a.view, MVC.View)
+		t.instance(a.controller, MVC.Controller)
+		t.instance(a.model, MVC.Model)
+		t.notinstance(a.view, MVC.Model)
+		
+		t.instance(a.view, A.View)
+		t.instance(a.controller, A.Controller)
+		t.instance(a.model, A.Model)
+	})
+})
+</script>
+</body>
+</html>
