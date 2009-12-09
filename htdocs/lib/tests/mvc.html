@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>Untitled tests</title>
+	<title>MVC tests</title>
 </head>
 <body>
 
@@ -39,23 +39,6 @@ Tests.test(function (t)
 		t.instance(new A(), MVC, 'className')
 	})
 	
-	t.test('inheritance', function (t)
-	{
-		var A = MVC.create('A')
-		
-		t.type(A, 'function')
-		t.instance(new A(), MVC)
-		
-		t.type(A.View, 'function')
-		t.instance(new A.View(), MVC.View)
-		
-		t.type(A.Controller, 'function')
-		t.instance(new A.Controller(), MVC.Controller)
-		
-		t.type(A.Model, 'function')
-		t.instance(new A.Model(), MVC.Model)
-	})
-	
 	t.test('model & view & controller', function (t)
 	{
 		var A = MVC.create('A')
@@ -74,6 +57,44 @@ Tests.test(function (t)
 		t.instance(a.view, A.View)
 		t.instance(a.controller, A.Controller)
 		t.instance(a.model, A.Model)
+	})
+	
+	t.test('inheritance', function (t)
+	{
+		var A = MVC.create('A')
+		
+		t.type(A, 'function')
+		t.instance(new A(), MVC)
+		
+		t.type(A.View, 'function')
+		t.instance(new A.View(), MVC.View)
+		
+		t.type(A.Controller, 'function')
+		t.instance(new A.Controller(), MVC.Controller)
+		
+		t.type(A.Model, 'function')
+		t.instance(new A.Model(), MVC.Model)
+	})
+	
+	t.test('even more inheritance', function (t)
+	{
+		var A = MVC.create('A')
+		var B = MVC.create('B', A)
+		
+		var b = new B()
+		b.__mvc_interlink()
+		
+		t.instance(b, MVC)
+		t.instance(b, A)
+		
+		t.instance(b.controller, MVC.Controller)
+		t.instance(b.controller, A.Controller)
+		
+		t.instance(b.view, MVC.View)
+		t.instance(b.view, A.View)
+		
+		t.instance(b.controller, MVC.Controller)
+		t.instance(b.controller, A.Controller)
 	})
 })
 </script>

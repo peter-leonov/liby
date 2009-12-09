@@ -29,21 +29,24 @@ Me.Model = Class.create(myName + '.Model')
 Me.View = Class.create(myName + '.View')
 Me.Controller = Class.create(myName + '.Controller')
 
-Me.setup = function (name, constructor)
+Me.setup = function (name, klass, parent)
 {
-	constructor.prototype = new Me()
-	Class.setup(name, constructor)
+	if (!parent)
+		parent = Me
 	
-	constructor.Model = Class.create(name + '.Model', new Me.Model())
-	constructor.View = Class.create(name + '.View', new Me.View())
-	constructor.Controller = Class.create(name + '.Controller', new Me.Controller())
+	klass.prototype = new parent()
+	Class.setup(name, klass)
 	
-	return constructor
+	klass.Model = Class.create(name + '.Model', new parent.Model())
+	klass.View = Class.create(name + '.View', new parent.View())
+	klass.Controller = Class.create(name + '.Controller', new parent.Controller())
+	
+	return klass
 }
 
-Me.create = function (name)
+Me.create = function (name, parent)
 {
-	return this.setup(name, function () {})
+	return this.setup(name, function () {}, parent)
 }
 
 })();
