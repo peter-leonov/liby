@@ -405,6 +405,10 @@ Me.prototype =
 					res = (this.level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + '}'
 					break
 				}
+			case 'function':
+				if (!(res = val.className))
+					res = String(val)
+				break
 			default:
 				res = String(val)
 		}
