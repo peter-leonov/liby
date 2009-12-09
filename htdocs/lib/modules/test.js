@@ -296,71 +296,123 @@ var empty = function () {}, devNull =
 	setStatus: empty, fail: empty, pass: empty, info: empty, summary: empty
 }
 
+})();
+
+;(function(){
+
 var escapeChars = {'"': '\\"', '\\': '\\\\', '\n': '\\n', '\r': '\\r', '\t': '\\t'}
 function escapeString (str)
 {
 	return str.replace(/(["\\\n\r\t])/g, function (v) { return escapeChars[v] })
 }
 
-var level = 0, indc = '	'
-function inspect (val)
+if (!Array.prototype.indexOf)
+Array.prototype.indexOf = function(v, i)
 {
-	if (level++ > 10)
-		throw new Error('inspecting too deep: ' + inspect.level)
-	
-	var res, ind = new Array(level).join(indc)
-	try
-	{
-		switch (typeof val)
-		{
-			case 'string':
-				res = '"' + escapeString(val) + '"'
-				break
-			case 'object':
-				if (val === null)
-				{
-					res = 'null'
-					break
-				}
-				else if (val.constructor === Array)
-				{
-					var elements = []
-					for (var i = 0, il = val.length; i < il; i++)
-						elements.push(inspect(val[i]))
-					res = (level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + indc + elements.join(',\n\r' + ind + indc) + '\n\r' + ind + ']'
-					break
-				}
-				else if (val.constructor === Date)
-					res = val.toString() + ' (' + (+val) + ')'
-				else if (val.constructor === RegExp)
-					res = val.toString()
-				else // any other Object
-				{
-					var keys = []
-					for (var k in val)
-						keys.push(k)
-					keys.sort()
-					
-					var elements = []
-					for (var i = 0, il = keys.length; i < il; i++)
-					{
-						var k = keys[i]
-						elements.push(inspect(k) + ': ' + inspect(val[k]))
-					}
-					res = (level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + indc + elements.join(',\n\r' + ind + indc) + '\n\r' + ind + '}'
-					break
-				}
-			default:
-				res = String(val)
-		}
-	}
-	catch (ex) { throw new Error('error inspecting "' + val + '":' + ex) }
-	
-	level--
-	return res
+	var len = this.length,
+		i = +i || 0
+	i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
+
+	for (; i < len; i++)
+		if (i in this && this[i] === v)
+			return i
+	return -1
 }
 
-Me.prototype.inspect = inspect
+
+var myName = 'Inspector'
+function Me ()
+{
+	this.seen = []
+}
+
+Me.prototype =
+{
+	deep: 40,
+	level: 0,
+	indc: '	',
+	
+	walk: function (val)
+	{
+		if (++this.level >= this.deep)
+			throw new Error('inspecting too deep: ' + this.level)
+		
+		var res, ind = new Array(this.level).join(this.indc)
+		try
+		{
+			switch (typeof val)
+			{
+				case 'string':
+					res = '"' + escapeString(val) + '"'
+					break
+				case 'object':
+					if (val === null)
+					{
+						res = 'null'
+						break
+					}
+					
+					if (val.constructor === Date)
+					{
+						res = val.toString() + ' (' + (+val) + ')'
+						break
+					}
+					
+					if (val.constructor === RegExp)
+					{
+						res = val.toString()
+						break
+					}
+					
+					// remember complex objects
+					var seen = this.seen, num = seen.indexOf(val)
+					if (num >= 0)
+						return '#' + num
+					seen.push(val)
+					
+					if (val.constructor === Array)
+					{
+						var elements = []
+						for (var i = 0, il = val.length; i < il; i++)
+							elements.push(this.walk(val[i]))
+						res = (this.level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + ']'
+						break
+					}
+					
+					// any other Object
+					{
+						var keys = []
+						for (var k in val)
+							keys.push(k)
+						keys.sort()
+						
+						var elements = []
+						for (var i = 0, il = keys.length; i < il; i++)
+						{
+							var k = keys[i]
+							elements.push(this.walk(k) + ': ' + this.walk(val[k]))
+						}
+						res = (this.level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + '}'
+						break
+					}
+				default:
+					res = String(val)
+			}
+		}
+		catch (ex) { throw new Error('error inspecting "' + val + '":' + ex) }
+		
+		this.level--
+		return res
+	}
+}
+
+self[myName] = Me
+
+Test.prototype.inspect = function (val)
+{
+	var me = new Me()
+	return me.walk.apply(me, arguments)
+}
 
 
 })();

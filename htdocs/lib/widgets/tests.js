@@ -143,20 +143,6 @@ if (!self.log)
 		s.log = function () {}
 }
 
-if (!Array.prototype.indexOf)
-Array.prototype.indexOf = function(v, i)
-{
-	var len = this.length,
-		i = N(i) || 0
-	i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
-
-	for (; i < len; i++)
-		if (i in this && this[i] === v)
-			return i
-	return -1
-}
-
-
 var m, ua = navigator.userAgent
 
 Me.ua =
