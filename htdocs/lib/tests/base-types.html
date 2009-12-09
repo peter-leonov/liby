@@ -125,6 +125,12 @@ Tests.test(function (t)
 		t.ok(a.hasOwnProperty('x'))
 	})
 	
+	t.test('etc', function (t)
+	{
+		
+		t.ne((function () {}).prototype, (function () {}).prototype, 'different default prototypes')
+	})
+	
 })
 </script>
 </body>
