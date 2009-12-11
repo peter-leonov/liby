@@ -13,10 +13,8 @@ if (!document.getElementsByClassName)
 		
 		var res = []
 		for (var l = 0, i = 0, il = children.length; i < il; i++)
-		{
 			if (rex.test(children[i].className))
 				res[l++] = children[i]
-		}
 		
 		return res
 	}
