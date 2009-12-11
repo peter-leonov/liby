@@ -208,18 +208,20 @@ Me.prototype =
 	
 	eqo: function (a, b, d)
 	{
-		if (this.inspect(a) === this.inspect(b))
-			this.pass([this.inspect(a), '===', this.inspect(b)], d)
+		var ia = this.inspect(a, 10, true), ib = this.inspect(b, 10, true)
+		if (ia === ib)
+			this.pass([ia, '===', ib], d)
 		else
-			this.fail([this.inspect(a), '!==', this.inspect(b)], d)
+			this.fail([ia, '!==', ib], d)
 	},
 	
 	neo: function (a, b, d)
 	{
-		if (this.inspect(a) !== this.inspect(b))
-			this.pass([this.inspect(a), '!==', this.inspect(b)], d)
+		var ia = this.inspect(a, 10, true), ib = this.inspect(b, 10, true)
+		if (ia !== ib)
+			this.pass([ia, '!==', ib], d)
 		else
-			this.fail([this.inspect(a), '===', this.inspect(b)], d)
+			this.fail([ia, '===', ib], d)
 	},
 	
 	lt: function (a, b, d) { if (a >= b) this.fail(this.inspect(a) + ' >= ' + this.inspect(b), d) },
@@ -328,12 +330,18 @@ function Me ()
 
 Me.prototype =
 {
-	deep: 40,
+	deep: 1,
+	hard: false,
 	level: 0,
 	indc: '	',
 	
-	inspect: function (val)
+	inspect: function (val, deep, hard)
 	{
+		if (deep !== undefined)
+			this.deep = deep
+		if (hard !== undefined)
+			this.hard = hard
+		
 		try
 		{
 			return this.walk(val)
@@ -346,8 +354,11 @@ Me.prototype =
 	
 	walk: function (val)
 	{
-		if (++this.level >= this.deep)
-			throw new Error('inspecting too deep: ' + this.level)
+		if (++this.level > this.deep)
+			if (this.hard)
+				throw new Error('inspecting too deep: ' + this.level)
+			else
+				this.deepest = true
 		
 		var res, ind = new Array(this.level).join(this.indc)
 		switch (typeof val)
@@ -355,6 +366,7 @@ Me.prototype =
 			case 'string':
 				res = '"' + escapeString(val) + '"'
 				break
+			
 			case 'object':
 				if (val === null)
 				{
@@ -382,6 +394,12 @@ Me.prototype =
 				
 				if (val.constructor === Array)
 				{
+					if (this.deepest)
+					{
+						res = '[…]'
+						break
+					}
+					
 					var elements = []
 					for (var i = 0, il = val.length; i < il; i++)
 						elements.push(this.walk(val[i]))
@@ -391,6 +409,12 @@ Me.prototype =
 				
 				// any other Object
 				{
+					if (this.deepest)
+					{
+						res = '{…}'
+						break
+					}
+					
 					var keys = []
 					for (var k in val)
 						keys.push(k)
@@ -405,10 +429,12 @@ Me.prototype =
 					res = (this.level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + '}'
 					break
 				}
+			
 			case 'function':
 				if (!(res = val.className))
 					res = String(val)
 				break
+			
 			default:
 				res = String(val)
 		}
