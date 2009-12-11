@@ -13,11 +13,14 @@
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+
+<!--
 <script type="text/javascript" src="../programica/fixes/log.js"></script>
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
 <script type="text/javascript" src="../programica/class.js"></script>
-<!-- <script type="text/javascript" src="../modules/event-target.js"></script> -->
+<script type="text/javascript" src="../modules/event-target.js"></script>
+-->
 
 <!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
@@ -104,8 +107,10 @@ Tests.test(function (t)
 		e.initEvent(type, true, true)
 		e.abc = 0
 		node.dispatchEvent(e)
-		t.eqo([event1, event2, event3], [e, e, e], 'all listeners got the same event object')
-		t.eqo(e.abc, 3, 'listeners can write custom fields')
+		t.eq(event1, e, 'first listener got the same event object')
+		t.eq(event2, e, 'second listener got the same event object')
+		t.eq(event3, e, 'third listener got the same event object')
+		t.eq(e.abc, 3, 'listeners can write custom fields')
 		
 		function prevent (e) { e.preventDefault() }
 		e = document.createEvent(kind)
