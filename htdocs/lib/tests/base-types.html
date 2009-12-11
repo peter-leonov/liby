@@ -133,6 +133,9 @@ Tests.test(function (t)
 		new A()
 		t.eq(prop, 123, 'prototype applies before constructor')
 		t.ne((function () {}).prototype, (function () {}).prototype, 'different default prototypes')
+		
+		t.lt(('А').localeCompare('Б'), 0, 'А < Б')
+		t.lt(('АБ').localeCompare('Б'), 0, 'А < Б')
 	})
 	
 })
