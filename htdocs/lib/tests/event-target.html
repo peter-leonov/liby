@@ -12,15 +12,7 @@
 <button id="test-node-2">test node 2</button>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
-
-<!--
-<script type="text/javascript" src="../programica/fixes/log.js"></script>
-<script type="text/javascript" src="../programica/init.js"></script>
-<script type="text/javascript" src="../programica/prototype.js"></script>
-<script type="text/javascript" src="../programica/class.js"></script>
-<script type="text/javascript" src="../modules/event-target.js"></script>
--->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 
 <!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
@@ -30,11 +22,6 @@ Tests.test(function (t)
 	{
 		var calls = 0, e, exception = null
 		function handler (e) { calls++ }
-		
-		// t.ok(self.EventTarget, 'EventTarget defined')
-		// // to date nor IE and Safari neither Opera support EventTarget
-		// if (self.EventTarget)
-		// 	t.ok(node instanceof self.EventTarget, 'instanceof EventTarget')
 		
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
@@ -136,21 +123,6 @@ Tests.test(function (t)
 	{
 		run(t, 'MouseEvent', 'click', document.getElementById('test-node-2'))
 	})
-	
-	
-	// var T = Class('T')
-	// T.prototype.initialize = function () { this.nodeName = 'object' }
-	// T.mixIn(EventTarget)
-	// 
-	// t.test('EventTarget: hide on EventTarget instance', function (t)
-	// {
-	// 	run(t, 'Event', 'hide', new T())
-	// })
-	// 
-	// t.test('MouseEvent: click on EventTarget instance', function (t)
-	// {
-	// 	run(t, 'MouseEvent', 'click', new T())
-	// })
 })
 </script>
 </body>
