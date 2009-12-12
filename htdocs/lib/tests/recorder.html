@@ -49,10 +49,10 @@ Tests.test(function (t)
 		recorder.bind(document, document.body)
 		
 		var started = false
-		function keypress (e)
+		function keydown (e)
 		{
-			// log(e.charCode)
-			if (e.charCode == 114)
+			// alert(e.keyCode)
+			if (e.keyCode == 82)
 			// if (e.ctrlKey && e.charCode == 114)
 				if (started)
 				{
@@ -65,13 +65,13 @@ Tests.test(function (t)
 					recorder.start()
 				}
 			
-			if (e.charCode == 112)
+			if (e.keyCode == 80)
 			{
 				recorder.play()
 				// log(JSON.stringify(recorder.script()))
 			}
 		}
-		document.addEventListener('keypress', keypress, false)
+		document.addEventListener('keydown', keydown, false)
 		
 		recorder.load(script)
 		recorder.play()
