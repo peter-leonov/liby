@@ -43,17 +43,29 @@ Tests.test(function (t)
 		
 		
 		var recorder = new Recorder()
+		recorder.bind(document, document.body)
 		
+		var started = false
 		function keypress (e)
 		{
+			// log(e.charCode)
+			if (e.charCode == 114)
+			// if (e.ctrlKey && e.charCode == 114)
+				if (started)
+				{
+					started = false
+					recorder.stop()
+				}
+				else
+				{
+					started = true
+					recorder.start()
+				}
+			
 			if (e.charCode == 112)
-			// if (e.ctrlKey && e.charCode == 112)
-				recorder.stop(),
 				recorder.play()
 		}
 		document.addEventListener('keypress', keypress, false)
-		
-		recorder.start()
 	})
 })
 </script>

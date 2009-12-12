@@ -2,30 +2,35 @@
 
 var myName = 'Recorder'
 
-function Me ()
-{
-	this.actions = []
-}
+function Me () {}
 
 Me.prototype =
 {
+	bind: function (doc, body)
+	{
+		this.doc = doc
+		this.cursor = body.appendChild(doc.createElement('div'))
+		this.cursor.id = 'recorder-cursor'
+	},
+	
 	addListeners: function ()
 	{
 		var me = this
 		function listener (e) { me.record(e) }
 		this.listener = listener
-		document.addEventListener('mousemove', listener, true)
+		this.doc.addEventListener('mousemove', listener, true)
 	},
 	
 	removeListeners: function ()
 	{
 		var listener = this.listener
-		document.removeEventListener('mousemove', listener, true)
+		this.doc.removeEventListener('mousemove', listener, true)
 	},
 	
 	start: function ()
 	{
-		this.start = new Date()
+		this.actions = []
+		this.begin = new Date()
 		this.addListeners()
 	},
 	
@@ -41,20 +46,21 @@ Me.prototype =
 			type: e.type,
 			target: e.target,
 			point: {x: e.clientX, y: e.clientY},
-			t: new Date() - this.start
+			t: new Date() - this.begin
 		}
 		this.actions.push(action)
 	},
 	
 	play: function ()
 	{
-		log('playing ', this.actions.length)
-		// document.removeEventListener('mousemove', mousemove, false)
-		// document.removeEventListener('keypress', keypress, false)
-		this.cursor = document.body.appendChild(document.createElement('div'))
-		this.cursor.id = 'recorder-cursor'
+		if (!this.actions)
+			throw new Error('nothing to playback')
+		this.stop()
+		log('playing:', this.actions.length)
+		// this.doc.removeEventListener('mousemove', mousemove, false)
+		// this.doc.removeEventListener('keypress', keypress, false)
 		this.frame = 0
-		this.start = new Date()
+		this.begin = new Date()
 		clearTimeout(this.timer)
 		var me = this
 		this.callFrame = function () { me.nextFrame() }
@@ -68,17 +74,17 @@ Me.prototype =
 		{
 			var point = action.point
 			// cursor = cursor.cloneNode(false)
-			// document.body.appendChild(cursor)
+			// this.doc.body.appendChild(cursor)
 			var style = this.cursor.style
 			style.left = point.x + 'px'
 			style.top = point.y + 'px'
-			var next = action.t - (new Date() - this.start)
+			var next = action.t - (new Date() - this.begin)
 			setTimeout(this.callFrame, next)
 			
-			var e = document.createEvent('MouseEvents')
+			var e = this.doc.createEvent('MouseEvents')
 			e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, point.x, point.y, false, false, false, false, 0, null)
 			action.target.dispatchEvent(e)
-			// document.elementFromPoint(point.x, point.y)
+			// this.doc.elementFromPoint(point.x, point.y)
 		}
 	}
 }
