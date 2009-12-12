@@ -48,11 +48,21 @@ Me.prototype =
 		while ((parent = node.parentNode))
 		{
 			var childs = parent.childNodes
-			for (var i = 0, il = childs.length; i < il; i++)
-				if (childs[i] === node)
+			for (var i = 0, num = 0, il = childs.length; i < il; i++)
+			{
+				var child = childs[i]
+				if (child === node)
 					break
+				// different browsers differ in node traversal support
+				// and we have additional scripts for some browsers just in body node
+				else if (child.nodeType == 1 && child.nodeName != 'SCRIPT')
+				{
+					num++
+					path.push(child.nodeName)
+				}
+			}
 			
-			path.push(i)
+			path.push(num)
 			node = parent
 		}
 		
@@ -63,9 +73,22 @@ Me.prototype =
 	{
 		var node = document
 		
-		for (var i = 0, il = path.length; i < il; i++)
-			node = node.childNodes[path[i]]
-		
+		for (var i = 0, num = 0, il = path.length; node && i < il; i++)
+		{
+			var childs = node.childNodes, n = path[i]
+			for (var j = 0, jl = childs.length; j < jl; j++)
+			{
+				var child = childs[j]
+				if (child.nodeType == 1 && child.nodeName != 'SCRIPT')
+					if (num === n)
+					{
+						node = child
+						break
+					}
+					else
+						num++
+			}
+		}
 		return node
 	},
 	
@@ -79,7 +102,6 @@ Me.prototype =
 		}
 		
 		var nodeNum, node = e.target
-		
 		if (!(nodeNum = node.__Recorder_nodeNum))
 		{
 			var path = this.guesNodePath(node)
@@ -105,7 +127,7 @@ Me.prototype =
 	{
 		if (!this.actions)
 			throw new Error('nothing to playback')
-		this.stop()
+		
 		log('playing:', this.actions.length)
 		// this.doc.removeEventListener('mousemove', mousemove, false)
 		// this.doc.removeEventListener('keypress', keypress, false)
@@ -129,8 +151,6 @@ Me.prototype =
 			var style = this.cursor.style
 			style.left = x + 'px'
 			style.top = y + 'px'
-			var next = action.t - (new Date() - this.begin)
-			setTimeout(this.callFrame, next < 0 ? 0 : next)
 			
 			var num = action.n, path = action.path
 			if (path)
@@ -141,6 +161,14 @@ Me.prototype =
 			else
 				node = this.nodes[num]
 			
+			if (!node)
+			{
+				alert('node undefined: path=' + path.join(',') + '; num=' + num)
+				throw new Error('could not determine current node')
+			}
+			
+			var next = action.t - (new Date() - this.begin)
+			setTimeout(this.callFrame, next < 0 ? 0 : next)
 			
 			var e = this.doc.createEvent('MouseEvent')
 			e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
