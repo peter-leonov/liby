@@ -1,4 +1,3 @@
-if (self.$)
 (function(){
 
 var doc = document
@@ -18,7 +17,8 @@ function checkready ()
 		// IE 6-7
 		doc.__fixNodes(doc.all)
 	
-	$.onready.run()
+	if (self.$)
+		self.$.onready.run()
 }
 checkready.interval = setInterval(checkready, 100)
 
