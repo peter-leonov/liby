@@ -1,14 +1,9 @@
 ;(function(){
 
 var myName = 'EventDriven',
-	Me = self[myName] = Module(myName),
+	Me = self[myName] = Module.create(myName),
 	handlersProp = '__' + myName + 'Handlers',
 	doc = document
-
-function preventDefault ()
-{
-	this.defaultPrevented = true
-}
 
 Me.prototype =
 {
@@ -43,16 +38,14 @@ Me.prototype =
 	
 	dispatchEvent: function (e)
 	{
+		e.__dispatched = true
 		var handlers, harr, len
 		if ((handlers = this[handlersProp]))
 			if ((harr = handlers[e.type]))
 				if ((len = harr.length))
 				{
-					e.preventDefault = preventDefault
 					for (var i = 0; i < len; i++)
-						try { harr[i].call(this, e) }
-						catch (ex) { log(ex) }
-					delete e.preventDefault
+						harr[i].call(this, e)
 					return !e.defaultPrevented
 				}
 		
@@ -61,11 +54,38 @@ Me.prototype =
 	
 	dispatchEventData: function (type, data)
 	{
-		var e = doc.createEvent('Event')
-		e.initEvent(type, true, true)
+		var e = new Event()
 		e.data = data
 		return this.dispatchEvent(e)
 	}
 }
+
+function Event () {}
+
+Event.prototype =
+{
+	bubbles: false,
+	cancelable: false,
+	
+	preventDefault: function ()
+	{
+		if (this.__dispatched && this.cancelable)
+			this.defaultPrevented = true
+	},
+	
+	stopPropagation: function ()
+	{
+		this.propagationStopped = true
+	},
+	
+	initEvent: function (type, bubbles, cancelable)
+	{
+		this.type = type
+		this.bubbles = bubbles
+		this.cancelable = cancelable
+	}
+}
+
+Me.Event = Event
 
 })();
