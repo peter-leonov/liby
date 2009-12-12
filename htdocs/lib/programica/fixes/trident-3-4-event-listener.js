@@ -97,6 +97,8 @@ function getEventWrapper (e, kind)
 	w.type = e.type
 	w.clientX = e.clientX
 	w.clientY = e.clientY
+	w.charCode = e.charCode
+	w.keyCode = e.keyCode
 	w.currentTarget = w.target = e.srcElement
 	w.detail = - e.wheelDelta / 30
 	w.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // body.scrollLeft
