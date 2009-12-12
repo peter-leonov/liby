@@ -8,19 +8,17 @@
 </head>
 <body>
 
-<button id="test-node-1">test node 1</button>
-
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 
 <!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	var node = document.getElementById('test-node-1')
-	
 	t.test('presence', function (t)
 	{
+		var node = document.createElement('div')
+		
 		t.ok(EventTarget, 'defined')
 		
 		// to date nor IE and Safari neither Opera support EventTarget
@@ -32,6 +30,70 @@ Tests.test(function (t)
 		function A () {}
 		A.prototype = document.body
 		t.instance(new A(), EventTarget)
+	})
+	
+	t.test('add listener then dispatch', function (t)
+	{
+		var node = document.createElement('div')
+		
+		var catched = false
+		node.addEventListener('test', function () { catched = true }, false)
+		
+		var e = document.createEvent('Event')
+		e.initEvent('test', true, true)
+		node.dispatchEvent(e)
+		
+		t.ok(catched, 'catched')
+	})
+	
+	t.test('add listener, append then dispatch', function (t)
+	{
+		var node = document.createElement('div')
+		
+		var catched = false
+		node.addEventListener('test', function () { catched = true }, false)
+		
+		document.body.appendChild(node)
+		
+		var e = document.createEvent('Event')
+		e.initEvent('test', true, true)
+		node.dispatchEvent(e)
+		
+		t.ok(catched, 'catched')
+	})
+	
+	t.test('append, add listener, remove then dispatch', function (t)
+	{
+		var node = document.createElement('div')
+		document.body.appendChild(node)
+		
+		var catched = false
+		node.addEventListener('test', function () { catched = true }, false)
+		
+		document.body.removeChild(node)
+		
+		var e = document.createEvent('Event')
+		e.initEvent('test', true, true)
+		node.dispatchEvent(e)
+		
+		t.ok(catched, 'catched')
+	})
+	
+	t.test('add listener, append, remove then dispatch', function (t)
+	{
+		var node = document.createElement('div')
+		
+		var catched = false
+		node.addEventListener('test', function () { catched = true }, false)
+		
+		document.body.appendChild(node)
+		document.body.removeChild(node)
+		
+		var e = document.createEvent('Event')
+		e.initEvent('test', true, true)
+		node.dispatchEvent(e)
+		
+		t.ok(catched, 'catched')
 	})
 })
 </script>
