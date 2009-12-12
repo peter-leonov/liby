@@ -1,6 +1,6 @@
 ;(function(){
 
-var myName = 'EventTarget',
+var myName = 'EventDriven',
 	Me = self[myName] = Module(myName),
 	handlersProp = '__' + myName + 'Handlers',
 	doc = document
