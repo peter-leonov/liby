@@ -1,3 +1,4 @@
+if (self.$)
 (function(){
 
 var doc = document
