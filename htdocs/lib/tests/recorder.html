@@ -24,12 +24,15 @@
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
 
+<script type="text/javascript" src="../modules/json.js"></script>
 <script type="text/javascript" src="../modules/recorder.js"></script>
 
 <!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	var script = <!--# include virtual="recorder-script.json" -->
+	
 	t.test('mousemove', function (t)
 	{
 		var block = document.getElementById('block')
@@ -63,9 +66,15 @@ Tests.test(function (t)
 				}
 			
 			if (e.charCode == 112)
+			{
 				recorder.play()
+				// log(JSON.stringify(recorder.script()))
+			}
 		}
 		document.addEventListener('keypress', keypress, false)
+		
+		recorder.load(script)
+		recorder.play()
 	})
 })
 </script>
