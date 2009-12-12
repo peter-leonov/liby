@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Recorder tests</title>
+	<style type="text/css" media="screen">
+		#block { position: absolute; z-index: 100; width: 5px; height: 5px; background: #800; }
+		#control { position: absolute; left: 100px; top: 200px; }
+		
+		#recorder-cursor { position: absolute; z-index: 65535; width: 3px; height: 3px; background: #000; }
+	</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="block"></div>
+
+<input id="control"/>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../programica/prototype.js"></script>
+
+<script type="text/javascript" src="../modules/recorder.js"></script>
+
+<!--# include virtual="tests.includes.html" -->
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('mousemove', function (t)
+	{
+		var block = document.getElementById('block')
+		function move (e)
+		{
+			var style = block.style
+			style.left = e.clientX - 5 + 'px'
+			style.top = e.clientY - 5 + 'px'
+		}
+		document.addEventListener('mousemove', move, false)
+		
+		
+		var recorder = new Recorder()
+		
+		function keypress (e)
+		{
+			if (e.charCode == 112)
+			// if (e.ctrlKey && e.charCode == 112)
+				recorder.stop(),
+				recorder.play()
+		}
+		document.addEventListener('keypress', keypress, false)
+		
+		recorder.start()
+	})
+})
+</script>
+</body>
+</html>
