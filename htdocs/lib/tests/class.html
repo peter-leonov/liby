@@ -24,21 +24,19 @@ Tests.test(function (t)
 		var A = Class.create(className)
 		
 		t.eq(A.className, className, 'name')
-		t.eqo(A.prototype, {}, 'clear prototype')
 		t.eq(A.prototype.constructor, A, 'prototype.constructor')
 	})
 	
 	t.test('create()', function (t)
 	{
 		var A = Class.create()
-		A.prototype.initialize = function () { this.args = arguments }
+		A.prototype.initialize = function (a, b, c) { this.args = [a, b, c] }
 		t.eq(A.className, '[anonymous Class 1]', 'name')
 		t.eq(Class.create().className, '[anonymous Class 2]', 'name')
 		t.instance(A.prototype, Object, 'prototype')
 		
-		var a = new A()
-		t.eqo(a, A.prototype, 'constructor')
-		t.eqo(a, A.prototype, 'clear constructor')
+		var a = new A(1, 2, 3)
+		t.eqo(a.args, [1, 2, 3], 'constructor')
 		t.ne(Class.create(), A, 'different constructors')
 	})
 	

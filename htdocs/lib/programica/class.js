@@ -3,7 +3,7 @@
 var myName = 'Class', count = 0,
 	Me = self[myName] = function () {}
 
-Me.setup = function (name, klass)
+Me.setup = function (klass, name)
 {
 	klass.className = name || '[anonymous ' + myName + ' ' + ++count + ']'
 	klass.prototype.constructor = klass
@@ -12,10 +12,17 @@ Me.setup = function (name, klass)
 
 Me.create = function (name, proto)
 {
-	var klass = function () {}
+	var klass = function () { this.initialize.apply(this, arguments) }
+	
 	if (proto)
 		klass.prototype = proto
-	return this.setup(name, klass)
+	else
+		proto = klass.prototype
+	
+	if (!proto.initialize)
+		proto.initialize = function () {}
+	
+	return this.setup(klass, name)
 }
 
 Me.className = myName
