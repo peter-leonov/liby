@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Paranoid EventTarget tests</title>
+</head>
+<body>
+
+<button id="test-node-1">test node 1</button>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if IE 8]><script type="text/javascript" src="../programica/trident4.js"></script><![endif]-->
+
+<!--# include virtual="tests.includes.html" -->
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var node = document.getElementById('test-node-1')
+	
+	t.test('presence', function (t)
+	{
+		t.ok(EventTarget, 'defined')
+		
+		// to date nor IE and Safari neither Opera support EventTarget
+		t.ok(node instanceof self.EventTarget, 'instanceof EventTarget')
+	})
+	
+	t.test('subclassing', function (t)
+	{
+		function A () {}
+		A.prototype = document.body
+		t.instance(new A(), EventTarget)
+	})
+})
+</script>
+</body>
+</html>
