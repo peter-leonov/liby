@@ -54,6 +54,28 @@ var UIEvent = win.UIEvent = function () { this.constructor = UIEvent }
 UIEvent.prototype = new Event()
 var MouseEvent = win.MouseEvent = function () { this.constructor = MouseEvent }
 MouseEvent.prototype = new Event()
+MouseEvent.prototype.initMouseEvent = function (type, bubbles, cancelable, view, detail, sx, sy, cx, cy, ctrl, alt, shift, meta, button, rTarget)
+{
+	this.type = type
+	this.bubbles = bubbles
+	this.cancelable = cancelable
+	this.timeStamp = +new Date()
+	
+	this.view = view
+	this.detail = detail
+	this.screenX = sx
+	this.screenY = sy
+	this.clientX = cx
+	this.clientY = cy
+	
+	this.ctrlKey = ctrl
+	this.altKey = alt
+	this.shiftKey = shift
+	this.metaKey = meta
+	
+	this.button = button
+	this.relatedTarget = rTarget
+}
 var KeyboardEvent = win.KeyboardEvent = function () { this.constructor = KeyboardEvent }
 KeyboardEvent.prototype = new Event()
 var MutationEvent = win.MutationEvent = function () { this.constructor = MutationEvent }
