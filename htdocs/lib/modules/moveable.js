@@ -1,13 +1,11 @@
 ;(function(){
 
-var myName = 'Moveable',
-	Me = self[myName] = Class(myName),
-	dropClick = false
+var myName = 'Moveable'
 
-Me.mixIn(EventTarget)
-
+function Me () {}
 
 function preventDefault (e){ e.preventDefault() }
+var dropClick = false
 function onclick (e)
 {
 	if (dropClick)
@@ -19,10 +17,8 @@ function onclick (e)
 Me.dropClick = function () { dropClick = true }
 document.addEventListener('click', onclick, true)
 
-Me.prototype.extend
-({
-	initialize: function () {},
-	
+Me.prototype =
+{
 	bind: function (node)
 	{
 		this.node = node
@@ -68,19 +64,19 @@ Me.prototype.extend
 			if (this.dispatchEventData('movestart', {event: e, mousedownEvent: this.mousedownEvent}))
 			{
 				Me.dropClick()
-				log(true)
+				
 				if (this.softStart)
 				{
 					this.startX = e.clientX
 					this.startY = e.clientY
 				}
-			
+				
 				document.removeEventListener('mousemove', this.mousemove, true)
 				document.removeEventListener('mouseup', this.mouseup, true)
-			
+				
 				document.addEventListener('mousemove', this.mousemove2, true)
 				document.addEventListener('mouseup', this.mouseup2, true)
-			
+				
 				this.onmove2(e)
 			}
 		}
@@ -129,6 +125,10 @@ Me.prototype.extend
 		
 		this.mousedownEvent = null
 	}
-})
+}
+
+self[myName] = Me
+Class.setup(Me, myName)
+Me.mixIn(EventDriven)
 
 })();

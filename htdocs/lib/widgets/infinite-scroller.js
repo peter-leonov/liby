@@ -1,15 +1,14 @@
 ;(function(){
 
-var myName = 'InfiniteScroller',
-	Me = self[myName] = Class(myName)
+var myName = 'InfiniteScroller'
 
-Me.prototype.extend
-({
-	initialize: function ()
-	{
-		this.nodes = {}
-	},
-	
+function Me ()
+{
+	this.nodes = {}
+}
+
+Me.prototype =
+{
 	bind: function (root)
 	{
 		this.nodes.root = root
@@ -81,6 +80,9 @@ Me.prototype.extend
 			}
 		}
 	}
-})
+}
+
+Class.setup(Me, myName)
+self[myName] = Me
 
 })();
