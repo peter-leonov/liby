@@ -29,6 +29,7 @@ Me.prototype =
 	
 	start: function ()
 	{
+		this.nodes = 0
 		this.actions = []
 		this.begin = new Date()
 		this.addListeners()
@@ -39,16 +40,57 @@ Me.prototype =
 		this.removeListeners()
 	},
 	
+	guesNodePath: function (node)
+	{
+		var parent, path = []
+		while ((parent = node.parentNode))
+		{
+			var childs = parent.childNodes
+			for (var i = 0, il = childs.length; i < il; i++)
+				if (childs[i] === node)
+					break
+			
+			path.push(i)
+			node = parent
+		}
+		
+		return path.reverse()
+	},
+	
+	guesNode: function (path)
+	{
+		var node = document
+		
+		for (var i = 0, il = path.length; i < il; i++)
+			node = node.childNodes[path[i]]
+		
+		return node
+	},
+	
 	record: function (e)
 	{
 		var action =
 		{
 			type: e.type,
-			target: e.target,
 			point: {x: e.clientX, y: e.clientY},
 			t: new Date() - this.begin
 		}
+		
+		var nodeNum, node = e.target
+		
+		if (!(nodeNum = node.__Recorder_nodeNum))
+		{
+			var path = this.guesNodePath(node)
+			action.path = path
+			nodeNum = node.__Recorder_nodeNum = ++this.nodes
+		}
+		action.node = nodeNum
 		this.actions.push(action)
+	},
+	
+	script: function ()
+	{
+		return this.actions
 	},
 	
 	play: function ()
@@ -59,6 +101,7 @@ Me.prototype =
 		log('playing:', this.actions.length)
 		// this.doc.removeEventListener('mousemove', mousemove, false)
 		// this.doc.removeEventListener('keypress', keypress, false)
+		this.nodes = {}
 		this.frame = 0
 		this.begin = new Date()
 		clearTimeout(this.timer)
@@ -81,9 +124,19 @@ Me.prototype =
 			var next = action.t - (new Date() - this.begin)
 			setTimeout(this.callFrame, next)
 			
+			var num = action.num, path = action.path
+			if (path)
+			{
+				node = this.guesNode(path)
+				this.nodes[num] = node
+			}
+			else
+				node = this.nodes[num]
+			
+			
 			var e = this.doc.createEvent('MouseEvents')
 			e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, point.x, point.y, false, false, false, false, 0, null)
-			action.target.dispatchEvent(e)
+			node.dispatchEvent(e)
 			// this.doc.elementFromPoint(point.x, point.y)
 		}
 	}
