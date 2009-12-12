@@ -6,6 +6,7 @@ function Me () {}
 
 Me.prototype =
 {
+	shortNames: {mousemove: 'mm', mousedown: 'md', mouseup: 'mu'},
 	bind: function (doc, body)
 	{
 		this.doc = doc
@@ -24,7 +25,8 @@ Me.prototype =
 	removeListeners: function ()
 	{
 		var listener = this.listener
-		this.doc.removeEventListener('mousemove', listener, true)
+		if (listener)
+			this.doc.removeEventListener('mousemove', listener, true)
 	},
 	
 	start: function ()
@@ -71,8 +73,8 @@ Me.prototype =
 	{
 		var action =
 		{
-			type: e.type,
-			point: {x: e.clientX, y: e.clientY},
+			e: this.shortNames[e.type],
+			p: [e.clientX, e.clientY],
 			t: new Date() - this.begin
 		}
 		
@@ -84,13 +86,19 @@ Me.prototype =
 			action.path = path
 			nodeNum = node.__Recorder_nodeNum = ++this.nodes
 		}
-		action.node = nodeNum
+		action.n = nodeNum
 		this.actions.push(action)
 	},
 	
 	script: function ()
 	{
+		this.stop()
 		return this.actions
+	},
+	
+	load: function (arr)
+	{
+		this.actions = arr
 	},
 	
 	play: function ()
@@ -115,16 +123,16 @@ Me.prototype =
 		var action = this.actions[this.frame++]
 		if (action)
 		{
-			var point = action.point
+			var point = action.p, x = point[0], y = point[1]
 			// cursor = cursor.cloneNode(false)
 			// this.doc.body.appendChild(cursor)
 			var style = this.cursor.style
-			style.left = point.x + 'px'
-			style.top = point.y + 'px'
+			style.left = x + 'px'
+			style.top = y + 'px'
 			var next = action.t - (new Date() - this.begin)
 			setTimeout(this.callFrame, next)
 			
-			var num = action.num, path = action.path
+			var num = action.n, path = action.path
 			if (path)
 			{
 				node = this.guesNode(path)
@@ -135,7 +143,7 @@ Me.prototype =
 			
 			
 			var e = this.doc.createEvent('MouseEvents')
-			e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, point.x, point.y, false, false, false, false, 0, null)
+			e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 			node.dispatchEvent(e)
 			// this.doc.elementFromPoint(point.x, point.y)
 		}
