@@ -57,6 +57,8 @@ Tests.test(function (t)
 	t.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
 	node.dispatchEvent(e)
 	t.eq(calls, 1, 'dispatchEvent does call handler')
+	node.dispatchEventData(e.type, {})
+	t.eq(calls, 2, 'dispatchEventData does call handler')
 	
 	calls = 0
 	e = new EventDriven.Event(kind)

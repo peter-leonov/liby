@@ -55,6 +55,7 @@ Me.prototype =
 	dispatchEventData: function (type, data)
 	{
 		var e = new Event()
+		e.type = type
 		e.data = data
 		return this.dispatchEvent(e)
 	}
