@@ -130,7 +130,7 @@ Me.prototype =
 			style.left = x + 'px'
 			style.top = y + 'px'
 			var next = action.t - (new Date() - this.begin)
-			setTimeout(this.callFrame, next)
+			setTimeout(this.callFrame, next < 0 ? 0 : next)
 			
 			var num = action.n, path = action.path
 			if (path)
@@ -142,7 +142,7 @@ Me.prototype =
 				node = this.nodes[num]
 			
 			
-			var e = this.doc.createEvent('MouseEvents')
+			var e = this.doc.createEvent('MouseEvent')
 			e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 			node.dispatchEvent(e)
 			// this.doc.elementFromPoint(point.x, point.y)
