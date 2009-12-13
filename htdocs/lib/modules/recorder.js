@@ -128,6 +128,8 @@ Me.prototype =
 		if (!this.actions)
 			throw new Error('nothing to playback')
 		
+		this.cursor.style.display = 'block'
+		
 		log('playing:', this.actions.length)
 		// this.doc.removeEventListener('mousemove', mousemove, false)
 		// this.doc.removeEventListener('keypress', keypress, false)
@@ -140,41 +142,46 @@ Me.prototype =
 		this.timer = setTimeout(this.callFrame, 0)
 	},
 	
+	pause: function ()
+	{
+		this.cursor.style.display = 'none'
+	},
+	
 	nextFrame: function ()
 	{
 		var action = this.actions[this.frame++]
-		if (action)
+		if (!action)
+			return this.pause()
+		
+		var point = action.p, x = point[0], y = point[1]
+		// cursor = cursor.cloneNode(false)
+		// this.doc.body.appendChild(cursor)
+		var style = this.cursor.style
+		style.left = x + 'px'
+		style.top = y + 'px'
+		
+		var num = action.n, path = action.path
+		if (path)
 		{
-			var point = action.p, x = point[0], y = point[1]
-			// cursor = cursor.cloneNode(false)
-			// this.doc.body.appendChild(cursor)
-			var style = this.cursor.style
-			style.left = x + 'px'
-			style.top = y + 'px'
-			
-			var num = action.n, path = action.path
-			if (path)
-			{
-				node = this.guesNode(path)
-				this.nodes[num] = node
-			}
-			else
-				node = this.nodes[num]
-			
-			if (!node)
-			{
-				alert('node undefined: path=' + path.join(',') + '; num=' + num)
-				throw new Error('could not determine current node')
-			}
-			
-			var next = action.t - (new Date() - this.begin)
-			setTimeout(this.callFrame, next < 0 ? 0 : next)
-			
-			var e = this.doc.createEvent('MouseEvent')
-			e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
-			node.dispatchEvent(e)
-			// this.doc.elementFromPoint(point.x, point.y)
+			node = this.guesNode(path)
+			this.nodes[num] = node
 		}
+		else
+			node = this.nodes[num]
+		
+		if (!node)
+		{
+			alert('node undefined: path=' + path.join(',') + '; num=' + num)
+			throw new Error('could not determine current node')
+		}
+		
+		var next = action.t - (new Date() - this.begin)
+		setTimeout(this.callFrame, next < 0 ? 0 : next)
+		
+		var e = this.doc.createEvent('MouseEvent')
+		e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
+		node.dispatchEvent(e)
+		// this.doc.elementFromPoint(point.x, point.y)
 	}
 }
 
