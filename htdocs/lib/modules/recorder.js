@@ -134,7 +134,7 @@ Me.prototype =
 		
 		this.cursor.style.display = 'block'
 		
-		log('playing:', this.actions.length)
+		// log('playing:', this.actions.length)
 		// this.doc.removeEventListener('mousemove', mousemove, false)
 		// this.doc.removeEventListener('keypress', keypress, false)
 		this.nodes = {}
@@ -183,6 +183,34 @@ Me.prototype =
 		e.initMouseEvent(this.longNames[action.e], true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 		node.dispatchEvent(e)
 		// this.doc.elementFromPoint(point.x, point.y)
+	},
+	
+	enableControls: function ()
+	{
+		var started = false, me = this
+		function keydown (e)
+		{
+			// alert(e.keyCode)
+			if (e.keyCode == 82)
+			// if (e.ctrlKey && e.charCode == 114)
+				if (started)
+				{
+					started = false
+					me.stop()
+				}
+				else
+				{
+					started = true
+					me.start()
+				}
+			
+			if (e.keyCode == 80)
+				me.play()
+			
+			if (e.keyCode == 83)
+				window.prompt(JSON.stringify(me.script()))
+		}
+		document.addEventListener('keydown', keydown, false)
 	}
 }
 
