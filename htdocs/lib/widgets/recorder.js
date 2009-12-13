@@ -46,6 +46,27 @@ Me.prototype =
 			var player = new EventPlayer()
 			player.bind(this.doc, this.root)
 			player.load(this.lastRecorder.script())
+			
+			var cursor = null
+			player.onstart = function ()
+			{
+				cursor = this.doc.createElement('div')
+				cursor.className = 'recorder-cursor'
+				this.body.appendChild(cursor)
+			}
+			
+			player.onstep = function (a, x, y)
+			{
+				var style = cursor.style
+				style.left = x + 'px'
+				style.top = y + 'px'
+			}
+			
+			player.oncomplete = function ()
+			{
+				this.body.removeChild(cursor)
+			}
+			
 			player.play()
 		}
 		

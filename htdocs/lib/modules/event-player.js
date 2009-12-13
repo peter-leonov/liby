@@ -6,13 +6,15 @@ function Me () {}
 
 Me.prototype =
 {
+	onstart: function () {},
+	onstep: function () {},
+	oncomplete: function () {},
+	
 	longNames:  {mm: 'mousemove', md: 'mousedown', mu: 'mouseup'},
 	bind: function (doc, body)
 	{
 		this.doc = doc || document
 		this.body = body || document.body
-		this.cursor = this.body.appendChild(this.doc.createElement('div'))
-		this.cursor.id = 'recorder-cursor'
 	},
 	
 	guesNode: function (path)
@@ -48,8 +50,6 @@ Me.prototype =
 		if (!this.actions)
 			throw new Error('nothing to playback')
 		
-		this.cursor.style.display = 'block'
-		
 		// log('playing:', this.actions.length)
 		// this.doc.removeEventListener('mousemove', mousemove, false)
 		// this.doc.removeEventListener('keypress', keypress, false)
@@ -59,26 +59,18 @@ Me.prototype =
 		clearTimeout(this.timer)
 		var me = this
 		this.callFrame = function () { me.nextFrame() }
+		if (this.onstart() === false)
+			return
 		this.timer = setTimeout(this.callFrame, 0)
-	},
-	
-	pause: function ()
-	{
-		this.cursor.style.display = 'none'
 	},
 	
 	nextFrame: function ()
 	{
 		var action = this.actions[this.frame++]
 		if (!action)
-			return this.pause()
+			return this.oncomplete()
 		
 		var point = action.p, x = point[0], y = point[1]
-		// cursor = cursor.cloneNode(false)
-		// this.doc.body.appendChild(cursor)
-		var style = this.cursor.style
-		style.left = x + 'px'
-		style.top = y + 'px'
 		
 		var num = action.n, path = action.path
 		if (path)
@@ -91,6 +83,9 @@ Me.prototype =
 		
 		if (!node)
 			throw new Error('could not determine current node')
+		
+		if (this.onstep && this.onstep(action, x, y, node) === false)
+			return
 		
 		var next = action.t - (new Date() - this.begin)
 		setTimeout(this.callFrame, next < 0 ? 0 : next)
