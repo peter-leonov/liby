@@ -94,36 +94,6 @@ Me.prototype =
 	{
 		this.stop()
 		return this.actions
-	},
-	
-	
-	enableControls: function ()
-	{
-		var started = false, me = this
-		function keydown (e)
-		{
-			// alert(e.keyCode)
-			if (e.keyCode == 82)
-			// if (e.ctrlKey && e.charCode == 114)
-				if (started)
-				{
-					started = false
-					me.stop()
-				}
-				else
-				{
-					started = true
-					me.start()
-				}
-			
-			if (e.keyCode == 80)
-				me.play()
-			
-			if (e.keyCode == 83)
-				// window.prompt('the script', JSON.stringify(me.script()))
-				log(JSON.stringify(me.script()))
-		}
-		document.addEventListener('keydown', keydown, false)
 	}
 }
 

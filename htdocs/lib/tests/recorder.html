@@ -23,9 +23,11 @@
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
 
-<script type="text/javascript" src="../modules/json.js"></script>
 <script type="text/javascript" src="../modules/event-recorder.js"></script>
 <script type="text/javascript" src="../modules/event-player.js"></script>
+
+<script type="text/javascript" src="../modules/json.js"></script>
+<script type="text/javascript" src="../widgets/recorder.js"></script>
 
 <!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
@@ -47,8 +49,8 @@ Tests.test(function (t)
 		var control = document.getElementById('control')
 		control.addEventListener('mousedown', function (e) { e.target.value++ }, false)
 		
-		var recorder = new EventRecorder()
-		recorder.bind(document)
+		var recorder = new Recorder()
+		recorder.enable()
 		
 		// recorder.enableControls()
 		
