@@ -56,10 +56,7 @@ Me.prototype =
 				// different browsers differ in node traversal support
 				// and we have additional scripts for some browsers just in body node
 				else if (child.nodeType == 1 && child.nodeName != 'SCRIPT')
-				{
 					num++
-					path.push(child.nodeName)
-				}
 			}
 			
 			path.push(num)
