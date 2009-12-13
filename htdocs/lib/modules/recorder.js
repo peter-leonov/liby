@@ -208,7 +208,7 @@ Me.prototype =
 				me.play()
 			
 			if (e.keyCode == 83)
-				window.prompt(JSON.stringify(me.script()))
+				window.prompt('the script', JSON.stringify(me.script()))
 		}
 		document.addEventListener('keydown', keydown, false)
 	}
