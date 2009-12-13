@@ -9,8 +9,9 @@ Me.prototype =
 	longNames:  {mm: 'mousemove', md: 'mousedown', mu: 'mouseup'},
 	bind: function (doc, body)
 	{
-		this.doc = doc
-		this.cursor = body.appendChild(doc.createElement('div'))
+		this.doc = doc || document
+		this.body = body || document.body
+		this.cursor = this.body.appendChild(this.doc.createElement('div'))
 		this.cursor.id = 'recorder-cursor'
 	},
 	

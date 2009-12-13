@@ -9,7 +9,7 @@ Me.prototype =
 	shortNames: {mousemove: 'mm', mousedown: 'md', mouseup: 'mu'},
 	bind: function (doc)
 	{
-		this.doc = doc
+		this.doc = doc || document
 	},
 	
 	addListeners: function ()
