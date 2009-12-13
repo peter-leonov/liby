@@ -7,6 +7,7 @@ function Me () {}
 Me.prototype =
 {
 	shortNames: {mousemove: 'mm', mousedown: 'md', mouseup: 'mu'},
+	longNames:  {mm: 'mousemove', md: 'mousedown', mu: 'mouseup'},
 	bind: function (doc, body)
 	{
 		this.doc = doc
@@ -20,13 +21,19 @@ Me.prototype =
 		function listener (e) { me.record(e) }
 		this.listener = listener
 		this.doc.addEventListener('mousemove', listener, true)
+		this.doc.addEventListener('mousedown', listener, true)
+		this.doc.addEventListener('mouseup', listener, true)
 	},
 	
 	removeListeners: function ()
 	{
 		var listener = this.listener
-		if (listener)
-			this.doc.removeEventListener('mousemove', listener, true)
+		if (!listener)
+			return
+		
+		this.doc.removeEventListener('mousemove', listener, true)
+		this.doc.removeEventListener('mousedown', listener, true)
+		this.doc.removeEventListener('mouseup', listener, true)
 	},
 	
 	start: function ()
@@ -167,16 +174,13 @@ Me.prototype =
 			node = this.nodes[num]
 		
 		if (!node)
-		{
-			alert('node undefined: path=' + path.join(',') + '; num=' + num)
 			throw new Error('could not determine current node')
-		}
 		
 		var next = action.t - (new Date() - this.begin)
 		setTimeout(this.callFrame, next < 0 ? 0 : next)
 		
 		var e = this.doc.createEvent('MouseEvent')
-		e.initMouseEvent('mousemove', true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
+		e.initMouseEvent(this.longNames[action.e], true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 		node.dispatchEvent(e)
 		// this.doc.elementFromPoint(point.x, point.y)
 	}

@@ -16,7 +16,7 @@
 
 <div id="block"></div>
 
-<input id="control"/>
+<input type="button" id="control" onmousedown="log(123)"/>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
@@ -41,7 +41,7 @@ Tests.test(function (t)
 			style.left = e.clientX - 5 + 'px'
 			style.top = e.clientY - 5 + 'px'
 		}
-		document.addEventListener('mousemove', move, false)
+		// document.addEventListener('mousemove', move, false)
 		
 		
 		var recorder = new Recorder()
@@ -72,8 +72,8 @@ Tests.test(function (t)
 		}
 		document.addEventListener('keydown', keydown, false)
 		
-		recorder.load(script)
-		recorder.play()
+		// recorder.load(script)
+		// recorder.play()
 	})
 })
 </script>
