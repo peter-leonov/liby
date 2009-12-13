@@ -54,14 +54,9 @@ Tests.test(function (t)
 		control.addEventListener('mousedown', function (e) { e.target.value++ }, false)
 		
 		var recorder = new Recorder()
-		recorder.enable()
+		recorder.bind()
 		
-		// recorder.enableControls()
-		
-		var player = new EventPlayer()
-		player.bind()
-		player.load(script)
-		player.play()
+		recorder.play(script)
 	})
 })
 </script>

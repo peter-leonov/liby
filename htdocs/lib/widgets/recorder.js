@@ -13,13 +13,41 @@ function Me (doc, root)
 
 Me.prototype =
 {
-	enable: function ()
+	bind: function ()
 	{
 		var me = this
 		document.addEventListener('keydown', function (e) { me.keydown(e) }, false)
 	},
 	
-	started: false,
+	play: function (script)
+	{
+		var player = new EventPlayer()
+		player.bind(this.doc, this.root)
+		player.load(script)
+		
+		var cursor = null
+		player.onstart = function ()
+		{
+			cursor = this.doc.createElement('div')
+			cursor.className = 'recorder-cursor'
+			this.body.appendChild(cursor)
+		}
+		
+		player.onstep = function (a, x, y)
+		{
+			var style = cursor.style
+			style.left = x + 'px'
+			style.top = y + 'px'
+		}
+		
+		player.oncomplete = function ()
+		{
+			this.body.removeChild(cursor)
+		}
+		
+		player.play()
+	},
+	
 	keydown: function (e)
 	{
 		// alert(e.keyCode)
@@ -43,31 +71,7 @@ Me.prototype =
 			if (!this.lastRecorder)
 				return alert('nothing to play')
 			
-			var player = new EventPlayer()
-			player.bind(this.doc, this.root)
-			player.load(this.lastRecorder.script())
-			
-			var cursor = null
-			player.onstart = function ()
-			{
-				cursor = this.doc.createElement('div')
-				cursor.className = 'recorder-cursor'
-				this.body.appendChild(cursor)
-			}
-			
-			player.onstep = function (a, x, y)
-			{
-				var style = cursor.style
-				style.left = x + 'px'
-				style.top = y + 'px'
-			}
-			
-			player.oncomplete = function ()
-			{
-				this.body.removeChild(cursor)
-			}
-			
-			player.play()
+			this.play(this.lastRecorder.script())
 		}
 		
 		if (e.keyCode == 83)
