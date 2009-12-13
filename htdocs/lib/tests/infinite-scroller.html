@@ -16,6 +16,8 @@
 	#test-node-1 .p4 { background-color: #b08; }
 	#test-node-1 .p5 { background-color: #fb0; }
 	#test-node-1 .tail { position: absolute; left: 2100px; top: 0; width: 600px; height: 100%; overflow: hidden; }
+	
+	#recorder-cursor { position: absolute; z-index: 65535; width: 18px; height: 24px; margin: -3px 0 0 -3px; background: url(recorder-cursor.png); }
 	</style>
 </head>
 <body>
@@ -48,17 +50,29 @@
 <script type="text/javascript" src="../modules/moveable.js"></script>
 <script type="text/javascript" src="../widgets/infinite-scroller.js"></script>
 
+<script type="text/javascript" src="../modules/json.js"></script>
+<script type="text/javascript" src="../modules/recorder.js"></script>
+<script type="text/javascript" src="infinite-scroller-script.json"></script>
+
 <!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.test('untitled', function (t)
+	t.test('recorded mouse', function (t)
 	{
 		var node = document.getElementById('test-node-1')
 		
 		var is = new InfiniteScroller().bind(node)
 		
-		t.instance(is, InfiniteScroller)
+		t.ok(is instanceof InfiniteScroller, 'instance InfiniteScroller')
+		
+		var recorder = new Recorder()
+		recorder.bind(document, document.body)
+		
+		recorder.load(scrollerScript)
+		recorder.play()
+		
+		recorder.enableControls()
 	})
 })
 </script>
