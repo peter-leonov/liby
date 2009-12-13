@@ -16,7 +16,7 @@
 
 <div id="block"></div>
 
-<input type="button" id="control" onmousedown="log(123)"/>
+<input type="button" id="control" value="0"/>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
@@ -43,34 +43,13 @@ Tests.test(function (t)
 		}
 		// document.addEventListener('mousemove', move, false)
 		
+		var control = document.getElementById('control')
+		control.addEventListener('mousedown', function (e) { e.target.value++ }, false)
 		
 		var recorder = new Recorder()
 		recorder.bind(document, document.body)
 		
-		var started = false
-		function keydown (e)
-		{
-			// alert(e.keyCode)
-			if (e.keyCode == 82)
-			// if (e.ctrlKey && e.charCode == 114)
-				if (started)
-				{
-					started = false
-					recorder.stop()
-				}
-				else
-				{
-					started = true
-					recorder.start()
-				}
-			
-			if (e.keyCode == 80)
-			{
-				recorder.play()
-				// log(JSON.stringify(recorder.script()))
-			}
-		}
-		document.addEventListener('keydown', keydown, false)
+		recorder.enableControls()
 		
 		// recorder.load(script)
 		// recorder.play()
