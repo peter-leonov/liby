@@ -17,7 +17,12 @@
 	#test-node-1 .p5 { background-color: #fb0; }
 	#test-node-1 .tail { position: absolute; left: 2100px; top: 0; width: 600px; height: 100%; overflow: hidden; }
 	
-	#recorder-cursor { position: absolute; z-index: 65535; width: 18px; height: 24px; margin: -3px 0 0 -3px; background: url(recorder-cursor.png); }
+	#recorder-cursor
+	{
+		position: absolute; z-index: 65535; left: 0; top: -100px; width: 18px; height: 24px;
+		background: url(recorder-cursor.png); margin: -3px 0 0 -3px;
+	}
+	
 	</style>
 </head>
 <body>
@@ -39,6 +44,8 @@
 </div>
 </div>
 
+<div id="recorder-cursor"></div>
+
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/prototype.js"></script>
@@ -50,8 +57,7 @@
 <script type="text/javascript" src="../modules/moveable.js"></script>
 <script type="text/javascript" src="../widgets/infinite-scroller.js"></script>
 
-<script type="text/javascript" src="../modules/json.js"></script>
-<script type="text/javascript" src="../modules/recorder.js"></script>
+<script type="text/javascript" src="../modules/event-player.js"></script>
 <script type="text/javascript" src="infinite-scroller-script.json"></script>
 
 <!--# include virtual="tests.includes.html" -->
@@ -66,13 +72,20 @@ Tests.test(function (t)
 		
 		t.ok(is instanceof InfiniteScroller, 'instance InfiniteScroller')
 		
-		var recorder = new Recorder()
-		recorder.bind(document, document.body)
+		var player = new EventPlayer()
+		player.bind()
 		
-		recorder.load(scrollerScript)
-		recorder.play()
+		var cursor = document.getElementById('recorder-cursor')
+		player.onstep = function (a, x, y)
+		{
+			var style = cursor.style
+			style.left = x + 'px'
+			style.top = y + 'px'
+		}
 		
-		recorder.enableControls()
+		// scrollerScript lais in infinite-scroller-script.json
+		player.load(scrollerScript)
+		player.play()
 	})
 })
 </script>
