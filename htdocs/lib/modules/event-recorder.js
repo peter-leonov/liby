@@ -6,7 +6,6 @@ function Me () {}
 
 Me.prototype =
 {
-	shortNames: {mousemove: 'mm', mousedown: 'md', mouseup: 'mu'},
 	bind: function (doc)
 	{
 		this.doc = doc || document
@@ -37,6 +36,7 @@ Me.prototype =
 	{
 		this.nodes = 0
 		this.actions = []
+		this.state = {}
 		this.begin = new Date()
 		this.addListeners()
 	},
@@ -72,12 +72,16 @@ Me.prototype =
 	
 	record: function (e)
 	{
+		var state = this.state
+		
 		var action =
 		{
-			e: this.shortNames[e.type],
 			p: [e.clientX, e.clientY],
 			t: new Date() - this.begin
 		}
+		
+		if (state.e !== e.type)
+			state.e = action.e = e.type
 		
 		var nodeNum, node = e.target
 		if (!(nodeNum = node.__Recorder_nodeNum))
@@ -86,7 +90,10 @@ Me.prototype =
 			action.path = path
 			nodeNum = node.__Recorder_nodeNum = ++this.nodes
 		}
-		action.n = nodeNum
+		
+		if (state.n !== nodeNum)
+			state.n = action.n = nodeNum
+		
 		this.actions.push(action)
 	},
 	

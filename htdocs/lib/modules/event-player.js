@@ -10,7 +10,6 @@ Me.prototype =
 	onstep: function () {},
 	oncomplete: function () {},
 	
-	longNames:  {mm: 'mousemove', md: 'mousedown', mu: 'mouseup'},
 	bind: function (doc, body)
 	{
 		this.doc = doc || document
@@ -50,9 +49,7 @@ Me.prototype =
 		if (!this.actions)
 			throw new Error('nothing to playback')
 		
-		// log('playing:', this.actions.length)
-		// this.doc.removeEventListener('mousemove', mousemove, false)
-		// this.doc.removeEventListener('keypress', keypress, false)
+		this.state = {}
 		this.nodes = {}
 		this.frame = 0
 		this.begin = new Date()
@@ -70,6 +67,8 @@ Me.prototype =
 		if (!action)
 			return this.oncomplete()
 		
+		var state = this.state
+		
 		var point = action.p, x = point[0], y = point[1]
 		
 		var num = action.n, path = action.path
@@ -77,9 +76,10 @@ Me.prototype =
 		{
 			node = this.guesNode(path)
 			this.nodes[num] = node
+			state.n = num
 		}
 		else
-			node = this.nodes[num]
+			node = this.nodes[num || state.n]
 		
 		if (!node)
 			throw new Error('could not determine current node')
@@ -90,8 +90,14 @@ Me.prototype =
 		var next = action.t - (new Date() - this.begin)
 		setTimeout(this.callFrame, next < 0 ? 0 : next)
 		
+		var type = action.e
+		if (type)
+			state.e = type
+		else
+			type = state.e
+		
 		var e = this.doc.createEvent('MouseEvent')
-		e.initMouseEvent(this.longNames[action.e], true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
+		e.initMouseEvent(type, true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 		node.dispatchEvent(e)
 		// this.doc.elementFromPoint(point.x, point.y)
 	}
