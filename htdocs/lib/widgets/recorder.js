@@ -51,10 +51,10 @@ Me.prototype =
 		
 		if (e.keyCode == 83)
 		{
-			if (!this.recorder)
+			if (!this.lastRecorder)
 				return alert('nothing to save')
 			
-			window.prompt('the script:', JSON.stringify(me.script()))
+			window.prompt('the script:', JSON.stringify(this.lastRecorder.script()))
 		}
 	}
 }
