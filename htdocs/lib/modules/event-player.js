@@ -6,10 +6,6 @@ function Me () {}
 
 Me.prototype =
 {
-	onstart: function () {},
-	onstep: function () {},
-	oncomplete: function () {},
-	
 	bind: function (doc, body)
 	{
 		this.doc = doc || document
@@ -56,7 +52,7 @@ Me.prototype =
 		clearTimeout(this.timer)
 		var me = this
 		this.callFrame = function () { me.nextFrame() }
-		if (this.onstart() === false)
+		if (this.onstart && this.onstart() === false)
 			return
 		this.timer = setTimeout(this.callFrame, 0)
 	},
@@ -65,7 +61,7 @@ Me.prototype =
 	{
 		var action = this.actions[this.frame++]
 		if (!action)
-			return this.oncomplete()
+			return this.oncomplete && this.oncomplete()
 		
 		var state = this.state
 		
