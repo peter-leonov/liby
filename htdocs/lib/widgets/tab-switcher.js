@@ -1,18 +1,15 @@
 ;(function(){
 
 var myName = 'TabSwitcher'
-var Me = self[myName] = Class(myName)
 
-Me.mixIn(EventTarget)
+function Me ()
+{
+	this.nodes = {tabs:[], sections:[]}
+}
 
-Me.prototype.extend
-({
+Me.prototype =
+{
 	eventType: 'mousedown',
-	
-	initialize: function ()
-	{
-		this.nodes = {tabs:[], sections:[]}
-	},
 	
 	bind: function (nodes)
 	{
@@ -48,7 +45,7 @@ Me.prototype.extend
 	
 	select: function (num)
 	{
-		var ok = this.dispatchEvent({type:'select', num:num})
+		var ok = this.dispatchEventData('select', {num:num})
 		if (ok)
 			this.renderSelected(num)
 		return ok
@@ -87,6 +84,11 @@ Me.prototype.extend
 				node.toggleClassName('hidden', num !== i)
 	}
 	
-})
+}
+
+Class.setup(Me, myName)
+self[myName] = Me
+
+Me.mixIn(EventDriven)
 
 })();
