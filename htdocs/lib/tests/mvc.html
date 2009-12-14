@@ -33,7 +33,7 @@ Tests.test(function (t)
 		{
 			this.abc = 123
 		}
-		MVC.setup('A', A)
+		MVC.setup(A, 'A')
 		
 		t.eq(A.className, 'A', 'className')
 		t.instance(new A(), MVC, 'className')
@@ -58,7 +58,7 @@ Tests.test(function (t)
 	t.test('setup(): model & view & controller', function (t)
 	{
 		function A () {}
-		MVC.setup('A', A)
+		MVC.setup(A, 'A')
 		
 		var a = new A()
 		t.eq(a.view, undefined, 'view')

@@ -24,19 +24,19 @@ Me.prototype =
 }
 
 self[myName] = Me
-Class.setup(myName, Me)
+Class.setup(Me, myName)
 
 Me.Model = Class.create(myName + '.Model')
 Me.View = Class.create(myName + '.View')
 Me.Controller = Class.create(myName + '.Controller')
 
-Me.setup = function (name, klass, parent)
+Me.setup = function (klass, name, parent)
 {
 	if (!parent)
 		parent = Me
 	
 	klass.prototype = new parent()
-	Class.setup(name, klass)
+	Class.setup(klass, name)
 	
 	klass.Model = Class.create(name + '.Model', new parent.Model())
 	klass.View = Class.create(name + '.View', new parent.View())
@@ -53,7 +53,7 @@ Me.create = function (name, parent)
 		this.initialize()
 	}
 	
-	return this.setup(name, klass, parent)
+	return this.setup(klass, name, parent)
 }
 
 })();
