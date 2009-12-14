@@ -177,6 +177,7 @@ doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 	
 	w.__isDispatching = true
 	w.defaultPrevented = false
+	w.target = this
 	this.fireEvent('on' + type, w.__pmc__event)
 	delete w.__isDispatching
 	return !w.defaultPrevented
