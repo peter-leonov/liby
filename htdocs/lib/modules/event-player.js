@@ -92,10 +92,10 @@ Me.prototype =
 		else
 			type = state.e
 		
+		// node = this.doc.elementFromPoint(x, y)
 		var e = this.doc.createEvent('MouseEvent')
 		e.initMouseEvent(type, true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 		node.dispatchEvent(e)
-		// this.doc.elementFromPoint(point.x, point.y)
 	}
 }
 
