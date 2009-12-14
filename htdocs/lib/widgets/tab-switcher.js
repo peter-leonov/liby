@@ -33,19 +33,21 @@ Me.prototype =
 		// 	return
 		
 		var tabs = this.nodes.tabs,
-			i, num = -1
+			i, num = -1, value
 		
 		for (i = 0; i < tabs.length; i++)
 			if (node === tabs[i])
+			{
+				value = node.getAttribute('data-tab-name')
 				num = i
+			}
 		
-		if (!this.select(num))
-			e.preventDefault()
+		this.select(value, num)
 	},
 	
-	select: function (num)
+	select: function (value, num)
 	{
-		var ok = this.dispatchEventData('select', {num:num})
+		var ok = this.dispatchEventData('select', {value: value, num: num})
 		if (ok)
 			this.renderSelected(num)
 		return ok
@@ -53,18 +55,30 @@ Me.prototype =
 	
 	setTabs: function (tabs)
 	{
-		var i, old = this.nodes.tabs, listener = this.mouseListener
+		var listener = this.mouseListener, node, eventType = this.eventType
 		
-		for (i = 0; i < old.length; i++)
-			if (old[i])
-				old[i].removeEventListener(this.eventType, listener, false)
+		var old = this.nodes.tabs
+		for (var i = 0; i < old.length; i++)
+			if ((node = old[i]))
+				node.removeEventListener(eventType, listener, false)
 		
+		var numByName = this.numByName = {},
+			names = this.names = []
 		this.nodes.tabs = tabs
-		
-		for (i = 0; i < tabs.length; i++)
-			if (tabs[i])
-				tabs[i].addEventListener(this.eventType, listener, false)
+		for (var i = 0; i < tabs.length; i++)
+			if ((node = tabs[i]))
+			{
+				node.addEventListener(eventType, listener, false)
+				var name = node.getAttribute('data-tab-name')
+				if (name !== undefined)
+				{
+					numByName[name] = i
+					names.push(name)
+				}
+			}
 	},
+	
+	getNames: function () { return this.names },
 	
 	setSections: function (sections)
 	{
@@ -73,13 +87,18 @@ Me.prototype =
 	
 	renderSelected: function (num)
 	{
-		var i, node, nodes = this.nodes, tabs = nodes.tabs, sections = nodes.sections
+		var nodes = this.nodes, node
 		
-		for (i = 0; i < tabs.length; i++)
+		if (typeof num !== 'number')
+			num = this.numByName[num]
+		
+		var tabs = nodes.tabs
+		for (var i = 0; i < tabs.length; i++)
 			if ((node = tabs[i]))
 				node.toggleClassName('selected', num === i)
 		
-		for (i = 0; i < sections.length; i++)
+		var sections = nodes.sections
+		for (var i = 0; i < sections.length; i++)
 			if ((node = sections[i]))
 				node.toggleClassName('hidden', num !== i)
 	}
