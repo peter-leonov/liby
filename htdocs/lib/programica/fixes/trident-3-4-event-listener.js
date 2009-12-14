@@ -25,6 +25,19 @@ var Event = win.Event = function () { this.constructor = Event }
 
 Event.prototype =
 {
+	__updateFromNative: function (e)
+	{
+		this.type = e.type
+		this.clientX = e.clientX
+		this.clientY = e.clientY
+		this.charCode = e.charCode
+		this.keyCode = e.keyCode
+		this.currentTarget = this.target = e.srcElement
+		this.detail = - e.wheelDelta / 30
+		this.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // body.scrollLeft
+		this.pageY = e.clientY + docelem.scrollTop  - body.clientTop // body.scrollTop
+	},
+	
 	initEvent: function (type, bubbles, cancelable)
 	{
 		this.type = type
@@ -93,17 +106,7 @@ function getEventWrapper (e, kind)
 	if (e.__pmc__wrapper)
 		return e.__pmc__wrapper
 	var w = new (eventConstructors[kind] || Event)()
-	
-	w.type = e.type
-	w.clientX = e.clientX
-	w.clientY = e.clientY
-	w.charCode = e.charCode
-	w.keyCode = e.keyCode
-	w.currentTarget = w.target = e.srcElement
-	w.detail = - e.wheelDelta / 30
-	w.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // body.scrollLeft
-	w.pageY = e.clientY + docelem.scrollTop  - body.clientTop // body.scrollTop
-	
+	w.__updateFromNative(e)
 	w.__pmc__event = e
 	e.__pmc__wrapper = w
 	
@@ -170,10 +173,7 @@ doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 {
 	var type = w.type
 	if (!(type in supportedEvents))
-	{
 		type = eventTransport
-		// alert('dispatchEvent: ' + type)
-	}
 	
 	w.__isDispatching = true
 	w.defaultPrevented = false
