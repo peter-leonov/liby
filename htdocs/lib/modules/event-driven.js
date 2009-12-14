@@ -65,8 +65,8 @@ function Event () {}
 
 Event.prototype =
 {
-	bubbles: false,
-	cancelable: false,
+	bubbles: true,
+	cancelable: true,
 	
 	preventDefault: function ()
 	{
