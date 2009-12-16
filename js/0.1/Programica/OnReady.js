@@ -11,7 +11,7 @@ $.onready.run = function (e)
 	
 	var listeners = this.listeners
 	for (var i = 0; i < listeners.length; i++)
-		try { listeners[i].call(document, e) } catch (ex) {}
+		listeners[i].call(document, e)
 }
 $.onload(function (e) { $.onready.run(e) })
 self.addEventListener('DOMContentLoaded', function (e) { $.onready.run(e) }, false)
