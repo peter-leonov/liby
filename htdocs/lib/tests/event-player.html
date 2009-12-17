@@ -6,11 +6,14 @@
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Event player tests</title>
 	<style type="text/css" media="screen">
-		.box { position: absolute; z-index: 10; left: 75px; width: 100px; height: 50px; color: #fff; text-align: center; line-height: 50px; }
-		#mousemove { top: 50px;  background: #800; }
-		#mousedown { top: 100px; background: #080; }
-		#mouseup   { top: 150px; background: #008; }
-		#click     { top: 200px; background: #808; }
+		.box,
+		.control { position: absolute; z-index: 10; left: 75px; width: 100px; }
+		.box { height: 50px; color: #fff; text-align: center; line-height: 50px; }
+		#mousemove { top: 50px;  background: #22a; }
+		#mousedown { top: 100px; background: #2a2; }
+		#mouseup   { top: 150px; background: #2aa; }
+		#click     { top: 200px; background: #a22; }
+		#keydown   { top: 250px; }
 		
 		.recorder-cursor
 		{
@@ -25,6 +28,7 @@
 <div id="mousedown" class="box">mousedown</div>
 <div id="mouseup" class="box">mouseup</div>
 <div id="click" class="box">click</div>
+<input id="keydown" class="control" type="text" value="keydown"/>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
@@ -76,6 +80,11 @@ Tests.test(function (t)
 		t.test('click', function (t)
 		{
 			bind(t, 'click')
+		})
+		
+		t.test('keydown', function (t)
+		{
+			bind(t, 'keydown')
 		})
 		
 		var recorder = new Recorder()
