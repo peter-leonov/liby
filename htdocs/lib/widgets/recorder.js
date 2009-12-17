@@ -52,11 +52,10 @@ Me.prototype =
 	{
 		// alert(e.keyCode)
 		if (e.keyCode == 82)
-		// if (e.ctrlKey && e.charCode == 114)
 			if (this.recorder)
 			{
 				this.recorder.stop()
-				this.lastRecorder = this.recorder
+				this.lastScript = this.recorder.script()
 				this.recorder = null
 			}
 			else
@@ -68,18 +67,45 @@ Me.prototype =
 		
 		if (e.keyCode == 80)
 		{
-			if (!this.lastRecorder)
+			if (!this.lastScript)
 				return alert('nothing to play')
 			
-			this.play(this.lastRecorder.script())
+			this.play(this.lastScript)
 		}
 		
 		if (e.keyCode == 83)
 		{
-			if (!this.lastRecorder)
+			if (!this.lastScript)
 				return alert('nothing to save')
 			
-			window.prompt('the script:', JSON.stringify(this.lastRecorder.script()))
+			var script = JSON.stringify(this.lastScript)
+			if (e.altKey)
+				window.name = script
+			else
+				window.prompt('saving the script:', script)
+		}
+		
+		if (e.keyCode == 76)
+		{
+			var script
+			if (e.altKey)
+				script = window.name
+			else
+				script = window.prompt('loading the script:', script)
+			
+			if (script != null)
+			{
+				try
+				{
+					script = JSON.parse(script)
+				}
+				catch (ex)
+				{
+					return alert('error parsing script')
+				}
+				
+				this.lastScript = script
+			}
 		}
 	}
 }
