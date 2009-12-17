@@ -65,8 +65,6 @@ Me.prototype =
 		
 		var state = this.state
 		
-		var point = action.p, x = point[0], y = point[1]
-		
 		var num = action.n, path = action.path
 		if (path)
 		{
@@ -80,7 +78,7 @@ Me.prototype =
 		if (!node)
 			throw new Error('could not determine current node')
 		
-		if (this.onstep && this.onstep(action, x, y, node) === false)
+		if (this.onstep && this.onstep(node, action) === false)
 			return
 		
 		var next = action.t - (new Date() - this.begin)
@@ -91,6 +89,13 @@ Me.prototype =
 			state.e = type
 		else
 			type = state.e
+		
+		this.dispatchMouse(type, node, action, state)
+	},
+	
+	dispatchMouse: function (type, node, action, state)
+	{
+		var point = action.p, x = point[0], y = point[1]
 		
 		// node = this.doc.elementFromPoint(x, y)
 		var e = this.doc.createEvent('MouseEvent')
