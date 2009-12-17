@@ -53,20 +53,20 @@ Tests.test(function (t)
 				box.removeEventListener(type, done, false)
 			}
 			box.addEventListener(type, done, false)
-
+			
 			t.wait(30000)
 		}
-
+		
 		t.test('mousemove', function (t)
 		{
 			bind(t, 'mousemove')
 		})
-
+		
 		t.test('mousedown', function (t)
 		{
 			bind(t, 'mousedown')
 		})
-
+		
 		t.test('mouseup', function (t)
 		{
 			bind(t, 'mouseup')
