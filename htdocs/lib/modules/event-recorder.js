@@ -19,6 +19,7 @@ Me.prototype =
 		this.doc.addEventListener('mousemove', listener, true)
 		this.doc.addEventListener('mousedown', listener, true)
 		this.doc.addEventListener('mouseup', listener, true)
+		this.doc.addEventListener('click', listener, true)
 	},
 	
 	removeListeners: function ()
@@ -30,6 +31,7 @@ Me.prototype =
 		this.doc.removeEventListener('mousemove', listener, true)
 		this.doc.removeEventListener('mousedown', listener, true)
 		this.doc.removeEventListener('mouseup', listener, true)
+		this.doc.removeEventListener('click', listener, true)
 	},
 	
 	start: function ()

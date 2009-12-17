@@ -10,7 +10,7 @@
 		#mousemove { top: 50px;  background: #800; }
 		#mousedown { top: 100px; background: #080; }
 		#mouseup   { top: 150px; background: #008; }
-		#control { position: absolute; left: 100px; top: 200px; }
+		#click     { top: 200px; background: #808; }
 		
 		.recorder-cursor
 		{
@@ -24,6 +24,7 @@
 <div id="mousemove" class="box">mousemove</div>
 <div id="mousedown" class="box">mousedown</div>
 <div id="mouseup" class="box">mouseup</div>
+<div id="click" class="box">click</div>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
@@ -69,6 +70,11 @@ Tests.test(function (t)
 		t.test('mouseup', function (t)
 		{
 			bind(t, 'mouseup')
+		})
+		
+		t.test('click', function (t)
+		{
+			bind(t, 'click')
 		})
 		
 		var recorder = new Recorder()
