@@ -33,11 +33,15 @@ Me.prototype =
 			this.body.appendChild(cursor)
 		}
 		
-		player.onstep = function (a, x, y)
+		player.onstep = function (n, a)
 		{
-			var style = cursor.style
-			style.left = x + 'px'
-			style.top = y + 'px'
+			var p
+			if ((p = a.p))
+			{
+				var style = cursor.style
+				style.left = p[0] + 'px'
+				style.top = p[1] + 'px'
+			}
 		}
 		
 		player.oncomplete = function ()
