@@ -43,6 +43,7 @@ Tests.test(function (t)
 {
 	t.test('simple events', function (t)
 	{
+		var time = 0
 		function bind (t, type)
 		{
 			var box = document.getElementById(type)
@@ -54,7 +55,7 @@ Tests.test(function (t)
 			}
 			box.addEventListener(type, done, false)
 			
-			t.wait(30000)
+			t.wait(10000 * ++time)
 		}
 		
 		t.test('mousemove', function (t)
