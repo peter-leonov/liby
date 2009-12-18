@@ -116,7 +116,11 @@ Me.prototype =
 	
 	playBuffer: function ()
 	{
-		this.play(JSON.parse(window.name))
+		try
+		{
+			this.play(JSON.parse(window.name))
+		}
+		catch (ex) {}
 	}
 }
 
