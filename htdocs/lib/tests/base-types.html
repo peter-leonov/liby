@@ -158,6 +158,44 @@ Tests.test(function (t)
 		t.instance(shape, Circle)
 		t.eqo(shape, {}, '123 was kicked off')
 	})
+	
+	t.test('exceptions', function (t)
+	{
+		function CustomError (message)
+		{
+			this.message = message
+		}
+		
+		var error
+		try
+		{
+			throw new CustomError(123)
+		}
+		catch (ex) { error = ex }
+		
+		t.instance(error, CustomError, 'throw new CustomError()')
+		t.eq(error.message, 123, 'CustomError.message')
+		
+		var error
+		try
+		{
+			throw {message:123}
+		}
+		catch (ex) { error = ex }
+		
+		t.eq(error.message, 123, 'throw {}')
+		
+		var error
+		try
+		{
+			throw 'message'
+		}
+		catch (ex) { error = ex }
+		
+		t.eq(error, 'message', 'throw "message"')
+		
+		t.eq(new Error('123').message, '123', 'new Error("123").message')
+	})
 })
 </script>
 </body>
