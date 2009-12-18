@@ -90,7 +90,11 @@ Me.prototype =
 		else
 			type = state.e
 		
-		this.dispatchMouse(type, node, action, state)
+		var dispatcher = this.typeMap[type]
+		if (dispatcher)
+			dispatcher.call(this, type, node, action, state)
+		else
+			throw new Error('could not dispatch event type ' + type + '"')
 	},
 	
 	dispatchMouse: function (type, node, action, state)
@@ -102,6 +106,15 @@ Me.prototype =
 		e.initMouseEvent(type, true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 		node.dispatchEvent(e)
 	}
+}
+
+var proto = Me.prototype
+proto.typeMap =
+{
+	mousemove: proto.dispatchMouse,
+	mousedown: proto.dispatchMouse,
+	mouseup: proto.dispatchMouse,
+	click: proto.dispatchMouse
 }
 
 self[myName] = Me
