@@ -21,6 +21,7 @@ Me.prototype =
 	
 	play: function (script)
 	{
+		this.lastScript = script
 		var player = new EventPlayer()
 		player.bind(this.doc, this.root)
 		player.load(script)
@@ -111,6 +112,11 @@ Me.prototype =
 				this.lastScript = script
 			}
 		}
+	},
+	
+	playBuffer: function ()
+	{
+		this.play(JSON.parse(window.name))
 	}
 }
 
