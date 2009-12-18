@@ -13,7 +13,8 @@
 		#mousedown { top: 100px; background: #2a2; }
 		#mouseup   { top: 150px; background: #2aa; }
 		#click     { top: 200px; background: #a22; }
-		#keydown   { top: 250px; }
+		#submit    { top: 250px; background: #a2a; }
+		#keydown   { top: 300px; }
 		
 		.recorder-cursor
 		{
@@ -28,6 +29,7 @@
 <div id="mousedown" class="box">mousedown</div>
 <div id="mouseup" class="box">mouseup</div>
 <div id="click" class="box">click</div>
+<form id="submit" class="box"><button type="submit">submit</button></form>
 <input id="keydown" class="control" type="text" value="keydown"/>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
@@ -53,9 +55,13 @@ Tests.test(function (t)
 			var box = document.getElementById(type)
 			function done (e)
 			{
-				t.ok(e.target === box, 'e.target')
-				t.done()
-				box.removeEventListener(type, done, false)
+				e.preventDefault()
+				if (!t.finished)
+				{
+					t.ok(e.target === box, 'e.target')
+					t.done()
+				}
+				// box.removeEventListener(type, done, false)
 			}
 			box.addEventListener(type, done, false)
 			
@@ -80,6 +86,11 @@ Tests.test(function (t)
 		t.test('click', function (t)
 		{
 			bind(t, 'click')
+		})
+		
+		t.test('submit', function (t)
+		{
+			bind(t, 'submit')
 		})
 		
 		t.test('keydown', function (t)
