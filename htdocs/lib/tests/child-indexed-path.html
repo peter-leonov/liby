@@ -10,17 +10,16 @@
 
 <div id="node-0"></div>
 <div id="node-1"><div id="node-1-0"><div id="node-1-0-0"></div></div></div>
-<div id="node-2">text <b id="bold">bold <i id="italic">bold <img id="img"/> italic</i> bold</b> text</div>
-
-<script type="text/javascript" id="script-node">/* some code here */</script>
+<div id="node-2">text <b id="bold">bold <i id="italic">bold italic</i> <img id="img"/> bold</b> text</div>
 
 <div id="messy-node">
+	<script type="text/javascript" id="messy-node-0">document.write('<p id="messy-node-1"></p>')</script>
 	text &amp; text
 	<!-- comment -->
-	<div id="messy-node-0"></div>
+	<div id="messy-node-2"></div>
 	text &gt; text
 	<!-- comment 2 -->
-	<div id="messy-node-1"></div>
+	<div id="messy-node-3"></div>
 </div>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
@@ -33,24 +32,48 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.test('prerequisites', function (t)
+	t.test('childIndexedPath()', function (t)
 	{
-		t.no(document.parentNode, '!document.parentNode')
+		t.test('prerequisites', function (t)
+		{
+			t.no(document.parentNode, '!document.parentNode')
+		})
+		
+		t.test('document', function (t)
+		{
+			t.eqo(document.childIndexedPath(document.body), [0, 1], 'body in document')
+			t.eqo(document.childIndexedPath(document.getElementsByTagName('head')[0]), [0, 0], 'head in document')
+			t.eqo(document.childIndexedPath(document), [], 'document in document')
+			t.eqo(document.childIndexedPath(document.documentElement), [0], 'documentElement in document')
+		})
+		
+		t.test('empty paths', function (t)
+		{
+			t.eqo(document.body.childIndexedPath(document), null, 'document in body')
+			t.eqo(document.body.childIndexedPath(document.body), [], 'body in body')
+		})
+		
+		t.test('nested nodes', function (t)
+		{
+			t.eqo(document.body.childIndexedPath($('node-0')), [0], 'node-0 in body')
+			t.eqo(document.body.childIndexedPath($('node-1')), [1], 'node-1 in body')
+			t.eqo(document.body.childIndexedPath($('node-1-0')), [1, 0], 'node-1-0 in body')
+			t.eqo(document.body.childIndexedPath($('node-1-0-0')), [1, 0, 0], 'node-1-0-0 in body')
+			t.eqo(document.body.childIndexedPath($('italic')), [2, 0, 0], 'italic in body')
+			t.eqo(document.body.childIndexedPath($('img')), [2, 0, 1], 'img in body')
+		})
+		
+		t.test('messy nodes', function (t)
+		{
+			var messy = $('messy-node')
+			t.eqo(messy.childIndexedPath(document.body), null, 'body in messy')
+			t.eqo(messy.childIndexedPath($('messy-node-0')), [0], 'script in messy')
+			t.eqo(messy.childIndexedPath($('messy-node-1')), [1], 'p in messy')
+			t.eqo(messy.childIndexedPath($('messy-node-2')), [2], 'node-2 in messy (after text and a comment)')
+			t.eqo(messy.childIndexedPath($('messy-node-3')), [3], 'node-3 in messy (after even more text and a comments)')
+		})
 	})
 	
-	t.test('document', function (t)
-	{
-		t.eqo(document.childIndexedPath(document.body), [0, 1], 'body in document')
-		t.eqo(document.childIndexedPath(document.getElementsByTagName('head')[0]), [0, 0], 'head in document')
-		t.eqo(document.childIndexedPath(document), [], 'document in document')
-		t.eqo(document.childIndexedPath(document.documentElement), [0], 'documentElement in document')
-	})
-	
-	t.test('empty paths', function (t)
-	{
-		t.eqo(document.body.childIndexedPath(document), null, 'document in body')
-		t.eqo(document.body.childIndexedPath(document.body), [], 'body in body')
-	})
 })
 </script>
 </body>

@@ -20,7 +20,7 @@ var myProto =
 				var child = childs[i]
 				if (child == node)
 					break
-				// lets count only the elements
+				// to provide a path useful cross browser lets count only the elements
 				else if (child.nodeType == 1)
 					num++
 			}
