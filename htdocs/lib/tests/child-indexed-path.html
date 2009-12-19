@@ -47,10 +47,11 @@ Tests.test(function (t)
 			t.eqo(document.childIndexedPath(document.documentElement), [0], 'documentElement in document')
 		})
 		
-		t.test('empty paths', function (t)
+		t.test('tricky paths', function (t)
 		{
 			t.eqo(document.body.childIndexedPath(document), null, 'document in body')
 			t.eqo(document.body.childIndexedPath(document.body), [], 'body in body')
+			t.eqo(document.body.childIndexedPath({parentNode:document.body}), null, 'body in body')
 		})
 		
 		t.test('nested nodes', function (t)

@@ -5,6 +5,7 @@ var myProto =
 	childIndexedPath: function (node)
 	{
 		var path = []
+		path:
 		for (;;)
 		{
 			if (node == this)
@@ -19,14 +20,17 @@ var myProto =
 			{
 				var child = childs[i]
 				if (child == node)
-					break
+				{
+					path.push(num)
+					node = parent
+					continue path
+				}
 				// to provide a path useful cross browser lets count only the elements
 				else if (child.nodeType == 1)
 					num++
 			}
-			
-			path.push(num)
-			node = parent
+			// we'r here if child node lied to us about its parentNode
+			return null
 		}
 		
 		return path.reverse()
