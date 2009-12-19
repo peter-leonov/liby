@@ -12,29 +12,6 @@ Me.prototype =
 		this.body = body || document.body
 	},
 	
-	guesNode: function (path)
-	{
-		var node = this.doc
-		
-		for (var i = 0, il = path.length; node && i < il; i++)
-		{
-			var childs = node.childNodes, n = path[i]
-			for (var j = 0, num = 0, jl = childs.length; j < jl; j++)
-			{
-				var child = childs[j]
-				if (child.nodeType == 1 && child.nodeName != 'SCRIPT')
-					if (num === n)
-					{
-						node = child
-						break
-					}
-					else
-						num++
-			}
-		}
-		return node
-	},
-	
 	load: function (arr)
 	{
 		this.actions = arr
@@ -68,7 +45,7 @@ Me.prototype =
 		var num = action.n, path = action.path
 		if (path)
 		{
-			node = this.guesNode(path)
+			node = this.doc.childByIndexedPath(path)
 			this.nodes[num] = node
 			state.n = num
 		}

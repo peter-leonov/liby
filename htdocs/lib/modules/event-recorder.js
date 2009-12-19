@@ -48,30 +48,6 @@ Me.prototype =
 		this.removeListeners()
 	},
 	
-	guesNodePath: function (node)
-	{
-		var parent, path = []
-		while ((parent = node.parentNode))
-		{
-			var childs = parent.childNodes
-			for (var i = 0, num = 0, il = childs.length; i < il; i++)
-			{
-				var child = childs[i]
-				if (child === node)
-					break
-				// different browsers differ in node traversal support
-				// and we have additional scripts for some browsers just in body node
-				else if (child.nodeType == 1 && child.nodeName != 'SCRIPT')
-					num++
-			}
-			
-			path.push(num)
-			node = parent
-		}
-		
-		return path.reverse()
-	},
-	
 	record: function (e)
 	{
 		var state = this.state
@@ -88,7 +64,7 @@ Me.prototype =
 		var nodeNum, node = e.target
 		if (!(nodeNum = node.__Recorder_nodeNum))
 		{
-			var path = this.guesNodePath(node)
+			var path = this.doc.childIndexedPath(node)
 			action.path = path
 			nodeNum = node.__Recorder_nodeNum = ++this.nodes
 		}
