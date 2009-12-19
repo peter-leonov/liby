@@ -30,6 +30,34 @@ var myProto =
 		}
 		
 		return path.reverse()
+	},
+	
+	childByIndexedPath: function (path)
+	{
+		var node = this
+		path:
+		for (var i = 0, il = path.length; node && i < il; i++)
+		{
+			var n = path[i],
+				childs = node.childNodes
+			// if there is no children this loop will be skipped
+			// so we can not go too deep
+			for (var j = 0, jl = childs.length; j < jl; j++)
+			{
+				var child = childs[j]
+				if (child.nodeType == 1)
+					if (n == 0)
+					{
+						node = child
+						continue path
+					}
+					else
+						n--
+			}
+			// we are here only if child num goes out of bounds
+			return null
+		}
+		return node
 	}
 }
 

@@ -74,6 +74,44 @@ Tests.test(function (t)
 		})
 	})
 	
+	// nice copy-pase example ;)
+	t.test('childByIndexedPath()', function (t)
+	{
+		t.test('document', function (t)
+		{
+			t.eq(document.childByIndexedPath([0, 1]), document.body, 'body in document')
+			t.eq(document.childByIndexedPath([0, 0]), document.getElementsByTagName('head')[0], 'head in document')
+			t.eq(document.childByIndexedPath([]), document, 'document in document')
+			t.eq(document.childByIndexedPath([0]), document.documentElement, 'documentElement in document')
+		})
+		
+		t.test('tricky paths', function (t)
+		{
+			t.eq(document.body.childByIndexedPath([]), document.body, 'empty path in body')
+			t.eq(document.body.childByIndexedPath([0,0,0,0,0,0]), null, 'too deep in body')
+			t.eq(document.body.childByIndexedPath([100]), null, 'too far in body')
+			t.eq(document.body.childByIndexedPath([-1]), null, 'negative chils num in body')
+		})
+		
+		t.test('nested nodes', function (t)
+		{
+			t.eq(document.body.childByIndexedPath([0]), $('node-0'), 'node-0 in body')
+			t.eq(document.body.childByIndexedPath([1]), $('node-1'), 'node-1 in body')
+			t.eq(document.body.childByIndexedPath([1, 0]), $('node-1-0'), 'node-1-0 in body')
+			t.eq(document.body.childByIndexedPath([1, 0, 0]), $('node-1-0-0'), 'node-1-0-0 in body')
+			t.eq(document.body.childByIndexedPath([2, 0, 0]), $('italic'), 'italic in body')
+			t.eq(document.body.childByIndexedPath([2, 0, 1]), $('img'), 'img in body')
+		})
+		
+		t.test('messy nodes', function (t)
+		{
+			var messy = $('messy-node')
+			t.eq(messy.childByIndexedPath([0]), $('messy-node-0'), 'script in messy')
+			t.eq(messy.childByIndexedPath([1]), $('messy-node-1'), 'p in messy')
+			t.eq(messy.childByIndexedPath([2]), $('messy-node-2'), 'node-2 in messy (after text and a comment)')
+			t.eq(messy.childByIndexedPath([3]), $('messy-node-3'), 'node-3 in messy (after even more text and a comments)')
+		})
+	})
 })
 </script>
 </body>
