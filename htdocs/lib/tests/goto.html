@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>GOTO tests (not for the evil)</title>
+</head>
+<body>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/init.js"></script>
+<script type="text/javascript" src="../programica/prototype.js"></script>
+
+<!--# include virtual="tests.includes.html" -->
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.log('This test had been written to check if its possibile to emulate some kind of “goto” in JS. It would be useful in the yarv2js project.')
+	t.test('an old dirty loop', function (t)
+	{
+		var i = 0
+		A: for (;;) // continue needs “for (;;)”
+		{
+			if (i == 5)
+				break A // goto B
+			
+			i++
+			continue A // goto A
+			
+			t.fail('continue does not work')
+			break A // goto B (never reached)
+		}
+		// here is B:
+		
+		t.eq(i, 5, 'loop index is ok')
+	})
+	
+	t.test('external jump', function (t)
+	{
+		var i = 0
+		A:
+		{
+			
+			for (var i = 0; i < 10; i++)
+				if (i == 5)
+					break A
+		}
+		
+		t.eq(i, 5, 'loop index is ok')
+	})
+	
+	t.test('nested jumps', function (t)
+	{
+		var i = 0
+		A:
+		{
+			B:
+			{
+				C:
+				{
+					break B
+					i++
+				}
+				i++
+			}
+			i++
+			break A
+			i++
+		}
+		
+		
+		t.eq(i, 1, 'index is ok')
+	})
+})
+</script>
+</body>
+</html>
