@@ -177,88 +177,86 @@ Me.prototype =
 	ok: function (v, d)
 	{
 		if (v)
-			this.pass([this.inspect(v), 'is true'], d)
+			this.pass([v, 'is true'], d)
 		else
-			this.fail([this.inspect(v), 'is not true'], d)
+			this.fail([v, 'is not true'], d)
 	},
 	
 	no: function (v, d)
 	{
 		if (!v)
-			this.pass([this.inspect(v), 'is false'], d)
+			this.pass([v, 'is false'], d)
 		else
-			this.fail([this.inspect(v), 'is not false'], d)
+			this.fail([v, 'is not false'], d)
 	},
 	
 	eq: function (a, b, d)
 	{
 		if (a === b)
-			this.pass([this.inspect(a), '===', this.inspect(b)], d)
+			this.pass([a, '===', b], d)
 		else
-			this.fail([this.inspect(a), '!==', this.inspect(b)], d)
+			this.fail([a, '!==', b], d)
 	},
 	
 	ne: function (a, b, d)
 	{
 		if (a !== b)
-			this.pass([this.inspect(a), '!==', this.inspect(b)], d)
+			this.pass([a, '!==', b], d)
 		else
-			this.fail([this.inspect(a), '===', this.inspect(b)], d)
+			this.fail([a, '===', b], d)
 	},
 	
 	eqo: function (a, b, d)
 	{
-		var ia = this.inspect(a, 10, true), ib = this.inspect(b, 10, true)
-		if (ia === ib)
-			this.pass([ia, '===', ib], d)
+		if (this.inspect(a, 10, true) === this.inspect(b, 10, true))
+			this.pass([a, '===', b], d)
 		else
-			this.fail([ia, '!==', ib], d)
+			this.fail([a, '!==', b], d)
 	},
 	
 	neo: function (a, b, d)
 	{
-		var ia = this.inspect(a, 10, true), ib = this.inspect(b, 10, true)
-		if (ia !== ib)
-			this.pass([ia, '!==', ib], d)
+		if (this.inspect(a, 10, true) !== this.inspect(b, 10, true))
+			this.pass([a, '!==', b], d)
 		else
-			this.fail([ia, '===', ib], d)
+			this.fail([a, '===', b], d)
 	},
 	
-	lt: function (a, b, d) { if (a >= b) this.fail(this.inspect(a) + ' >= ' + this.inspect(b), d) },
-	lte: function (a, b, d) { if (a > b) this.fail(this.inspect(a) + ' > '  + this.inspect(b), d) },
-	gte: function (a, b, d) { if (a < b) this.fail(this.inspect(a) + ' < '  + this.inspect(b), d) },
-	gt: function (a, b, d) { if (a <= b) this.fail(this.inspect(a) + ' <= ' + this.inspect(b), d) },
+	lt: function (a, b, d) { if (a >= b) this.fail(a + ' >= ' + b, d) },
+	lte: function (a, b, d) { if (a > b) this.fail(a + ' > '  + b, d) },
+	gte: function (a, b, d) { if (a < b) this.fail(a + ' < '  + b, d) },
+	gt: function (a, b, d) { if (a <= b) this.fail(a + ' <= ' + b, d) },
 	
 	instance: function (a, b, d)
 	{
 		if (a instanceof b)
-			this.pass([this.inspect(a), 'instanceof', this.inspect(b)], d)
+			this.pass([a, 'instanceof', b], d)
 		else
-			this.fail([this.inspect(a), 'is not instanceof', this.inspect(b)], d)
+			this.fail([a, 'is not instanceof', b], d)
 	},
 	
 	notinstance: function (a, b, d)
 	{
 		if (!(a instanceof b))
-			this.pass([this.inspect(a), 'is not instanceof', this.inspect(b)], d)
+			this.pass([a, 'is not instanceof', b], d)
 		else
-			this.fail([this.inspect(a), 'instanceof', this.inspect(b)], d)
+			this.fail([a, 'instanceof', b], d)
 	},
 	
 	type: function (a, b, d)
 	{
 		if (typeof a === b)
-			this.pass([this.inspect(a), 'typeof', this.inspect(b)], d)
+			this.pass([a, 'typeof', b], d)
 		else
-			this.fail([this.inspect(a), 'is not typeof', this.inspect(b)], d)
+			this.fail([a, 'is not typeof', b], d)
 	},
 	
 	nottype: function (a, b, d)
 	{
 		if (!(typeof a === b))
-			this.pass([this.inspect(a), 'is not typeof', this.inspect(b)], d)
+			this.pass([a, 'is not typeof', b], d)
 		else
-			this.fail([this.inspect(a), 'typeof', this.inspect(b)], d)
+			this.fail([a, 'typeof', b], d)
 	},
 	
 	_times: {},
