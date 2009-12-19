@@ -54,12 +54,12 @@ Me.prototype =
 		
 		var action =
 		{
-			p: [e.clientX, e.clientY],
 			t: new Date() - this.begin
 		}
 		
-		if (state.e !== e.type)
-			state.e = action.e = e.type
+		var type = e.type
+		if (state.e !== type)
+			state.e = action.e = type
 		
 		var nodeNum, node = e.target
 		if (!(nodeNum = node.__Recorder_nodeNum))
@@ -71,6 +71,26 @@ Me.prototype =
 		
 		if (state.n !== nodeNum)
 			state.n = action.n = nodeNum
+		
+		this.recordMouse(type, e, node, action, state)
+	},
+	
+	recordMouse: function (type, e, node, action, state)
+	{
+		action.p = [e.clientX, e.clientY]
+		
+		this.actions.push(action)
+	},
+	
+	recordKeyborad: function (type, e, node, action, state)
+	{
+		var keyCode = e.keyCode
+		if (state.keyCode !== keyCode)
+		{
+			state.keyCode = action.keyCode = keyCode
+			state.inputValue = action.inputValue = node.value
+			log(node.value)
+		}
 		
 		this.actions.push(action)
 	},
