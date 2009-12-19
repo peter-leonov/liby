@@ -113,8 +113,9 @@ Reporter.prototype =
 		{
 			for (var i = 0; i < m.length; i++)
 			{
-				var elem = m[i]
-				// if (elem)
+				var elem = String(m[i])
+				if (elem.length > 25)
+					elem = elem.substr(0, 25) + ' …'
 				row.appendChild(T(elem + ' '))
 			}
 		}
