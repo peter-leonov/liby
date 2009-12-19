@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<link rel="stylesheet" href="tests.css" type="text/css"/>
+	<title>Element#childIndexedPath() and Element#childByIndexedPath() tests</title>
+</head>
+<body>
+
+<div id="node-0"></div>
+<div id="node-1"><div id="node-1-0"><div id="node-1-0-0"></div></div></div>
+<div id="node-2">text <b id="bold">bold <i id="italic">bold <img id="img"/> italic</i> bold</b> text</div>
+
+<script type="text/javascript" id="script-node">/* some code here */</script>
+
+<div id="messy-node">
+	text &amp; text
+	<!-- comment -->
+	<div id="messy-node-0"></div>
+	text &gt; text
+	<!-- comment 2 -->
+	<div id="messy-node-1"></div>
+</div>
+
+<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+<script type="text/javascript" src="../programica/prototype.js"></script>
+<script type="text/javascript" src="../modules/cosy.js"></script>
+<script type="text/javascript" src="../modules/child-indexed-path.js"></script>
+
+<!--# include virtual="tests.includes.html" -->
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('prerequisites', function (t)
+	{
+		t.no(document.parentNode, '!document.parentNode')
+	})
+	
+	t.test('document', function (t)
+	{
+		t.eqo(document.childIndexedPath(document.body), [0, 1], 'body in document')
+		t.eqo(document.childIndexedPath(document.getElementsByTagName('head')[0]), [0, 0], 'head in document')
+		t.eqo(document.childIndexedPath(document), [], 'document in document')
+		t.eqo(document.childIndexedPath(document.documentElement), [0], 'documentElement in document')
+	})
+	
+	t.test('empty paths', function (t)
+	{
+		t.eqo(document.body.childIndexedPath(document), null, 'document in body')
+		t.eqo(document.body.childIndexedPath(document.body), [], 'body in body')
+	})
+})
+</script>
+</body>
+</html>
