@@ -63,6 +63,9 @@ Me.prototype =
 			return
 		
 		if (e.keyCode == 82)
+		{
+			e.preventDefault()
+			
 			if (this.recorder)
 			{
 				this.recorder.stop()
@@ -75,9 +78,12 @@ Me.prototype =
 				recorder.bind(this.doc)
 				recorder.start()
 			}
+		}
 		
 		if (e.keyCode == 80)
 		{
+			e.preventDefault()
+			
 			if (!this.lastScript)
 				return alert('nothing to play')
 			
@@ -86,6 +92,8 @@ Me.prototype =
 		
 		if (e.keyCode == 83)
 		{
+			e.preventDefault()
+			
 			if (!this.lastScript)
 				return alert('nothing to save')
 			
@@ -98,6 +106,8 @@ Me.prototype =
 		
 		if (e.keyCode == 76)
 		{
+			e.preventDefault()
+			
 			var script
 			if (e.shiftKey)
 				script = window.name
