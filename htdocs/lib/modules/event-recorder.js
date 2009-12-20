@@ -34,9 +34,10 @@ Me.prototype =
 	start: function ()
 	{
 		this.nodes = 0
+		this.lastAction = {}
 		this.actions = []
 		this.state = {}
-		this.begin = new Date()
+		this.last = new Date()
 		this.addListeners()
 	},
 	
@@ -50,12 +51,14 @@ Me.prototype =
 		if (e.__createdByEventPlayer)
 			return
 		
-		var state = this.state
+		var state = this.state,
+			now = new Date()
 		
 		var action =
 		{
-			t: new Date() - this.begin
+			t: now - this.last
 		}
+		this.last = now
 		
 		var type = e.type
 		if (state.e !== type)
@@ -74,11 +77,13 @@ Me.prototype =
 		
 		var recorder = this.typeMap[type]
 		if (recorder)
-			recorder.call(this, type, e, node, action, state)
+		{
+			if (recorder.call(this, type, e, node, action, state) !== false)
+				this.actions.push(action)
+			this.lastAction = action
+		}
 		else
 			throw new Error('could not record event type ' + type + '"')
-		
-		this.actions.push(action)
 	},
 	
 	recordMouse: function (type, e, node, action, state)
@@ -96,10 +101,15 @@ Me.prototype =
 			function save ()
 			{
 				action.inputValue = node.value
-				log('value:', type, node.value)
 			}
 			// setting zero timeout could be enough to get the value in time
 			setTimeout(save, 0)
+			
+			if (this.lastAction.e == 'keydown')
+			{
+				this.lastAction.next = action
+				return false
+			}
 		}
 	},
 	

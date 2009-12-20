@@ -25,7 +25,7 @@ Me.prototype =
 		this.state = {}
 		this.nodes = {}
 		this.frame = 0
-		this.begin = new Date()
+		// this.last = new Date()
 		clearTimeout(this.timer)
 		var me = this
 		this.callFrame = function () { me.nextFrame() }
@@ -36,10 +36,20 @@ Me.prototype =
 	
 	nextFrame: function ()
 	{
-		var action = this.actions[this.frame++]
+		var action
+		if ((action = this.nextAction))
+			this.processAction(action)
+		
+		action = this.nextAction = this.actions[this.frame++]
 		if (!action)
 			return this.oncomplete && this.oncomplete()
 		
+		var next = action.t// - (new Date() - this.last)
+		setTimeout(this.callFrame, next <= 0 ? 0 : next)
+	},
+	
+	processAction: function (action)
+	{
 		var state = this.state
 		
 		var num = action.n, path = action.path
@@ -58,9 +68,6 @@ Me.prototype =
 		if (this.onstep && this.onstep(node, action) === false)
 			return
 		
-		var next = action.t - (new Date() - this.begin)
-		setTimeout(this.callFrame, next < 0 ? 0 : next)
-		
 		var type = action.e
 		if (type)
 			state.e = type
@@ -72,6 +79,9 @@ Me.prototype =
 			dispatcher.call(this, type, node, action, state)
 		else
 			throw new Error('could not dispatch event type ' + type + '"')
+		
+		if (action.next)
+			this.processAction(action.next)
 	},
 	
 	dispatchMouse: function (type, node, action, state)
@@ -87,8 +97,6 @@ Me.prototype =
 	
 	dispatchKeyborad: function (type, node, a, state)
 	{
-		log(type, a.keyCode)
-		
 		// node = this.doc.elementFromPoint(x, y)
 		var e = this.doc.createEvent('KeyboardEvent')
 		e.initKeyEvent(type, true, true, window, a.ctrlKey, a.altKey, a.shiftKey, a.metaKey, a.keyCode, a.charCode)
