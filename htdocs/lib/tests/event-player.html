@@ -6,17 +6,11 @@
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Event player tests</title>
 	<style type="text/css" media="screen">
-		.box,
-		.control { position: absolute; z-index: 10; left: 75px; width: 100px; }
-		.box { height: 50px; color: #fff; text-align: center; line-height: 50px; }
-		#mousemove { top: 50px;  background: #22a; }
-		#mousedown { top: 100px; background: #2a2; }
-		#mouseup   { top: 150px; background: #2aa; }
-		#click     { top: 200px; background: #a22; }
-		#submit    { top: 250px; background: #a2a; }
-		#keydown   { top: 300px; }
-		#keypress  { top: 350px; }
-		#keyup     { top: 400px; }
+		.box { position: absolute; z-index: 10; left: 75px; width: 75px; height: 50px; color: #fff; text-align: center; line-height: 50px; }
+		#mouse         { top: 100px;  background: #22a; }
+		#submit        { top: 150px; background: #2a2; }
+		#keyboard-box  { top: 200px; background: #2aa; }
+		#keyboard-box input  { width: 55px; }
 		
 		.recorder-cursor
 		{
@@ -27,14 +21,9 @@
 </head>
 <body>
 
-<div id="mousemove" class="box">mousemove</div>
-<div id="mousedown" class="box">mousedown</div>
-<div id="mouseup" class="box">mouseup</div>
-<div id="click" class="box">click</div>
+<div id="mouse" class="box">mouse</div>
 <form id="submit" class="box"><button type="submit">submit</button></form>
-<input id="keydown" class="control" type="text" value="keydown"/>
-<input id="keypress" class="control" type="text" value="keypress"/>
-<input id="keyup" class="control" type="text" value="keyup"/>
+<div id="keyboard-box" class="box"><input id="keyboard" type="text" value=""/></div>
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
@@ -54,63 +43,90 @@ Tests.test(function (t)
 {
 	t.test('simple events', function (t)
 	{
+		function $ (id) { return document.getElementById(id) }
 		var time = 0
-		function bind (t, type)
+		function bind (t, node, type, callback)
 		{
-			var box = document.getElementById(type)
 			function done (e)
 			{
-				e.preventDefault()
+				if (callback)
+					callback(e)
 				if (!t.finished)
 				{
-					t.ok(e.target === box, 'e.target')
+					t.ok(e.target === node, 'e.target')
 					t.done()
 				}
-				// box.removeEventListener(type, done, false)
+				// node.removeEventListener(type, done, false)
 			}
-			box.addEventListener(type, done, false)
+			node.addEventListener(type, done, false)
 			
 			t.wait(10000 * ++time)
 		}
 		
+		function preventDefault (e)
+		{
+			e.preventDefault()
+		}
+		
 		t.test('mousemove', function (t)
 		{
-			bind(t, 'mousemove')
+			bind(t, $('mouse'), 'mousemove')
 		})
 		
 		t.test('mousedown', function (t)
 		{
-			bind(t, 'mousedown')
+			bind(t, $('mouse'), 'mousedown')
 		})
 		
 		t.test('mouseup', function (t)
 		{
-			bind(t, 'mouseup')
+			bind(t, $('mouse'), 'mouseup')
 		})
 		
 		t.test('click', function (t)
 		{
-			bind(t, 'click')
+			bind(t, $('mouse'), 'click')
 		})
 		
 		t.test('submit', function (t)
 		{
-			bind(t, 'submit')
+			bind(t, $('submit'), 'submit', preventDefault)
 		})
+		
+		var keyboard = $('keyboard')
+		keyboard.value = ''
 		
 		t.test('keydown', function (t)
 		{
-			bind(t, 'keydown')
+			t.eq(keyboard.value, '', 'before')
+			function check (e)
+			{
+				t.eq(e.target.value, '', 'within')
+				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+			}
+			bind(t, keyboard, 'keydown', check)
 		})
 		
 		t.test('keypress', function (t)
 		{
-			bind(t, 'keypress')
+			t.eq(keyboard.value, '', 'before')
+			function check (e)
+			{
+				t.eq(e.target.value, '', 'within')
+				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+			}
+			bind(t, keyboard, 'keypress', check)
 		})
 		
 		t.test('keyup', function (t)
 		{
-			bind(t, 'keyup')
+			t.eq(keyboard.value, '', 'before')
+			function check (e)
+			{
+				t.eq(e.target.value, '1', 'within')
+				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+			}
+			bind(t, keyboard, 'keyup', check)
 		})
 		
 		var recorder = new Recorder()
