@@ -83,6 +83,17 @@ Me.prototype =
 		e.initMouseEvent(type, true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
 		e.__createdByEventPlayer = true
 		node.dispatchEvent(e)
+	},
+	
+	dispatchKeyborad: function (type, node, a, state)
+	{
+		log(type, a.keyCode)
+		
+		// node = this.doc.elementFromPoint(x, y)
+		var e = this.doc.createEvent('KeyboardEvent')
+		e.initKeyEvent(type, true, true, window, a.ctrlKey, a.altKey, a.shiftKey, a.metaKey, a.keyCode, a.charCode)
+		e.__createdByEventPlayer = true
+		node.dispatchEvent(e)
 	}
 }
 
@@ -92,7 +103,10 @@ proto.typeMap =
 	mousemove: proto.dispatchMouse,
 	mousedown: proto.dispatchMouse,
 	mouseup: proto.dispatchMouse,
-	click: proto.dispatchMouse
+	click: proto.dispatchMouse,
+	keydown: proto.dispatchKeyborad,
+	keypress: proto.dispatchKeyborad,
+	keyup: proto.dispatchKeyborad
 }
 
 self[myName] = Me

@@ -20,6 +20,7 @@ Me.prototype =
 		this.doc.addEventListener('mousedown', listener, true)
 		this.doc.addEventListener('mouseup', listener, true)
 		this.doc.addEventListener('click', listener, true)
+		this.doc.addEventListener('keydown', listener, true)
 	},
 	
 	removeListeners: function ()
@@ -32,6 +33,7 @@ Me.prototype =
 		this.doc.removeEventListener('mousedown', listener, true)
 		this.doc.removeEventListener('mouseup', listener, true)
 		this.doc.removeEventListener('click', listener, true)
+		this.doc.removeEventListener('keydown', listener, true)
 	},
 	
 	start: function ()
@@ -75,14 +77,18 @@ Me.prototype =
 		if (state.n !== nodeNum)
 			state.n = action.n = nodeNum
 		
-		this.recordMouse(type, e, node, action, state)
+		var recorder = this.typeMap[type]
+		if (recorder)
+			recorder.call(this, type, e, node, action, state)
+		else
+			throw new Error('could not record event type ' + type + '"')
+		
+		this.actions.push(action)
 	},
 	
 	recordMouse: function (type, e, node, action, state)
 	{
 		action.p = [e.clientX, e.clientY]
-		
-		this.actions.push(action)
 	},
 	
 	recordKeyborad: function (type, e, node, action, state)
@@ -94,8 +100,6 @@ Me.prototype =
 			state.inputValue = action.inputValue = node.value
 			log(node.value)
 		}
-		
-		this.actions.push(action)
 	},
 	
 	script: function ()
@@ -104,6 +108,19 @@ Me.prototype =
 		return this.actions
 	}
 }
+
+var proto = Me.prototype
+proto.typeMap =
+{
+	mousemove: proto.recordMouse,
+	mousedown: proto.recordMouse,
+	mouseup: proto.recordMouse,
+	click: proto.recordMouse,
+	keydown: proto.recordKeyborad,
+	keypress: proto.recordKeyborad,
+	keyup: proto.recordKeyborad
+}
+
 
 self[myName] = Me
 
