@@ -56,6 +56,9 @@ Me.prototype =
 	keydown: function (e)
 	{
 		// alert(e.keyCode)
+		if (e.__createdByEventPlayer)
+			return
+		
 		if (e.keyCode == 82)
 			if (this.recorder)
 			{

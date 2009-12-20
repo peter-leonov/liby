@@ -50,6 +50,9 @@ Me.prototype =
 	
 	record: function (e)
 	{
+		if (e.__createdByEventPlayer)
+			return
+		
 		var state = this.state
 		
 		var action =

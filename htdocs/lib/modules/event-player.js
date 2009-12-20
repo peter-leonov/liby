@@ -81,6 +81,7 @@ Me.prototype =
 		// node = this.doc.elementFromPoint(x, y)
 		var e = this.doc.createEvent('MouseEvent')
 		e.initMouseEvent(type, true, true, window,  0, 0, 0, x, y, false, false, false, false, 0, null)
+		e.__createdByEventPlayer = true
 		node.dispatchEvent(e)
 	}
 }
