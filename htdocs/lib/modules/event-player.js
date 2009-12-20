@@ -52,7 +52,7 @@ Me.prototype =
 	{
 		var state = this.state
 		
-		var num = action.n, path = action.path
+		var node, num = action.n, path = action.path
 		if (path)
 		{
 			node = this.doc.childByIndexedPath(path)
