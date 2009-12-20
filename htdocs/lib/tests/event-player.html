@@ -94,14 +94,14 @@ Tests.test(function (t)
 		})
 		
 		var keyboard = $('keyboard')
-		keyboard.value = ''
+		keyboard.value = '0'
 		
 		t.test('keydown', function (t)
 		{
-			t.eq(keyboard.value, '', 'before')
+			t.eq(keyboard.value, '0', 'before')
 			function check (e)
 			{
-				t.eq(e.target.value, '', 'within')
+				t.eq(e.target.value, '0', 'within')
 				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
 			}
 			bind(t, keyboard, 'keydown', check)
@@ -109,10 +109,10 @@ Tests.test(function (t)
 		
 		t.test('keypress', function (t)
 		{
-			t.eq(keyboard.value, '', 'before')
+			t.eq(keyboard.value, '0', 'before')
 			function check (e)
 			{
-				t.eq(e.target.value, '', 'within')
+				t.eq(e.target.value, '0', 'within')
 				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
 			}
 			bind(t, keyboard, 'keypress', check)
@@ -120,7 +120,7 @@ Tests.test(function (t)
 		
 		t.test('keyup', function (t)
 		{
-			t.eq(keyboard.value, '', 'before')
+			t.eq(keyboard.value, '0', 'before')
 			function check (e)
 			{
 				t.eq(e.target.value, '1', 'within')
