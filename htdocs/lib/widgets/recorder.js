@@ -59,6 +59,9 @@ Me.prototype =
 		if (e.__createdByEventPlayer)
 			return
 		
+		if (!e.altKey)
+			return
+		
 		if (e.keyCode == 82)
 			if (this.recorder)
 			{
@@ -87,7 +90,7 @@ Me.prototype =
 				return alert('nothing to save')
 			
 			var script = JSON.stringify(this.lastScript)
-			if (e.altKey)
+			if (e.shiftKey)
 				window.name = script
 			else
 				window.prompt('saving the script:', script)
@@ -96,7 +99,7 @@ Me.prototype =
 		if (e.keyCode == 76)
 		{
 			var script
-			if (e.altKey)
+			if (e.shiftKey)
 				script = window.name
 			else
 				script = window.prompt('loading the script:', script)
