@@ -94,6 +94,10 @@ Me.prototype =
 		e.initKeyEvent(type, true, true, window, a.ctrlKey, a.altKey, a.shiftKey, a.metaKey, a.keyCode, a.charCode)
 		e.__createdByEventPlayer = true
 		node.dispatchEvent(e)
+		
+		// mimic the browser behavior: set the value precisely after the event dispatch
+		if (type == 'keypress' && 'inputValue' in a)
+			node.value = a.inputValue
 	}
 }
 

@@ -16,11 +16,9 @@ Me.prototype =
 		var me = this
 		function listener (e) { me.record(e) }
 		this.listener = listener
-		this.doc.addEventListener('mousemove', listener, true)
-		this.doc.addEventListener('mousedown', listener, true)
-		this.doc.addEventListener('mouseup', listener, true)
-		this.doc.addEventListener('click', listener, true)
-		this.doc.addEventListener('keydown', listener, true)
+		
+		for (var k in this.typeMap)
+			this.doc.addEventListener(k, listener, true)
 	},
 	
 	removeListeners: function ()
@@ -29,11 +27,8 @@ Me.prototype =
 		if (!listener)
 			return
 		
-		this.doc.removeEventListener('mousemove', listener, true)
-		this.doc.removeEventListener('mousedown', listener, true)
-		this.doc.removeEventListener('mouseup', listener, true)
-		this.doc.removeEventListener('click', listener, true)
-		this.doc.removeEventListener('keydown', listener, true)
+		for (var k in this.typeMap)
+			this.doc.removeEventListener(k, listener, true)
 	},
 	
 	start: function ()
@@ -93,12 +88,18 @@ Me.prototype =
 	
 	recordKeyborad: function (type, e, node, action, state)
 	{
-		var keyCode = e.keyCode
-		if (state.keyCode !== keyCode)
+		action.keyCode = e.keyCode
+		if (type == 'keypress' && node.nodeName == 'INPUT' && (node.type == 'text' || !node.type))
 		{
-			state.keyCode = action.keyCode = keyCode
-			state.inputValue = action.inputValue = node.value
-			log(node.value)
+			// keypress may occur many times before keyup will
+			// so we have to catch input's value after every keypres
+			function save ()
+			{
+				action.inputValue = node.value
+				log('value:', type, node.value)
+			}
+			// setting zero timeout could be enough to get the value in time
+			setTimeout(save, 0)
 		}
 	},
 	
