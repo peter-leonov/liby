@@ -98,8 +98,11 @@ Me.prototype =
 	dispatchKeyborad: function (type, node, a, state)
 	{
 		// node = this.doc.elementFromPoint(x, y)
-		var e = this.doc.createEvent('KeyboardEvent')
-		e.initKeyEvent(type, true, true, window, a.ctrlKey, a.altKey, a.shiftKey, a.metaKey, a.keyCode, a.charCode)
+		// var e = this.doc.createEvent('KeyboardEvent')
+		// e.initKeyboardEvent(type, true, true, window, a.ctrlKey, a.altKey, a.shiftKey, a.metaKey, a.keyCode, a.charCode)
+		var e = this.doc.createEvent('UIEvent')
+		e.initUIEvent(type, true, true, window, 0)
+		e.keyCode = a.keyCode
 		e.__createdByEventPlayer = true
 		node.dispatchEvent(e)
 		
