@@ -35,7 +35,7 @@ Tests.test(function (t)
 
 loadOrder.push('script1')
 
-document.write('<img src="/slow/autumn.jpg?nc=' + Math.random() + '"/>')
+document.write('<img src="/slow/lib/tests/?nc=' + Math.random() + '"/>')
 
 $.onload(function () { loadOrder.push('onload1'); onloadTime = new Date() })
 $.onready(function () { loadOrder.push('onready1'); onreadyTime = new Date() })
