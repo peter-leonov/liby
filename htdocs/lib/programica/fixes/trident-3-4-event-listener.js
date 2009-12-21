@@ -1,6 +1,6 @@
 (function(){
 
-var doc = document, docelem = doc.documentElement, body = doc.body, win = window, undef
+var doc = document, docelem = doc.documentElement, win = window, undef
 
 if (win.addEventListener || !win.attachEvent)
 	return
@@ -34,8 +34,8 @@ Event.prototype =
 		this.keyCode = e.keyCode
 		this.currentTarget = this.target = e.srcElement
 		this.detail = - e.wheelDelta / 30
-		this.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // body.scrollLeft
-		this.pageY = e.clientY + docelem.scrollTop  - body.clientTop // body.scrollTop
+		this.pageX = e.clientX + docelem.scrollLeft - document.body.clientLeft // document.body.scrollLeft
+		this.pageY = e.clientY + docelem.scrollTop  - document.body.clientTop // document.body.scrollTop
 	},
 	
 	initEvent: function (type, bubbles, cancelable)
