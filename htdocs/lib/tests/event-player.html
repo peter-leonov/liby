@@ -20,24 +20,31 @@
 	</style>
 	<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 	<!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
+	
+	<script type="text/javascript" src="../programica/init.js"></script>
+	<script type="text/javascript" src="../programica/prototype.js"></script>
+	
+	<script type="text/javascript" src="../modules/child-indexed-path.js"></script>
+	<script type="text/javascript" src="../modules/event-player.js"></script>
+	
+	<!--
+	<script type="text/javascript" src="../modules/json.js"></script>
+	<script type="text/javascript" src="../modules/event-recorder.js"></script>
+	<script type="text/javascript" src="../widgets/recorder.js"></script>
+	-->
+	
+	<!--# include virtual="tests.includes.html" -->
 </head>
 <body>
+
+<div id="recorder-cursor"></div>
 
 <div id="mouse" class="box">mouse</div>
 <form id="submit" class="box"><button type="submit">submit</button></form>
 <div id="keyboard-box" class="box"><input id="keyboard" type="text" value=""/></div>
 
-<script type="text/javascript" src="../programica/init.js"></script>
-<script type="text/javascript" src="../programica/prototype.js"></script>
 
-<script type="text/javascript" src="../modules/child-indexed-path.js"></script>
-<script type="text/javascript" src="../modules/event-recorder.js"></script>
-<script type="text/javascript" src="../modules/event-player.js"></script>
 
-<script type="text/javascript" src="../modules/json.js"></script>
-<script type="text/javascript" src="../widgets/recorder.js"></script>
-
-<!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
 Tests.test(function (t)
 {
@@ -129,10 +136,15 @@ Tests.test(function (t)
 			bind(t, keyboard, 'keyup', check)
 		})
 		
-		var recorder = new Recorder()
-		recorder.bind()
+		var player = new EventPlayer()
+		player.bind()
+		player.load(<!--# include virtual="event-player-script.json" -->)
+		player.play()
 		
-		recorder.play(<!--# include virtual="event-player-script.json" -->)
+		// var recorder = new Recorder()
+		// recorder.bind()
+		// recorder.play(<!-- include virtual="event-player-script.json" -->)
+		// recorder.playBuffer()
 	})
 })
 </script>
