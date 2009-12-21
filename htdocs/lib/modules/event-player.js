@@ -63,7 +63,7 @@ Me.prototype =
 			node = this.nodes[num || state.n]
 		
 		if (!node)
-			throw new Error('could not determine current node')
+			throw new Error('could not determine current node num=' + num + ', path=' + path)
 		
 		if (this.onstep && this.onstep(node, action) === false)
 			return
