@@ -65,6 +65,17 @@ Event.prototype =
 // DocumentEvent.prototype = new Event()
 var UIEvent = win.UIEvent = function () { this.constructor = UIEvent }
 UIEvent.prototype = new Event()
+UIEvent.prototype.initUIEvent = function (type, bubbles, cancelable, view, detail)
+{
+	this.type = type
+	this.bubbles = bubbles
+	this.cancelable = cancelable
+	this.timeStamp = +new Date()
+	
+	this.view = view
+	this.detail = detail
+}
+
 var MouseEvent = win.MouseEvent = function () { this.constructor = MouseEvent }
 MouseEvent.prototype = new Event()
 MouseEvent.prototype.initMouseEvent = function (type, bubbles, cancelable, view, detail, sx, sy, cx, cy, ctrl, alt, shift, meta, button, rTarget)
