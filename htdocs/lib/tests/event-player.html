@@ -12,7 +12,7 @@
 		#keyboard-box  { top: 200px; background: #2aa; }
 		#keyboard-box input  { width: 55px; }
 		
-		.recorder-cursor
+		#recorder-cursor, .recorder-cursor
 		{
 			position: absolute; z-index: 65535; left: 0; top: -100px; width: 16px; height: 21px;
 			background: url(recorder-cursor.png); margin: -3px 0 0 -3px;
@@ -139,6 +139,19 @@ Tests.test(function (t)
 		var player = new EventPlayer()
 		player.bind()
 		player.load(<!--# include virtual="event-player-script.json" -->)
+		
+		var cursor = document.getElementById('recorder-cursor')
+		player.onstep = function (n, a)
+		{
+			var p
+			if ((p = a.p))
+			{
+				var style = cursor.style
+				style.left = p[0] + 'px'
+				style.top = p[1] + 'px'
+			}
+		}
+		
 		player.play()
 		
 		// var recorder = new Recorder()
