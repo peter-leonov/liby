@@ -9,11 +9,11 @@ function Me ()
 
 Me.prototype =
 {
-	bind: function (root)
+	bind: function (root, width)
 	{
 		this.nodes.root = root
 		this.globalX = root.scrollLeft
-		this.width = root.scrollWidth - root.clientWidth
+		this.width = width !== undefined ? width : root.scrollWidth - root.clientWidth
 		
 		var moveable = this.moveable = new Moveable().bind(root)
 		moveable.softStart = true
