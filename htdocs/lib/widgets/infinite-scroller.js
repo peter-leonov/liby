@@ -62,7 +62,7 @@ Me.prototype =
 	onmoveend: function (e)
 	{
 		var ms = e.data.movements.reverse(),
-			power = 1
+			power = 1000
 		
 		if (ms[5]) // got at least five movements
 		{
@@ -70,13 +70,13 @@ Me.prototype =
 			var root = this.nodes.root,
 				sx = this.globalX,
 				// approximating last three movements
-				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx) + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 3
+				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx)) / 3// + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx))
 			
 			if (vx)
 			{
-				var ix = Math.inertia(vx) * power
+				var tx = vx * 50 / power, dx = power * tx * tx
 				this.motionStoped = false
-				this.motion = new Motion(sx, sx + ix, power, Motion.types.easeOutQuad, this.setX, this.onMotionStop).start()
+				this.motion = new Motion(sx, sx + dx, tx, Motion.types.easeOutQuad, this.setX, this.onMotionStop).start()
 			}
 		}
 	}
