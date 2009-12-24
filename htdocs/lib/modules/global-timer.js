@@ -38,6 +38,13 @@ var myName = 'GlobalTimer', Me =
 			if (--this.total <= 0)
 				clearInterval(this.timer)
 		}
+	},
+	
+	clear: function (d)
+	{
+		var timers = this.timers
+		for (var id in timers)
+			this.remove(id)
 	}
 }
 
