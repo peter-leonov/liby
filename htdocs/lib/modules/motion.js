@@ -23,8 +23,8 @@ Me.prototype =
 		if (!this.running)
 		{
 			this.running = true
-			globalTimer.removeTimer(this.timer)
-			this.timer = globalTimer.addTimer(this.step) // step is already a prepared callback
+			globalTimer.remove(this.timer)
+			this.timer = globalTimer.add(this.step) // step is already a prepared callback
 		}
 		return this
 	},
@@ -34,7 +34,7 @@ Me.prototype =
 		if (this.running)
 		{
 			this.running = false
-			globalTimer.removeTimer(this.timer)
+			globalTimer.remove(this.timer)
 			if (this.onstop)
 				this.onstop(comleted)
 		}

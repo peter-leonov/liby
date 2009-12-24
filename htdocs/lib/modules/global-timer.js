@@ -15,7 +15,7 @@ var myName = 'GlobalTimer', Me =
 				timer(d)
 	},
 	
-	addTimer: function (callback)
+	add: function (callback)
 	{
 		// if was no timers
 		if (this.total++ <= 0)
@@ -28,7 +28,7 @@ var myName = 'GlobalTimer', Me =
 		return this.id
 	},
 	
-	removeTimer: function (id)
+	remove: function (id)
 	{
 		if (this.timers[id])
 		{
