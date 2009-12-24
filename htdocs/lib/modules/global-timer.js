@@ -6,12 +6,13 @@ var myName = 'GlobalTimer', Me =
 	total: 0,
 	id: 0,
 	timers: {},
+	timer: null,
 	
 	tick: function (d)
 	{
 		var timer, timers = this.timers
-		for (var k in timers)
-			if ((timer = timers[k]))
+		for (var id in timers)
+			if ((timer = timers[id]))
 				timer(d)
 	},
 	
@@ -20,6 +21,8 @@ var myName = 'GlobalTimer', Me =
 		// if was no timers
 		if (this.total++ <= 0)
 		{
+			if (this.timer !== null)
+				throw new Error(myName + '.timer had been broken')
 			var me = this
 			this.timer = setInterval(function (d) { me.tick(d) }, 1000 / this.fps)
 		}
@@ -30,13 +33,19 @@ var myName = 'GlobalTimer', Me =
 	
 	remove: function (id)
 	{
-		if (this.timers[id])
+		if (id in this.timers)
 		{
+			var callback = this.timers[id]
 			delete this.timers[id]
 			
 			// if have deleted last timer
 			if (--this.total <= 0)
+			{
 				clearInterval(this.timer)
+				this.timer = null
+			}
+			
+			return callback
 		}
 	},
 	
