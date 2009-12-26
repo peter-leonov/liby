@@ -2,7 +2,7 @@
 
 ;(function(){
 
-var report = 'http://oops.programica.ru/report?'
+var report = '/oops/report?'
 
 function Oops (message, url, line, type)
 {

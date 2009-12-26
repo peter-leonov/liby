@@ -45,7 +45,6 @@ Me.prototype =
 			var me = this
 			setTimeout(function () { me.__r.send(data) }, 0)
 			// __r.send() is wrapped in timer because of #97
-			// see http://trac.programica.ru/programica/ticket/97
 		}
 		else
 			this.__r.send(data)
