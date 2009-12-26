@@ -9,6 +9,9 @@ function Me ()
 
 Me.prototype =
 {
+	acceleration: 0.0005,
+	power: 50,
+	
 	bind: function (root, width)
 	{
 		this.nodes.root = root
@@ -61,20 +64,24 @@ Me.prototype =
 	
 	onmoveend: function (e)
 	{
-		var ms = e.data.movements.reverse(),
-			power = 1000
+		var ms = e.data.movements.reverse()
 		
 		if (ms[5]) // got at least five movements
 		{
 			
 			var root = this.nodes.root,
 				sx = this.globalX,
-				// approximating last three movements
-				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx)) / 3// + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx))
+				// approximating last movements
+				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx) + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 5
 			
 			if (vx)
 			{
-				var tx = vx * 50 / power, dx = power * tx * tx
+				var sign = vx < 0 ? -1 : 1
+				vx = Math.abs(vx)
+				
+				var a = this.acceleration,
+					tx = vx * this.power * a, dx = sign * tx * tx / a
+				
 				this.motionStoped = false
 				this.motion = new Motion(sx, sx + dx, tx, Motion.types.easeOutQuad, this.setX, this.onMotionStop).start()
 			}
