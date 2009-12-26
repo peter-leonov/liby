@@ -1,5 +1,5 @@
 // base objects extensions
-// this code is heavy minified and it couldn't be changed frequently
+// this code is heavily minified and it couldn not be changed frequently
 ;(function(){
 
 var O = Object, A = Array, Ap = A.prototype, S = String, Fp = Function.prototype, D = Date, N = Number, M = Math
@@ -18,7 +18,9 @@ add
 	}
 )
 
-add(String, {localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }})
+add(S, {localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }})
+
+add(Fp, {mixIn: function (module) { return add(this.prototype, module.prototype) }})
 
 add(Fp, {extend: function (s) { for (var k in s) this[k] = s[k]; return this }})
 

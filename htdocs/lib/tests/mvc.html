@@ -10,9 +10,7 @@
 
 <!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
-<script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
-<script type="text/javascript" src="../programica/class.js"></script>
 <script type="text/javascript" src="../modules/mvc.js"></script>
 
 <!--# include virtual="tests.includes.html" -->
@@ -57,7 +55,7 @@ Tests.test(function (t)
 	
 	t.test('setup(): model & view & controller', function (t)
 	{
-		function A () {}
+		function A () { this.constructor = A }
 		MVC.setup(A, 'A')
 		
 		var a = new A()

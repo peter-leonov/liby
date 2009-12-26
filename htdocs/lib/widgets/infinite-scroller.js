@@ -82,7 +82,7 @@ Me.prototype =
 	}
 }
 
-Class.setup(Me, myName)
+Me.className = myName
 self[myName] = Me
 
 })();

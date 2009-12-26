@@ -127,8 +127,9 @@ Me.prototype =
 	}
 }
 
-self[myName] = Me
-Class.setup(Me, myName)
 Me.mixIn(EventDriven)
+
+self[myName] = Me
+Me.className = myName
 
 })();

@@ -2,19 +2,17 @@
 ;(function(){
 
 var myName = 'ScrollRangeFinder',
-	Me = self[myName] = Class(myName),
 	max = Math.max, sqrt = Math.sqrt
 
-Me.mixIn(EventTarget)
+function Me ()
+{
+	this.nodes = {}
+	this.vals = {}
+}
 
-Me.prototype.extend
-({
+Me.prototype =
+{
 	interval: 1000,
-	initialize: function ()
-	{
-		this.nodes = {}
-		this.vals = {}
-	},
 	
 	bind: function (main, images)
 	{
@@ -98,6 +96,11 @@ Me.prototype.extend
 			me.check()
 		}
 	}
-})
+}
+
+Me.mixIn(EventDriven)
+
+self[myName] = Me
+Me.className = myName
 
 })();

@@ -19,16 +19,27 @@ Me.prototype =
 		model.parent = view.parent = controller.parent = this
 	},
 	
-	bind: function () {},
 	initialize: function () {}
 }
 
 self[myName] = Me
-Class.setup(Me, myName)
+Me.className = myName
 
-Me.Model = Class.create(myName + '.Model')
-Me.View = Class.create(myName + '.View')
-Me.Controller = Class.create(myName + '.Controller')
+function Model () {}
+Model.prototype.initialize = function () {}
+Model.className = myName + '.Model'
+Me.Model = Model
+
+function View () {}
+View.prototype.initialize = function () {}
+View.className = myName + '.View'
+Me.View = View
+
+function Controller () {}
+Controller.prototype.initialize = function () {}
+Controller.className = myName + '.Controller'
+Me.Controller = Controller
+
 
 Me.setup = function (klass, name, parent)
 {
@@ -36,11 +47,38 @@ Me.setup = function (klass, name, parent)
 		parent = Me
 	
 	klass.prototype = new parent()
-	Class.setup(klass, name)
+	klass.className = name
 	
-	klass.Model = Class.create(name + '.Model', new parent.Model())
-	klass.View = Class.create(name + '.View', new parent.View())
-	klass.Controller = Class.create(name + '.Controller', new parent.Controller())
+	
+	function Model ()
+	{
+		this.constructor = Model
+		this.initialize.apply(this, arguments)
+	}
+	Model.className = name + '.Model'
+	Model.prototype = new parent.Model()
+	klass.Model = Model
+	
+	
+	function View ()
+	{
+		this.constructor = View
+		this.initialize.apply(this, arguments)
+	}
+	View.className = name + '.View'
+	View.prototype = new parent.View()
+	klass.View = View
+	
+	
+	function Controller ()
+	{
+		this.constructor = Controller
+		this.initialize.apply(this, arguments)
+	}
+	Controller.className = name + '.Controller'
+	Controller.prototype = new parent.Controller()
+	klass.Controller = Controller
+	
 	
 	return klass
 }
@@ -49,6 +87,7 @@ Me.create = function (name, parent)
 {
 	function klass ()
 	{
+		this.constructor = klass
 		this.__mvc_interlink()
 		this.initialize()
 	}

@@ -1,38 +1,5 @@
 ;(function(){
 
-var myName = 'Class', count = 0,
-	Me = self[myName] = function () {}
-
-Me.setup = function (klass, name)
-{
-	klass.className = name || '[anonymous ' + myName + ' ' + ++count + ']'
-	klass.prototype.constructor = klass
-	return klass
-}
-
-Me.create = function (name, proto)
-{
-	var klass = function () { this.initialize.apply(this, arguments) }
-	
-	if (proto)
-		klass.prototype = proto
-	else
-		proto = klass.prototype
-	
-	if (!proto.initialize)
-		proto.initialize = function () {}
-	
-	return this.setup(klass, name)
-}
-
-Me.className = myName
-
-})();
-
-
-
-;(function(){
-
 var myName = 'Module', count = 0,
 	Me = self[myName] = function ()
 	{
