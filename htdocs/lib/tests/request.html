@@ -3,17 +3,16 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=320"/>
-	<link rel="stylesheet" href="tests.css" type="text/css"/>
 	<title>Request tests</title>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
+	<script type="text/javascript" src="../modules/url-encode.js"></script>
+	<script type="text/javascript" src="../modules/request.js"></script>
+	
+	<script src="tests.common.js" type="text/javascript"></script>
 </head>
 <body>
 
-<!--[if lte IE 7]><script type="text/javascript" src="../programica/fixes/trident3.js"></script><![endif]-->
-
-<script type="text/javascript" src="../modules/url-encode.js"></script>
-<script type="text/javascript" src="../modules/request.js"></script>
-
-<!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
 Tests.test(function (t)
 {
