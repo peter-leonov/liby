@@ -1,6 +1,6 @@
 ;(function(){
 
-var Me = Programica.Form =
+var myName = 'FormHelper', Me =
 {
 	toHash: function (form, fa)
 	{
@@ -64,5 +64,7 @@ var Me = Programica.Form =
 		return hash;
 	}
 }
+
+self[myName] = Me
 
 })();

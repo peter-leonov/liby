@@ -1,6 +1,8 @@
 ;(function () {
 
-var M = Motion, Me = Programica.Animation = function (node, motion, duration, trans, unit)
+var M = Motion, myName = 'Animation'
+
+function Me (node, motion, duration, trans, unit)
 {
 	this.node = node
 	switch (typeof motion)
@@ -153,5 +155,6 @@ Me.setStyleProperty = function (node, p, value, unit)
 	}
 }
 
+self[myName] = Me
 
 })();
