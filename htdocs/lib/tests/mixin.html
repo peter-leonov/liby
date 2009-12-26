@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=320"/>
 	<link rel="stylesheet" href="tests.css" type="text/css"/>
-	<title>Module tests</title>
+	<title>Mixin tests</title>
 </head>
 <body>
 
@@ -12,34 +12,11 @@
 <!--[if gte IE 8]><script type="text/javascript" src="../programica/fixes/trident4.js"></script><![endif]-->
 <script type="text/javascript" src="../programica/init.js"></script>
 <script type="text/javascript" src="../programica/prototype.js"></script>
-<script type="text/javascript" src="../programica/class.js"></script>
 
 <!--# include virtual="tests.includes.html" -->
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.test('create(…)', function (t)
-	{
-		var prototype = {x:123}, className = 'A'
-		function constructor () { this.y }
-		var A = Module.create(className, prototype)
-		
-		t.eq(A.className, className, 'name')
-		t.eq(A.prototype, prototype, 'prototype')
-	})
-	
-	t.test('create()', function (t)
-	{
-		var A = Module.create()
-		A.prototype.initialize = function () { this.args = arguments }
-		t.eq(A.className, '[anonymous Module 1]', 'name')
-		t.eq(Module.create().className, '[anonymous Module 2]', 'name')
-		t.instance(A.prototype, Object, 'prototype')
-		
-		t.ne(Module.create(), A, 'different objects')
-		t.ne(Module.create().prototype, A.prototype, 'different prototypes')
-	})
-	
 	t.test('mixing', function (t)
 	{
 		var A = function () {}
@@ -57,7 +34,7 @@ Tests.test(function (t)
 		var c = new C()
 		t.eqo(c, {x: 'A', y: 'B', z: 'C'})
 		
-		var M = Module.create('M')
+		var M = function () {}
 		M.prototype.x = 'M'
 		M.prototype.q = 'M'
 		M.prototype.y = 'M'

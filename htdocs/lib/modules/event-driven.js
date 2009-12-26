@@ -1,7 +1,7 @@
 ;(function(){
 
 var myName = 'EventDriven',
-	Me = self[myName] = Module.create(myName),
+	Me = self[myName] = function () {},
 	handlersProp = '__' + myName + 'Handlers',
 	doc = document
 
