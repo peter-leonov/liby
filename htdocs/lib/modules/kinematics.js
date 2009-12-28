@@ -162,7 +162,7 @@ Vector.prototype =
 		
 		var h = this.h
 		if (h === -1)
-			h = this.h = Math.sqrt(x * x, y * y)
+			h = this.h = Math.sqrt(x * x + y * y)
 		
 		if (h == 0)
 			return
