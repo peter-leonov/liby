@@ -150,12 +150,6 @@ function Vector (x, y)
 
 Vector.prototype =
 {
-	sum: function (v)
-	{
-		this.x += v.x
-		this.y += v.y
-	},
-	
 	addC: function (c)
 	{
 		var x = this.x, y = this.y
@@ -164,7 +158,7 @@ Vector.prototype =
 		if (h === -1)
 			h = this.h = Math.sqrt(x * x + y * y)
 		
-		if (h == 0)
+		if (h === 0)
 			return
 		
 		var cos = x / h,

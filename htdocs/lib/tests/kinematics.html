@@ -17,14 +17,16 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.test('point motion', function (t)
+	t.test('freezing', function (t)
 	{
 		var space = new Kinematics.Space()
 		
-		var point = new Kinematics.Point(0, 0, 1, 0)
-		space.add(point)
+		space.add(new Kinematics.Point(0, 0, 0, 0))
+		space.add(new Kinematics.Point(0, 0, 0, 1))
+		space.add(new Kinematics.Point(0, 0, 1, 0))
+		space.add(new Kinematics.Point(0, 0, 1, 1))
 		
-		var fr = new Kinematics.Friction(0.02)
+		var fr = new Kinematics.Friction(0.2)
 		space.add(fr)
 		
 		space.run(2000)
