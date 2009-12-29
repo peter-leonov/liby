@@ -68,8 +68,14 @@ Tests.test(function (t)
 		var fr = new Kinematics.Friction(0.2)
 		space.add(fr)
 		
+		var begin = new Date()
 		space.ontimeout = function () { t.fail('timed out at pulse = ' + space.pulse), t.done() }
-		space.onfreeze = function () { t.done() }
+		space.onfreeze = function ()
+		{
+			t.lte(new Date() - begin, 2000, 'freaze time ok')
+			t.lte(this.ticks, 100, 'freaze tick ok')
+			t.done()
+		}
 		
 		space.run(2000)
 		t.wait(5000)
