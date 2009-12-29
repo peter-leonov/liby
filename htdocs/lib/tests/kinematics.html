@@ -17,6 +17,45 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.test('ontick', function (t)
+	{
+		var space = new Kinematics.Space()
+		
+		space.add(new Kinematics.Point(0, 0, 10, 0))
+		
+		var fr = new Kinematics.Friction(1)
+		space.add(fr)
+		
+		var ticks = 0
+		space.ontick = function () { ticks++ }
+		space.ontimeout = function () { t.fail('timed out at pulse = ' + space.pulse), t.done() }
+		space.onfreeze = function ()
+		{
+			t.eq(ticks, 10 + 60 - 1) // -1 overlap
+			t.eq(space.ticks, 10 + 60 - 1) // -1 overlap
+			t.done()
+		}
+		
+		space.run(2000)
+		t.wait(5000)
+	})
+	
+	t.test('ontimeout', function (t)
+	{
+		var space = new Kinematics.Space()
+		
+		space.add(new Kinematics.Point(0, 0, 100, 0))
+		
+		var fr = new Kinematics.Friction(1)
+		space.add(fr)
+		
+		var ticks = 0
+		space.ontimeout = function () { space.ontick = function () { ticks++ } }
+		
+		space.run(1000)
+		t.async(function () { t.eq(ticks, 0, '0 ticks after ontimeout') }, 2000)
+	})
+	
 	t.test('freezing', function (t)
 	{
 		var space = new Kinematics.Space()
