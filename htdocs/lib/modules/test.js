@@ -49,6 +49,7 @@ Me.prototype =
 	async: function (f, d)
 	{
 		this.cascade.add(f, d)
+		this.setStatus('waiting')
 	},
 	
 	wait: function (d)
