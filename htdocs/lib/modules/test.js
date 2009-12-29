@@ -223,10 +223,34 @@ Me.prototype =
 			this.fail([a, '===', b], d)
 	},
 	
-	lt: function (a, b, d) { if (a >= b) this.fail(a + ' >= ' + b, d) },
-	lte: function (a, b, d) { if (a > b) this.fail(a + ' > '  + b, d) },
-	gte: function (a, b, d) { if (a < b) this.fail(a + ' < '  + b, d) },
-	gt: function (a, b, d) { if (a <= b) this.fail(a + ' <= ' + b, d) },
+	lt: function (a, b, d)
+	{
+		if (a < b)
+			this.pass([a, '<', b], d)
+		else
+			this.fail([a, '>=', b], d)
+	},
+	lte: function (a, b, d)
+	{
+		if (a <= b)
+			this.pass([a, '<=', b], d)
+		else
+			this.fail([a, '>', b], d)
+	},
+	gte: function (a, b, d)
+	{
+		if (a >= b)
+			this.pass([a, '>=', b], d)
+		else
+			this.fail([a, '<', b], d)
+	},
+	gt: function (a, b, d)
+	{
+		if (a > b)
+			this.pass([a, '>', b], d)
+		else
+			this.fail([a, '<=', b], d)
+	},
 	
 	instance: function (a, b, d)
 	{
