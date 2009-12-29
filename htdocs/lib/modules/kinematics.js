@@ -4,6 +4,8 @@ function Kinematics () {}
 Kinematics.className = 'Kinematics'
 self[Kinematics.className] = Kinematics
 
+function stub () {}
+
 function Space ()
 {
 	this.timers = {}
@@ -17,6 +19,10 @@ Space.prototype =
 {
 	minPulse: 0.01,
 	maxFreeze: GlobalTimer.fps, // wait one seccond before freeze
+	
+	ontick: stub,
+	ontimeout: stub,
+	onfreeze: stub,
 	
 	run: function (timeout)
 	{
@@ -34,7 +40,7 @@ Space.prototype =
 	
 	timeout: function (d)
 	{
-		this.ontimeout && this.ontimeout()
+		this.ontimeout()
 		this.stop()
 	},
 	
@@ -60,6 +66,8 @@ Space.prototype =
 				force.apply(points[j])
 		}
 		
+		this.ontick()
+		
 		var pulse = 0
 		for (var i = 0, il = points.length; i < il; i++)
 		{
@@ -72,8 +80,8 @@ Space.prototype =
 			if (++this.freeze == this.maxFreeze)
 			{
 				this.freeze = 0
-				if (this.onfreeze && this.onfreeze() !== false)
-				this.stop()
+				if (this.onfreeze() !== false)
+					this.stop()
 			}
 		}
 		else
