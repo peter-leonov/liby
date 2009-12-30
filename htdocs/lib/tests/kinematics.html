@@ -80,6 +80,27 @@ Tests.test(function (t)
 		space.run(2000)
 		t.wait(5000)
 	})
+	
+	t.test('premature freezing', function (t)
+	{
+		var space = new Kinematics.Space()
+		
+		space.add(new Kinematics.Point(0, 0, -10, 10))
+		space.add(new Kinematics.Point(0, 0, 10, -10))
+		
+		var fr = new Kinematics.Friction(2)
+		space.add(fr)
+		
+		space.ontimeout = function () { t.fail('timed out at pulse = ' + space.pulse), t.done() }
+		space.onfreeze = function ()
+		{
+			t.gt(this.ticks, fps, 'freaze tick ok')
+			t.done()
+		}
+		
+		space.run(2000)
+		t.wait(5000)
+	})
 })
 </script>
 </body>
