@@ -159,10 +159,11 @@ Kinematics[Friction.className] = Friction
 
 
 
-function Wave (soft, step)
+function Wave (step, soft, min)
 {
-	this.soft = soft
 	this.step = step
+	this.soft = soft || 10
+	this.min = min / fps || 0
 }
 
 Wave.prototype = new Force()
@@ -175,7 +176,7 @@ Wave.prototype.apply = function (point)
 		sign = dir < 0 ? 1 : -1
 	// log(dir)
 	if (dir)
-		point.v.addX(sign * (Math.sqrt(Math.abs(dir)) / this.soft + 1))
+		point.v.addX(sign * (Math.sqrt(Math.abs(dir)) / this.soft + this.min))
 }
 
 Wave.className = 'Wave'
