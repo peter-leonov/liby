@@ -17,8 +17,8 @@ function Space ()
 
 Space.prototype =
 {
-	minPulse: 0.01,
-	maxFreeze: GlobalTimer.fps, // wait one seccond before freeze
+	minPulse: 1 / (fps * fps *10),
+	maxFreeze: fps, // wait one second before freeze
 	
 	ontick: stub,
 	ontimeout: stub,
