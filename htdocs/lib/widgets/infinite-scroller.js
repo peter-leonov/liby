@@ -9,14 +9,17 @@ function Me ()
 
 Me.prototype =
 {
-	friction: 100,
+	friction: 60,
+	soft: 7,
 	power: 1.5,
 	
 	bind: function (root, width)
 	{
 		this.nodes.root = root
 		this.globalX = root.scrollLeft
-		this.width = width !== undefined ? width : root.scrollWidth - root.clientWidth
+		
+		var clientWidth = root.clientWidth
+		this.width = width !== undefined ? width : root.scrollWidth - clientWidth
 		
 		var moveable = this.moveable = new Moveable().bind(root)
 		moveable.softStart = true
@@ -37,7 +40,9 @@ Me.prototype =
 		
 		
 		var space = this.space = new Kinematics.Space()
+		space.add(new Kinematics.Wave(this.soft, clientWidth))
 		space.add(new Kinematics.Friction(this.friction))
+		
 		
 		var point = this.point = new Kinematics.Point(0, 0, 0, 0)
 		space.add(point)
@@ -76,19 +81,16 @@ Me.prototype =
 	{
 		var ms = e.data.movements.reverse()
 		
-		if (ms[5]) // got at least five movements
+		if (ms[3]) // got at least five movements
 		{
 			
 			var root = this.nodes.root,
 				// approximating last movements
 				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx)) / 3// + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 5
 			
-			if (vx)
-			{
-				this.point.x = this.globalX
-				this.point.v.set(vx * this.power, 0)
-				this.space.run(10000) // set a reasonable timeout
-			}
+			this.point.x = this.globalX
+			this.point.v.set(vx ? vx * this.power : 0, 0)
+			this.space.run(10000) // set a reasonable timeout
 		}
 	}
 }
