@@ -9,8 +9,8 @@ function Me ()
 
 Me.prototype =
 {
-	acceleration: 0.0005,
-	power: 50,
+	friction: 100,
+	power: 1.5,
 	
 	bind: function (root, width)
 	{
@@ -35,25 +35,35 @@ Me.prototype =
 		}
 		// this.setY = function (v) { root.scrollTop = v }
 		
-		this.onMotionStop = function () { me.motionStoped = true }
+		
+		var space = this.space = new Kinematics.Space()
+		space.add(new Kinematics.Friction(this.friction))
+		
+		var point = this.point = new Kinematics.Point(0, 0, 0, 0)
+		space.add(point)
+		
+		space.ontick = function () { me.spaceTick() }
 		
 		return this
 	},
 	
+	spaceTick: function ()
+	{
+		this.setX(this.point.x)
+	},
+	
 	onmovestart: function (e)
 	{
-		if (this.motion)
-			this.motion.stop()
+		this.space.stop()
 		this.startX = this.globalX
 	},
 	
 	onmoveabout: function ()
 	{
-		if (!this.motionStoped)
+		if (this.space.running)
 		{
 			Moveable.dropClick()
-			if (this.motion)
-				this.motion.stop()
+			this.space.stop()
 		}
 	},
 	
@@ -70,20 +80,14 @@ Me.prototype =
 		{
 			
 			var root = this.nodes.root,
-				sx = this.globalX,
 				// approximating last movements
-				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx) + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 5
+				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx)) / 3// + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 5
 			
 			if (vx)
 			{
-				var sign = vx < 0 ? -1 : 1
-				vx = Math.abs(vx)
-				
-				var a = this.acceleration,
-					tx = vx * this.power * a, dx = sign * tx * tx / a
-				
-				this.motionStoped = false
-				this.motion = new Motion(sx, sx + dx, tx, Motion.types.easeOutQuad, this.setX, this.onMotionStop).start()
+				this.point.x = this.globalX
+				this.point.v.set(vx * this.power, 0)
+				this.space.run(10000) // set a reasonable timeout
 			}
 		}
 	}
