@@ -4,6 +4,8 @@ function Kinematics () {}
 Kinematics.className = 'Kinematics'
 self[Kinematics.className] = Kinematics
 
+var fps = Kinematics.fps = GlobalTimer.fps
+
 function stub () {}
 
 function Space ()
@@ -117,7 +119,7 @@ function Point (x, y, vx, vy, m)
 	this.x = x || 0
 	this.y = y || 0
 	this.m = m || 1
-	this.v = new Vector(vx || 0, vy || 0)
+	this.v = new Vector(vx ? vx / fps : 0, vy ? vy / fps : 0)
 }
 
 Point.prototype =
@@ -143,7 +145,7 @@ Kinematics[Force.className] = Force
 
 function Friction (mu)
 {
-	this.mu = mu
+	this.mu = mu / fps
 }
 
 Friction.prototype = new Force()
