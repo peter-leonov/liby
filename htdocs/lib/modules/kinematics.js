@@ -158,6 +158,31 @@ Friction.className = 'Friction'
 Kinematics[Friction.className] = Friction
 
 
+
+function Wave (soft, step)
+{
+	this.soft = soft
+	this.step = step
+}
+
+Wave.prototype = new Force()
+Wave.prototype.apply = function (point)
+{
+	var x = Math.floor(point.x), step = this.step,
+		pos = x % step,
+		shift = x < 0 ? step + pos : pos,
+		dir = shift > step / 2 ? shift - step : shift,
+		sign = dir < 0 ? 1 : -1
+	// log(dir)
+	if (dir)
+		point.v.addX(sign * (Math.sqrt(Math.abs(dir)) / this.soft + 1))
+}
+
+Wave.className = 'Wave'
+Kinematics[Wave.className] = Wave
+
+
+
 function Vector (x, y)
 {
 	this.x = x
@@ -171,6 +196,12 @@ Vector.prototype =
 	{
 		this.x = x
 		this.y = y
+		this.h = -1
+	},
+	
+	addX: function (x)
+	{
+		this.x += x
 		this.h = -1
 	},
 	
