@@ -71,6 +71,13 @@ Space.prototype =
 		var pulse = 0
 		for (var i = 0, il = points.length; i < il; i++)
 		{
+			var p = points[i], v = p.v
+			p.x += v.x
+			p.y += v.y
+		}
+		
+		for (var i = 0, il = points.length; i < il; i++)
+		{
 			var v = points[i].v
 			pulse += v.x + v.y
 		}
