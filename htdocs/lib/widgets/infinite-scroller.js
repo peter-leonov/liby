@@ -13,7 +13,7 @@ Me.prototype =
 	soft: 7,
 	power: 1.5,
 	
-	bind: function (root, width)
+	bind: function (root, width, page)
 	{
 		this.nodes.root = root
 		this.globalX = root.scrollLeft
@@ -40,8 +40,9 @@ Me.prototype =
 		
 		
 		var space = this.space = new Kinematics.Space()
-		space.add(new Kinematics.Wave(this.soft, clientWidth))
 		space.add(new Kinematics.Friction(this.friction))
+		space.add(new Kinematics.Wave(page || clientWidth, this.soft, this.friction))
+		
 		
 		
 		var point = this.point = new Kinematics.Point(0, 0, 0, 0)

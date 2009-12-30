@@ -100,7 +100,7 @@ Tests.test(function (t)
 	{
 		var node = document.getElementById('test-node-1')
 		
-		var is = new InfiniteScroller().bind(node)
+		var is = new InfiniteScroller().bind(node, undefined, 420)
 		new InfiniteScroller().bind(document.getElementById('test-node-2'))
 		
 		t.ok(is instanceof InfiniteScroller, 'instance InfiniteScroller')
