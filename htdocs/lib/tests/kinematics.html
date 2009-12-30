@@ -17,6 +17,7 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	var fps = Kinematics.fps
 	t.test('ontick', function (t)
 	{
 		var space = new Kinematics.Space()
@@ -31,8 +32,8 @@ Tests.test(function (t)
 		space.ontimeout = function () { t.fail('timed out at pulse = ' + space.pulse), t.done() }
 		space.onfreeze = function ()
 		{
-			t.eq(ticks, 10 + 60 - 1) // -1 overlap
-			t.eq(space.ticks, 10 + 60 - 1) // -1 overlap
+			t.eq(ticks, 10 + fps - 1) // -1 overlap
+			t.eq(space.ticks, 10 + fps - 1) // -1 overlap
 			t.done()
 		}
 		
