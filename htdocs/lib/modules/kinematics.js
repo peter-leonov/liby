@@ -79,7 +79,7 @@ Space.prototype =
 		for (var i = 0, il = points.length; i < il; i++)
 		{
 			var v = points[i].v
-			pulse += v.x + v.y
+			pulse += v.x * v.x + v.y * v.y
 		}
 		
 		if (!pulse || pulse < this.minPulse)
