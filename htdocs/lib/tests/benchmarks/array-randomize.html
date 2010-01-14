@@ -7,25 +7,12 @@
 	<script src="/lib/tests/tests.common.js" type="text/javascript"></script>
 	
 	<script src="../../core/prototype.js" type="text/javascript"></script>
+	<script src="../../modules/array-randomize.js" type="text/javascript"></script>
 </head>
 <body>
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	Array.prototype.randomize = function ()
-	{
-		for (var v, i = 0, il = this.length; i < il; i++)
-		{
-			var j = (Math.random() * il) >> 0
-			v = this[j]
-			this[j] = this[i]
-			this[i] = v
-			// t.log(j)
-		}
-		
-		return this
-	}
-	
 	function factorial (n) { return n <= 1 ? 1 : n * factorial(n - 1) }
 	
 	t.test('distribution and combinations', function (t)
