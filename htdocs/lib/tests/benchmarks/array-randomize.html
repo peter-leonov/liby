@@ -26,7 +26,6 @@ Tests.test(function (t)
 			else
 				combos[key] = 1
 		}
-		log(combos)
 		var total = factorial(arr.length)
 		
 		var normal = 0, rounded = (1 / total * 100 >> 0) / 100
@@ -34,9 +33,7 @@ Tests.test(function (t)
 			if ((combos[k] / count * 100) / 100 >= rounded)
 				normal++
 			else
-			{
-				t.log((combos[k] / count * 100) / 100, rounded)
-			}
+				t.fail(k)
 		
 		t.eq(Object.keys(combos).length, total, 'total')
 		t.eq(normal, total, 'normal')
