@@ -208,6 +208,13 @@ Vector.prototype =
 		this.h = -1
 	},
 	
+	add: function (x, y)
+	{
+		this.x += x
+		this.y += y
+		this.h = -1
+	},
+	
 	addC: function (c)
 	{
 		var x = this.x, y = this.y
