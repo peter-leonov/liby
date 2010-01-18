@@ -28,15 +28,17 @@ Space.prototype =
 	
 	run: function (timeout)
 	{
+		var me = this
+		clearTimeout(this.timers.timeout)
+		if (timeout)
+			this.timers.timeout = setTimeout(function (d) { me.timeout(d) }, timeout)
+		
 		if (this.running)
 			return
 		this.running = true
 		
 		this.freeze = 0
 		
-		var me = this
-		if (timeout)
-			this.timers.timeout = setTimeout(function (d) { me.timeout(d) }, timeout)
 		this.timers.tick = GlobalTimer.add(function (d) { me.tick(d) })
 	},
 	
