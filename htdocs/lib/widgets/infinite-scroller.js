@@ -90,9 +90,24 @@ Me.prototype =
 				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx)) / 3// + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 5
 			
 			this.point.x = this.globalX
-			this.point.v.set(vx ? vx * this.power : 0, 0)
-			this.space.run(10000) // set a reasonable timeout
+			this.setVelocity(vx ? vx * this.power : 0, 0)
+			this.run()
 		}
+	},
+	
+	addVelocity: function (x, y)
+	{
+		this.point.v.add(x, y)
+	},
+	
+	setVelocity: function (x, y)
+	{
+		this.point.v.set(x, y)
+	},
+	
+	run: function (timeout)
+	{
+		this.space.run(timeout === undefined ? 10000 : timeout) // set a reasonable timeout
 	}
 }
 
