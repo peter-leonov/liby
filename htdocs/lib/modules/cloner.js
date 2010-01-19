@@ -14,19 +14,33 @@ Me.prototype =
 	{
 		this.root = root
 		this.nodes = nodes
+		this.paths = this.getPaths(root, nodes)
 		
 		return this
 	},
 	
-	getPaths: function (nodes)
+	getPaths: function (root, nodes)
 	{
+		var paths = {}
 		for (var k in nodes)
-			log(nodes[k])
+			paths[k] = root.childIndexedPath(nodes[k])
+		return paths
+	},
+	
+	getNodes: function (root, paths)
+	{
+		var nodes = {}
+		for (var k in paths)
+			nodes[k] = root.getChildByIndexedPath(paths[k])
+		return nodes
 	},
 	
 	create: function ()
 	{
-		return this.root.cloneNode(true)
+		var root = this.root.cloneNode(true),
+			nodes = this.getNodes(root, this.paths)
+		
+		return {root: root, nodes: nodes}
 	},
 }
 
