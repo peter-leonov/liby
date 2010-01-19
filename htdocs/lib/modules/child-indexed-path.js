@@ -36,7 +36,7 @@ var myProto =
 		return path.reverse()
 	},
 	
-	childByIndexedPath: function (path)
+	getChildByIndexedPath: function (path)
 	{
 		var node = this
 		path:

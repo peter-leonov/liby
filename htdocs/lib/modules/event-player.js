@@ -55,7 +55,7 @@ Me.prototype =
 		var node, num = action.n, path = action.path
 		if (path)
 		{
-			node = this.doc.childByIndexedPath(path)
+			node = this.doc.getChildByIndexedPath(path)
 			this.nodes[num] = node
 			state.n = num
 		}
