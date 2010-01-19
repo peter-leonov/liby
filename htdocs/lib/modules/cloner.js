@@ -47,7 +47,7 @@ Me.prototype =
 			nodes = this.getNodes(root, this.paths)
 		
 		return {root: root, nodes: nodes}
-	},
+	}
 }
 
 // Me.mixIn(EventDriven)
