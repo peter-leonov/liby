@@ -12,13 +12,19 @@
 </head>
 <body>
 	
-	<div id="root1" class="root">
+	<div id="root1" class="root1">
 		<dl>
 			<dt class="head">head</dt>
 			<dd class="body">body</dd>
 		</dl>
 		<p><span>123</span><span class="text">321</span></p>
 	</div>
+	
+	<ul id="root2" class="root2">
+		<li class="item1">1</li>
+		<li class="item2">2</li>
+		<li class="item3">3</li>
+	</ul>
 	
 <script type="text/javascript">
 Tests.test(function (t)
@@ -55,6 +61,46 @@ Tests.test(function (t)
 	
 	t.test('changed tree clone', function (t)
 	{
+		var root = $('root2'),
+			item1 = root.getElementsByTagName('li')[0],
+			item2 = root.getElementsByTagName('li')[1],
+			item3 = root.getElementsByTagName('li')[2]
+		
+		var nodes = { item1: item1, item2: item2, item3: item3 }
+		
+		var cloner = new Cloner()
+		cloner.bind(root, nodes)
+		
+		var clone = cloner.create()
+		
+		t.ne(clone.root, root, 'root cloned')
+		t.eq(clone.root.className, root.className, 'root class cloned')
+		
+		t.ne(clone.nodes.item1, item1, 'item1 cloned')
+		t.eq(clone.nodes.item1.className, item1.className, 'item1 class cloned')
+		
+		t.ne(clone.nodes.item2, item2, 'item2 cloned')
+		t.eq(clone.nodes.item2.className, item2.className, 'item2 class cloned')
+		
+		t.ne(clone.nodes.item3, item3, 'item3 cloned')
+		t.eq(clone.nodes.item3.className, item3.className, 'item3 class cloned')
+		
+		root.appendChild(item1)
+		
+		cloner.sync()
+		var clone = cloner.create()
+		
+		t.ne(clone.root, root, 'root cloned')
+		t.eq(clone.root.className, root.className, 'root class cloned')
+		
+		t.ne(clone.nodes.item1, item1, 'item1 cloned')
+		t.eq(clone.nodes.item1.className, item1.className, 'item1 class cloned')
+		
+		t.ne(clone.nodes.item2, item2, 'item2 cloned')
+		t.eq(clone.nodes.item2.className, item2.className, 'item2 class cloned')
+		
+		t.ne(clone.nodes.item3, item3, 'item3 cloned')
+		t.eq(clone.nodes.item3.className, item3.className, 'item3 class cloned')
 		
 	})
 })

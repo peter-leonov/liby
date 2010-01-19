@@ -14,9 +14,15 @@ Me.prototype =
 	{
 		this.root = root
 		this.nodes = nodes
-		this.paths = this.getPaths(root, nodes)
+		
+		this.sync()
 		
 		return this
+	},
+	
+	sync: function ()
+	{
+		this.paths = this.getPaths(this.root, this.nodes)
 	},
 	
 	getPaths: function (root, nodes)
