@@ -35,6 +35,14 @@ Tests.test(function (t)
 		var res = concat.apply(stub, array2d)
 		t.eq(res.toString(), array1d.toString(), 'concat.apply() ok')
 		t.timeEnd('apply')
+		
+		t.time('apply after loop')
+		var res = []
+		for (var i = 0; i < array2d.length; i++)
+			res[i] = array2d[i]
+		res = concat.apply(stub, res)
+		t.eq(res.toString(), array1d.toString(), 'concat.apply() ok')
+		t.timeEnd('apply after loop')
 	})
 	
 	t.test('source array checks', function (t)
