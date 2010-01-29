@@ -14,7 +14,8 @@ add
 		extend: function (d, s) { if (d) for (var k in s) d[k] = s[k]; return d },
 		copy: function (s) { var d = {}; for (var k in s) d[k] = s[k]; return d },
 		keys: function (s) { var r = []; for (var k in s) r.push(k); return r },
-		values: function (s) { var r = []; for (var k in s) r.push(s[k]); return r }
+		values: function (s) { var r = []; for (var k in s) r.push(s[k]); return r },
+		isEmpty: function (s) { for (var k in s) return false; return true }
 	}
 )
 
