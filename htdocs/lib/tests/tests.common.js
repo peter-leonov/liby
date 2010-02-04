@@ -6,10 +6,8 @@ function style (src) { document.write('<link rel="stylesheet" href="' + src + '"
 script('/lib/modules/cascade.js')
 script('/lib/modules/test.js')
 script('/lib/widgets/tests.js')
+script('/js/ga.js')
 
 style('/lib/tests/tests.css')
 
 })();
-
-<!--# block name="ga" -->/* no ga.js was found */<!--# endblock -->
-<!--# include virtual="/js/ga.js" stub="ga" -->
