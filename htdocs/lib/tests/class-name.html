@@ -198,6 +198,51 @@ Tests.test(function (t)
 		node.className = 'a-b-a-b-a'
 		t.no(node.hasClassName('a'), '"a-b-a-b-a"')
 	})
+	
+	t.test('toggleClassName()', function (t)
+	{
+		var node = test1.cloneNode(true)
+		node.className = ' x y y y x y y x '
+		node.toggleClassName('y')
+		t.eq(node.className, 'x x x', '" x y y y x y y x "')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'x z'
+		node.toggleClassName('y')
+		t.eq(node.className, 'x z y', '"x z"')
+		
+		var node = test1.cloneNode(true)
+		node.toggleClassName('y')
+		t.eq(node.className, 'y', 'untouched')
+		
+		var node = test1.cloneNode(true)
+		node.toggleClassName('y', true)
+		t.eq(node.className, 'y', 'untouched true')
+		
+		var node = test1.cloneNode(true)
+		node.toggleClassName('y', false)
+		t.eq(node.className, '', 'untouched false')
+	})
+	
+	t.test('setClassName()', function (t)
+	{
+		var node = test1.cloneNode(true)
+		node.setClassName('y')
+		t.eq(node.className, 'y', '"y"')
+		
+		var node = test1.cloneNode(true)
+		node.setClassName('x y')
+		t.eq(node.className, 'x y', '"x y"')
+	})
+	
+	t.test('regexp cache', function (t)
+	{
+		var node = test1.cloneNode(true)
+		node.className = ' x y y y x y y x '
+		t.ok(node.hasClassName('y'), 'hasClassName(y)')
+		node.removeClassName('y')
+		t.eq(node.className, 'x x x', '"x"')
+	})
 })
 </script>
 </body>
