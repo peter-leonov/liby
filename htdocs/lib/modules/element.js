@@ -15,7 +15,11 @@ Object.add
 		addClassName: function (cn)
 		{
 			// this.removeClassName(cn)
-			this.className += ' ' + cn
+			var className = this.className
+			if (!className)
+				this.className = cn
+			else
+				this.className = className + ' ' + cn
 			return cn
 		},
 		
@@ -23,8 +27,12 @@ Object.add
 		{
 			var className = this.className
 			if (className)
+			{
+				// the following regexp has to be the exact copy of the regexp from hasClassName()
+				// because these two methods have the same regexp cache
 				this.className = className.replace(rexCache[cn] || (rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')), ' ')
-								.replace(/^\s+|\s+$/g, '')
+										  .replace(/^\s+|\s+$/g, '') // trim
+			}
 			return cn
 		},
 		
@@ -34,13 +42,25 @@ Object.add
 				state = !this.hasClassName(cn)
 			
 			this.removeClassName(cn)
-			if (state) this.addClassName(cn)
+			if (state)
+				this.addClassName(cn)
 		},
 		
 		hasClassName: function (cn)
 		{
 			var className = this.className
-			return (className == cn || (rexCache[cn] || (rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+'))).test(className))
+			if (className == cn)
+				return true
+			
+			// the following regexp has to be the exact copy of the regexp from removeClassName()
+			// because these two methods have the same regexp cache
+			var rex = rexCache[cn]
+			if (rex)
+				rex.lastIndex = 0
+			else
+				rex = rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
+			
+			return rex.test(className)
 		},
 		
 		empty: function ()
