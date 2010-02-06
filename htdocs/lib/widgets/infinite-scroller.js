@@ -9,17 +9,15 @@ function Me ()
 
 Me.prototype =
 {
-	friction: 60,
-	soft: 7,
 	power: 1.5,
 	
-	bind: function (root, width, page)
+	bind: function (root, width)
 	{
 		this.nodes.root = root
 		this.globalX = root.scrollLeft
 		
 		var clientWidth = root.clientWidth
-		this.width = width !== undefined ? width : root.scrollWidth - clientWidth
+		this.setWidth(width || this.guessWidth())
 		
 		var moveable = this.moveable = new Moveable().bind(root)
 		moveable.softStart = true
@@ -40,17 +38,31 @@ Me.prototype =
 		
 		
 		var space = this.space = new Kinematics.Space()
-		space.add(new Kinematics.Friction(this.friction))
-		space.add(new Kinematics.Wave(page || clientWidth, this.soft, this.friction))
-		
-		
-		
 		var point = this.point = new Kinematics.Point(0, 0, 0, 0)
 		space.add(point)
 		
 		space.ontick = function () { me.spaceTick() }
 		
 		return this
+	},
+	
+	guessWidth: function ()
+	{
+		var root = this.nodes.root
+		return root.scrollWidth - root.clientWidth
+	},
+	
+	setWidth: function (width)
+	{
+		this.width = width
+	},
+	
+	reset: function ()
+	{
+		this.space.stop()
+		this.setX(0)
+		this.point.x = this.globalX
+		this.setVelocity(0, 0)
 	},
 	
 	spaceTick: function ()

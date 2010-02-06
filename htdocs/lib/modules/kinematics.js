@@ -163,12 +163,16 @@ Kinematics[Friction.className] = Friction
 
 function Wave (step, soft, min)
 {
+	this.setup(step, soft, min)
+}
+
+Wave.prototype = new Force()
+Wave.prototype.setup = function (step, soft, min)
+{
 	this.step = step
 	this.soft = soft || 10
 	this.min = min / fps || 0
 }
-
-Wave.prototype = new Force()
 Wave.prototype.apply = function (point)
 {
 	var x = Math.floor(point.x), step = this.step,
