@@ -109,6 +109,8 @@ Space.prototype =
 			this.points.push(object)
 		else
 			throw new Error('unknown object added ' + object)
+		
+		return object
 	}
 }
 
