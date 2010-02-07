@@ -38,6 +38,9 @@ Me.prototype =
 	
 	ondown: function (e)
 	{
+		if (this.disabled)
+			return
+		
 		if (this.dispatchEventData('moveabout', {event: e, mousedownEvent: this.mousedownEvent}))
 		{
 			this.startX = e.clientX
