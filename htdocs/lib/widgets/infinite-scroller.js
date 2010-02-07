@@ -57,6 +57,11 @@ Me.prototype =
 		this.width = width
 	},
 	
+	setMovable: function (v)
+	{
+		this.moveable.disabled = !v
+	},
+	
 	reset: function ()
 	{
 		this.space.stop()
