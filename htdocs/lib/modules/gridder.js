@@ -25,9 +25,6 @@ Me.prototype =
 		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
-			if (0 == cellsLeft--)
-				throw new Error('to many cells (' + this.maxCells + ')')
-			
 			var box = boxes[i],
 				x = box.x / sx >> 0,
 				y = box.y / sy >> 0,
@@ -39,6 +36,9 @@ Me.prototype =
 			for (var j = x; j <= jl; j++)
 				for (var k = y; k <= kl; k++)
 				{
+					if (0 == cellsLeft--)
+						throw new Error('to many cells (' + this.maxCells + ')')
+					
 					// a little bit slowly but much more reliable than j << 16 + k
 					var cell = j + ':' + k
 					if (cell in grid)
@@ -47,8 +47,6 @@ Me.prototype =
 						grid[cell] = [box]
 				}
 		}
-		
-		// log(grid)
 	},
 	
 	setStep: function (x, y)
