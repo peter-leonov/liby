@@ -39,6 +39,7 @@ Me.prototype =
 			for (var j = x; j <= jl; j++)
 				for (var k = y; k <= kl; k++)
 				{
+					// a little bit slowly but much more reliable than j << 16 + k
 					var cell = j + ':' + k
 					if (cell in grid)
 						grid[cell].push(box)
