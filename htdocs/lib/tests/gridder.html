@@ -35,16 +35,16 @@ Tests.test(function (t)
 	{
 		t.test('reflow', function (t)
 		{
-			var boxes = []
-			for (var i = 0; i < 10000; i++)
-				boxes[i] = {x: i * 100, y: i * 100, w: 200, h: 200}
+			var boxes = [], count = 10000, w = 200, h = 200
+			for (var i = 0; i < count; i++)
+				boxes[i] = {x: i * 100, y: i * 100, w: w, h: h}
 			
-			t.log(i + ' boxes 200x200')
+			t.log(count + ' boxes ' + w + 'x' + h)
 			
 			var gridder = new Gridder()
-			gridder.maxCells = 10000
+			gridder.maxCells = count
 			
-			// almost nothing to calculate
+			// fast loading as almost nothing to calculate
 			gridder.setStep(10000, 10000)
 			gridder.setBoxes(boxes)
 			
