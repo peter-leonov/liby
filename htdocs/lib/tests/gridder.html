@@ -42,6 +42,7 @@ Tests.test(function (t)
 			t.log(i + ' boxes 200x200')
 			
 			var gridder = new Gridder()
+			gridder.maxCells = 10000
 			
 			// almost nothing to calculate
 			gridder.setStep(10000, 10000)

@@ -15,14 +15,19 @@ function Me (boxes)
 Me.prototype =
 {
 	stepX: 500, stepY: 500,
+	maxCells: 100,
 	
 	reflow: function ()
 	{
-		var boxes = this.boxes, grid = this.grid,
-			sx = this.stepX, sy = this.stepY
+		var boxes = this.boxes, grid = this.grid = [],
+			sx = this.stepX, sy = this.stepY,
+			cellsLeft = this.maxCells
 		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
+			if (0 == cellsLeft--)
+				throw new Error('to many cells (' + this.maxCells + ')')
+			
 			var box = boxes[i],
 				x = box.x / sx >> 0,
 				y = box.y / sy >> 0,
