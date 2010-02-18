@@ -17,17 +17,54 @@ Tests.test(function (t)
 	{
 		var boxes =
 		[
-			{x: 0,   y: 0, w: 100, h: 100, blablabla: 123},
-			{x: 100, y: 0, w: 100, h: 100, blablabla: 123},
-			{x: 200, y: 0, w: 100, h: 100, blablabla: 123},
-			{x: 300, y: 0, w: 100, h: 100, blablabla: 123},
-			{x: 400, y: 0, w: 100, h: 100, blablabla: 123},
-			{x: 500, y: 0, w: 100, h: 100, blablabla: 123}
+			{x: 0  , y: 0  , w: 250, h: 250, blablabla: 123},
+			{x: 50 , y: 50 , w: 250, h: 250, blablabla: 123},
+			{x: 100, y: 100, w: 250, h: 250, blablabla: 123},
+			{x: 150, y: 150, w: 250, h: 250, blablabla: 123},
+			{x: 200, y: 200, w: 250, h: 250, blablabla: 123},
+			{x: 250, y: 250, w: 250, h: 250, blablabla: 123},
+			{x: 300, y: 300, w: 250, h: 250, blablabla: 123}
 		]
 		
 		var gridder = new Gridder()
-		gridder.setBoxes()
+		gridder.setStep(100, 100)
+		gridder.setBoxes(boxes)
 	})
+	
+	t.test('speed', function (t)
+	{
+		t.test('reflow', function (t)
+		{
+			var boxes = []
+			for (var i = 0; i < 10000; i++)
+				boxes[i] = {x: i * 100, y: i * 100, w: 200, h: 200}
+			
+			t.log(i + ' boxes 200x200')
+			
+			var gridder = new Gridder()
+			
+			// almost nothing to calculate
+			gridder.setStep(10000, 10000)
+			gridder.setBoxes(boxes)
+			
+			t.time('setStep 10000x10000')
+			gridder.setStep(10000, 10000)
+			t.timeEnd('setStep 10000x10000')
+			
+			t.time('setStep 1000x1000')
+			gridder.setStep(1000, 1000)
+			t.timeEnd('setStep 1000x1000')
+			
+			t.time('setStep 100x100')
+			gridder.setStep(100, 100)
+			t.timeEnd('setStep 100x100')
+			
+			t.time('setStep 50x50')
+			gridder.setStep(50, 50)
+			t.timeEnd('setStep 50x50')
+		})
+	})
+	
 })
 </script>
 </body>

@@ -5,7 +5,7 @@ var myName = 'Gridder'
 function Me (boxes)
 {
 	this.boxes = []
-	this.grid = {}
+	this.grid = []
 	this.constructor = Me
 	
 	if (boxes)
@@ -18,7 +18,30 @@ Me.prototype =
 	
 	reflow: function ()
 	{
-		log('reflow')
+		var boxes = this.boxes, grid = this.grid,
+			sx = this.stepX, sy = this.stepY
+		
+		for (var i = 0, il = boxes.length; i < il; i++)
+		{
+			var box = boxes[i],
+				x = box.x / sx >> 0,
+				y = box.y / sy >> 0,
+				w = Math.floor(box.w / sx),
+				h = Math.floor(box.h / sy)
+			
+			// every box gets at least one cell (via “<=”)
+			for (var j = x, jl = x + w; j <= jl; j++)
+				for (var k = x, kl = x + w; k <= kl; k++)
+				{
+					var cell = j << 16 + k
+					if (cell in grid)
+						grid[cell].push(box)
+					else
+						grid[cell] = [box]
+				}
+		}
+		
+		// log(grid)
 	},
 	
 	setStep: function (x, y)
