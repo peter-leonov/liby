@@ -5,7 +5,7 @@ var myName = 'Gridder'
 function Me (boxes)
 {
 	this.boxes = []
-	this.grid = []
+	this.grid = {}
 	this.constructor = Me
 	
 	if (boxes)
@@ -38,7 +38,7 @@ Me.prototype =
 			for (var j = x, jl = x + w; j <= jl; j++)
 				for (var k = x, kl = x + w; k <= kl; k++)
 				{
-					var cell = j << 16 + k
+					var cell = j + ':' + k
 					if (cell in grid)
 						grid[cell].push(box)
 					else
