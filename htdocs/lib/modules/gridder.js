@@ -35,8 +35,9 @@ Me.prototype =
 				h = Math.floor(box.h / sy)
 			
 			// every box gets at least one cell (via “<=”)
-			for (var j = x, jl = x + w; j <= jl; j++)
-				for (var k = x, kl = x + w; k <= kl; k++)
+			var jl = x + w, kl = y + h
+			for (var j = x; j <= jl; j++)
+				for (var k = y; k <= kl; k++)
 				{
 					var cell = j + ':' + k
 					if (cell in grid)
