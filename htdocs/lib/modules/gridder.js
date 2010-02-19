@@ -15,13 +15,13 @@ function Me (boxes)
 Me.prototype =
 {
 	stepX: 500, stepY: 500,
-	maxCells: 100,
+	maxSteps: 1000,
 	
 	reflow: function ()
 	{
 		var boxes = this.boxes, grid = this.grid = [],
 			sx = this.stepX, sy = this.stepY,
-			cellsLeft = this.maxCells
+			stepsLeft = this.maxSteps
 		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
@@ -36,8 +36,8 @@ Me.prototype =
 			for (var j = x; j <= jl; j++)
 				for (var k = y; k <= kl; k++)
 				{
-					if (0 == cellsLeft--)
-						throw new Error('to many cells (' + this.maxCells + ')')
+					if (0 == stepsLeft--)
+						throw new Error('to many steps (' + this.maxSteps + ')')
 					
 					// a little bit slowly but much more reliable than j << 16 + k
 					var cell = j + ':' + k
