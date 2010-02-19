@@ -282,9 +282,8 @@ Me.prototype =
 			this.fail([a, 'typeof', b], d)
 	},
 	
-	exception: function (f, d)
+	exception: function (f, c, d)
 	{
-		var exception = null
 		try
 		{
 			f(this)
@@ -292,6 +291,7 @@ Me.prototype =
 		catch (ex)
 		{
 			this.pass(['exception was thrown', ex], d)
+			c(this, ex)
 			return
 		}
 		
