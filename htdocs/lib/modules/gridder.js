@@ -29,21 +29,27 @@ Me.prototype =
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
 			var box = boxes[i],
-				x = box.x / sx >> 0,
-				y = box.y / sy >> 0,
-				w = Math.floor(box.w / sx),
-				h = Math.floor(box.h / sy)
+				x = box.x,
+				y = box.y
+			
+			var x1 = x < 0 ? (x / sx - 1) >> 0 : x / sx >> 0
+			var y1 = y < 0 ? (y / sy - 1) >> 0 : y / sy >> 0
+			
+			x += Math.ceil(box.w) - 1
+			y += Math.ceil(box.h) - 1
+			
+			var x2 = x < 0 ? (x / sx - 1) >> 0 : x / sx >> 0
+			var y2 = y < 0 ? (y / sy - 1) >> 0 : y / sy >> 0
 			
 			// every box gets at least one cell (via “<=”)
-			var jl = x + w, kl = y + h
-			for (var j = x; j <= jl; j++)
-				for (var k = y; k <= kl; k++)
+			for (var x = x1; x <= x2; x++)
+				for (var y = y1; y <= y2; y++)
 				{
 					if (0 == stepsLeft--)
 						throw new Me.Error('to many steps (' + this.maxSteps + ')')
 					
 					// a little bit slowly but much more reliable than j << 16 + k
-					var cell = j + ':' + k
+					var cell = x + ':' + y
 					if (cell in grid)
 						grid[cell].push(box)
 					else
