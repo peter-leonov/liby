@@ -28,18 +28,27 @@ Me.prototype =
 		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
-			var box = boxes[i],
-				x = box.x,
-				y = box.y
+			var box = boxes[i]
 			
-			var x1 = x < 0 ? (x / sx - 1) >> 0 : x / sx >> 0
-			var y1 = y < 0 ? (y / sy - 1) >> 0 : y / sy >> 0
+			var x1, x2, x = box.x, w = box.w
+			x1 = x < 0 ? -Math.ceil(-x / sx) : x / sx >> 0
+			if (w <= 0)
+				var x2 = x1
+			else
+			{
+				x += w
+				x2 = x > 0 ? Math.ceil(x / sx) - 1 : (x / sx >> 0) - 1
+			}
 			
-			x += Math.ceil(box.w) - 1
-			y += Math.ceil(box.h) - 1
-			
-			var x2 = x < 0 ? (x / sx - 1) >> 0 : x / sx >> 0
-			var y2 = y < 0 ? (y / sy - 1) >> 0 : y / sy >> 0
+			var y1, y2, y = box.y, h = box.h
+			y1 = y < 0 ? -Math.ceil(-y / sy) : y / sy >> 0
+			if (h <= 0)
+				var y2 = y1
+			else
+			{
+				y += h
+				y2 = y > 0 ? Math.ceil(y / sy) - 1 : (y / sy >> 0) - 1
+			}
 			
 			// every box gets at least one cell (via “<=”)
 			for (var x = x1; x <= x2; x++)
