@@ -2,14 +2,17 @@
 
 var myName = 'Gridder'
 
-function Me (boxes)
+function Me (boxes, x, y)
 {
 	this.boxes = []
 	this.grid = {}
 	this.constructor = Me
 	
 	if (boxes)
-		this.addBoxes(boxes)
+		this.setBoxes(boxes)
+	
+	if (x && y)
+		this.setStep(x, y)
 }
 
 Me.prototype =
