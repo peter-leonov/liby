@@ -30,20 +30,22 @@ Me.prototype =
 		{
 			var box = boxes[i]
 			
+			// x and width
 			var x1, x2, x = box.x, w = box.w
 			x1 = x < 0 ? -Math.ceil(-x / sx) : x / sx >> 0
 			if (w <= 0)
-				var x2 = x1
+				x2 = x1
 			else
 			{
 				x += w
 				x2 = x > 0 ? Math.ceil(x / sx) - 1 : (x / sx >> 0) - 1
 			}
 			
+			// y and height
 			var y1, y2, y = box.y, h = box.h
 			y1 = y < 0 ? -Math.ceil(-y / sy) : y / sy >> 0
 			if (h <= 0)
-				var y2 = y1
+				y2 = y1
 			else
 			{
 				y += h
