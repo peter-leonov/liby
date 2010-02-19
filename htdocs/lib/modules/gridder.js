@@ -5,7 +5,8 @@ var myName = 'Gridder'
 function Me (boxes, x, y)
 {
 	this.boxes = []
-	this.grid = {}
+	this.gridH = {}
+	this.gridA = []
 	this.constructor = Me
 	
 	if (boxes)
@@ -22,7 +23,7 @@ Me.prototype =
 	
 	reflow: function ()
 	{
-		var boxes = this.boxes, grid = this.grid = {},
+		var boxes = this.boxes, gridH = this.gridH = {}, gridA = this.gridA = [],
 			sx = this.stepX, sy = this.stepY,
 			stepsLeft = this.maxSteps
 		
@@ -54,20 +55,36 @@ Me.prototype =
 				y2 = y > 0 ? ceil(y / sy) - 1 : (y / sy >> 0) - 1
 			}
 			
-			// every box gets at least one cell (via “<=”)
+			// slow string properties
 			for (var x = x1; x <= x2; x++)
-				for (var y = y1; y <= y2; y++)
+			for (var y = y1; y <= y2; y++)
+			{
+				if (0 == stepsLeft--)
+					throw new Me.Error('to many steps (' + this.maxSteps + ')')
+				
+				// check if we are NOT in the safe diapason of the values
+				if (x >> 15 || y >> 15)
 				{
-					if (0 == stepsLeft--)
-						throw new Me.Error('to many steps (' + this.maxSteps + ')')
-					
-					// a little bit slowly but much more reliable than j << 16 + k
 					var cell = x + ':' + y
-					if (cell in grid)
-						grid[cell].push(box)
+					
+					var arr = gridH[cell]
+					if (arr)
+						arr.push(box)
 					else
-						grid[cell] = [box]
+						gridH[cell] = [box]
+					
 				}
+				else
+				{
+					var cell = (30000 + x) << 15 + (30000 + y)
+					
+					var arr = gridA[cell]
+					if (arr)
+						arr.push(box)
+					else
+						gridA[cell] = [box]
+				}
+			}
 		}
 	},
 	
@@ -91,7 +108,7 @@ Me.prototype =
 	
 	getCell: function (x, y)
 	{
-		return this.grid[x + ':' + y]
+		return x >> 15 || y >> 15 ? this.gridH[x + ':' + y] : this.gridA[(30000 + x) << 15 + (30000 + y)]
 	}
 }
 
