@@ -259,7 +259,6 @@ Me.prototype =
 		else
 			this.fail([a, 'is not instanceof', b], d)
 	},
-	
 	notinstance: function (a, b, d)
 	{
 		if (!(a instanceof b))
@@ -275,13 +274,28 @@ Me.prototype =
 		else
 			this.fail([a, 'is not typeof', b], d)
 	},
-	
 	nottype: function (a, b, d)
 	{
 		if (!(typeof a === b))
 			this.pass([a, 'is not typeof', b], d)
 		else
 			this.fail([a, 'typeof', b], d)
+	},
+	
+	exception: function (f, d)
+	{
+		var exception = null
+		try
+		{
+			f(this)
+		}
+		catch (ex)
+		{
+			this.pass(['exception was thrown', ex], d)
+			return
+		}
+		
+		this.fail('no exception was thrown', d)
 	},
 	
 	_times: {},
