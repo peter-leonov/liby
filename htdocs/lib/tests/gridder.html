@@ -29,6 +29,16 @@ Tests.test(function (t)
 		var gridder = new Gridder()
 		gridder.setStep(100, 100)
 		gridder.setBoxes(boxes)
+		
+		t.exception(function (t)
+		{
+			gridder.maxSteps = 10
+			gridder.setStep(10, 10)
+		},
+		function (t, ex)
+		{
+			t.instance(ex, Gridder.Error)
+		})
 	})
 	
 	t.test('speed', function (t)

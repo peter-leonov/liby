@@ -37,7 +37,7 @@ Me.prototype =
 				for (var k = y; k <= kl; k++)
 				{
 					if (0 == stepsLeft--)
-						throw new Error('to many steps (' + this.maxSteps + ')')
+						throw new Me.Error('to many steps (' + this.maxSteps + ')')
 					
 					// a little bit slowly but much more reliable than j << 16 + k
 					var cell = j + ':' + k
@@ -67,6 +67,9 @@ Me.prototype =
 		return this.boxes
 	}
 }
+
+Me.Error = function (m) { this.name = myName + '.Error'; this.message = m }
+Me.Error.prototype = new Error()
 
 Me.className = myName
 self[myName] = Me
