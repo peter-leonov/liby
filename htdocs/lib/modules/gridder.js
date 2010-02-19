@@ -19,7 +19,7 @@ Me.prototype =
 	
 	reflow: function ()
 	{
-		var boxes = this.boxes, grid = this.grid = [],
+		var boxes = this.boxes, grid = this.grid = {},
 			sx = this.stepX, sy = this.stepY,
 			stepsLeft = this.maxSteps
 		
