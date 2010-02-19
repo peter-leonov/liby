@@ -65,6 +65,11 @@ Me.prototype =
 	getBoxes: function (e)
 	{
 		return this.boxes
+	},
+	
+	getCell: function (x, y)
+	{
+		return this.grid[x + ':' + y]
 	}
 }
 
