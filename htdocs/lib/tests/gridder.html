@@ -37,7 +37,13 @@ Tests.test(function (t)
 		},
 		function (t, ex)
 		{
-			t.instance(ex, Gridder.Error)
+			t.instance(ex, Gridder.Error, 'proper exception type')
+		})
+		
+		t.noexception(function (t)
+		{
+			gridder.maxSteps = 10
+			gridder.setStep(10000, 10000)
 		})
 	})
 	
