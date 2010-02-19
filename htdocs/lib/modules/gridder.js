@@ -26,30 +26,32 @@ Me.prototype =
 			sx = this.stepX, sy = this.stepY,
 			stepsLeft = this.maxSteps
 		
+		var ceil = Math.ceil
+		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
 			var box = boxes[i]
 			
 			// x and width
 			var x1, x2, x = box.x, w = box.w
-			x1 = x < 0 ? -Math.ceil(-x / sx) : x / sx >> 0
+			x1 = x < 0 ? -ceil(-x / sx) : x / sx >> 0
 			if (w <= 0)
 				x2 = x1
 			else
 			{
 				x += w
-				x2 = x > 0 ? Math.ceil(x / sx) - 1 : (x / sx >> 0) - 1
+				x2 = x > 0 ? ceil(x / sx) - 1 : (x / sx >> 0) - 1
 			}
 			
 			// y and height
 			var y1, y2, y = box.y, h = box.h
-			y1 = y < 0 ? -Math.ceil(-y / sy) : y / sy >> 0
+			y1 = y < 0 ? -ceil(-y / sy) : y / sy >> 0
 			if (h <= 0)
 				y2 = y1
 			else
 			{
 				y += h
-				y2 = y > 0 ? Math.ceil(y / sy) - 1 : (y / sy >> 0) - 1
+				y2 = y > 0 ? ceil(y / sy) - 1 : (y / sy >> 0) - 1
 			}
 			
 			// every box gets at least one cell (via “<=”)
