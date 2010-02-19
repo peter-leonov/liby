@@ -13,18 +13,166 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.test('untitled', function (t)
+	t.test('positive position', function (t)
 	{
-		var boxes =
-		[
-			{x: 0  , y: 0  , w: 250, h: 250, blablabla: 123},
-			{x: 50 , y: 50 , w: 250, h: 250, blablabla: 123},
-			{x: 100, y: 100, w: 250, h: 250, blablabla: 123},
-			{x: 150, y: 150, w: 250, h: 250, blablabla: 123},
-			{x: 200, y: 200, w: 250, h: 250, blablabla: 123},
-			{x: 250, y: 250, w: 250, h: 250, blablabla: 123},
-			{x: 300, y: 300, w: 250, h: 250, blablabla: 123}
-		]
+		var a = {x: 10, y: 10, w: 5, h: 5},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+	})
+	
+	t.test('positive float position (step + 0.5)', function (t)
+	{
+		var a = {x: 0, y: 0, w: 100.5, h: 100.5},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(1, 1)[0], a, '1;1')
+		t.eq(gridder.getCell(2, 2), undefined, '2;2')
+	})
+	
+	t.test('negative position', function (t)
+	{
+		var a = {x: -10, y: -10, w: 5, h: 5},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-2, -2), undefined, '-2;-2')
+		t.eq(gridder.getCell(-1, -1)[0], a, '-1;-1')
+		t.eq(gridder.getCell(0, 0), undefined, '0;0')
+	})
+	
+	t.test('negative position = step', function (t)
+	{
+		var a = {x: -100, y: -100, w: 100, h: 100},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-2, -2), undefined, '-2;-2')
+		t.eq(gridder.getCell(-1, -1)[0], a, '-1;-1')
+		t.eq(gridder.getCell(0, 0), undefined, '0;0')
+	})
+	
+	t.test('negative to positive position', function (t)
+	{
+		var a = {x: -10, y: -10, w: 100, h: 100},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-2, -2), undefined, '-2;-2')
+		t.eq(gridder.getCell(-1, -1)[0], a, '-1;-1')
+		t.eq(gridder.getCell(-1, 0)[0], a, '-1;0')
+		t.eq(gridder.getCell(0, -1)[0], a, '0;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+	})
+	
+	t.test('negative float to positive float position (wider by 0.5 + 0.5)', function (t)
+	{
+		var a = {x: -0.5, y: -0.5, w: 101, h: 101},
+			gridder = new Gridder([a], 100, 100)
+		log(gridder.grid)
+		t.eq(gridder.getCell(-2, -2), undefined, '-2;-2')
+		
+		t.eq(gridder.getCell(-1, -1)[0], a, '-1;-1')
+		t.eq(gridder.getCell(-1, 0)[0], a, '-1;0')
+		t.eq(gridder.getCell(-1, 1)[0], a, '-1:1')
+		
+		t.eq(gridder.getCell(0, -1)[0], a, '0;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(0, 1)[0], a, '0:1')
+		
+		t.eq(gridder.getCell(1, -1)[0], a, '1;-1')
+		t.eq(gridder.getCell(1, 0)[0], a, '1;0')
+		t.eq(gridder.getCell(1, 1)[0], a, '1:1')
+		
+		
+		t.eq(gridder.getCell(2, 2), undefined, '2;2')
+	})
+	
+	t.test('positive float to positive float position (wider by 0.5 + 0.5)', function (t)
+	{
+		var a = {x: 199.5, y: 199.5, w: 101, h: 101},
+			gridder = new Gridder([a], 100, 100)
+		log(gridder.grid)
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+		
+		t.eq(gridder.getCell(2, 2)[0], a, '2;2')
+		t.eq(gridder.getCell(2, 3)[0], a, '2;3')
+		t.eq(gridder.getCell(2, 4)[0], a, '2:4')
+		
+		t.eq(gridder.getCell(3, 2)[0], a, '3;2')
+		t.eq(gridder.getCell(3, 3)[0], a, '3;3')
+		t.eq(gridder.getCell(3, 4)[0], a, '3:4')
+		
+		t.eq(gridder.getCell(4, 2)[0], a, '4;2')
+		t.eq(gridder.getCell(4, 3)[0], a, '4;3')
+		t.eq(gridder.getCell(4, 4)[0], a, '4:4')
+		
+		
+		t.eq(gridder.getCell(5, 5), undefined, '5;5')
+	})
+	
+	t.test('zero position', function (t)
+	{
+		var a = {x: 0, y: 0, w: 5, h: 5},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+	})
+	
+	t.test('zero width', function (t)
+	{
+		var a = {x: 1, y: 1, w: 0, h: 0},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+	})
+	
+	t.test('width = step', function (t)
+	{
+		var a = {x: 0, y: 0, w: 100, h: 100},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+	})
+	
+	t.test('width = step * 2', function (t)
+	{
+		var a = {x: 0, y: 0, w: 200, h: 200},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(0, 1)[0], a, '0;1')
+		t.eq(gridder.getCell(1, 0)[0], a, '1;0')
+		t.eq(gridder.getCell(1, 1)[0], a, '1;1')
+		t.eq(gridder.getCell(2, 2), undefined, '2;2')
+	})
+	
+	t.test('width > step, x and y > step / 2', function (t)
+	{
+		var a = {x: 53, y: 57, w: 101, h: 101},
+			gridder = new Gridder([a], 100, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(0, 1)[0], a, '0;1')
+		t.eq(gridder.getCell(1, 0)[0], a, '1;0')
+		t.eq(gridder.getCell(1, 1)[0], a, '1;1')
+		t.eq(gridder.getCell(2, 2), undefined, '2;2')
+	})
+	
+	t.test('too many steps', function (t)
+	{
+		// one wide enough box
+		var boxes = [{x: 0  , y: 0  , w: 250, h: 250}]
 		
 		var gridder = new Gridder()
 		gridder.setStep(100, 100)
@@ -33,7 +181,8 @@ Tests.test(function (t)
 		t.exception(function (t)
 		{
 			gridder.maxSteps = 10
-			gridder.setStep(10, 10)
+			// very precise grid gives zillions of steps :)
+			gridder.setStep(1, 1)
 		},
 		function (t, ex)
 		{
