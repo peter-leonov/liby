@@ -284,6 +284,10 @@ Me.prototype =
 	
 	exception: function (f, c, d)
 	{
+		if (typeof c !== 'function')
+			d = c,
+			c = null
+		
 		try
 		{
 			f(this)
@@ -297,6 +301,20 @@ Me.prototype =
 		}
 		
 		this.fail('no exception was thrown', d)
+	},
+	noexception: function (f, d)
+	{
+		try
+		{
+			f(this)
+		}
+		catch (ex)
+		{
+			this.fail(['exception was thrown', ex], d)
+			return
+		}
+		
+		this.pass('no exception was thrown', d)
 	},
 	
 	_times: {},
