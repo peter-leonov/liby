@@ -291,7 +291,8 @@ Me.prototype =
 		catch (ex)
 		{
 			this.pass(['exception was thrown', ex], d)
-			c(this, ex)
+			if (c)
+				c(this, ex)
 			return
 		}
 		
