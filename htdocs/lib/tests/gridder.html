@@ -12,6 +12,16 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.test('cells count', function (t)
+	{
+		var a = {x: 0, y: 0, w: 500, h: 500},
+			gridder = new Gridder([a, a, a], 100, 100)
+		
+		for (var i = 0; i < 5; i++)
+		for (var j = 0; j < 5; j++)
+			t.eq(gridder.getCell(i, j).length, 3, i + ';' + j)
+	})
+	
 	t.test('positive position', function (t)
 	{
 		var a = {x: 10, y: 10, w: 5, h: 5},
