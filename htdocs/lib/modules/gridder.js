@@ -77,7 +77,7 @@ Me.prototype =
 				else
 				{
 					// safe, so using fast integer key on gridA
-					var key = ((30000 + x) << 15) + (30000 + y)
+					var key = (x << 15) + y
 					
 					var cell = gridA[key]
 					if (cell)
@@ -109,7 +109,7 @@ Me.prototype =
 	
 	getCell: function (x, y)
 	{
-		return x >> 15 || y >> 15 ? this.gridH[x + ':' + y] : this.gridA[((30000 + x) << 15) + (30000 + y)]
+		return x >> 15 || y >> 15 ? this.gridH[x + ':' + y] : this.gridA[(x << 15) + y]
 	}
 }
 
