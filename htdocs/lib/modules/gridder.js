@@ -89,6 +89,67 @@ Me.prototype =
 		}
 	},
 	
+	// as far as JavaScript has no macros system or semi-reliable function inlining
+	// you can see a heavy copy-paste here, it's for performance purpose only
+	getCells: function (x, y, w, h)
+	{
+		var gridH = this.gridH, gridA = this.gridA,
+			sx = this.stepX, sy = this.stepY,
+			stepsLeft = this.maxSteps
+		
+		var ceil = Math.ceil
+		
+		// x and width
+		var x1 = x < 0 ? -ceil(-x / sx) : x / sx >> 0
+		if (w <= 0)
+			var x2 = x1
+		else
+		{
+			x += w
+			var x2 = x > 0 ? ceil(x / sx) - 1 : (x / sx >> 0) - 1
+		}
+			
+		// y and height
+		var y1 = y < 0 ? -ceil(-y / sy) : y / sy >> 0
+		if (h <= 0)
+			var y2 = y1
+		else
+		{
+			y += h
+			var y2 = y > 0 ? ceil(y / sy) - 1 : (y / sy >> 0) - 1
+		}
+		
+		var cells = []
+		for (var x = x1; x <= x2; x++)
+		for (var y = y1; y <= y2; y++)
+		{
+			if (0 == stepsLeft--)
+				throw new Me.Error('too many steps (' + this.maxSteps + ')')
+			
+			// check diapason of the values
+			if (x >> 15 || y >> 15)
+			{
+				// unsafe, so using slow string key on gridH
+				var key = x + ':' + y
+				
+				var cell = gridH[key]
+				if (cell)
+					cells.push(cell)
+			}
+			else
+			{
+				// safe, so using fast integer key on gridA
+				var key = (x << 15) + y
+				
+				var cell = gridA[key]
+				if (cell)
+					cells.push(cell)
+			}
+		}
+		
+		return cells
+	},
+	
 	setStep: function (x, y)
 	{
 		this.stepX = x
