@@ -45,6 +45,17 @@ add
 					return i
 			return -1
 		},
+		uniq: function ()
+		{
+			var res = [], j = 0
+			for (var i = 0, il = this.length; i < il; i++)
+			{
+				var v = this[i]
+				if (res.indexOf(v) === -1)
+					res[j++] = v
+			}
+			return res
+		},
 		forEach: function (f, inv) { for (var i = 0, len = this.length; i < len; i++) f.call(inv, this[i], i, this) },
 		map: function(f, inv)
 		{
