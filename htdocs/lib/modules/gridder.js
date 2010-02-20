@@ -55,34 +55,35 @@ Me.prototype =
 				y2 = y > 0 ? ceil(y / sy) - 1 : (y / sy >> 0) - 1
 			}
 			
-			// slow string properties
 			for (var x = x1; x <= x2; x++)
 			for (var y = y1; y <= y2; y++)
 			{
 				if (0 == stepsLeft--)
-					throw new Me.Error('to many steps (' + this.maxSteps + ')')
+					throw new Me.Error('too many steps (' + this.maxSteps + ')')
 				
-				// check if we are NOT in the safe diapason of the values
+				// check diapason of the values
 				if (x >> 15 || y >> 15)
 				{
-					var cell = x + ':' + y
+					// unsafe, so using slow string key on gridH
+					var key = x + ':' + y
 					
-					var arr = gridH[cell]
-					if (arr)
-						arr.push(box)
+					var cell = gridH[key]
+					if (cell)
+						cell.push(box)
 					else
-						gridH[cell] = [box]
+						gridH[key] = [box]
 					
 				}
 				else
 				{
-					var cell = (30000 + x) << 15 + (30000 + y)
+					// safe, so using fast integer key on gridA
+					var key = (30000 + x) << 15 + (30000 + y)
 					
-					var arr = gridA[cell]
-					if (arr)
-						arr.push(box)
+					var cell = gridA[key]
+					if (cell)
+						cell.push(box)
 					else
-						gridA[cell] = [box]
+						gridA[key] = [box]
 				}
 			}
 		}
