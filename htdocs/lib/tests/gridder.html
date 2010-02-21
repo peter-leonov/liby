@@ -13,6 +13,17 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.test('getBoxes()', function (t)
+	{
+		var gridder = new Gridder([{x: 0, y: 0, w: 300, h: 300}, {x: 0, y: 0, w: 300, h: 300}], 100, 100)
+		
+		var boxes = gridder.getBoxes(-100, -100, 400, 400)
+		t.eq(boxes.length, 2, 'boxes count')
+		
+		var flat = Array.prototype.concat.apply([], boxes)
+		t.eq(flat.uniq().length, 2, 'uniq boxes count')
+	})
+	
 	t.test('getCells()', function (t)
 	{
 		var a = {x: 0, y: 0, w: 300, h: 300},

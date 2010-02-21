@@ -33,6 +33,10 @@ Me.prototype =
 		{
 			var box = boxes[i]
 			
+			// mark box with an integer ID
+			// simplifying future operations of search
+			box.boxID = i
+			
 			// x and width
 			var x1, x2, x = box.x, w = box.w
 			x1 = x < 0 ? -ceil(-x / sx) : x / sx >> 0
@@ -150,6 +154,28 @@ Me.prototype =
 		return cells
 	},
 	
+	getBoxes: function (x, y, w, h)
+	{
+		var cells = this.getCells(x, y, w, h),
+			seen = [], boxes = [], k = 0
+		
+		for (var i = 0, il = cells.length; i < il; i++)
+		{
+			var cell = cells[i]
+			for (var j = 0; j < cell.length; j++)
+			{
+				var box = cell[j], id = box.boxID
+				if (!seen[id])
+				{
+					seen[id] = true
+					boxes[k++] = box
+				}
+			}
+		}
+		
+		return boxes
+	},
+	
 	setStep: function (x, y)
 	{
 		this.stepX = x
@@ -161,11 +187,6 @@ Me.prototype =
 	{
 		this.boxes = boxes
 		this.reflow()
-	},
-	
-	getBoxes: function (e)
-	{
-		return this.boxes
 	},
 	
 	getCell: function (x, y)
