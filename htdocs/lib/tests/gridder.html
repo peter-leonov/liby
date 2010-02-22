@@ -13,6 +13,47 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.test('getBoxesPrecise()', function (t)
+	{
+		var gridder = new Gridder([{x: 100, y: 100, w: 100, h: 100}], 300, 300)
+		
+		var boxes = gridder.getBoxesPrecise(10000, 10000, 50, 50)
+		t.eq(boxes.length, 0, 'far-far away')
+		
+		var boxes = gridder.getBoxesPrecise(0, 0, 50, 50)
+		t.eq(boxes.length, 0, 'left up')
+		
+		var boxes = gridder.getBoxesPrecise(0, 0, 300, 300)
+		t.eq(boxes.length, 1, 'all over')
+		
+		var boxes = gridder.getBoxesPrecise(50, 50, 100, 100)
+		t.eq(boxes.length, 1, 'to the upper left')
+		
+		var boxes = gridder.getBoxesPrecise(150, 150, 100, 100)
+		t.eq(boxes.length, 1, 'to the lower right')
+		
+		var boxes = gridder.getBoxesPrecise(0, 0, 100, 100)
+		t.eq(boxes.length, 0, 'left border')
+		
+		var boxes = gridder.getBoxesPrecise(200, 0, 100, 100)
+		t.eq(boxes.length, 0, 'right border')
+		
+		var boxes = gridder.getBoxesPrecise(100, 0, 100, 100)
+		t.eq(boxes.length, 0, 'top border')
+		
+		var boxes = gridder.getBoxesPrecise(50, 0, 100, 100)
+		t.eq(boxes.length, 0, 'only x overlap')
+		
+		var boxes = gridder.getBoxesPrecise(0, 50, 100, 100)
+		t.eq(boxes.length, 0, 'only y overlap')
+		
+		var boxes = gridder.getBoxesPrecise(0, 0, 100, 100)
+		t.eq(boxes.length, 0, 'one left top point overlap')
+		
+		var boxes = gridder.getBoxesPrecise(0.001, 0.001, 100, 100)
+		t.eq(boxes.length, 1, 'left top 0.001x0.001 overlap')
+	})
+	
 	t.test('getBoxes()', function (t)
 	{
 		var gridder = new Gridder([{x: 0, y: 0, w: 300, h: 300}, {x: 0, y: 0, w: 300, h: 300}], 100, 100)

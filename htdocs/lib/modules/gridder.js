@@ -176,6 +176,32 @@ Me.prototype =
 		return boxes
 	},
 	
+	getBoxesPrecise: function (x, y, w, h)
+	{
+		var boxes = this.getBoxes(x, y, w, h),
+			res = []
+		
+		var ax1 = x, ax2 = ax1 + w, ay1 = y, ay2 = ay1 + h
+		for (var i = 0, j = 0, il = boxes.length; i < il; i++)
+		{
+			var box = boxes[i]
+			
+			var bx1 = box.x, bx2 = bx1 + box.w, by1 = box.y, by2 = by1 + box.h
+			
+			// checking x
+			if (ax2 <= bx1 || bx2 <= ax1)
+				continue
+			
+			// checking y
+			if (ay2 <= by1 || by2 <= ay1)
+				continue
+			
+			res[j++] = box
+		}
+		
+		return res
+	},
+	
 	setStep: function (x, y)
 	{
 		this.stepX = x
