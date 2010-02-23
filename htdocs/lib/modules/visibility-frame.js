@@ -42,7 +42,13 @@ Me.prototype =
 	
 	moveTo: function (x, y)
 	{
+		var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
 		
+		for (var i = 0, il = boxes.length; i < il; i++)
+		{
+			var box = boxes[i]
+			box.node.className += ' visible'
+		}
 	}
 }
 
