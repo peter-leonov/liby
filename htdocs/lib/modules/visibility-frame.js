@@ -7,6 +7,7 @@ function Me ()
 	this.gridder = new Gridder()
 	this.nodes = []
 	this.boxes = []
+	this.visible = []
 	this.constructor = Me
 }
 
@@ -38,17 +39,26 @@ Me.prototype =
 	{
 		this.width = w
 		this.height = h
+		
+		this.gridder.setStep(100, 100)
 	},
 	
 	moveTo: function (x, y)
 	{
-		var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
+		var visible = this.visible
+		
+		for (var i = 0, il = visible.length; i < il; i++)
+			visible[i].node.removeClassName('visible')
+		
+		var boxes = this.gridder.getBoxes(x, y, this.width, this.height)
 		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
 			var box = boxes[i]
-			box.node.className += ' visible'
+			box.node.addClassName('visible')
 		}
+		
+		this.visible = boxes
 	}
 }
 
