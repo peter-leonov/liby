@@ -5,6 +5,7 @@ var myName = 'VisibilityFrame'
 function Me ()
 {
 	this.gridder = new Gridder()
+	this.gridder.maxSteps = 10000
 	this.nodes = []
 	this.boxes = []
 	this.visible = []
@@ -40,7 +41,7 @@ Me.prototype =
 		this.width = w
 		this.height = h
 		
-		this.gridder.setStep(100, 100)
+		this.gridder.setStep(250, 250)
 	},
 	
 	moveTo: function (x, y)
@@ -48,14 +49,14 @@ Me.prototype =
 		var visible = this.visible
 		
 		for (var i = 0, il = visible.length; i < il; i++)
-			visible[i].node.removeClassName('visible')
+			visible[i].node.className = ''
 		
-		var boxes = this.gridder.getBoxes(x, y, this.width, this.height)
+		var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
 		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
 			var box = boxes[i]
-			box.node.addClassName('visible')
+			box.node.className = 'visible'
 		}
 		
 		this.visible = boxes
