@@ -12,6 +12,7 @@
 	<script src="../../modules/log.js" type="text/javascript"></script>
 	<script src="../../modules/cosy.js" type="text/javascript"></script>
 	<script src="../../modules/element.js" type="text/javascript"></script>
+	<script src="../../modules/url-encode.js" type="text/javascript"></script>
 	
 	<script src="../../modules/gridder.js" type="text/javascript"></script>
 	<script src="../../modules/visibility-frame.js" type="text/javascript"></script>
@@ -24,6 +25,9 @@
 		#boxes div { position: absolute; z-index: 1; left: 0; top: 0; background-color: #888; /*opacity: 0.25;*/ }
 		#boxes div.visible { background-color: #6d4; /*opacity: 0.75;*/ }
 		
+		#boxes.transparent div { opacity: 0.25; }
+		#boxes.transparent div.visible { opacity: 0.75; }
+		
 		#frame { position: absolute; z-index: 2; left: 0; top: 0; width: 400px; height: 300px; border: 1px solid #888; }
 	</style>
 </head>
@@ -33,14 +37,29 @@
 <script type="text/javascript">
 $.onload(function ()
 {
-	var boxesRoot = $('boxes')
+	var count = 25, transparent = true
+	
+	var options = UrlEncode.parse(window.location.hash.substr(1))
+	if ('count' in options)
+		count = options.count
+	if ('transparent' in options)
+		transparent = options.transparent !== 'false'
+	
+	
+	
+	boxesRoot = $('boxes')
+	
+	if (transparent)
+		boxesRoot.className += ' transparent'
+	
+	
 	
 	var boxes = []
 	
 	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
 		mw = rw / 5, mh = rh / 5, min = 25,
 		random = Math.random
-	for (var i = 0; i < 1000; i++)
+	for (var i = 0; i < count; i++)
 	{
 		var w = (random() * mw + min) >> 0,
 			h = (random() * mh + min) >> 0,
