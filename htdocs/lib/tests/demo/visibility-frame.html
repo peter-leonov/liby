@@ -22,7 +22,7 @@
 		#boxes { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; }
 		#boxes .box { position: absolute; z-index: 1; left: 0; top: 0; background-color: #888; opacity: 0.25; }
 		
-		#frame { position: absolute; z-index: 2; left: 0; top: 0; width: 400px; height: 300px; background-color: #fff; border: 1px solid #888; }
+		#frame { position: absolute; z-index: 2; left: 0; top: 0; width: 400px; height: 300px; border: 1px solid #888; }
 	</style>
 </head>
 <body id="boxes">
@@ -37,7 +37,7 @@ $.onload(function ()
 	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
 		mw = rw / 5, mh = rh / 5, min = 25,
 		random = Math.random
-	for (var i = 0; i < 0; i++)
+	for (var i = 0; i < 50; i++)
 	{
 		var w = (random() * mw + min) >> 0,
 			h = (random() * mh + min) >> 0,
@@ -58,15 +58,32 @@ $.onload(function ()
 	var frameNode = $('frame')
 	
 	var frame = new VisibilityFrame()
-	// frame.setNodes(boxes)
+	frame.setNodes(boxes)
+	frame.setFrame(frameNode.offsetWidth, frameNode.offsetHeight)
+	frame.moveTo(frameNode.offsetLeft, frameNode.offsetTop)
 	
 	var m = new Moveable()
 	m.bind(frameNode)
 	
-	var x = 0, y = 0
-	m.addEventListener('movestart', function (e) { x = frameNode.offsetLeft, y = frameNode.offsetTop }, false)
-	m.addEventListener('move', function (e) { frameNode.style.left = x + e.data.dx + 'px', frameNode.style.top = y + e.data.dy + 'px' }, false)
+	var frameX = 0, frameY = 0
+	function movestart (e)
+	{
+		frameX = frameNode.offsetLeft
+		frameY = frameNode.offsetTop
+	}
 	
+	function move (e)
+	{
+		var x = frameX + e.data.dx,
+			y = frameY + e.data.dy
+		
+		frameNode.style.left = x + 'px'
+		frameNode.style.top = y + 'px'
+		frame.moveTo(x, y)
+	}
+	
+	m.addEventListener('movestart', movestart, false)
+	m.addEventListener('move', move, false)
 })
 </script>
 </body>
