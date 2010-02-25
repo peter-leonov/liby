@@ -59,7 +59,7 @@ $.onload(function ()
 	var statNode = $('stat').firstChild
 	
 	
-	var boxes = []
+	var nodes = []
 	
 	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
 		mw = rw / 5, mh = rh / 5, min = 25,
@@ -71,21 +71,37 @@ $.onload(function ()
 			x = (random() * (rw - w)) >> 0,
 			y = (random() * (rh - h)) >> 0
 		
-		var box = boxes[i] = document.createElement('div')
-		var s = box.style
+		var node = nodes[i] = document.createElement('div')
+		var s = node.style
 		s.left = x + 'px'
 		s.top = y + 'px'
 		s.width = w + 'px'
 		s.height = h + 'px'
 		
-		boxesRoot.appendChild(box)
+		boxesRoot.appendChild(node)
 	}
+	
+	var boxes = []
+	for (var i = 0, il = nodes.length; i < il; i++)
+	{
+		var node = nodes[i]
+		
+		boxes[i] =
+		{
+			x: node.offsetLeft,
+			y: node.offsetTop,
+			w: node.offsetWidth,
+			h: node.offsetHeight,
+			node: node // custom fields are normal
+		}
+	}
+	
 	
 	var frameNode = $('frame')
 	
 	var frame = new VisibilityFrame()
 	frame.gridder.maxSteps = count * 10
-	frame.setNodes(boxes)
+	frame.setBoxes(boxes)
 	frame.setFrame(frameNode.offsetWidth, frameNode.offsetHeight)
 	frame.onmove = function (show, hide)
 	{
@@ -98,7 +114,7 @@ $.onload(function ()
 			show[i].node.addClassName('visible')
 		
 		setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
-	},
+	}
 	frame.moveTo(frameNode.offsetLeft, frameNode.offsetTop)
 	
 	var m = new Moveable()
