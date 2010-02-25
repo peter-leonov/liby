@@ -92,10 +92,10 @@ $.onload(function ()
 		var begin = new Date()
 		
 		for (var i = 0; i < hide.length; i++)
-			hide[i].node.className = ''
+			hide[i].node.removeClassName('visible')
 		
 		for (var i = 0; i < show.length; i++)
-			show[i].node.className = 'visible'
+			show[i].node.addClassName('visible')
 		
 		setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
 	},
