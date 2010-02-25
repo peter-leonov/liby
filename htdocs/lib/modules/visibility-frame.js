@@ -5,15 +5,16 @@ var myName = 'VisibilityFrame'
 function Me ()
 {
 	this.gridder = new Gridder()
-	this.gridder.maxSteps = 10000
 	this.nodes = []
 	this.boxes = []
-	this.visible = []
+	this.visible = {}
 	this.constructor = Me
 }
 
 Me.prototype =
 {
+	onmove: function (show, hide, visible) {},
+	
 	setNodes: function (nodes)
 	{
 		this.nodes = nodes
@@ -44,22 +45,42 @@ Me.prototype =
 		this.gridder.setStep(250, 250)
 	},
 	
+	// // slow version
+	// moveTo: function (x, y)
+	// {
+	// 	var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
+	// 	
+	// 	var visible = this.visible
+	// 	this.visible = boxes
+	// 	
+	// 	this.onmove(boxes, visible, boxes)
+	// },
+	
+	// much faster version
 	moveTo: function (x, y)
 	{
-		var visible = this.visible
-		
-		for (var i = 0, il = visible.length; i < il; i++)
-			visible[i].node.className = ''
+		var last = this.visible, current = {}, show = [], hide = []
 		
 		var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
-		
 		for (var i = 0, il = boxes.length; i < il; i++)
 		{
-			var box = boxes[i]
-			box.node.className = 'visible'
+			var box = boxes[i],
+				id = box.boxID
+			
+			if (id in last)
+				delete last[id]
+			else
+				show.push(box)
+			
+			current[id] = box
 		}
 		
-		this.visible = boxes
+		for (var k in last)
+			hide.push(last[k])
+		
+		this.visible = current
+		
+		this.onmove(show, hide, boxes)
 	}
 }
 
