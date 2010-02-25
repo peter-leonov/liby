@@ -274,6 +274,32 @@ Tests.test(function (t)
 		t.eq(gridder.getCell(2, 2), undefined, '2;2')
 	})
 	
+	t.test('step x > step y', function (t)
+	{
+		var a = {x: 0, y: 0, w: 100, h: 100},
+			gridder = new Gridder([a], 100, 50)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(0, 1)[0], a, '0;1')
+		t.eq(gridder.getCell(1, 0), undefined, '1;0')
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+		t.eq(gridder.getCell(2, 2), undefined, '2;2')
+	})
+	
+	t.test('step y > step x', function (t)
+	{
+		var a = {x: 0, y: 0, w: 100, h: 100},
+			gridder = new Gridder([a], 50, 100)
+		
+		t.eq(gridder.getCell(-1, -1), undefined, '-1;-1')
+		t.eq(gridder.getCell(0, 0)[0], a, '0;0')
+		t.eq(gridder.getCell(1, 0)[0], a, '0;1')
+		t.eq(gridder.getCell(0, 1), undefined, '1;0')
+		t.eq(gridder.getCell(1, 1), undefined, '1;1')
+		t.eq(gridder.getCell(2, 2), undefined, '2;2')
+	})
+	
 	t.test('too many steps', function (t)
 	{
 		// one wide enough box
