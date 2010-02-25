@@ -29,17 +29,6 @@ Me.prototype =
 		this.gridder.setStep(250, 250)
 	},
 	
-	// // slow version
-	// moveTo: function (x, y)
-	// {
-	// 	var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
-	// 	
-	// 	var visible = this.visible
-	// 	this.visible = boxes
-	// 	
-	// 	this.onmove(boxes, visible, boxes)
-	// },
-	
 	// much faster version
 	moveTo: function (x, y)
 	{
@@ -66,6 +55,17 @@ Me.prototype =
 		
 		this.onmove(show, hide, boxes)
 	}
+	
+	// // slow version
+	// moveTo: function (x, y)
+	// {
+	// 	var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
+	// 	
+	// 	var visible = this.visible
+	// 	this.visible = boxes
+	// 	
+	// 	this.onmove(boxes, visible, boxes)
+	// }
 }
 
 Me.className = myName
