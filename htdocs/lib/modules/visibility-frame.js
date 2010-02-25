@@ -5,7 +5,6 @@ var myName = 'VisibilityFrame'
 function Me ()
 {
 	this.gridder = new Gridder()
-	this.nodes = []
 	this.boxes = []
 	this.visible = {}
 	this.constructor = Me
@@ -15,24 +14,9 @@ Me.prototype =
 {
 	onmove: function (show, hide, visible) {},
 	
-	setNodes: function (nodes)
+	setBoxes: function (boxes)
 	{
-		this.nodes = nodes
-		
-		var boxes = this.boxes = []
-		for (var i = 0, il = nodes.length; i < il; i++)
-		{
-			var node = nodes[i]
-			
-			boxes[i] =
-			{
-				x: node.offsetLeft,
-				y: node.offsetTop,
-				w: node.offsetWidth,
-				h: node.offsetHeight,
-				node: node // custom fields are normal
-			}
-		}
+		this.boxes = boxes
 		
 		this.gridder.setBoxes(boxes)
 	},
