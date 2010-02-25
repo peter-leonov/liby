@@ -92,6 +92,26 @@ Object.add
 			while ((node = node.parentNode))
 			
 			return false
+		},
+		
+		offsetPosition: function ()
+		{
+			var node = this, left = 0, top = 0, parent
+			for (;;)
+			{
+				left += node.offsetLeft
+				top += node.offsetTop
+				if ((parent = node.offsetParent))
+				{
+					left -= node.scrollLeft
+					top -= node.scrollTop
+					node = parent
+				}
+				else
+					break
+			}
+			
+			return {left: left, top: top}
 		}
 	}
 )
