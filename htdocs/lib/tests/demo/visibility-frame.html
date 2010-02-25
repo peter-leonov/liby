@@ -29,9 +29,12 @@
 		#boxes.transparent div.visible { opacity: 0.75; }
 		
 		#frame { position: absolute; z-index: 2; left: 0; top: 0; width: 400px; height: 300px; border: 1px solid #888; cursor: move; }
+		
+		#stat { position: absolute; z-index: 3; right: 25px; top: 25px;  background-color: #fff; }
 	</style>
 </head>
 <body>
+<div id="stat"> </div>
 <div id="boxes"></div>
 <div id="frame"></div>
 <script type="text/javascript">
@@ -47,11 +50,13 @@ $.onload(function ()
 	
 	
 	
-	boxesRoot = $('boxes')
+	var boxesRoot = $('boxes')
 	
 	if (transparent)
 		boxesRoot.className += ' transparent'
 	
+	
+	var statNode = $('stat').firstChild
 	
 	
 	var boxes = []
@@ -79,8 +84,21 @@ $.onload(function ()
 	var frameNode = $('frame')
 	
 	var frame = new VisibilityFrame()
+	frame.gridder.maxSteps = count * 10
 	frame.setNodes(boxes)
 	frame.setFrame(frameNode.offsetWidth, frameNode.offsetHeight)
+	frame.onmove = function (show, hide)
+	{
+		var begin = new Date()
+		
+		for (var i = 0; i < hide.length; i++)
+			hide[i].node.className = ''
+		
+		for (var i = 0; i < show.length; i++)
+			show[i].node.className = 'visible'
+		
+		statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms'
+	},
 	frame.moveTo(frameNode.offsetLeft, frameNode.offsetTop)
 	
 	var m = new Moveable()
