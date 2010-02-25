@@ -7,3 +7,4 @@
 <!--# include virtual="trident3-element-prototype.js" -->
 <!--# include virtual="trident-3-4-onready.js" -->
 <!--# include virtual="trident3-xhr.js" -->
+<!--# include virtual="trident-3-4-window-page-offset.js" -->
