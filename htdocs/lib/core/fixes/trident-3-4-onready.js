@@ -17,7 +17,7 @@ function checkready ()
 		// IE 6-7
 		doc.__fixNodes(doc.all)
 	
-	if (self.$)
+	if (self.$ && self.$.onready)
 		self.$.onready.run()
 }
 checkready.interval = setInterval(checkready, 100)
