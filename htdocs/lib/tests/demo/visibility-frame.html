@@ -97,7 +97,7 @@ $.onload(function ()
 		for (var i = 0; i < show.length; i++)
 			show[i].node.className = 'visible'
 		
-		statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms'
+		setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
 	},
 	frame.moveTo(frameNode.offsetLeft, frameNode.offsetTop)
 	
