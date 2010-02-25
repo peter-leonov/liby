@@ -30,8 +30,8 @@ Me.prototype =
 		this.mouseup = function (e) { me.onup(e) }
 		this.mouseup2 = function (e) { me.onup2(e) }
 		
-		node.addEventListener('mousedown', this.mousedown, true)
-		node.addEventListener('selectstart', preventDefault, true)
+		node.addEventListener('mousedown', this.mousedown, false)
+		node.addEventListener('selectstart', preventDefault, false)
 		
 		return this
 	},
