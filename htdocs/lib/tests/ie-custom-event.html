@@ -15,54 +15,54 @@
 <button id="test-node-1">test node 1</button>
 <button id="test-node-2">test node 2</button>
 <button id="test-node-3">test node 3</button>
+<button id="test-node-4">test node 4</button>
 
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	if (!/IE [678]/.test(Tests.ua))
+	t.test('IE only tests', function (t)
 	{
-		t.test('IE only tests', function (t) { t.ok('this is ' + navigator.userAgent) })
-		return
-	}
-	
-	t.test('uniqueID', function (t)
-	{
-		var node = document.getElementById('test-node-1'), calls = 0
-		t.log('testing events wrapper internals')
-		t.ok('uniqueID' in window, 'window.uniqueID is set')
-		t.eq(window.uniqueID, window.uniqueID, 'window.uniqueID is a constant')
+		if (!/IE [678]/.test(navigator.userAgent))
+			return t.ok('this is ' + navigator.userAgent)
 		
-		t.ok('uniqueID' in node, 'node.uniqueID is set')
-		t.eq(node.uniqueID, node.uniqueID, 'node.uniqueID is a constant')
+		t.test('uniqueID', function (t)
+		{
+			var node = document.getElementById('test-node-1'), calls = 0
+			t.log('testing events wrapper internals')
+			t.ok('uniqueID' in window, 'window.uniqueID is set')
+			t.eq(window.uniqueID, window.uniqueID, 'window.uniqueID is a constant')
+			
+			t.ok('uniqueID' in node, 'node.uniqueID is set')
+			t.eq(node.uniqueID, node.uniqueID, 'node.uniqueID is a constant')
+			
+			t.ok('__uniqueID' in document, 'document.__uniqueID is set')
+			t.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
+		})
 		
-		t.ok('__uniqueID' in document, 'document.__uniqueID is set')
-		t.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
+		t.test('transport event', function (t)
+		{
+			var node = document.getElementById('test-node-2'), calls = 0
+			function handler (e) { calls++ }
+			
+			var type = document.__pmc__eventTransport
+			t.log('transport event is "' + document.__pmc__eventTransport + '"')
+			
+			document.attachEvent('on' + type, handler)
+			node.fireEvent('on' + type, document.createEventObject())
+			t.eq(calls, 1, type + ' event is bubling')
+			
+			node.focus()
+			t.eq(calls, 1, 'focus() does not affects ' + type + ' event')
+			
+			document.detachEvent('on' + type, handler)
+			node.fireEvent('on' + type, document.createEventObject())
+			t.eq(calls, 1, type + ' detaching works')
+			
+			document.attachEvent('on' + type, function () { event.returnValue = false })
+			t.ok(node.fireEvent('on' + type, document.createEventObject()) === false, type + ' returnValue works')
+			
+		})
 	})
-	
-	t.test('transport event', function (t)
-	{
-		var node = document.getElementById('test-node-2'), calls = 0
-		function handler (e) { calls++ }
-		
-		var type = document.__pmc__eventTransport
-		t.log('event transport is "' + document.__pmc__eventTransport + '"')
-		
-		document.attachEvent('on' + type, handler)
-		node.fireEvent('on' + type, document.createEventObject())
-		t.eq(calls, 1, type + ' event is bubling')
-		
-		node.focus()
-		t.eq(calls, 1, 'focus() does not affects ' + type + ' event')
-		
-		document.detachEvent('on' + type, handler)
-		node.fireEvent('on' + type, document.createEventObject())
-		t.eq(calls, 1, type + ' detaching works')
-		
-		document.attachEvent('on' + type, function () { event.returnValue = false })
-		t.ok(node.fireEvent('on' + type, document.createEventObject()) === false, type + ' returnValue works')
-		
-	})
-	
 	
 	t.test('simple DOM Events tests', function (t)
 	{
@@ -80,6 +80,39 @@ Tests.test(function (t)
 		node.dispatchEvent(e2)
 		t.eq(calls, 1, 'custom handler called once')
 		t.eq(e2.type, type2, 'the event preserves its type')
+	})
+	
+	function orderTest (t, node, type)
+	{
+		var order = []
+		
+		var e = document.createEvent('UIEvents')
+		e.initEvent(type, true, true)
+		
+		// so many are to avoid false positives with hashing algorithm
+		node.addEventListener(type, function () { order.push(1) }, false)
+		node.addEventListener(type, function () { order.push(2) }, false)
+		node.addEventListener(type, function () { order.push(3) }, false)
+		node.addEventListener(type, function () { order.push(4) }, false)
+		node.addEventListener(type, function () { order.push(5) }, false)
+		node.addEventListener(type, function () { order.push(6) }, false)
+		node.addEventListener(type, function () { order.push(7) }, false)
+		node.addEventListener(type, function () { order.push(8) }, false)
+		
+		node.dispatchEvent(e)
+		
+		t.eq(order.length, 8, '8 total calls')
+		t.eq(order.join(','), '1,2,3,4,5,6,7,8', 'proper order')
+	}
+	
+	t.test('calls order for native', function (t)
+	{
+		orderTest(t, document.getElementById('test-node-4'), 'click')
+	})
+	
+	t.test('calls order for custom', function (t)
+	{
+		orderTest(t, document.getElementById('test-node-4'), 'became-visible')
 	})
 })
 </script>
