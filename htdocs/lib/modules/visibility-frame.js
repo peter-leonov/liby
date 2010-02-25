@@ -21,12 +21,18 @@ Me.prototype =
 		this.gridder.setBoxes(boxes)
 	},
 	
-	setFrame: function (w, h)
+	setFrame: function (w, h, x, y)
 	{
 		this.width = w
 		this.height = h
 		
-		this.gridder.setStep(250, 250)
+		if (x && y)
+			this.setStep(x, y)
+	},
+	
+	setStep: function (x, y)
+	{
+		this.gridder.setStep(x, y)
 	},
 	
 	// much faster version
