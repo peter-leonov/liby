@@ -108,10 +108,6 @@ MutationEvent.prototype = new Event()
 var eventConstructors = {Event:Event, /*DocumentEvent:DocumentEvent,*/ UIEvent:UIEvent, MouseEvent:MouseEvent, KeyboardEvent:KeyboardEvent, MutationEvent:MutationEvent}
 
 
-window.uniqueID = document.uniqueID
-// uniqueID is not a constant for document
-document.__uniqueID = document.uniqueID
-
 function getEventWrapper (e, kind)
 {
 	if (e.__pmc__wrapper)
@@ -124,43 +120,54 @@ function getEventWrapper (e, kind)
 	return w
 }
 
-function getEventListenerWrapper (node, type, func, dir)
-{
-	var key = '__IEEventWrapper:' + type + ':' + dir + ':' + (node.__uniqueID || node.uniqueID)
-	
-	if (func[key])
-		return func[key]
-	else
-	{
-		var wrapper = func[key] = function (e)
-		{
-			if (e === undef)
-				e = event
-			
-			var w = getEventWrapper(e)
-			if (type !== w.type)
-				return
-			w.__isDispatching = true
-			func.call(node, w)
-			delete w.__isDispatching
-		}
-		wrapper.__pmc__eventListenerWrapper = key
-		return wrapper
-	}
-}
-
 win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 {
 	if (dir === undef)
 		dir = false
 	
-	var wrapper = getEventListenerWrapper(this, type, func, dir)
-	if (!(type in supportedEvents))
-		type = eventTransport
-	if (wrapper)
-		this.detachEvent('on' + type, wrapper)
-	this.attachEvent('on' + type, wrapper)
-	onBeforeUnload.stack.push([this, 'on' + type, wrapper])
+	var all = this.__pmc__eventListeners
+	if (!all)
+		all = this.__pmc__eventListeners = {}
+	
+	var key = type + ':' + dir
+	
+	var listeners = all[key]
+	if (!listeners)
+	{
+		listeners = all[key] = []
+		
+		var me = this
+		function dispatcher ()
+		{
+			var w = getEventWrapper(event)
+			if (type !== w.type)
+				return
+			
+			w.__isDispatching = true
+			for (var i = 0, il = listeners.length; i < il; i++)
+			{
+				try
+				{
+					listeners[i].call(me, w)
+				}
+				catch (ex)
+				{
+					setTimeout(function () { throw ex }, 1000)
+				}
+			}
+			delete w.__isDispatching
+		}
+		
+		var transport = type in supportedEvents ? type : eventTransport
+		this.attachEvent('on' + transport, dispatcher)
+		listeners.dispatcher = dispatcher
+	}
+	
+	var dup = listeners.indexOf(func)
+	if (dup != -1)
+		listeners.splice(dup, 1)
+	
+	listeners.push(func)
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
@@ -168,11 +175,26 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 	if (dir === undef)
 		dir = false
 	
-	var wrapper = getEventListenerWrapper(this, type, func, dir)
-	if (!(type in supportedEvents))
-		type = eventTransport
-	if (wrapper)
-		this.detachEvent('on' + type, wrapper)
+	var all = this.__pmc__eventListeners
+	if (!all)
+		return
+	
+	var key = type + ':' + dir
+	
+	var listeners = all[key]
+	if (!listeners)
+		return
+	
+	var dup = listeners.indexOf(func)
+	if (dup != -1)
+		listeners.splice(dup, 1)
+	
+	if (!listeners.length)
+	{
+		delete all[key]
+		var transport = type in supportedEvents ? type : eventTransport
+		this.detachEvent('on' + transport, listeners.dispatcher)
+	}
 }
 
 doc.createEvent = function (kind)

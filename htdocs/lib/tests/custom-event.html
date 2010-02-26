@@ -26,20 +26,6 @@ Tests.test(function (t)
 		if (!/IE [678]/.test(navigator.userAgent))
 			return t.ok('this is ' + navigator.userAgent)
 		
-		t.test('uniqueID', function (t)
-		{
-			var node = document.getElementById('test-node-1'), calls = 0
-			t.log('testing events wrapper internals')
-			t.ok('uniqueID' in window, 'window.uniqueID is set')
-			t.eq(window.uniqueID, window.uniqueID, 'window.uniqueID is a constant')
-			
-			t.ok('uniqueID' in node, 'node.uniqueID is set')
-			t.eq(node.uniqueID, node.uniqueID, 'node.uniqueID is a constant')
-			
-			t.ok('__uniqueID' in document, 'document.__uniqueID is set')
-			t.eq(document.__uniqueID, document.__uniqueID, 'document.__uniqueID is a constant')
-		})
-		
 		t.test('transport event', function (t)
 		{
 			var node = document.getElementById('test-node-2'), calls = 0
@@ -65,7 +51,7 @@ Tests.test(function (t)
 		})
 	})
 	
-	t.test('simple DOM Events tests', function (t)
+	t.test('two custom with handler for the first one only', function (t)
 	{
 		var node = document.getElementById('test-node-3'), calls = 0
 		function handler (e) { calls++ }
