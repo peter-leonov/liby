@@ -16,6 +16,7 @@
 <button id="test-node-2">test node 2</button>
 <button id="test-node-3">test node 3</button>
 <button id="test-node-4">test node 4</button>
+<button id="test-node-5">test node 5</button>
 
 <script type="text/javascript">
 Tests.test(function (t)
@@ -89,7 +90,10 @@ Tests.test(function (t)
 		var e = document.createEvent('UIEvents')
 		e.initEvent(type, true, true)
 		
+		function a () { order.push(9) }
+		
 		// so many are to avoid false positives with hashing algorithm
+		node.addEventListener(type, a, false)
 		node.addEventListener(type, function () { order.push(1) }, false)
 		node.addEventListener(type, function () { order.push(2) }, false)
 		node.addEventListener(type, function () { order.push(3) }, false)
@@ -98,21 +102,24 @@ Tests.test(function (t)
 		node.addEventListener(type, function () { order.push(6) }, false)
 		node.addEventListener(type, function () { order.push(7) }, false)
 		node.addEventListener(type, function () { order.push(8) }, false)
+		node.addEventListener(type, a, false)
 		
 		node.dispatchEvent(e)
 		
-		t.eq(order.length, 8, '8 total calls')
-		t.eq(order.join(','), '1,2,3,4,5,6,7,8', 'proper order')
+		t.eq(order.length, 9, '8 total calls')
+		t.eq(order.join(','), '1,2,3,4,5,6,7,8,9', 'proper order')
 	}
 	
 	t.test('calls order for native', function (t)
 	{
 		orderTest(t, document.getElementById('test-node-4'), 'click')
+		orderTest(t, document.getElementById('test-node-4'), 'mousedown')
 	})
 	
 	t.test('calls order for custom', function (t)
 	{
-		orderTest(t, document.getElementById('test-node-4'), 'became-visible')
+		orderTest(t, document.getElementById('test-node-5'), 'became-visible')
+		orderTest(t, document.getElementById('test-node-5'), 'hide')
 	})
 })
 </script>
