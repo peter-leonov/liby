@@ -2,7 +2,7 @@
 // this code is heavily minified and it couldn not be changed frequently
 ;(function(){
 
-var O = Object, A = Array, Ap = A.prototype, S = String, Fp = Function.prototype, D = Date, N = Number, M = Math
+var O = Object, A = Array, Ap = A.prototype, S = String, Fp = Function.prototype, D = Date, M = Math
 
 function add (d, s) { if (d) for (var k in s) if (!(k in d)) d[k] = s[k]; return d }
 
@@ -34,11 +34,19 @@ add
 (
 	Ap,
 	{
-		indexOf: function(v, i)
+		indexOf: function (v, i)
 		{
-			var len = this.length,
-				i = N(i) || 0
-			i = (i < 0) ? (ceil(i) + len) : floor(i)
+			var len = this.length
+			
+			if ((i = +i))
+			{
+				if (i < 0)
+					i = ceil(i) + len
+				else
+					i = floor(i)
+			}
+			else
+				i = 0
 			
 			for (; i < len; i++)
 				if (i in this && this[i] === v)
