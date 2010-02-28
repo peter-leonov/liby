@@ -43,7 +43,7 @@ var Me = self[myName] =
 		var r = new XHR()
 		
 		if (params)
-			url += (url.indexOf('?') ? UrlEncode.paramDelimiter : '?') + urlEncode(params)
+			url += (url.indexOf('?') != -1 ? UrlEncode.paramDelimiter : '?') + urlEncode(params)
 		
 		r.open('GET', url, !sync)
 		if (!sync)
