@@ -14,11 +14,25 @@
 Tests.test(function (t)
 {
 	var reports = []
-	window.Tracker = { track: function (c, a, l, m) { reports.push({category: c, action: a, label: l, message: m}) } }
+	window.Tracker = { track: function (c, a, l, v) { reports.push({category: c, action: a, label: l, value: v}) } }
 	
 	t.test('check for existence', function (t)
 	{
 		t.ok(Oops, 'global Oops object')
+	})
+	
+	t.test('simple exception handling', function (t)
+	{
+		Oops.enable()
+		
+		setTimeout(function () { blablabla }, 1)
+		
+		function check ()
+		{
+			t.eq(reports.length, 1, 'got one report')
+		}
+		
+		t.async(check, 200)
 	})
 	
 	t.test('maybeEnable', function (t)
