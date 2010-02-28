@@ -2,6 +2,8 @@
 // except for Tracker object that hmm… tracks :)
 ;(function(){
 
+function log (str) { try { console.log('Oops: ' + str) } catch (ex) {} }
+
 var myName = 'Oops'
 
 var Me =
@@ -24,7 +26,7 @@ var Me =
 		}
 		catch (ex)
 		{
-			this.log('could not report')
+			log('could not report')
 		}
 		
 		return true
@@ -43,7 +45,7 @@ var Me =
 		this.enabled = true
 		
 		window.onerror = Me.onerror
-		this.log('error catching enabled')
+		log('error catching enabled')
 	},
 	
 	disable: function ()
@@ -53,10 +55,23 @@ var Me =
 		this.enabled = false
 		
 		window.onerror = null
-		this.log('error catching disabled')
+		log('error catching disabled')
 	},
 	
-	log: function (str) { try { console.log('Oops: ' + str) } catch (ex) {} }
+	log: function (message)
+	{
+		Tracker.track('Oops', 'log', message)
+	},
+	
+	error: function (message)
+	{
+		Tracker.track('Oops', 'error', message)
+	},
+	
+	time: function (message, time)
+	{
+		Tracker.track('Oops', 'time', message, time)
+	}
 }
 
 self.className = Me
