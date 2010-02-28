@@ -6,8 +6,8 @@ var myName = 'Tracker',
 var Me =
 {
 	version: 0.3,
-	reportPath: '/tracker/report?',
 	sessionID: +new Date() + '-' + Math.round(Math.random() * 1E+17),
+	reportPath: '/tracker/report',
 	
 	track: function (category, action, label, value)
 	{
@@ -33,7 +33,7 @@ var Me =
 	send: function (data)
 	{
 		var r = new Image(1, 1)
-		r.src = this.reportPath + data
+		r.src = this.reportPath + '?' + data
 		r.onload = function () { this.log('error reported successfuly: ' + data) }
 	},
 	
