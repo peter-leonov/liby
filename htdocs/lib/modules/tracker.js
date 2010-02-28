@@ -6,8 +6,8 @@ var myName = 'Tracker',
 var Me =
 {
 	version: 0.3,
-	sessionID: +new Date() + '-' + Math.round(Math.random() * 1E+17),
 	reportPath: '/tracker/report',
+	session: +new Date() + '-' + Math.round(Math.random() * 1E+17),
 	
 	track: function (category, action, label, value)
 	{
@@ -15,6 +15,7 @@ var Me =
 		{
 			var q =
 				'vr=' + escape(this.version) +
+				'&s=' + escape(this.session) +
 				'&c=' + escape(category) +
 				'&a=' + escape(action) +
 				'&l=' + escape(label) +
