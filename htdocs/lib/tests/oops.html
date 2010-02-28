@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<title>Oops tests</title>
+	
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="../modules/oops.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var reports = []
+	window.Tracker = { track: function (c, a, l, m) { reports.push({category: c, action: a, label: l, message: m}) } }
+	
+	t.test('check for existence', function (t)
+	{
+		t.ok(Oops, 'global Oops object')
+	})
+	
+	t.test('maybeEnable', function (t)
+	{
+		Oops.disable()
+		t.no(Oops.enabled, 'disabled')
+		
+		
+		t.log('clearing Oops cookie')
+		document.cookie = 'Oops=; expires=Sun, 28 Feb 2010 16:53:02 GMT'
+		
+		Oops.maybeEnable()
+		t.ok(Oops.enabled, 'Oops is enabled')
+		
+		Oops.disable()
+		t.no(Oops.enabled, 'disabled')
+		
+		
+		t.log('setting Oops=disabled cookie')
+		document.cookie = 'Oops=disabled'
+		
+		Oops.maybeEnable()
+		t.no(Oops.enabled, 'Oops is still disabled')
+		
+		
+		Oops.disable()
+		t.no(Oops.enabled, 'disabled')
+		
+		t.log('clearing Oops cookie')
+		document.cookie = 'Oops=; expires=Sun, 28 Feb 2010 16:53:02 GMT'
+	})
+})
+</script>
+</body>
+</html>
