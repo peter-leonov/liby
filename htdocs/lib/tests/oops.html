@@ -43,6 +43,10 @@ Tests.test(function (t)
 		Oops.maybeEnable()
 		t.no(Oops.enabled, 'Oops is still disabled')
 		
+		t.log('force enable Oops')
+		Oops.enable()
+		t.ok(Oops.enabled, 'Oops is now enabled')
+		
 		
 		Oops.disable()
 		t.no(Oops.enabled, 'disabled')
