@@ -35,7 +35,6 @@ var Me =
 	{
 		var r = new Image(1, 1)
 		r.src = this.reportPath + '?' + data
-		r.onload = function () { this.log('error reported successfuly: ' + data) }
 	},
 	
 	log: function (str) { try { console.log(myName + ': ' + str) } catch (ex) {} }
