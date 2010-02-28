@@ -11,7 +11,7 @@ var Me =
 	
 	onerror: function (message, url, line)
 	{
-		this.report('error', url + ':' + line + ': ' + message)
+		Me.report('error', url + ':' + line + ': ' + message)
 		
 		return Me.masking
 	},
