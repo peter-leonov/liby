@@ -23,16 +23,43 @@ Tests.test(function (t)
 	
 	t.test('simple exception handling', function (t)
 	{
-		Oops.enable()
-		
-		setTimeout(function () { blablabla }, 1)
+		var was
+		function error ()
+		{
+			Oops.enable()
+			was = reports.length
+			
+			blablabla
+		}
+		setTimeout(error, 10)
 		
 		function check ()
 		{
-			t.eq(reports.length, 1, 'got one report')
+			t.eq(reports.length, was + 1, 'got one report')
 		}
+		t.async(check, 50)
+	})
+	
+	t.test('log() and error()', function (t)
+	{
+		Oops.log('logging')
+		var report = reports[reports.length-1]
+		t.eq(report.category, 'Oops')
+		t.eq(report.action, 'log')
+		t.eq(report.label, 'logging')
 		
-		t.async(check, 200)
+		Oops.error('erroring')
+		var report = reports[reports.length-1]
+		t.eq(report.category, 'Oops')
+		t.eq(report.action, 'error')
+		t.eq(report.label, 'erroring')
+		
+		Oops.time('timing', 12345)
+		var report = reports[reports.length-1]
+		t.eq(report.category, 'Oops')
+		t.eq(report.action, 'time')
+		t.eq(report.label, 'timing')
+		t.eq(report.value, 12345)
 	})
 	
 	t.test('maybeEnable', function (t)
