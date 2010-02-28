@@ -7,10 +7,13 @@ var myName = 'Oops'
 var Me =
 {
 	enabled: false,
+	masking: true,
 	
 	onerror: function (message, url, line)
 	{
 		this.report('error', url + ':' + line + ': ' + message)
+		
+		return Me.masking
 	},
 	
 	report: function (type, message)
