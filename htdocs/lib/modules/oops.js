@@ -17,7 +17,7 @@ var Me =
 	{
 		try // to fully describe an error
 		{
-			Tracker.report('Oops', type, message)
+			Tracker.track('Oops', type, message)
 		}
 		catch (ex)
 		{
