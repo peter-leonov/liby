@@ -27,7 +27,7 @@ Tests.test(function (t)
 	
 	t.test('simple exception handling', function (t)
 	{
-		t.expect(4)
+		t.expect(5)
 		
 		function setTimeout ()
 		{
@@ -60,6 +60,17 @@ Tests.test(function (t)
 		node.addEventListener('load', addEventListener, false)
 		node.src = 'recorder-cursor.png'
 		
+		function removeEventListener (e)
+		{
+			Oops.enable()
+			
+			throw new Error('removeEventListener')
+		}
+		var node = document.body.appendChild(document.createElement('img'))
+		node.addEventListener('load', removeEventListener, false)
+		node.removeEventListener('load', removeEventListener, false)
+		node.src = 'recorder-cursor.png'
+		
 		
 		function check ()
 		{
@@ -71,6 +82,7 @@ Tests.test(function (t)
 			t.gte(all.indexOf('setTimeout'), 0, 'setTimeout()')
 			t.gte(all.indexOf('setInterval'), 0, 'setInterval()')
 			t.gte(all.indexOf('addEventListener'), 0, 'addEventListener()')
+			t.eq(all.indexOf('removeEventListener'), -1, 'removeEventListener()')
 		}
 		t.async(check, 1500)
 	})
