@@ -23,21 +23,51 @@ Tests.test(function (t)
 	
 	t.test('simple exception handling', function (t)
 	{
-		var was
-		function error ()
+		t.expect(4)
+		
+		function setTimeout ()
+		{
+			// Oops may had been disabled by other async tests
+			// so re-enabling it
+			Oops.enable()
+			
+			throw new Error('setTimeout')
+		}
+		window.setTimeout(setTimeout, 10)
+		
+		
+		function setInterval ()
 		{
 			Oops.enable()
-			was = reports.length
 			
-			blablabla
+			clearInterval(intervalTimer)
+			throw new Error('setInterval')
 		}
-		setTimeout(error, 10)
+		var intervalTimer = window.setInterval(setInterval, 10)
+		
+		function addEventListener (e)
+		{
+			Oops.enable()
+			t.eq(e.type, 'load', 'event type')
+			throw new Error('addEventListener')
+		}
+		var node = document.body.appendChild(document.createElement('iframe'))
+		node.addEventListener('load', addEventListener, false)
+		node.src = '/'
+		
 		
 		function check ()
 		{
-			t.eq(reports.length, was + 1, 'got one report')
+			var all = []
+			for (var i = 0; i < reports.length; i++)
+				all[i] = reports[i].label
+			all = all.join('\n')
+			
+			t.gte(all.indexOf('setTimeout'), 0, 'setTimeout()')
+			t.gte(all.indexOf('setInterval'), 0, 'setInterval()')
+			t.gte(all.indexOf('addEventListener'), 0, 'addEventListener()')
 		}
-		t.async(check, 50)
+		t.async(check, 100)
 	})
 	
 	t.test('log() and error()', function (t)
