@@ -1,5 +1,9 @@
 ;(function(){
 
+// warn a developer
+try { console.log('emulating onerror') } catch (ex) {}
+try { opera.postError('emulating onerror') } catch (ex) {}
+
 function wrap (callback)
 {
 	var wrapper = callback.__onerror_wrapper
