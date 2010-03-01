@@ -1,0 +1,35 @@
+;(function(){
+
+function wrap (callback)
+{
+	var wrapper = callback.__onerror_wrapper
+	if (!wrapper)
+	{
+		wrapper = callback.__onerror_wrapper = function ()
+		{
+			try
+			{
+				return callback.apply(this, arguments)
+			}
+			catch (ex)
+			{
+				if (typeof window.onerror === 'function')
+					if (!window.onerror(ex.message, ex.sourceURL, ex.line))
+						throw ex
+			}
+		}
+	}
+	
+	return wrapper
+}
+
+var setTimeout = window.setTimeout
+window.setTimeout = function (callback, timeout) { return setTimeout.call(window, wrap(callback), timeout) }
+
+var setInterval = window.setInterval
+window.setInterval = function (callback, timeout) { return setInterval.call(window, wrap(callback), timeout) }
+
+var addEventListener = Element.prototype.addEventListener
+Element.prototype.addEventListener = function (type, callback, dir) { return addEventListener.call(this, wrap(callback), dir) }
+
+})();
