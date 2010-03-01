@@ -6,7 +6,9 @@
 	<title>Oops tests</title>
 	
 	<script src="tests.common.js" type="text/javascript"></script>
-	
+	<!--# if expr="$HTTP_USER_AGENT = /Opera/(9|10)\.|Safari/" -->
+	<script type="text/javascript" src="../core/fixes/onerror.js"></script>
+	<!--# endif -->
 	<script type="text/javascript" src="../modules/oops.js"></script>
 </head>
 <body>
