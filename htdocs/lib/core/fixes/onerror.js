@@ -30,6 +30,9 @@ var setInterval = window.setInterval
 window.setInterval = function (callback, timeout) { return setInterval.call(window, wrap(callback), timeout) }
 
 var addEventListener = Element.prototype.addEventListener
-Element.prototype.addEventListener = function (type, callback, dir) { return addEventListener.call(this, wrap(callback), dir) }
+Element.prototype.addEventListener = function (type, callback, dir) { return addEventListener.call(this, type, wrap(callback), dir) }
+
+var removeEventListener = Element.prototype.removeEventListener
+Element.prototype.removeEventListener = function (type, callback, dir) { return removeEventListener.call(this, type, wrap(callback), dir) }
 
 })();
