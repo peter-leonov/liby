@@ -1,4 +1,5 @@
-;(function(){
+if (/Opera\/(9|10)\.|Version\/[34]\..+Safari/.test(navigator.userAgent))
+(function(){
 
 // warn a developer
 try { console.log('emulating onerror') } catch (ex) {}
