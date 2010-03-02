@@ -10,6 +10,7 @@ function Me ()
 Me.prototype =
 {
 	power: 1.5,
+	onscroll: function () {},
 	
 	bind: function (root, width)
 	{
@@ -38,6 +39,7 @@ Me.prototype =
 			else
 				real = x < 0 ? w + x % w : x % w
 			root.scrollLeft = real
+			this.onscroll(x, real)
 		}
 		// this.setY = function (v) { root.scrollTop = v }
 		
