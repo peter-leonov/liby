@@ -31,8 +31,13 @@ Me.prototype =
 		this.setX = function (x)
 		{
 			me.globalX = x
-			var w = me.width
-			root.scrollLeft = x < 0 ? w + x % w : x % w
+			var w = me.width,
+				real
+			if (w == 0)
+				real = 0
+			else
+				real = x < 0 ? w + x % w : x % w
+			root.scrollLeft = real
 		}
 		// this.setY = function (v) { root.scrollTop = v }
 		
