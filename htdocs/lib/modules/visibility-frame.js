@@ -17,6 +17,7 @@ Me.prototype =
 	setBoxes: function (boxes)
 	{
 		this.boxes = boxes
+		this.visible = {}
 		
 		this.gridder.setBoxes(boxes)
 	},

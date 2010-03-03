@@ -13,34 +13,52 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	var boxesRoot = document.getElementById('boxes')
-	
-	var boxes = []
-	for (var i = 0; i < 25; i++)
-	{
-		boxes[i] =
-		{
-			x: i * 100,
-			y: i * 100,
-			w: 100,
-			h: 100
-		}
-	}
-	
-	var frame = new VisibilityFrame()
-	frame.setBoxes(boxes)
-	frame.setFrame(200, 200)
-	
 	var showBoxes, hideBoxes
 	
-	frame.onmove = function (show, hide)
+	function onmove (show, hide)
 	{
 		showBoxes = show
 		hideBoxes = hide
 	}
 	
+	t.test('setBoxes()', function (t)
+	{
+		var frame = new VisibilityFrame()
+		frame.setFrame(200, 200)
+		frame.onmove = onmove
+		
+		frame.setBoxes([{x: 0, y: 0, w: 100, h: 100}])
+		frame.moveTo(0, 0)
+		t.eq(showBoxes.length, 1, 'show 1')
+		t.eq(hideBoxes.length, 0, 'hide 1')
+		
+		frame.setBoxes([{x: 0, y: 0, w: 100, h: 100}])
+		frame.moveTo(0, 0)
+		t.eq(showBoxes.length, 1, 'show 1')
+		t.eq(hideBoxes.length, 0, 'hide 1')
+	})
+	
+	
 	t.test('moveTo()', function (t)
 	{
+		var boxes = []
+		for (var i = 0; i < 25; i++)
+		{
+			boxes[i] =
+			{
+				x: i * 100,
+				y: i * 100,
+				w: 100,
+				h: 100
+			}
+		}
+		
+		var frame = new VisibilityFrame()
+		frame.setBoxes(boxes)
+		frame.setFrame(200, 200)
+		frame.onmove = onmove
+		
+		
 		t.log('moveTo(0, 0)')
 		frame.moveTo(0, 0)
 		t.eq(showBoxes.length, 2, 'show 2')
