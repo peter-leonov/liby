@@ -140,6 +140,7 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 		function dispatcher ()
 		{
 			var w = getEventWrapper(event)
+			// check if we got a custom event that does not match our type
 			if (type !== w.type)
 				return
 			
@@ -152,6 +153,8 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 				}
 				catch (ex)
 				{
+					// this trick is useful to report errors from all listeners
+					// 1000 delay helps to avoid sensitive lag when error reporting is on
 					setTimeout(function () { throw ex }, 1000)
 				}
 			}
