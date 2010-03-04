@@ -1,101 +1,34 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-	<title>Kill Safari</title>
+	<title>Crash Safari with delete Array.prototype</title>
 </head>
 <body>
 
 <script type="text/javascript">
-
-
-;(function(){
-
-var myName = 'Test', Me = self[myName] = function () {}
-Me.prototype =
+function blablabla (m)
 {
-	initialize: function (parent, name, reporter, conf, callback)
-	{
-		this.results = []
-		this.reporter = reporter
-		this.callback = callback
-		return this
-	},
+	[].push()
+	m.constructor === Array
+}
+
+function crash ()
+{
+	Array.prototype.xxx6 = 123
+	blablabla(123)
+	delete Array.prototype.xxx6
+	blablabla([])
 	
-	run: function ()
-	{
-		try
-		{
-			this.callback(this)
-		}
-		catch (ex)
-		{
-			this.pass([])
-		}
-	},
+	new Array().join()
 	
-	test: function (name, conf, callback)
 	{
-		callback(this)
-	},
-	
-	pass: function (m)
-	{
-		this.results.push()
-		this.reporter.pass(m)
-	},
-	
-	inspect: function (val)
-	{
-		var ind = new Array().join()
-		{
-			[].sort()
-		}
+		[].sort()
 	}
 }
 
-
-
-// without next line you will have to click the “CRASH!” button twice :)
-Array.prototype.indexOf
-
-})();
-
-
-
-;(function(){
-
-Reporter = function () {}
-Reporter.prototype =
-{
-	line: function (m)
-	{
-		m.constructor === Array
-	},
-	
-	pass: function (m, d) { this.line(m) }
-}
-})();
-
-
-function CRASH ()
-{
-	var reporter = new Reporter()
-
-	var t = new Test().initialize(this, 1, reporter)
-	
-		Array.prototype.xxx6 = 123
-		t.pass(123)
-		delete Array.prototype.xxx6
-		
-		t.pass([])
-		t.inspect({}) === {}.inspect()
-	
-	test.run()
-}
+crash()
 </script>
 
-<button onclick="CRASH()">CRASH!</button>
+<button onclick="crash()">Crash!</button> click it (second click may require if you're lucky)
 
 </body>
 </html>
