@@ -22,24 +22,17 @@ Me.prototype =
 		return this
 	},
 	
-	run: function (delay)
-	{
-		this._run(this.callback)
-	},
-	
-	_run: function (f)
+	run: function ()
 	{
 		try
 		{
-			f(this)
+			this.callback(this)
 		}
 		catch (ex)
 		{
-			this.fail([])
+			this.pass([])
 		}
 	},
-	
-	
 	
 	test: function (name, conf, callback)
 	{
@@ -48,33 +41,11 @@ Me.prototype =
 	
 	pass: function (m)
 	{
+		this.results.push()
 		this.reporter.pass(m)
 	},
 	
-	fail: function (m)
-	{
-		this.results.push()
-		this.reporter.fail(m)
-	}
-}
-
-})();
-
-;(function(){
-
-Array.prototype.indexOf
-
-
-function Me (){}
-
-Me.prototype =
-{
-	inspect: function (val, deep, hard)
-	{
-		return this.walk(val)
-	},
-	
-	walk: function (val)
+	inspect: function (val)
 	{
 		var ind = new Array().join()
 		{
@@ -83,12 +54,10 @@ Me.prototype =
 	}
 }
 
-Test.prototype.inspect = function (val)
-{
-	var me = new Me()
-	return me.inspect.apply(me, arguments)
-}
 
+
+// without next line you will have to click the “CRASH!” button twice :)
+Array.prototype.indexOf
 
 })();
 
@@ -96,70 +65,37 @@ Test.prototype.inspect = function (val)
 
 ;(function(){
 
-var myName = 'Tests', Me = self[myName] =
-{
-	nodes: {},
-	onload: function ()
-	{
-		this.run()
-	},
-	
-	test: function (f)
-	{
-		this.callback = f
-	},
-	
-	run: function ()
-	{
-		try { var title }
-		catch (ex) { title = 'main' }
-		
-		var reporter = new Reporter().initialize()
-		
-		var test = new Test().initialize(this, title, reporter, null, this.callback)
-		test.run()
-	}
-}
-
-var Reporter = function () {}
+Reporter = function () {}
 Reporter.prototype =
 {
-	initialize: function (name)
-	{
-		return this
-	},
-	
-	create: function ()
-	{
-		var reporter = new Reporter().initialize()
-		return reporter
-	},
-	
-	line: function (cn, m, desc)
+	line: function (m)
 	{
 		m.constructor === Array
 	},
 	
-	fail: function (m, d) { this.line('fail', m, d) },
-	pass: function (m, d) { this.line('pass', m, d) }
+	pass: function (m, d) { this.line(m) }
 }
 })();
 
 
-
-
-Tests.test(function (t)
+function CRASH ()
 {
-	Array.prototype.xxx6 = 123
-	t.pass(123)
-	delete Array.prototype.xxx6
+	var reporter = new Reporter()
+
+	var t = new Test().initialize(this, 1, reporter)
 	
-	t.pass([])
-	t.inspect({}) === {}.inspect()
-})
+		Array.prototype.xxx6 = 123
+		t.pass(123)
+		delete Array.prototype.xxx6
+		
+		t.pass([])
+		t.inspect({}) === {}.inspect()
+	
+	test.run()
+}
 </script>
 
-<button onclick="Tests.onload()">delete array.prototype.xxx5</button>
+<button onclick="CRASH()">CRASH!</button>
 
 </body>
 </html>
