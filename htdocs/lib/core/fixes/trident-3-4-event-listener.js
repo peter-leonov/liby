@@ -132,9 +132,17 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	var key = type + ':' + dir
 	
 	var listeners = all[key]
-	if (!listeners)
+	if (listeners)
 	{
-		listeners = all[key] = []
+		var dup = listeners.indexOf(func)
+		if (dup != -1)
+			listeners.splice(dup, 1)
+		
+		listeners.push(func)
+	}
+	else
+	{
+		listeners = all[key] = [func]
 		
 		var me = this
 		function dispatcher ()
@@ -165,12 +173,6 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 		this.attachEvent('on' + transport, dispatcher)
 		listeners.dispatcher = dispatcher
 	}
-	
-	var dup = listeners.indexOf(func)
-	if (dup != -1)
-		listeners.splice(dup, 1)
-	
-	listeners.push(func)
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
