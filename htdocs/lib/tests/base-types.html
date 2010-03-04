@@ -82,12 +82,17 @@ Tests.test(function (t)
 		delete Function.prototype.xxx4
 		t.no('xxx4' in (function () {}), 'Function')
 		
-		Array.prototype.xxx5 = 123
-		t.eq(([]).xxx5, 123, 'Array')
-		t.eq((new Array()).xxx5, 123, 'Array')
-		delete Array.prototype.xxx5
-		t.no('xxx5' in ([]), 'Array')
-		t.no('xxx5' in (new Array()), 'Array')
+		if (/Version\/[34]\..+Safari/.test(navigator.userAgent))
+			t.log('skipping test with delete Array.prototype.xxx')
+		else
+		{
+			Array.prototype.xxx5 = 123
+			t.eq(([]).xxx5, 123, 'Array')
+			t.eq((new Array()).xxx5, 123, 'Array')
+			delete Array.prototype.xxx5
+			t.no('xxx5' in ([]), 'Array')
+			t.no('xxx5' in (new Array()), 'Array')
+		}
 		
 		Object.prototype.xxx6 = 123
 		t.eq(({}).xxx6, 123, 'Object')
