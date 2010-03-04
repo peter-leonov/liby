@@ -18,6 +18,8 @@ Tests.test(function (t)
 	var reports = []
 	window.Tracker = { track: function (c, a, l, v) { reports.push({category: c, action: a, label: l, value: v}) } }
 	
+	var evented = /Chrome\/[345]\.0|Version\/[34]\..+Safari/.test(navigator.userAgent)
+	
 	t.test('check for existence', function (t)
 	{
 		t.ok(Oops, 'global Oops object')
@@ -25,7 +27,7 @@ Tests.test(function (t)
 	
 	t.test('simple exception handling', function (t)
 	{
-		t.expect(5)
+		t.expect(5 + (evented ? 1 : 0))
 		
 		function setTimeout ()
 		{
@@ -69,6 +71,9 @@ Tests.test(function (t)
 		node.removeEventListener('load', removeEventListener, false)
 		node.src = 'recorder-cursor.png'
 		
+		var script = document.body.appendChild(document.createElement('script'))
+		window.setTimeout(function () { script.src = 'non-existent.uri' }, 500)
+		
 		
 		function check ()
 		{
@@ -81,6 +86,10 @@ Tests.test(function (t)
 			t.gte(all.indexOf('setInterval'), 0, 'setInterval()')
 			t.gte(all.indexOf('addEventListener'), 0, 'addEventListener()')
 			t.eq(all.indexOf('removeEventListener'), -1, 'removeEventListener()')
+			if (evented)
+				t.gte(all.indexOf('unable to load'), 0, 'error loading script')
+			else
+				t.log('skipping script load error test')
 		}
 		t.async(check, 1500)
 	})

@@ -13,7 +13,16 @@ var Me =
 	
 	onerror: function (message, url, line)
 	{
-		Me.report('error', url + ':' + line + ': ' + message)
+		// for (var k in message)
+		// 	log(k + ': ' + message[k])
+		if (typeof message == 'object')
+		{
+			// an event was caught
+			if (message.target)
+				Me.report('warning', 'unable to load "' + message.target.src + '"')
+		}
+		else
+			Me.report('error', url + ':' + line + ': ' + message)
 		
 		return Me.masking
 	},
