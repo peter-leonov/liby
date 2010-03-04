@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
@@ -14,24 +14,17 @@
 var myName = 'Test', Me = self[myName] = function () {}
 Me.prototype =
 {
-	status: 'new',
-	finished: false,
-	
 	initialize: function (parent, name, reporter, conf, callback)
 	{
 		this.results = []
-		
 		this.reporter = reporter
 		this.callback = callback
-		
-		
 		return this
 	},
 	
 	run: function (delay)
 	{
-		var me = this
-		me._run(me.callback)
+		this._run(this.callback)
 	},
 	
 	_run: function (f)
@@ -42,7 +35,7 @@ Me.prototype =
 		}
 		catch (ex)
 		{
-			this.fail([ex.message, ex.fileName || ex.sourceURL, ex.line || ex.lineNumber], 'got an exception')
+			this.fail([])
 		}
 	},
 	
@@ -53,17 +46,15 @@ Me.prototype =
 		callback(this)
 	},
 	
-	
-	pass: function (m, d)
+	pass: function (m)
 	{
-		this.reporter.pass(m, d)
+		this.reporter.pass(m)
 	},
 	
-	fail: function (m, d)
+	fail: function (m)
 	{
 		this.results.push()
-		if (m || d)
-			this.reporter.fail(m, d)
+		this.reporter.fail(m)
 	}
 }
 
@@ -74,10 +65,7 @@ Me.prototype =
 Array.prototype.indexOf
 
 
-var myName = 'Inspector'
-function Me ()
-{
-}
+function Me (){}
 
 Me.prototype =
 {
@@ -94,8 +82,6 @@ Me.prototype =
 		}
 	}
 }
-
-self[myName] = Me
 
 Test.prototype.inspect = function (val)
 {
@@ -130,17 +116,10 @@ var myName = 'Tests', Me = self[myName] =
 		
 		var reporter = new Reporter().initialize()
 		
-		var test = this.mainTest = new Test().initialize(this, title, reporter, null, this.callback)
+		var test = new Test().initialize(this, title, reporter, null, this.callback)
 		test.run()
-	},
-	
-	sigchild: function ()
-	{
 	}
 }
-
-window.onload = function () { Me.onload() }
-
 
 var Reporter = function () {}
 Reporter.prototype =
@@ -156,22 +135,6 @@ Reporter.prototype =
 		return reporter
 	},
 	
-	name: function (name)
-	{
-	},
-	
-	setStatus: function (s)
-	{
-	},
-	
-	summary: function (text)
-	{
-	},
-	
-	node: function (node)
-	{
-	},
-	
 	line: function (cn, m, desc)
 	{
 		m.constructor === Array
@@ -180,9 +143,6 @@ Reporter.prototype =
 	fail: function (m, d) { this.line('fail', m, d) },
 	pass: function (m, d) { this.line('pass', m, d) }
 }
-
-
-
 })();
 
 
@@ -199,7 +159,7 @@ Tests.test(function (t)
 })
 </script>
 
-<button onclick="arrayPropto()">delete array.prototype.xxx5</button>
+<button onclick="Tests.onload()">delete array.prototype.xxx5</button>
 
 </body>
 </html>
