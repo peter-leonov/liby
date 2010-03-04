@@ -192,7 +192,7 @@ Tests.test(function (t)
 		
 		t.eq(error, 'message', 'throw "message"')
 		
-		t.eq(new Error('123').message, '123', 'new Error("123").message')
+		t.eq(new Error('abc').message, 'abc', 'new Error("abc").message')
 	})
 })
 </script>
