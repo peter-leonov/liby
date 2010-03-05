@@ -13,22 +13,24 @@ var Me =
 	
 	onerror: function (message, uri, line)
 	{
-		// for (var k in message)
-		// 	log(k + ': ' + message[k])
-		if (typeof message == 'object')
+		try
 		{
-			// an event was caught
-			if (message.target)
-				Me.report('warning', 'unable to load "' + message.target.src + '"')
-		}
-		else
-		{
-			// cutting out current page uri prefix
-			if (typeof uri == 'string')
-				uri = uri.replace('^' + location.protocol + '//' + location.hostname, '')
+			if (typeof message == 'object')
+			{
+				// an event was caught
+				if (message.target)
+					Me.report('warning', 'unable to load "' + message.target.src + '"')
+			}
+			else
+			{
+				// cutting out current page uri prefix
+				if (typeof uri == 'string')
+					uri = uri.replace('^' + location.protocol + '//' + location.hostname, '')
 				
-			Me.report('error', message + ' at ' + uri + ':' + line)
+				Me.report('error', message + ' at ' + uri + ':' + line)
+			}
 		}
+		catch (ex) {}
 		
 		return Me.masking
 	},
