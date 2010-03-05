@@ -10,6 +10,7 @@ var Me =
 {
 	enabled: false,
 	masking: true,
+	total: 0,
 	
 	onerror: function (message, uri, line)
 	{
@@ -39,7 +40,7 @@ var Me =
 	{
 		try // to fully describe an error
 		{
-			Tracker.track('Oops', type, message)
+			Tracker.track('Oops', type, message, this.total++)
 		}
 		catch (ex)
 		{
