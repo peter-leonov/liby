@@ -11,7 +11,7 @@ var Me =
 	enabled: false,
 	masking: true,
 	
-	onerror: function (message, url, line)
+	onerror: function (message, uri, line)
 	{
 		// for (var k in message)
 		// 	log(k + ': ' + message[k])
@@ -22,7 +22,13 @@ var Me =
 				Me.report('warning', 'unable to load "' + message.target.src + '"')
 		}
 		else
-			Me.report('error', url + ':' + line + ': ' + message)
+		{
+			// cutting out current page uri prefix
+			if (typeof uri == 'string')
+				uri = uri.replace('^' + location.protocol + '//' + location.hostname, '')
+				
+			Me.report('error', uri + ':' + line + ': ' + message)
+		}
 		
 		return Me.masking
 	},
