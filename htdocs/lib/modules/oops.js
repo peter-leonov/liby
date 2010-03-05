@@ -12,28 +12,33 @@ var Me =
 	masking: true,
 	total: 0,
 	
-	onerror: function (message, uri, line)
+	handler: function (message, uri, line)
 	{
 		try
 		{
-			if (typeof message == 'object')
-			{
-				// an event was caught
-				if (message.target)
-					Me.report('warning', 'unable to load "' + message.target.src + '"')
-			}
-			else
-			{
-				// cutting out current page uri prefix
-				if (typeof uri == 'string')
-					uri = uri.replace('^' + location.protocol + '//' + location.hostname, '')
-				
-				Me.report('error', message + ' at ' + uri + ':' + line)
-			}
+			return Me.onerror.apply(Me, arguments)
 		}
-		catch (ex) {}
+		catch (ex) { log('error on error reporting') }
+	},
+	
+	onerror: function (message, uri, line)
+	{
+		if (typeof message == 'object')
+		{
+			// an event was caught
+			if (message.target)
+				this.report('warning', 'unable to load "' + message.target.src + '"')
+		}
+		else
+		{
+			// cutting out current page uri prefix
+			if (typeof uri == 'string')
+				uri = uri.replace('^' + location.protocol + '//' + location.hostname, '')
+			
+			this.report('error', message + ' at ' + uri + ':' + line)
+		}
 		
-		return Me.masking
+		return this.masking
 	},
 	
 	report: function (type, message)
@@ -62,7 +67,7 @@ var Me =
 			return
 		this.enabled = true
 		
-		window.onerror = Me.onerror
+		window.onerror = this.handler
 		log('error catching enabled')
 	},
 	
