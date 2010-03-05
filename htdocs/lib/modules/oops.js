@@ -27,7 +27,7 @@ var Me =
 			if (typeof uri == 'string')
 				uri = uri.replace('^' + location.protocol + '//' + location.hostname, '')
 				
-			Me.report('error', uri + ':' + line + ': ' + message)
+			Me.report('error', message + ' at ' + uri + ':' + line)
 		}
 		
 		return Me.masking
