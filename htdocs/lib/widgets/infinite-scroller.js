@@ -31,7 +31,10 @@ Me.prototype =
 		
 		this.setX = function (x)
 		{
+			if (me.globalX == x)
+				return
 			me.globalX = x
+			
 			var w = me.width,
 				real
 			if (w == 0)
