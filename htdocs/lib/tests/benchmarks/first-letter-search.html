@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<title>Best way to search smt. by letter</title>
+	<script src="/lib/tests/tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function bakeWords (e)
+	{
+		var words = [],
+			letters = 'qwertyuiopasdfghjklzxcvbnm1234567890йцукенгшщзхъфывапролджэёячсмитьбю'.split(''),
+			suffixes = ['', 'a', 'aa', 'aaa', 'aaaa', 'aaaaa', 'aaaaaa', 'aaaaaaa', 'aaaaaaaa', 'aaaaaaaaa']
+			ll = letters.length
+		
+		for (var i = 0; i < 1000; i++)
+			words[i] = letters[i % ll] + letters[(i + 10) % ll] + letters[(i + 20) % ll] + letters[(i + 25) % ll] + suffixes[i % 10]
+		
+		return words
+	}
+	
+	var words = bakeWords(),
+		count = 100, found
+	
+	t.time('regexp')
+	for (var i = 0; i < count; i++)
+	{
+		found = 0
+		for (var j = 0, jl = words.length; j < jl; j++)
+			if (/^[h8ж]/.test(words[j]))
+				found++
+		
+	}
+	t.timeEnd('regexp')
+	t.eq(found, 44, 'found')
+	
+	
+	var hash = {h: true, '8': true, 'ж': true}
+	t.time('charAt() + hash')
+	for (var i = 0; i < count; i++)
+	{
+		found = 0
+		for (var j = 0, jl = words.length; j < jl; j++)
+			if (hash[words[j].charAt(0)])
+				found++
+		
+	}
+	t.timeEnd('charAt() + hash')
+	t.eq(found, 44, 'found')
+	
+	
+	var hash = {h: true, '8': true, 'ж': true}
+	t.time('charAt() + hash')
+	for (var i = 0; i < count; i++)
+	{
+		found = 0
+		for (var j = 0, jl = words.length; j < jl; j++)
+		{
+			var letter = words[j].charAt(0)
+			if (letter == 'h' || letter == '8' || letter == 'ж')
+				found++
+		}
+	}
+	t.timeEnd('charAt() + hash')
+	t.eq(found, 44, 'found')
+})
+</script>
+</body>
+</html>
