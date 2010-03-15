@@ -19,8 +19,10 @@ function wrap (callback)
 			catch (ex)
 			{
 				if (typeof window.onerror === 'function')
-					if (!window.onerror(ex.message, ex.sourceURL, ex.line))
-						throw ex
+					if (window.onerror(ex.message, ex.sourceURL, ex.line))
+						return
+				
+				throw ex
 			}
 		}
 	}
