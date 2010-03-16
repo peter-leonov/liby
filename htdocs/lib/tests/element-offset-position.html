@@ -15,6 +15,7 @@
 	<style type="text/css">
 	/* needed for overflow */
 	.spacer { position: absolute; left: 0px; top: 0px; width: 5000px; height: 10000px; }
+	html.done .spacer { display: none; }
 	/* needed for nesting */
 	.box { position: absolute; left: 10px; top: 10px; width: 10px; height: 10px; overflow: hidden; }
 	
@@ -96,6 +97,8 @@ Tests.test(function (t)
 		t.eq(pos.top, 80 + 10, 'top')
 	})
 })
+
+Tests.oncomplete = function () { document.documentElement.className = 'done' }
 </script>
 </body>
 </html>
