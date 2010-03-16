@@ -103,8 +103,8 @@ Object.add
 				top += node.offsetTop
 				if ((parent = node.offsetParent))
 				{
-					left -= node.scrollLeft
-					top -= node.scrollTop
+					left -= parent.scrollLeft
+					top -= parent.scrollTop
 					node = parent
 				}
 				else
