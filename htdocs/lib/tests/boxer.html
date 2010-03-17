@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=320"/>
+	<title>tests for Boxer</title>
+	
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../core/prototype.js"></script>
+	<script type="text/javascript" src="../modules/element.js"></script>
+	<script type="text/javascript" src="../modules/boxer.js"></script>
+	
+	<style type="text/css">
+	/* fix for the documentElement is not an offset parent */
+	html { position: relative; }
+	
+	#different-nodes { position: relative; width: 100px; height: 100px; }
+	#different-nodes .a { position: absolute; left: 10px; top: 20px; width: 30px; height: 40px; }
+	#different-nodes .b { position: absolute; left: 50px; top: 60px; width: 70px; height: 80px; }
+	
+	#same-nodes { position: relative; width: 100px; height: 100px; }
+	#same-nodes .a { position: absolute; left: 10px; top: 20px; width: 10px; height: 20px; }
+	#same-nodes .b { position: absolute; left: 30px; top: 40px; width: 10px; height: 20px; }
+	</style>
+</head>
+<body>
+
+<div id="different-nodes"><div class="a"></div><div class="b"></div></div>
+<div id="same-nodes"><div class="a"></div><div class="b"></div></div>
+
+<script type="text/javascript" src="../core/fixes/body-offset-parent.js"></script>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function $ (id) { return document.getElementById(id) }
+	
+	t.test('nodes with different boundaries', function (t)
+	{
+		var node = $('different-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.nodesToBoxes(node, children)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.eqo([box.x, box.y, box.w, box.h], [10, 20, 30, 40], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.eqo([box.x, box.y, box.w, box.h], [50, 60, 70, 80], 'b box')
+	})
+	
+	t.test('nodes with same boundaries', function (t)
+	{
+		var node = $('same-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.nodesToBoxes(node, children)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.eqo([box.x, box.y, box.w, box.h], [10, 20, 10, 20], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.eqo([box.x, box.y, box.w, box.h], [30, 40, 10, 20], 'b box')
+	})
+})
+</script>
+</body>
+</html>
