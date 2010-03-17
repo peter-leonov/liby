@@ -69,11 +69,10 @@ Tests.test(function (t)
 {
 	function $ (id) { return document.getElementById(id) }
 	
-	window.scrollTo(0, 0)
-	
 	t.test('in body', function (t)
 	{
 		var node = $('in-body')
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition()
 		
 		t.eq(pos.left, 10, 'left')
@@ -86,6 +85,7 @@ Tests.test(function (t)
 		
 		var node = $('in-document-element')
 		document.documentElement.appendChild(node)
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition()
 		
 		t.eq(node.parentNode, document.documentElement, 'parentNode is a documentElement')
@@ -111,6 +111,7 @@ Tests.test(function (t)
 		var node = $('in-scrolled-box')
 		node.parentNode.scrollLeft = 15
 		node.parentNode.scrollTop = 25
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition()
 		
 		t.eq(pos.left, 50 - 15 + 10, 'left')
@@ -122,6 +123,7 @@ Tests.test(function (t)
 		var node = $('self-scrolled')
 		node.scrollLeft = 1000
 		node.scrollTop = 2000
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition()
 		
 		t.eq(pos.left, 70 + 10, 'left')
@@ -131,6 +133,7 @@ Tests.test(function (t)
 	t.test('nested', function (t)
 	{
 		var node = $('nested')
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition()
 		
 		t.eq(pos.left, 90 + 10 * 5, 'left')
@@ -140,6 +143,7 @@ Tests.test(function (t)
 	t.test('nested with offset parent', function (t)
 	{
 		var node = $('nested')
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition($('nested-offset-parent'))
 		
 		t.eq(pos.left, 90 + 10 * 2, 'left')
@@ -149,6 +153,7 @@ Tests.test(function (t)
 	t.test('nested with plain parent', function (t)
 	{
 		var node = $('nested')
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition($('nested-plain-parent'))
 		
 		t.eq(pos.left, 90 + 10 * 5, 'left')
@@ -160,6 +165,7 @@ Tests.test(function (t)
 		var node = $('with-scrolled-root')
 		node.parentNode.scrollLeft = 1000
 		node.parentNode.scrollTop = 2000
+		window.scrollTo(0, 0)
 		var pos = node.offsetPosition(node.parentNode)
 		
 		t.eq(pos.left, 110, 'left')
