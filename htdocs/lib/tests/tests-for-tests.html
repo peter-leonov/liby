@@ -8,9 +8,9 @@
 </head>
 <body>
 <script type="text/javascript">
-Tests.test(function (job)
+Tests.test(function (t)
 {
-	job.test('cascade', function (t)
+	t.test('cascade', function (t)
 	{
 		t.test('nested 1', function (t)
 		{
@@ -41,12 +41,12 @@ Tests.test(function (job)
 	})
 	
 	
-	job.test('exception', {failing: true}, function (test)
+	t.test('exception', {failing: true}, function (test)
 	{
 		a + 1
 	})
 	
-	job.test('manual', {failing: true}, function (test)
+	t.test('manual', {failing: true}, function (test)
 	{
 		test.time('all')
 		test.log(123)
@@ -56,28 +56,28 @@ Tests.test(function (job)
 		test.timeEnd('all')
 	})
 	
-	job.test('empty', function (test) {})
+	t.test('empty', function (test) {})
 	
-	job.test('passing', function (test)
+	t.test('passing', function (test)
 	{
 		test.ok(true)
 		test.no(false)
 	})
 	
-	job.test('failing', {failing: true}, function (test)
+	t.test('failing', {failing: true}, function (test)
 	{
 		test.ok(false)
 		test.no(true)
 	})
 	
 	
-	job.test('expect:', {failing: true, expect: 0}, function (test)
+	t.test('expect:', {failing: true, expect: 0}, function (test)
 	{
 		test.ok(true)
 	})
 	
 	
-	job.test('expect()', function (test)
+	t.test('expect()', function (test)
 	{
 		test.expect(2)
 		test.ok(true)
@@ -85,7 +85,7 @@ Tests.test(function (job)
 	})
 	
 	
-	job.test('timer passing', function (test)
+	t.test('timer passing', function (test)
 	{
 		function job ()
 		{
@@ -97,13 +97,13 @@ Tests.test(function (job)
 	})
 	
 	
-	job.test('timer failing', {failing: true}, function (test)
+	t.test('timer failing', {failing: true}, function (test)
 	{
 		test.wait(10)
 	})
 	
 	
-	job.test('infinite timer', function (test)
+	t.test('infinite timer', function (test)
 	{
 		function job ()
 		{
@@ -115,21 +115,21 @@ Tests.test(function (job)
 	})
 	
 	
-	job.test('async', function (test)
+	t.test('async', function (test)
 	{
 		function job () { test.ok(true) }
 		test.async(job)
 	})
 	
 	
-	job.test('async many times', function (test)
+	t.test('async many times', function (test)
 	{
 		test.async(function () { test.ok(1) })
 		test.async(function () { test.ok(2) })
 		test.async(function () { test.ok(3) })
 	})
 	
-	job.test('the same async many times', function (test)
+	t.test('the same async many times', function (test)
 	{
 		function job () { test.ok(1) }
 		test.async(job)
