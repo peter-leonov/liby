@@ -53,6 +53,7 @@ body{font: 12px Arial,sans-serif;}
 #tests-output .test .test.waiting .head { color: #000; }
 #tests-output .test .test.failed .head { color: #d40; }
 #tests-output .test .test.passed .head { color: #082; }
+#tests-output .test .test.warned .head { color: #e82; }
 
 #tests-output .line
 {

@@ -85,7 +85,13 @@ Me.prototype =
 		if (this.conf.failing)
 			ok = !ok
 		
-		this.setStatus(ok ? 'passed' : 'failed')
+		var status
+		if (this.conf.mayFail && !ok)
+			status = 'warned'
+		else
+			status = ok ? 'passed' : 'failed'
+		
+		this.setStatus(status)
 		this.finished = true
 		this.summary()
 		this.parent.sigchild(this)
@@ -150,6 +156,8 @@ Me.prototype =
 	
 	
 	expect: function (amount) { this.conf.expect = amount },
+	failing: function (flag) { this.conf.failing = flag === undefined ? true : flag },
+	mayFail: function (flag) { this.conf.mayFail = flag === undefined ? true : flag },
 	
 	log: function (m) { this.reporter.log(m) },
 	info: function (m) { this.reporter.info(m) },

@@ -70,6 +70,11 @@ Tests.test(function (t)
 		test.no(true)
 	})
 	
+	t.test('may fail', function (t)
+	{
+		t.mayFail()
+		t.ok(false)
+	})
 	
 	t.test('expect:', {failing: true, expect: 0}, function (test)
 	{
