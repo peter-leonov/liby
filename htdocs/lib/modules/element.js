@@ -97,6 +97,10 @@ Object.add
 		offsetPosition: function (root)
 		{
 			var node = this, left = 0, top = 0, parent
+			
+			if (node == root)
+				return null
+			
 			for (;;)
 			{
 				left += node.offsetLeft

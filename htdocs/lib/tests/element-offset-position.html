@@ -30,6 +30,7 @@
 	#self-scrolled { position: absolute; left: 70px; top: 80px; width: 10px; height: 20px; overflow: hidden; }
 	#nested { position: absolute; left: 90px; top: 100px; width: 10px; height: 20px; }
 	#with-scrolled-root { position: absolute; left: 110px; top: 120px; width: 10px; height: 20px; }
+	#self-rooted { position: absolute; left: 130px; top: 140px; width: 10px; height: 20px; }
 	</style>
 </head>
 <body>
@@ -60,6 +61,7 @@
 	<div id="with-scrolled-root"></div>
 </div>
 
+<div id="self-rooted"><div class="spacer"></div></div>
 
 <script type="text/javascript" src="../core/fixes/body-offset-parent.js"></script>
 <script type="text/javascript">
@@ -162,6 +164,15 @@ Tests.test(function (t)
 		
 		t.eq(pos.left, 110, 'left')
 		t.eq(pos.top, 120, 'top')
+	})
+	
+	t.test('self rooted', function (t)
+	{
+		var node = $('self-rooted')
+		window.scrollTo(0, 0)
+		var pos = node.offsetPosition(node)
+		
+		t.eq(pos, null, 'position')
 	})
 })
 
