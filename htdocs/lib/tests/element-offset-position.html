@@ -75,6 +75,8 @@ Tests.test(function (t)
 	
 	t.test('in documentElement', function (t)
 	{
+		t.mayFail()
+		
 		var node = $('in-document-element')
 		document.documentElement.appendChild(node)
 		var pos = node.offsetPosition()
