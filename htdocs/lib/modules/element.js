@@ -94,7 +94,7 @@ Object.add
 			return false
 		},
 		
-		offsetPosition: function ()
+		offsetPosition: function (root)
 		{
 			var node = this, left = 0, top = 0, parent
 			for (;;)
@@ -105,6 +105,10 @@ Object.add
 				{
 					left -= parent.scrollLeft
 					top -= parent.scrollTop
+					
+					if (parent == root)
+						break
+					
 					node = parent
 				}
 				else

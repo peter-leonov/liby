@@ -48,9 +48,13 @@
 <!-- will be scrolled left and top -->
 <div class="box"><div id="self-scrolled"><div class="spacer"></div></div></div>
 
-<div class="box"><div class="box"><div class="box"><div class="box"><div class="box">
-	<div id="nested"></div>
+<div class="box"><div class="box"><div id="nested-offset-parent" class="box"><div class="box"><div class="box">
+	<div id="nested-plain-parent">
+		<div id="nested"></div>
+	</div>
 </div></div></div></div></div>
+
+
 
 <script type="text/javascript" src="../core/fixes/body-offset-parent.js"></script>
 <script type="text/javascript">
@@ -119,6 +123,24 @@ Tests.test(function (t)
 	{
 		var node = $('nested')
 		var pos = node.offsetPosition()
+		
+		t.eq(pos.left, 90 + 10 * 5, 'left')
+		t.eq(pos.top, 100 + 10 * 5, 'top')
+	})
+	
+	t.test('nested with offset parent', function (t)
+	{
+		var node = $('nested')
+		var pos = node.offsetPosition($('nested-offset-parent'))
+		
+		t.eq(pos.left, 90 + 10 * 2, 'left')
+		t.eq(pos.top, 100 + 10 * 2, 'top')
+	})
+	
+	t.test('nested with plain parent', function (t)
+	{
+		var node = $('nested')
+		var pos = node.offsetPosition($('nested-plain-parent'))
 		
 		t.eq(pos.left, 90 + 10 * 5, 'left')
 		t.eq(pos.top, 100 + 10 * 5, 'top')
