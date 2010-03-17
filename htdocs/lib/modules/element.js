@@ -103,11 +103,11 @@ Object.add
 				top += node.offsetTop
 				if ((parent = node.offsetParent))
 				{
-					left -= parent.scrollLeft
-					top -= parent.scrollTop
-					
 					if (parent == root)
 						break
+					
+					left -= parent.scrollLeft
+					top -= parent.scrollTop
 					
 					node = parent
 				}

@@ -29,6 +29,7 @@
 	#in-scrolled-box { position: absolute; left: 50px; top: 60px; }
 	#self-scrolled { position: absolute; left: 70px; top: 80px; width: 10px; height: 20px; overflow: hidden; }
 	#nested { position: absolute; left: 90px; top: 100px; width: 10px; height: 20px; }
+	#with-scrolled-root { position: absolute; left: 110px; top: 120px; width: 10px; height: 20px; }
 	</style>
 </head>
 <body>
@@ -54,6 +55,10 @@
 	</div>
 </div></div></div></div></div>
 
+<div class="box">
+	<div class="spacer"></div>
+	<div id="with-scrolled-root"></div>
+</div>
 
 
 <script type="text/javascript" src="../core/fixes/body-offset-parent.js"></script>
@@ -146,6 +151,17 @@ Tests.test(function (t)
 		
 		t.eq(pos.left, 90 + 10 * 5, 'left')
 		t.eq(pos.top, 100 + 10 * 5, 'top')
+	})
+	
+	t.test('with scrolled root', function (t)
+	{
+		var node = $('with-scrolled-root')
+		node.parentNode.scrollLeft = 1000
+		node.parentNode.scrollTop = 2000
+		var pos = node.offsetPosition(node.parentNode)
+		
+		t.eq(pos.left, 110, 'left')
+		t.eq(pos.top, 120, 'top')
 	})
 })
 
