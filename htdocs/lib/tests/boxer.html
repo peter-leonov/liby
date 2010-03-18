@@ -14,9 +14,6 @@
 	<script type="text/javascript" src="../modules/boxer.js"></script>
 	
 	<style type="text/css">
-	/* fix for the documentElement is not an offset parent */
-	html { position: relative; }
-	
 	#different-nodes { position: relative; width: 100px; height: 100px; }
 	#different-nodes .a { position: absolute; left: 10px; top: 20px; width: 30px; height: 40px; }
 	#different-nodes .b { position: absolute; left: 50px; top: 60px; width: 70px; height: 80px; }
@@ -31,7 +28,6 @@
 <div id="different-nodes"><div class="a"></div><div class="b"></div></div>
 <div id="same-nodes"><div class="a"></div><div class="b"></div></div>
 
-<script type="text/javascript" src="../core/fixes/body-offset-parent.js"></script>
 <script type="text/javascript">
 Tests.test(function (t)
 {
