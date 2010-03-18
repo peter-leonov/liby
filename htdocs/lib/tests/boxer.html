@@ -23,7 +23,7 @@
 	
 	#same-nodes { position: relative; width: 100px; height: 100px; }
 	#same-nodes .a { position: absolute; left: 10px; top: 20px; width: 10px; height: 20px; }
-	#same-nodes .b { position: absolute; left: 30px; top: 40px; width: 10px; height: 20px; }
+	#same-nodes .b { position: absolute; left: 30px; top: 40px; width: 12px; height: 23px; /* width and height will be ignored */ }
 	</style>
 </head>
 <body>
@@ -52,11 +52,26 @@ Tests.test(function (t)
 		t.eqo([box.x, box.y, box.w, box.h], [50, 60, 70, 80], 'b box')
 	})
 	
+	t.test('different nodes with custom width and height', function (t)
+	{
+		var node = $('different-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.nodesToBoxes(node, children, 55, 66)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.eqo([box.x, box.y, box.w, box.h], [10, 20, 55, 66], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.eqo([box.x, box.y, box.w, box.h], [50, 60, 55, 66], 'b box')
+	})
+	
 	t.test('nodes with same boundaries', function (t)
 	{
 		var node = $('same-nodes'),
 			children = node.childNodes
-		var boxes = Boxer.nodesToBoxes(node, children)
+		var boxes = Boxer.sameNodesToBoxes(node, children)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
@@ -65,6 +80,14 @@ Tests.test(function (t)
 		var box = boxes[1]
 		t.eq(box.node, children[1], 'b node')
 		t.eqo([box.x, box.y, box.w, box.h], [30, 40, 10, 20], 'b box')
+	})
+	
+	t.test('empty nodes array', function (t)
+	{
+		var node = null
+		t.eqo(Boxer.nodesToBoxes(node, []), [], 'nodesToBoxes()')
+		t.eqo(Boxer.nodesToBoxes(node, [], 100, 200), [], 'nodesToBoxesWH()')
+		t.eqo(Boxer.sameNodesToBoxes(node, []), [], 'sameNodesToBoxes()')
 	})
 })
 </script>

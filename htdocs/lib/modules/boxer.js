@@ -4,9 +4,13 @@ var myName = 'Boxer'
 
 var Me =
 {
-	nodesToBoxes: function (root, nodes)
+	nodesToBoxes: function (root, nodes, width, height)
 	{
-		var lastParent = root, position = {left: 0, top: 0}, boxes = []
+		var boxes = []
+		
+		var custom = width !== undefined && height !== undefined
+		
+		var lastParent = root, position = {left: 0, top: 0}
 		for (var i = 0, il = nodes.length; i < il; i++)
 		{
 			var node = nodes[i],
@@ -18,17 +22,35 @@ var Me =
 				position = parent.offsetPosition(root)
 			}
 			
-			boxes[i] =
+			var box = boxes[i] =
 			{
 				x: node.offsetLeft + position.left,
 				y: node.offsetTop + position.top,
-				w: node.offsetWidth,
-				h: node.offsetHeight,
 				node: node
+			}
+			
+			if (custom)
+			{
+				box.w = width
+				box.h = height
+			}
+			else
+			{
+				box.w = node.offsetWidth
+				box.h = node.offsetHeight
 			}
 		}
 		
 		return boxes
+	},
+	
+	sameNodesToBoxes: function (root, nodes)
+	{
+		var first = nodes[0]
+		if (!first)
+			return []
+		
+		return this.nodesToBoxes(root, nodes, first.offsetWidth, first.offsetHeight)
 	}
 }
 
