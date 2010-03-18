@@ -96,27 +96,30 @@ Object.add
 		
 		offsetPosition: function (root)
 		{
-			var node = this, left = 0, top = 0, parent
+			var node = this, parent,
+				left = 0, top = 0,
+				scrollLeft = 0, scrollTop = 0
 			
-			if (node == root)
-				return null
-			
+			if (node != root) // do not want to indent
 			for (;;)
 			{
 				left += node.offsetLeft
 				top += node.offsetTop
-				if ((parent = node.offsetParent))
+				
+				if ((parent = node.offsetParent) && parent != root)
 				{
-					if (parent == root)
-						break
-					
-					left -= parent.scrollLeft
-					top -= parent.scrollTop
+					left -= (scrollLeft = parent.scrollLeft)
+					top -= (scrollTop = parent.scrollTop)
 					
 					node = parent
 				}
 				else
+				{
+					left += scrollLeft
+					top += scrollTop
+					
 					break
+				}
 			}
 			
 			return {left: left, top: top}
