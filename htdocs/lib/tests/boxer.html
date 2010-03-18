@@ -14,11 +14,11 @@
 	<script type="text/javascript" src="../modules/boxer.js"></script>
 	
 	<style type="text/css">
-	#different-nodes { position: relative; width: 100px; height: 100px; }
+	#different-nodes { position: absolute; left: 10px; top: 20px; width: 100px; height: 100px; }
 	#different-nodes .a { position: absolute; left: 10px; top: 20px; width: 30px; height: 40px; }
 	#different-nodes .b { position: absolute; left: 50px; top: 60px; width: 70px; height: 80px; }
 	
-	#same-nodes { position: relative; width: 100px; height: 100px; }
+	#same-nodes { position: absolute; left: 20px; top: 30px; width: 100px; height: 100px; }
 	#same-nodes .a { position: absolute; left: 10px; top: 20px; width: 10px; height: 20px; }
 	#same-nodes .b { position: absolute; left: 30px; top: 40px; width: 12px; height: 23px; /* width and height will be ignored */ }
 	</style>
@@ -32,6 +32,21 @@
 Tests.test(function (t)
 {
 	function $ (id) { return document.getElementById(id) }
+	
+	t.test('nodes without a root', function (t)
+	{
+		var node = $('different-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.nodesToBoxes(children)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.eqo([box.x, box.y, box.w, box.h], [10 + 10, 20 + 20, 30, 40], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.eqo([box.x, box.y, box.w, box.h], [50 + 10, 60 + 20, 70, 80], 'b box')
+	})
 	
 	t.test('nodes with different boundaries', function (t)
 	{
