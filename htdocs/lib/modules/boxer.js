@@ -4,7 +4,7 @@ var myName = 'Boxer'
 
 var Me =
 {
-	nodesToBoxes: function (root, nodes, width, height)
+	nodesToBoxes: function (nodes, root, width, height)
 	{
 		var boxes = []
 		
@@ -44,13 +44,13 @@ var Me =
 		return boxes
 	},
 	
-	sameNodesToBoxes: function (root, nodes)
+	sameNodesToBoxes: function (nodes, root)
 	{
 		var first = nodes[0]
 		if (!first)
 			return []
 		
-		return this.nodesToBoxes(root, nodes, first.offsetWidth, first.offsetHeight)
+		return this.nodesToBoxes(nodes, root, first.offsetWidth, first.offsetHeight)
 	}
 }
 

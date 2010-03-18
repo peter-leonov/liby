@@ -37,7 +37,7 @@ Tests.test(function (t)
 	{
 		var node = $('different-nodes'),
 			children = node.childNodes
-		var boxes = Boxer.nodesToBoxes(node, children)
+		var boxes = Boxer.nodesToBoxes(children, node)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
@@ -52,7 +52,7 @@ Tests.test(function (t)
 	{
 		var node = $('different-nodes'),
 			children = node.childNodes
-		var boxes = Boxer.nodesToBoxes(node, children, 55, 66)
+		var boxes = Boxer.nodesToBoxes(children, node, 55, 66)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
@@ -67,7 +67,7 @@ Tests.test(function (t)
 	{
 		var node = $('same-nodes'),
 			children = node.childNodes
-		var boxes = Boxer.sameNodesToBoxes(node, children)
+		var boxes = Boxer.sameNodesToBoxes(children, node)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
@@ -80,10 +80,9 @@ Tests.test(function (t)
 	
 	t.test('empty nodes array', function (t)
 	{
-		var node = null
-		t.eqo(Boxer.nodesToBoxes(node, []), [], 'nodesToBoxes()')
-		t.eqo(Boxer.nodesToBoxes(node, [], 100, 200), [], 'nodesToBoxesWH()')
-		t.eqo(Boxer.sameNodesToBoxes(node, []), [], 'sameNodesToBoxes()')
+		t.eqo(Boxer.nodesToBoxes([]), [], 'nodesToBoxes()')
+		t.eqo(Boxer.nodesToBoxes([], null, 100, 200), [], 'nodesToBoxesWH()')
+		t.eqo(Boxer.sameNodesToBoxes([]), [], 'sameNodesToBoxes()')
 	})
 })
 </script>

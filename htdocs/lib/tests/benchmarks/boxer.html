@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=320"/>
-	<title>tests for Boxer</title>
+	<title>benchmarks for Boxer</title>
 	
 	<script src="../tests.common.js" type="text/javascript"></script>
 	
@@ -48,27 +48,27 @@ Tests.test(function (t)
 		$('holder').empty()
 		$('holder').appendChild(set.root)
 		
-		t.time('nodesToBoxes(root, nodes)')
-		Boxer.nodesToBoxes(set.root, set.nodes)
-		t.timeEnd('nodesToBoxes(root, nodes)')
+		t.time('nodesToBoxes()')
+		Boxer.nodesToBoxes(set.nodes, set.root)
+		t.timeEnd('nodesToBoxes()')
 		
 		
 		var set = bakeNodes(count)
 		$('holder').empty()
 		$('holder').appendChild(set.root)
 		
-		t.time('nodesToBoxes(root, nodes, 100, 100)')
-		Boxer.nodesToBoxes(set.root, set.nodes, 100, 100)
-		t.timeEnd('nodesToBoxes(root, nodes, 100, 100)')
+		t.time('nodesToBoxes() with width and height')
+		Boxer.nodesToBoxes(set.nodes, set.root, 100, 100)
+		t.timeEnd('nodesToBoxes() with width and height')
 		
 		
 		var set = bakeNodes(count)
 		$('holder').empty()
 		$('holder').appendChild(set.root)
 		
-		t.time('sameNodesToBoxes(root, nodes)')
-		Boxer.sameNodesToBoxes(set.root, set.nodes)
-		t.timeEnd('sameNodesToBoxes(root, nodes)')
+		t.time('sameNodesToBoxes()')
+		Boxer.sameNodesToBoxes(set.nodes, set.root)
+		t.timeEnd('sameNodesToBoxes()')
 		
 		return t.timeEnd('whole')
 	}
