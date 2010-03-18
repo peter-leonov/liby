@@ -67,6 +67,11 @@ Tests.test(function (t)
 {
 	function $ (id) { return document.getElementById(id) }
 	
+	t.test('prerequisites', function (t)
+	{
+		t.no(document.documentElement.offsetParent, 'documentElement.offsetParent')
+	})
+	
 	t.test('in body', function (t)
 	{
 		var node = $('in-body')
