@@ -43,7 +43,7 @@ Me.prototype =
 				real = 0
 			else
 				real = x < 0 ? w + x % w : x % w
-			root.scrollLeft = real
+			root.scrollLeft = Math.round(real)
 			this.onscroll(x, real)
 		}
 		// this.setY = function (v) { root.scrollTop = v }

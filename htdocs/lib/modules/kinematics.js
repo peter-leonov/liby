@@ -177,7 +177,7 @@ Wave.prototype.setup = function (step, soft, min)
 }
 Wave.prototype.apply = function (point)
 {
-	var x = Math.floor(point.x), step = this.step,
+	var x = Math.round(point.x), step = this.step,
 		pos = x % step,
 		shift = x < 0 ? step + pos : pos,
 		dir = shift > step / 2 ? shift - step : shift,
