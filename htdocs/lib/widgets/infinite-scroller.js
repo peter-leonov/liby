@@ -10,6 +10,8 @@ function Me ()
 Me.prototype =
 {
 	power: 1.5,
+	spaceTimeout: 30000,
+	maxInertia: 500,
 	onscroll: function () {},
 	
 	bind: function (root, width)
@@ -116,6 +118,9 @@ Me.prototype =
 				// approximating last movements
 				vx = ((ms[1].dx - ms[0].dx) + (ms[2].dx - ms[1].dx) + (ms[3].dx - ms[2].dx)) / 3// + (ms[4].dx - ms[3].dx) + (ms[5].dx - ms[4].dx)) / 5
 			
+			if (Math.abs(vx) > this.maxInertia)
+				vx = (vx < 0 ? -1 : 1) * this.maxInertia
+			
 			this.point.x = this.globalX
 			this.setVelocity(vx ? vx * this.power : 0, 0)
 			this.run()
@@ -134,7 +139,7 @@ Me.prototype =
 	
 	run: function (timeout)
 	{
-		this.space.run(timeout === undefined ? 10000 : timeout) // set a reasonable timeout
+		this.space.run(timeout === undefined ? this.spaceTimeout : timeout) // set a reasonable timeout
 	}
 }
 
