@@ -5,6 +5,7 @@ function style (src) { document.write('<link rel="stylesheet" href="' + src + '"
 
 script('/lib/modules/cascade.js')
 script('/lib/modules/test.js')
+script('/lib/modules/test-tool.js')
 script('/lib/widgets/tests.js')
 script('/js/ga.js')
 
