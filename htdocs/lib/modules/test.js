@@ -1,6 +1,8 @@
 ;(function(){
 
-var myName = 'Test', Me = self[myName] = function (parent, name, conf, callback)
+var myName = 'Test'
+
+function Me (parent, name, conf, callback)
 {
 	this.conf = conf || {}
 	this.results = []
@@ -16,6 +18,7 @@ var myName = 'Test', Me = self[myName] = function (parent, name, conf, callback)
 	c.oncomplete = function () { me.done() }
 	c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
 }
+
 Me.prototype =
 {
 	status: 'new',
@@ -175,6 +178,8 @@ Me.prototype =
 		this.reporter.setStatus(s)
 	}
 }
+
+self[myName] = Me
 
 var empty = function () {}, devNull =
 {

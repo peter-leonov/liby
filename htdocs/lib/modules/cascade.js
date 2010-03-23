@@ -1,6 +1,8 @@
 ;(function () {
 
-var myName = 'Cascade', Me = self[myName] = function (job, delay, holder)
+var myName = 'Cascade'
+
+function Me (job, delay, holder)
 {
 	this.timers = {}
 	this.data = {}
@@ -13,7 +15,9 @@ var myName = 'Cascade', Me = self[myName] = function (job, delay, holder)
 		this.run(delay)
 	}
 }
+
 Me.running = 0
+
 Me.prototype =
 {
 	completed: false,
@@ -134,5 +138,7 @@ Me.prototype =
 		}
 	}
 }
+
+self[myName] = Me
 
 })();
