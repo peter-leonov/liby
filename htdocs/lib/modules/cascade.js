@@ -105,7 +105,7 @@ Me.prototype =
 		{
 			this.timersClear()
 			
-			var children = this.children, count = 0
+			var children = this.children
 			for (var i = 0; i < children.length; i++)
 				children[i].stop()
 			
