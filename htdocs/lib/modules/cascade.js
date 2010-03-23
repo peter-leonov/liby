@@ -2,12 +2,11 @@
 
 var myName = 'Cascade'
 
-function Me (job, delay, holder)
+function Me (job, delay)
 {
 	this.timers = {}
 	this.data = {}
 	this.children = []
-	this.holder = holder || window
 	
 	if (job)
 	{
@@ -21,6 +20,7 @@ Me.running = 0
 Me.prototype =
 {
 	completed: false,
+	holder: self, // window
 	
 	onerror: function (ex, job)
 	{
