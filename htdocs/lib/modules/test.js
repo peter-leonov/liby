@@ -5,8 +5,9 @@ Me.prototype =
 {
 	status: 'new',
 	finished: false,
+	reporter: devNull,
 	
-	initialize: function (parent, name, reporter, conf, callback)
+	initialize: function (parent, name, conf, callback)
 	{
 		this.conf = conf || {}
 		this.results = []
@@ -14,7 +15,6 @@ Me.prototype =
 		
 		this.parent = parent
 		this.name = name || '(untitled)'
-		this.reporter = reporter || devNull
 		this.callback = callback
 		
 		var c = this.cascade = new Cascade()
@@ -22,14 +22,13 @@ Me.prototype =
 		c.oncomplete = function () { me.done() }
 		c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
 		
-		reporter.name(name)
-		
 		return this
 	},
 	
 	run: function (delay)
 	{
 		var me = this
+		this.reporter.name(this.name)
 		this.cascade.job = function () { me._run(me.callback) }
 		this.cascade.run(delay)
 	},
@@ -125,7 +124,8 @@ Me.prototype =
 		
 		var reporter = this.reporter.create()
 		var test = new Me()
-		test.initialize(this, name, reporter, conf, callback)
+		test.initialize(this, name, conf, callback)
+		test.reporter = reporter
 		
 		this.cascade.add(test.cascade)
 		test.run()

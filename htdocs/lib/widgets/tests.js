@@ -39,7 +39,8 @@ var myName = 'Tests', Me = self[myName] =
 		var reporter = new Reporter().initialize()
 		this.nodes.main.appendChild(reporter.nodes.main)
 		
-		var test = this.mainTest = new Test().initialize(this, title, reporter, null, this.callback)
+		var test = this.mainTest = new Test().initialize(this, title, null, this.callback)
+		test.reporter = reporter
 		test.run()
 	},
 	
