@@ -19,18 +19,20 @@ function Me (parent, name, conf, callback)
 	c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
 }
 
-Me.prototype =
+Me.prototype = new Cascade()
+
+var prototype =
 {
 	status: 'new',
 	finished: false,
 	reporter: devNull,
 	
-	run: function (delay)
+	run: function ()
 	{
 		var me = this
 		this.reporter.name(this.name)
 		this.cascade.job = function () { me._run(me.callback) }
-		this.cascade.run(delay)
+		this.cascade.run()
 	},
 	
 	_run: function (f)
@@ -178,6 +180,9 @@ Me.prototype =
 		this.reporter.setStatus(s)
 	}
 }
+
+for (var k in prototype)
+	Me.prototype[k] = prototype[k]
 
 self[myName] = Me
 
