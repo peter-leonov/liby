@@ -1,0 +1,1 @@
+window.veryGlobalVaiable.file1 = 555
