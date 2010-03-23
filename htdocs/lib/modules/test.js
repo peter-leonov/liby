@@ -1,29 +1,24 @@
 ;(function(){
 
-var myName = 'Test', Me = self[myName] = function () {}
+var myName = 'Test', Me = self[myName] = function (parent, name, conf, callback)
+{
+	this.conf = conf || {}
+	this.results = []
+	
+	this.parent = parent
+	this.name = name || '(untitled)'
+	this.callback = callback
+	
+	var c = this.cascade = new Cascade()
+	var me = this
+	c.oncomplete = function () { me.done() }
+	c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
+}
 Me.prototype =
 {
 	status: 'new',
 	finished: false,
 	reporter: devNull,
-	
-	initialize: function (parent, name, conf, callback)
-	{
-		this.conf = conf || {}
-		this.results = []
-		this.status = 'initialized'
-		
-		this.parent = parent
-		this.name = name || '(untitled)'
-		this.callback = callback
-		
-		var c = this.cascade = new Cascade()
-		var me = this
-		c.oncomplete = function () { me.done() }
-		c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
-		
-		return this
-	},
 	
 	run: function (delay)
 	{
@@ -123,8 +118,7 @@ Me.prototype =
 			throw new Error('callback is not present')
 		
 		var reporter = this.reporter.create()
-		var test = new Me()
-		test.initialize(this, name, conf, callback)
+		var test = new Me(this, name, conf, callback)
 		test.reporter = reporter
 		
 		this.cascade.add(test.cascade)

@@ -36,10 +36,10 @@ var myName = 'Tests', Me = self[myName] =
 		try { var title = doc.getElementsByTagName('title')[0].firstChild.nodeValue }
 		catch (ex) { title = 'main' }
 		
-		var reporter = new Reporter().initialize()
+		var reporter = new Reporter()
 		this.nodes.main.appendChild(reporter.nodes.main)
 		
-		var test = this.mainTest = new Test().initialize(this, title, null, this.callback)
+		var test = this.mainTest = new Test(this, title, null, this.callback)
 		test.reporter = reporter
 		test.run()
 	},
@@ -54,25 +54,21 @@ var myName = 'Tests', Me = self[myName] =
 window.onload = function () { Me.onload() }
 
 
-var Reporter = function () {}
+var Reporter = function (name)
+{
+	var nodes = this.nodes = {}
+	
+	nodes.main = N('dl', 'test')
+	nodes.head = nodes.main.appendChild(N('dt', 'head'))
+	nodes.summary = nodes.main.appendChild(N('dt', 'summary'))
+	nodes.body = nodes.main.appendChild(N('dt', 'body'))
+	nodes.output = nodes.body.appendChild(N('ol'))
+}
 Reporter.prototype =
 {
-	initialize: function (name)
-	{
-		var nodes = this.nodes = {}
-		
-		nodes.main = N('dl', 'test')
-		nodes.head = nodes.main.appendChild(N('dt', 'head'))
-		nodes.summary = nodes.main.appendChild(N('dt', 'summary'))
-		nodes.body = nodes.main.appendChild(N('dt', 'body'))
-		nodes.output = nodes.body.appendChild(N('ol'))
-		
-		return this
-	},
-	
 	create: function ()
 	{
-		var reporter = new Reporter().initialize()
+		var reporter = new Reporter()
 		this.node(reporter.nodes.main)
 		return reporter
 	},
