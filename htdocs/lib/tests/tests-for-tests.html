@@ -10,6 +10,38 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	// needs a test for timeout in non-parallel test
+	
+	t.test('parallel(false)', function (t)
+	{
+		t.parallel(false)
+		
+		var order = []
+		
+		t.test('1', function (t)
+		{
+			setTimeout(function () { order.push(1); t.done() }, 500)
+			t.wait(1000)
+		})
+		
+		t.test('2', function (t)
+		{
+			setTimeout(function () { order.push(2); t.done() }, 10)
+			t.wait(1000)
+		})
+		
+		t.test('3', function (t)
+		{
+			setTimeout(function () { order.push(3); t.done() }, 250)
+			t.wait(1000)
+		})
+		
+		t.test('check', function (t)
+		{
+			t.eq(order, [1, 2, 3])
+		})
+	})
+	
 	t.test('cascade', function (t)
 	{
 		t.test('nested 1', function (t)

@@ -11,7 +11,7 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.test('simple tests', function (t)
+	t.test('parallel(true)', function (t)
 	{
 		var order = []
 		
@@ -24,6 +24,24 @@ Tests.test(function (t)
 		c.oncomplete = function ()
 		{
 			t.eqo(order, ['job', 1, 2, 3, 'delayed'])
+			t.done()
+		}
+		t.wait(1000)
+	})
+	
+	t.test('parallel(false)', function (t)
+	{
+		var order = []
+		
+		var c = new Cascade(function () { order.push('job') })
+		c.parallel = false
+		c.add(new Cascade(function () { order.push('delayed') }, 250))
+		c.add(new Cascade(function () { order.push(1) }))
+		c.add(new Cascade(function () { order.push(2) }))
+		c.add(function () { order.push(3) })
+		c.oncomplete = function ()
+		{
+			t.eqo(order, ['job', 'delayed', 1, 2, 3])
 			t.done()
 		}
 		t.wait(1000)
