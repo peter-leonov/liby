@@ -2,17 +2,12 @@
 
 var myName = 'Cascade'
 
-function Me (job, delay)
+function Me (job)
 {
 	this.timers = {}
 	this.data = {}
 	this.children = []
-	
-	if (job)
-	{
-		this.job = job
-		this.run(delay)
-	}
+	this.job = job
 }
 
 Me.running = 0
@@ -39,18 +34,12 @@ Me.prototype =
 		this.oncomplete()
 	},
 	
-	run: function (delay)
+	run: function ()
 	{
 		Me.running++
 		
-		if (delay === undefined)
-			delay = 0
-		
-		if (delay >= 0)
-		{
-			var me = this
-			this.timer('job', function () { me._run() }, delay)
-		}
+		var me = this
+		this.timer('job', function () { me._run() })
 	},
 	
 	_run: function ()
@@ -67,7 +56,7 @@ Me.prototype =
 		this.sigchild()
 	},
 	
-	add: function (job, delay)
+	add: function (job)
 	{
 		if (this.completed)
 			return
@@ -75,13 +64,15 @@ Me.prototype =
 		var children = this.children
 		
 		if (typeof job === 'function')
-			job = new Me(job, delay)
+			job = new Me(job)
 		else
 			if (children.indexOf(job) >= 0)
-				return -1
+				return null
 		
 		job.parent = this
-		return children.push(job)
+		children.push(job)
+		job.run()
+		return job
 	},
 	
 	sigchild: function ()
