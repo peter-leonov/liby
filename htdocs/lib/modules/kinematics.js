@@ -169,11 +169,12 @@ function Wave (step, soft, min)
 }
 
 Wave.prototype = new Force()
-Wave.prototype.setup = function (step, soft, min)
+Wave.prototype.setup = function (step, soft, min, max)
 {
 	this.step = step
 	this.soft = soft || 10
 	this.min = min / fps || 0
+	this.max = max / fps || 500
 }
 Wave.prototype.apply = function (point)
 {
@@ -181,10 +182,16 @@ Wave.prototype.apply = function (point)
 		pos = x % step,
 		shift = x < 0 ? step + pos : pos,
 		dir = shift > step / 2 ? shift - step : shift,
-		sign = dir < 0 ? 1 : -1
-	// log(dir)
+		sign = dir < 0 ? 1 : -1,
+		v = Math.sqrt(Math.abs(dir)) / this.soft
+	
+	if (v < this.min)
+		v = this.min
+	else if (v > this.max)
+		v = this.max
+	
 	if (dir)
-		point.v.addX(sign * (Math.sqrt(Math.abs(dir)) / this.soft + this.min))
+		point.v.addX(sign * v)
 }
 
 Wave.className = 'Wave'
