@@ -121,16 +121,15 @@ Tests.test(function (t)
 		test.ok(true)
 	})
 	
-	
-	t.test('timer passing', function (test)
+	t.test('wait() passing', function (t)
 	{
 		function job ()
 		{
-			test.ok(true)
-			test.done()
+			t.pass('job')
+			t.done()
 		}
-		setTimeout(job, 10)
-		test.wait(1000)
+		setTimeout(job, 250)
+		t.wait(1000)
 	})
 	
 	t.test('wait() with parallel(1)', function (t)
@@ -142,7 +141,7 @@ Tests.test(function (t)
 		t.wait(1000)
 	})
 	
-	t.test('timer failing', {failing: true}, function (test)
+	t.test('wait() failing', {failing: true}, function (test)
 	{
 		test.wait(10)
 	})
