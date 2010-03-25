@@ -9,6 +9,7 @@ function Me (job)
 	if (job)
 		this.job = job
 	this.state = 'ready'
+	this.constructor = Me
 }
 
 Me.running = 0
