@@ -1,9 +1,11 @@
 ;(function(){
 
-var myName = 'Test'
+var myName = 'Test', Super = Cascade
 
 function Me (parent, name, conf, callback)
 {
+	Super.call(this)
+	
 	this.conf = conf || {}
 	this.results = []
 	
@@ -12,17 +14,11 @@ function Me (parent, name, conf, callback)
 	this.callback = callback
 	
 	this.tool = new Me.Tool(this)
-	
-	var c = this.cascade = new Cascade()
-	var me = this
-	this.cascade.job = function () { me._run(me.callback) }
-	c.oncomplete = function () { me.done() }
-	c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
+	this.constructor = Me
 }
 
-Me.prototype = new Cascade()
-
-var prototype =
+var sup = Super.prototype,
+	prototype =
 {
 	status: 'new',
 	finished: false,
@@ -30,13 +26,17 @@ var prototype =
 	
 	run: function ()
 	{
-		this.cascade.start()
+		this.start()
 	},
 	
-	_run: function (f)
+	start: function (delay)
 	{
 		this.reporter.name(this.name)
-		
+		this.supercall('start', [delay])
+	},
+	
+	exec: function (f)
+	{
 		try
 		{
 			f(this.tool)
@@ -47,17 +47,27 @@ var prototype =
 		}
 	},
 	
+	job: function ()
+	{
+		this.exec(this.callback)
+	},
+	
+	oncomplete: function ()
+	{
+		this.done()
+	},
+	
 	async: function (f, d)
 	{
 		var me = this
-		this.cascade.add(function () { f(me.tool) }).start(d)
+		this.add(function () { f(me.tool) }).start(d)
 		this.setStatus('waiting')
 	},
 	
 	wait: function (d)
 	{
 		var me = this
-		var c = this.cascade.add(function () { me.timedOut() })
+		var c = this.add(function () { me.timedOut() })
 		c.spawnable = false
 		if (d !== undefined)
 			c.start(d)
@@ -75,7 +85,7 @@ var prototype =
 		if (this.finished)
 			return
 		
-		this.cascade.stop()
+		this.stop()
 		
 		var results = this.results, expect = this.conf.expect
 		
@@ -99,10 +109,10 @@ var prototype =
 		this.setStatus(status)
 		this.finished = true
 		this.summary()
-		this.parent.sigchild(this)
+		this.parent.child(this)
 	},
 	
-	sigchild: function (test)
+	child: function (test)
 	{
 		var status = test.status
 		if (status === 'failed')
@@ -133,7 +143,7 @@ var prototype =
 		test.reporter = reporter
 		
 		// link cascades
-		this.cascade.add(test.cascade)
+		this.add(test)
 		
 		return test
 	},
@@ -159,10 +169,9 @@ var prototype =
 		this.reporter.summary(text.join(', ') + '.')
 	},
 	
-	parallel: function (amount) { this.cascade.parallel = amount },
 	expect: function (amount) { this.conf.expect = amount },
-	failing: function (flag) { this.conf.failing = flag === undefined ? true : flag },
-	mayFail: function (flag) { this.conf.mayFail = flag === undefined ? true : flag },
+	failing: function (v) { this.conf.failing = v === undefined ? true : v },
+	mayFail: function (v) { this.conf.mayFail = v === undefined ? true : v },
 	
 	pass: function (m, d)
 	{
@@ -182,11 +191,19 @@ var prototype =
 	{
 		this.status = s
 		this.reporter.setStatus(s)
+	},
+	
+	supercall: function (name, args)
+	{
+		// oh, mama…
+		this.constructor.prototype.constructor.prototype[name].apply(this, args)
 	}
 }
 
+var proto = new Super()
 for (var k in prototype)
-	Me.prototype[k] = prototype[k]
+	proto[k] = prototype[k]
+Me.prototype = proto
 
 self[myName] = Me
 

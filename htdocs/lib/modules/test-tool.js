@@ -7,12 +7,13 @@ function Me (parent)
 	this.parent = parent
 }
 
-var proxyList = ['parallel', 'wait', 'done', 'test', 'async', 'expect', 'failing', 'mayFail', 'pass', 'fail']
+var proxyList = ['wait', 'done', 'test', 'async', 'expect', 'failing', 'mayFail', 'pass', 'fail']
 
 var prototype =
 {
 	log: function (m) { return this.parent.reporter.log(m) },
 	info: function (m) { return this.parent.reporter.info(m) },
+	parallel: function (v) { return this.parent.parallel = v },
 	
 	ok: function (v, d)
 	{
