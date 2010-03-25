@@ -21,14 +21,6 @@ Me.prototype =
 	spawnable: true,
 	holder: self, // window
 	
-	onerror: function (ex, job)
-	{
-		if (this.parent)
-			this.parent.onerror(ex, job || this)
-		else
-			throw ex
-	},
-	
 	oncomplete: function () {},
 	_oncomplete: function ()
 	{
@@ -40,15 +32,8 @@ Me.prototype =
 	
 	run: function ()
 	{
-		try
-		{
-			// passing this as a parameter is handy in tangled closures
-			this.job(this)
-		}
-		catch (ex)
-		{
-			this.onerror(ex)
-		}
+		// passing “this” as a parameter is handy in tangled closures
+		this.job(this)
 		
 		this.selfCompleted = true
 		this.sigchild()
