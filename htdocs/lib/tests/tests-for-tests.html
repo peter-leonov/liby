@@ -151,27 +151,40 @@ Tests.test(function (t)
 		test.wait()
 	})
 	
-	
-	t.test('async', function (test)
+	t.test('async', function (t)
 	{
-		function job () { test.ok(true) }
-		test.async(job)
+		t.expect(1)
+		function job () { t.pass(1) }
+		t.async(job)
 	})
 	
-	
-	t.test('async many times', function (test)
+	t.test('async then done', function (t)
 	{
-		test.async(function () { test.ok(1) })
-		test.async(function () { test.ok(2) })
-		test.async(function () { test.ok(3) })
+		t.expect(0)
+		function job () { t.fail('async run') }
+		t.async(job)
+		t.done()
 	})
 	
-	t.test('the same async many times', function (test)
+	t.test('async many times', function (t)
 	{
-		function job () { test.ok(1) }
-		test.async(job)
-		test.async(job)
-		test.async(job)
+		var order = []
+		t.expect(5) // four pass() and one eqo()
+		t.async(function () { t.pass(1); order.push(1) })
+		t.async(function () { t.pass(2); order.push(2) }, 100)
+		t.async(function () { t.pass(3); order.push(3) })
+		t.async(function () { t.pass(4); order.push(4) })
+		t.async(function () { t.eqo(order, [1, 3, 4, 2], 'order') }, 500)
+	})
+	
+	t.test('the same async many times', function (t)
+	{
+		t.expect(4)
+		function job () { t.pass(1) }
+		t.async(job)
+		t.async(job)
+		t.async(job)
+		t.async(job)
 	})
 })
 </script>
