@@ -37,7 +37,7 @@ Me.prototype =
 		this.job(this)
 		
 		this.selfCompleted = true
-		this.sigchild()
+		this.checkCompleteness()
 	},
 	
 	add: function (job)
@@ -58,11 +58,16 @@ Me.prototype =
 		return job
 	},
 	
-	sigchild: function ()
+	sigchild: function (child)
 	{
-		if (this.state == 'completed')
-			throw new Error('sigchild() while "' + this.state + '" state')
+		if (this.state != 'running')
+			throw new Error('sigchild() while "' + this.state + '" state from ' + child.name)
 		
+		this.checkCompleteness()
+	},
+	
+	checkCompleteness: function ()
+	{
 		if (!this.selfCompleted)
 			return
 		
@@ -130,7 +135,7 @@ Me.prototype =
 		
 		this.selfCompleted = true
 		
-		this.sigchild()
+		this.checkCompleteness()
 	},
 	
 	timer: function (name, func, delay)
