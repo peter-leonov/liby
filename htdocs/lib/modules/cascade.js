@@ -36,16 +36,7 @@ Me.prototype =
 		this.oncomplete()
 	},
 	
-	run: function (delay)
-	{
-		this.state = 'running'
-		Me.running++
-		
-		var me = this
-		this.timer('job', function () { me._run() }, delay)
-	},
-	
-	_run: function ()
+	run: function ()
 	{
 		try
 		{
@@ -81,7 +72,7 @@ Me.prototype =
 	sigchild: function ()
 	{
 		if (this.state == 'completed')
-			throw new Error('sigchild while "' + this.state + '" state')
+			throw new Error('sigchild() while "' + this.state + '" state')
 		
 		if (!this.selfCompleted)
 			return
@@ -98,6 +89,18 @@ Me.prototype =
 			var me = this
 			this.timer('completed', function () { me._oncomplete() }, 0)
 		}
+	},
+	
+	start: function (delay)
+	{
+		if (this.state != 'ready')
+			throw new Error('start() while "' + this.state + '" state')
+		
+		this.state = 'running'
+		Me.running++
+		
+		var me = this
+		this.timer('job', function () { me.run() }, delay)
 	},
 	
 	stop: function ()

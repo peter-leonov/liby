@@ -17,16 +17,16 @@ Tests.test(function (t)
 		
 		var c = new Cascade(function () { order.push('job') })
 		
-		c.add(new Cascade(function () { order.push('delayed') })).run(100)
-		c.add(new Cascade(function () { order.push(1) })).run()
-		c.add(new Cascade(function () { order.push(2) })).run()
-		c.add(function () { order.push(3) }).run()
+		c.add(new Cascade(function () { order.push(1) })).start()
+		c.add(new Cascade(function () { order.push('delayed') })).start(100)
+		c.add(new Cascade(function () { order.push(2) })).start()
+		c.add(function () { order.push(3) }).start()
 		c.oncomplete = function ()
 		{
 			t.eqo(order, [1, 2, 3, 'delayed', 'job'], 'order')
 			t.done()
 		}
-		c.run(200)
+		c.start(200)
 		t.wait(1000)
 	})
 	

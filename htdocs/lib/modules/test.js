@@ -32,7 +32,7 @@ var prototype =
 		var me = this
 		this.reporter.name(this.name)
 		this.cascade.job = function () { me._run(me.callback) }
-		this.cascade.run()
+		this.cascade.start()
 	},
 	
 	_run: function (f)
@@ -49,7 +49,7 @@ var prototype =
 	
 	async: function (f, d)
 	{
-		this.cascade.add(f).run(d)
+		this.cascade.add(f).start(d)
 		this.setStatus('waiting')
 	},
 	
@@ -58,7 +58,7 @@ var prototype =
 		var me = this
 		var c = this.cascade.add(function () { me.timedOut() })
 		if (d !== undefined)
-			c.run(d)
+			c.start(d)
 		this.setStatus('waiting')
 	},
 	
