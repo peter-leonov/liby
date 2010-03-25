@@ -49,14 +49,16 @@ var prototype =
 	
 	async: function (f, d)
 	{
-		this.cascade.add(f, d)
+		this.cascade.add(f).run(d)
 		this.setStatus('waiting')
 	},
 	
 	wait: function (d)
 	{
 		var me = this
-		this.cascade.add(function () { me.timedOut() }, d === undefined ? -1 : d)
+		var c = this.cascade.add(function () { me.timedOut() })
+		if (d !== undefined)
+			c.run(d)
 		this.setStatus('waiting')
 	},
 	
