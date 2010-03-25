@@ -17,6 +17,7 @@ Me.prototype =
 	state: 'undefined',
 	selfCompleted: false,
 	parallel: Infinity,
+	spawnable: true,
 	holder: self, // window
 	
 	onerror: function (ex, job)
@@ -101,6 +102,10 @@ Me.prototype =
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i]
+			
+			if (!child.spawnable)
+				continue
+			
 			if (child.state == 'ready')
 				ready.push(child)
 			else if (child.state == 'running')
