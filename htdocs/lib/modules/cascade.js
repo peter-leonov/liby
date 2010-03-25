@@ -15,6 +15,7 @@ Me.running = 0
 Me.prototype =
 {
 	completed: false,
+	selfCompleted: false,
 	holder: self, // window
 	
 	onerror: function (ex, job)
@@ -53,6 +54,7 @@ Me.prototype =
 			this.onerror(ex)
 		}
 		
+		this.selfCompleted = true
 		this.sigchild()
 	},
 	
@@ -79,6 +81,9 @@ Me.prototype =
 		if (this.completed)
 			return
 		
+		if (!this.selfCompleted)
+			return
+		
 		var children = this.children, count = 0
 		for (var i = 0; i < children.length; i++)
 			if (!children[i].completed)
@@ -102,6 +107,8 @@ Me.prototype =
 			var children = this.children
 			for (var i = 0; i < children.length; i++)
 				children[i].stop()
+			
+			this.selfCompleted = true
 			
 			this.sigchild()
 		}
