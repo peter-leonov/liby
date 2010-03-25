@@ -25,7 +25,7 @@ Me.prototype =
 	oncomplete: function () {},
 	_oncomplete: function ()
 	{
-		if (this.parent)
+		if (this.parent && this.parent.sigchild)
 			this.parent.sigchild(this)
 		
 		this.oncomplete()
