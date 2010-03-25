@@ -19,6 +19,7 @@ Tests.test(function (t)
 	
 	t.test('prerequisites', function (t)
 	{
+		t.expect(1)
 		var script = document.getElementsByTagName('head')[0].appendChild(document.createElement('script'))
 		script.addEventListener('load', load, false)
 		script.src = 'require-file-1.js?ac=' + Math.random()
