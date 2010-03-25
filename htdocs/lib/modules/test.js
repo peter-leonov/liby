@@ -49,7 +49,8 @@ var prototype =
 	
 	async: function (f, d)
 	{
-		this.cascade.add(f).start(d)
+		var me = this
+		this.cascade.add(function () { f(me.tool) }).start(d)
 		this.setStatus('waiting')
 	},
 	
