@@ -34,12 +34,12 @@ Me.prototype =
 		this.oncomplete()
 	},
 	
-	run: function ()
+	run: function (delay)
 	{
 		Me.running++
 		
 		var me = this
-		this.timer('job', function () { me._run() })
+		this.timer('job', function () { me._run() }, delay)
 	},
 	
 	_run: function ()
