@@ -30,7 +30,7 @@ Me.prototype =
 		this.oncomplete()
 	},
 	
-	run: function ()
+	doJob: function ()
 	{
 		// passing “this” as a parameter is handy in tangled closures
 		this.job(this)
@@ -113,7 +113,7 @@ Me.prototype =
 		Me.running++
 		
 		var me = this
-		this.timer('job', function () { me.run() }, delay)
+		this.timer('job', function () { me.doJob() }, delay)
 	},
 	
 	stop: function ()
