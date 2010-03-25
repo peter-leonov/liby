@@ -70,7 +70,7 @@ Tests.test(function (t)
 		
 		c.oncomplete = function ()
 		{
-			t.eqo(order, [0, 1, 2, 3, 'job', 'delayed'], 'order')
+			t.eqo(order, [0, 'job', 1, 2, 3, 'delayed'], 'order')
 			t.done()
 		}
 		

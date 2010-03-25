@@ -76,10 +76,10 @@ Me.prototype =
 		if (this.state == 'completed')
 			throw new Error('sigchild() while "' + this.state + '" state')
 		
-		this.spawn()
-		
 		if (!this.selfCompleted)
 			return
+		
+		this.spawn()
 		
 		var children = this.children, count = 0
 		for (var i = 0; i < children.length; i++)
@@ -128,8 +128,6 @@ Me.prototype =
 		
 		var me = this
 		this.timer('job', function () { me.run() }, delay)
-		
-		this.spawn()
 	},
 	
 	stop: function ()
