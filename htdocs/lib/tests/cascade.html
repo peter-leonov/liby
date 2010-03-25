@@ -35,17 +35,19 @@ Tests.test(function (t)
 		var order = []
 		
 		var c = new Cascade(function () { order.push('job') })
-		c.parallel = false
-		c.add(new Cascade(function () { order.push('delayed') }, 250))
+		c.parallel = 1
 		c.add(new Cascade(function () { order.push(1) }))
+		c.add(new Cascade(function () { this.add(function () { order.push('delayed') }).start(1000) }))
 		c.add(new Cascade(function () { order.push(2) }))
 		c.add(function () { order.push(3) })
 		c.oncomplete = function ()
 		{
-			t.eqo(order, ['job', 'delayed', 1, 2, 3])
+			t.eqo(order, [0, 'job', 1, 'delayed', 2, 3], 'order')
 			t.done()
 		}
-		t.wait(1000)
+		c.start()
+		order.push(0)
+		t.wait(2000)
 	})
 	
 	t.test('cascade', function (t)

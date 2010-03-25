@@ -5,7 +5,6 @@ var myName = 'Cascade'
 function Me (job)
 {
 	this.timers = {}
-	this.data = {}
 	this.children = []
 	this.job = job
 	this.state = 'ready'
@@ -17,6 +16,7 @@ Me.prototype =
 {
 	state: 'undefined',
 	selfCompleted: false,
+	parallel: Infinity,
 	holder: self, // window
 	
 	onerror: function (ex, job)
@@ -40,7 +40,7 @@ Me.prototype =
 	{
 		try
 		{
-			this.job.call(this.data, this)
+			this.job()
 		}
 		catch (ex)
 		{
@@ -74,6 +74,8 @@ Me.prototype =
 		if (this.state == 'completed')
 			throw new Error('sigchild() while "' + this.state + '" state')
 		
+		this.spawn()
+		
 		if (!this.selfCompleted)
 			return
 		
@@ -91,16 +93,37 @@ Me.prototype =
 		}
 	},
 	
+	spawn: function ()
+	{
+		var ready = [], running = []
+		
+		var children = this.children
+		for (var i = 0; i < children.length; i++)
+		{
+			var child = children[i]
+			if (child.state == 'ready')
+				ready.push(child)
+			else if (child.state == 'running')
+				running.push(child)
+		}
+		
+		var spawn = this.parallel - running.length
+		for (var i = 0, il = ready.length; i < il && i < spawn; i++)
+			ready[i].start()
+	},
+	
 	start: function (delay)
 	{
 		if (this.state != 'ready')
-			throw new Error('start() while "' + this.state + '" state')
+			return
 		
 		this.state = 'running'
 		Me.running++
 		
 		var me = this
 		this.timer('job', function () { me.run() }, delay)
+		
+		this.spawn()
 	},
 	
 	stop: function ()
