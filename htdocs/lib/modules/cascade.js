@@ -71,7 +71,6 @@ Me.prototype =
 		
 		job.parent = this
 		children.push(job)
-		job.run()
 		return job
 	},
 	
