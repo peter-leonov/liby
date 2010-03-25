@@ -133,6 +133,14 @@ Tests.test(function (t)
 		test.wait(1000)
 	})
 	
+	t.test('wait() with parallel(1)', function (t)
+	{
+		t.parallel(1)
+		t.async(function (t) { t.pass(1) })
+		t.async(function (t) { t.pass(2) })
+		t.async(function (t) { t.done() })
+		t.wait(1000)
+	})
 	
 	t.test('timer failing', {failing: true}, function (test)
 	{
