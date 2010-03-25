@@ -6,7 +6,8 @@ function Me (job)
 {
 	this.timers = {}
 	this.children = []
-	this.job = job
+	if (job)
+		this.job = job
 	this.state = 'ready'
 }
 
