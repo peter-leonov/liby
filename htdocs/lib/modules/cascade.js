@@ -41,7 +41,8 @@ Me.prototype =
 	{
 		try
 		{
-			this.job(this) // passing as a parameter is handy, name it in tangled closures
+			// passing this as a parameter is handy in tangled closures
+			this.job(this)
 		}
 		catch (ex)
 		{
