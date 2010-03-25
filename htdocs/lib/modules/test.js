@@ -15,6 +15,7 @@ function Me (parent, name, conf, callback)
 	
 	var c = this.cascade = new Cascade()
 	var me = this
+	this.cascade.job = function () { me._run(me.callback) }
 	c.oncomplete = function () { me.done() }
 	c.onerror = function (ex) { me.fail(ex.message, 'got an error form cascade') }
 }
@@ -29,14 +30,13 @@ var prototype =
 	
 	run: function ()
 	{
-		var me = this
-		this.reporter.name(this.name)
-		this.cascade.job = function () { me._run(me.callback) }
 		this.cascade.start()
 	},
 	
 	_run: function (f)
 	{
+		this.reporter.name(this.name)
+		
 		try
 		{
 			f(this.tool)
@@ -132,8 +132,8 @@ var prototype =
 		var test = new Me(this, name, conf, callback)
 		test.reporter = reporter
 		
+		// link cascades
 		this.cascade.add(test.cascade)
-		test.run()
 		
 		return test
 	},
@@ -159,7 +159,7 @@ var prototype =
 		this.reporter.summary(text.join(', ') + '.')
 	},
 	
-	
+	parallel: function (amount) { this.cascade.parallel = amount },
 	expect: function (amount) { this.conf.expect = amount },
 	failing: function (flag) { this.conf.failing = flag === undefined ? true : flag },
 	mayFail: function (flag) { this.conf.mayFail = flag === undefined ? true : flag },

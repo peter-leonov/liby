@@ -7,7 +7,7 @@ function Me (parent)
 	this.parent = parent
 }
 
-var proxyList = ['wait', 'done', 'test', 'async', 'expect', 'failing', 'mayFail', 'pass', 'fail']
+var proxyList = ['parallel', 'wait', 'done', 'test', 'async', 'expect', 'failing', 'mayFail', 'pass', 'fail']
 
 var prototype =
 {

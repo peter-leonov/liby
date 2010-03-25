@@ -12,9 +12,10 @@ Tests.test(function (t)
 {
 	// needs a test for timeout in non-parallel test
 	
-	t.test('parallel(false)', function (t)
+	t.test('parallel(1)', function (t)
 	{
-		t.parallel(false)
+		t.parallel(1)
+		t.expect(4)
 		
 		var order = []
 		
@@ -38,7 +39,7 @@ Tests.test(function (t)
 		
 		t.test('check', function (t)
 		{
-			t.eq(order, [1, 2, 3])
+			t.eqo(order, [1, 2, 3])
 		})
 	})
 	
