@@ -40,7 +40,7 @@ Me.prototype =
 	{
 		try
 		{
-			this.job()
+			this.job(this) // passing as a parameter is handy, name it in tangled closures
 		}
 		catch (ex)
 		{
