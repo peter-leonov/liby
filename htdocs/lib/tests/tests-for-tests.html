@@ -139,16 +139,16 @@ Tests.test(function (t)
 		test.wait(10)
 	})
 	
-	
-	t.test('infinite timer', function (test)
+	t.test('infinite wait()', function (t)
 	{
+		t.expect(1)
 		function job ()
 		{
-			test.ok(true)
-			test.done()
+			t.pass('job')
+			t.done()
 		}
 		setTimeout(job, 10)
-		test.wait()
+		t.wait()
 	})
 	
 	t.test('async', function (t)

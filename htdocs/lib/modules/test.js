@@ -58,6 +58,7 @@ var prototype =
 	{
 		var me = this
 		var c = this.cascade.add(function () { me.timedOut() })
+		c.spawnable = false
 		if (d !== undefined)
 			c.start(d)
 		this.setStatus('waiting')
