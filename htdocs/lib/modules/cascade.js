@@ -8,13 +8,14 @@ function Me (job)
 	this.data = {}
 	this.children = []
 	this.job = job
+	this.state = 'ready'
 }
 
 Me.running = 0
 
 Me.prototype =
 {
-	completed: false,
+	state: 'undefined',
 	selfCompleted: false,
 	holder: self, // window
 	
@@ -37,6 +38,7 @@ Me.prototype =
 	
 	run: function (delay)
 	{
+		this.state = 'running'
 		Me.running++
 		
 		var me = this
@@ -60,8 +62,8 @@ Me.prototype =
 	
 	add: function (job)
 	{
-		if (this.completed)
-			return
+		if (this.state != 'ready' && this.state != 'running')
+			throw new Error('can not add children while "' + this.state + '" state')
 		
 		var children = this.children
 		
@@ -78,20 +80,20 @@ Me.prototype =
 	
 	sigchild: function ()
 	{
-		if (this.completed)
-			return
+		if (this.state == 'completed')
+			throw new Error('sigchild while "' + this.state + '" state')
 		
 		if (!this.selfCompleted)
 			return
 		
 		var children = this.children, count = 0
 		for (var i = 0; i < children.length; i++)
-			if (!children[i].completed)
+			if (children[i].state != 'completed')
 				count++
 		
 		if (count == 0)
 		{
-			this.completed = true
+			this.state = 'completed'
 			Me.running--
 			var me = this
 			this.timer('completed', function () { me._oncomplete() }, 0)
@@ -100,20 +102,18 @@ Me.prototype =
 	
 	stop: function ()
 	{
-		if (!this.completed)
-		{
-			this.timersClear()
-			
-			var children = this.children
-			for (var i = 0; i < children.length; i++)
-				children[i].stop()
-			
-			this.selfCompleted = true
-			
-			this.sigchild()
-		}
+		if (this.state == 'completed')
+			return
 		
-		return this.completed
+		this.timersClear()
+		
+		var children = this.children
+		for (var i = 0; i < children.length; i++)
+			children[i].stop()
+		
+		this.selfCompleted = true
+		
+		this.sigchild()
 	},
 	
 	timer: function (name, func, delay)
