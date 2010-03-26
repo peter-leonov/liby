@@ -89,23 +89,23 @@ Tests.test(function (t)
 			
 			c.add(function (c)
 			{
-				order.push(0.1)
-				c.add(function () { order.push(1) })
+				order.push(1)
 				c.add(function () { order.push(2) })
+				c.add(function () { order.push(3) })
 			})
 			
 			c.add(function (c)
 			{
-				order.push(0.2)
-				c.add(function () { order.push(3) })
-				c.add(function () { order.push(4) })
+				order.push(4)
 				c.add(function () { order.push(5) })
+				c.add(function () { order.push(6) })
+				c.add(function () { order.push(7) })
 			})
 		})
 		
 		c.oncomplete = function ()
 		{
-			t.eqo(order, [0, 0.1, 0.2, 1, 2, 3, 4, 5], 'order')
+			t.eqo(order, [0, 1, 4, 2, 3, 5, 6, 7], 'order')
 			t.done()
 		}
 		
