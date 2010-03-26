@@ -44,11 +44,14 @@ var myName = 'Tests', Me = self[myName] =
 		test.run()
 	},
 	
-	sigchild: function ()
+	childTest: function ()
 	{
 		this.nodes.main.className += 'done'
 		this.oncomplete()
-	}
+	},
+	
+	// ignore raw sigchilds
+	sigchild: function () {}
 }
 
 window.onload = function () { Me.onload() }
