@@ -123,25 +123,25 @@ Tests.test(function (t)
 			
 			c.add(function (c)
 			{
-				order.push(0.1)
-				c.add(function (c) { order.push(1) })
-				c.add(function (c) { order.push(2); c.add(function (c) { order.push(2.2) }) })
+				order.push(1)
+				c.add(function (c) { order.push(2) })
+				c.add(function (c) { order.push(3); c.add(function (c) { order.push(4) }) })
+				c.add(function (c) { order.push(5) })
 				c.stop()
-				c.add(function (c) { order.push(2.1) })
 			})
 			
 			c.add(function (c)
 			{
-				order.push(0.2)
-				c.add(function (c) { order.push(3) })
-				c.add(function (c) { order.push(4) })
-				c.add(function (c) { order.push(5) })
+				order.push(6)
+				c.add(function (c) { order.push(7) })
+				c.add(function (c) { order.push(8) })
+				c.add(function (c) { order.push(9) })
 			})
 		})
 		
 		c.oncomplete = function ()
 		{
-			t.eqo(order, [0, 0.1, 0.2, 3, 4, 5])
+			t.eqo(order, [0, 1, 6, 7, 8, 9])
 			t.done()
 		}
 		

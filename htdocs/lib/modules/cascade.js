@@ -17,26 +17,21 @@ Me.running = 0
 Me.prototype =
 {
 	state: 'undefined',
-	selfCompleted: false,
+	jobCompleted: false,
 	parallel: Infinity,
 	spawnable: true,
 	holder: self, // window
-	
 	oncomplete: function () {},
-	_oncomplete: function ()
-	{
-		if (this.parent && this.parent.sigchild)
-			this.parent.sigchild(this)
-		
-		this.oncomplete()
-	},
 	
 	doJob: function ()
 	{
 		// passing “this” as a parameter is handy in tangled closures
 		this.job(this)
+		this.jobCompleted = true
 		
-		this.selfCompleted = true
+		// children may have been added in job
+		this.spawn()
+		// or it may become nothing to do
 		this.checkCompleteness()
 	},
 	
@@ -63,49 +58,60 @@ Me.prototype =
 		if (this.state != 'running')
 			throw new Error('sigchild() while "' + this.state + '" state from ' + child.name)
 		
+		this.spawn()
 		this.checkCompleteness()
 	},
 	
 	checkCompleteness: function ()
 	{
-		if (!this.selfCompleted)
+		// our own job is not done yet
+		if (!this.jobCompleted)
 			return
 		
-		this.spawn()
-		
-		var children = this.children, count = 0
+		// check all children (even not spawnable) for completeness
+		var children = this.children
 		for (var i = 0; i < children.length; i++)
 			if (children[i].state != 'completed')
-				count++
+				return
 		
-		if (count == 0)
-		{
-			this.state = 'completed'
-			Me.running--
-			var me = this
-			this.timer('completed', function () { me._oncomplete() }, 0)
-		}
+		// finaly complete ourselfs
+		this.completed()
+	},
+	
+	completed: function ()
+	{
+		this.state = 'completed'
+		Me.running--
+		
+		if (this.parent)
+			this.parent.sigchild(this)
+		
+		this.oncomplete()
 	},
 	
 	spawn: function ()
 	{
-		var ready = [], running = []
+		var ready = [], running = 0
 		
 		var children = this.children
 		for (var i = 0; i < children.length; i++)
 		{
 			var child = children[i]
 			
+			// some children can be started by hand
 			if (!child.spawnable)
 				continue
 			
+			// collect ready children
 			if (child.state == 'ready')
 				ready.push(child)
+			// count currently running
 			else if (child.state == 'running')
-				running.push(child)
+				running++
 		}
 		
-		var spawn = this.parallel - running.length
+		// simply spawn as many children as needed by “this.parallel”
+		var spawn = this.parallel - running
 		for (var i = 0, il = ready.length; i < il && i < spawn; i++)
 			ready[i].start()
 	},
@@ -127,15 +133,19 @@ Me.prototype =
 		if (this.state == 'completed')
 			return
 		
+		// mark job as completed
+		this.jobCompleted = true
+		
+		// stop all planned callbacks
 		this.timersClear()
 		
+		// check ourselfs for completeness
+		this.checkCompleteness()
+		
+		// otherwise stop() all children and wait for sigchild()
 		var children = this.children
 		for (var i = 0; i < children.length; i++)
 			children[i].stop()
-		
-		this.selfCompleted = true
-		
-		this.checkCompleteness()
 	},
 	
 	timer: function (name, func, delay)
