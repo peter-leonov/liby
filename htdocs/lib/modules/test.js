@@ -109,6 +109,16 @@ var sup = Super.prototype,
 		this.setStatus(status)
 		this.finished = true
 		this.summary()
+		this.parent.childTest(this)
+	},
+	
+	childTest: function (test)
+	{log(test.status)
+		var status = test.status
+		if (status === 'failed')
+			this.fail()
+		else if (status === 'passed')
+			this.pass()
 	},
 	
 	test: function (name, conf, callback)
