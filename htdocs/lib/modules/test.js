@@ -54,7 +54,7 @@ var sup = Super.prototype,
 	
 	oncomplete: function ()
 	{
-		this.done()
+		this._done()
 	},
 	
 	async: function (f, d)
@@ -82,10 +82,13 @@ var sup = Super.prototype,
 	
 	done: function ()
 	{
+		this.stop()
+	},
+	
+	_done: function ()
+	{
 		if (this.finished)
 			return
-		
-		this.stop()
 		
 		var results = this.results, expect = this.conf.expect
 		
