@@ -59,7 +59,7 @@ Tests.test(function (t)
 					t.ok(e.target === node, 'e.target')
 					t.done()
 				}
-				// node.removeEventListener(type, done, false)
+				node.removeEventListener(type, done, false)
 			}
 			node.addEventListener(type, done, false)
 			
