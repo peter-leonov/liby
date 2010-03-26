@@ -44,7 +44,7 @@ var myName = 'Tests', Me = self[myName] =
 		test.run()
 	},
 	
-	child: function ()
+	sigchild: function ()
 	{
 		this.nodes.main.className += 'done'
 		this.oncomplete()
