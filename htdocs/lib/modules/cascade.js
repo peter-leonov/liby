@@ -83,10 +83,10 @@ Me.prototype =
 		this.state = 'completed'
 		Me.running--
 		
+		this.oncomplete()
+		
 		if (this.parent)
 			this.parent.sigchild(this)
-		
-		this.oncomplete()
 	},
 	
 	spawn: function ()
