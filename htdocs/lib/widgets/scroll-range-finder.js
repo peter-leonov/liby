@@ -56,8 +56,6 @@ Me.prototype =
 			s = max(w, h), ranges = []
 			// box = {w: main.scrollWidth, h: main.scrollHeight}
 		
-		// log('changed')
-		
 		for (i = 0; i < circles.length; i++)
 		{
 			circle = circles[i]

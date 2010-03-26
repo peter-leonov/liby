@@ -34,8 +34,6 @@ if (!self[myName]) self[myName] =
 	
 	keys: function ()
 	{
-		log(doc.cookie)
-		
 		var cookie, keys = [], rex = new RegExp('(?:^|;)\\s*([^=]+)=[^;\\s]*', 'g')
 		while (cookie = rex.exec(doc.cookie))
 			keys.push(cookie[1])

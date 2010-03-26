@@ -116,7 +116,7 @@ var sup = Super.prototype,
 	},
 	
 	childTest: function (test)
-	{log(test.status)
+	{
 		var status = test.status
 		if (status === 'failed')
 			this.fail()

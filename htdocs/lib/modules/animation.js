@@ -150,7 +150,7 @@ Me.setStyleProperty = function (node, p, value, unit)
 	}
 	catch (ex)
 	{
-		log(ex + p + value)
+		log('setStyleProperty(' + arguments +'): ' + ex)
 		return value
 	}
 }
