@@ -10,6 +10,20 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.test('nested fail', function (t)
+	{
+		t.failing(true)
+		t.test('pass', function (t)
+		{
+			t.pass('pass')
+		})
+		
+		t.test('fail', function (t)
+		{
+			t.fail('fail')
+		})
+	})
+	
 	// needs a test for timeout in non-parallel test
 	
 	t.test('parallel(1)', function (t)
