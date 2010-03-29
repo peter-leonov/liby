@@ -37,14 +37,17 @@ Tests.test(function (t)
 		t.parallel(1)
 		
 		window.veryGlobalCounter = 0
+		var called = {}
 		
 		function test (t, count)
 		{
-			t.expect(1)
+			t.expect(2)
 			
 			function onload (e)
 			{
 				t.eq(window.veryGlobalCounter, count)
+				t.no(called[count], 'already called')
+				called[count] = true
 				t.done()
 			}
 			
