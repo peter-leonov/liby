@@ -9,15 +9,13 @@
 	
 	<!--[if lte IE 7]><script type="text/javascript" src="../core/fixes/trident3.js"></script><![endif]-->
 	<!--[if gte IE 8]><script type="text/javascript" src="../core/fixes/trident4.js"></script><![endif]-->
-	<!-- <script type="text/javascript" src="../modules/element.js"></script> -->
+	<script type="text/javascript" src="../modules/require.js"></script>
 </head>
 <body>
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	window.veryGlobalVaiable = {}
-	
-	t.test('prerequisites', function (t)
+	t.test('script onload', function (t)
 	{
 		t.expect(1)
 		var script = document.getElementsByTagName('head')[0].appendChild(document.createElement('script'))
@@ -27,7 +25,7 @@ Tests.test(function (t)
 		function load (e)
 		{
 			t.timeEnd('load')
-			t.eq(window.veryGlobalVaiable.file1, 555)
+			t.ok(window.veryGlobalVaiable, 'global variable set')
 			t.done()
 		}
 		

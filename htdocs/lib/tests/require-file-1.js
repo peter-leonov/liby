@@ -1,1 +1,1 @@
-window.veryGlobalVaiable.file1 = 555
+window.veryGlobalVaiable = true
