@@ -12,7 +12,7 @@ function Me (src, f)
 {
 	var root = getRoot()
 	if (!root)
-		throw new Error('can not get root node to append a script to')
+		throw new Error('can not get a root node to append a script to')
 	
 	var script = root.appendChild(document.createElement('script'))
 	script.addEventListener('load', f, false)
