@@ -39,15 +39,15 @@ Tests.test(function (t)
 		window.veryGlobalCounter = 0
 		var called = {}
 		
-		function test (t, count)
+		function test (t, num)
 		{
 			t.expect(2)
 			
 			function onload (e)
 			{
-				t.eq(window.veryGlobalCounter, count)
-				t.no(called[count], 'already called')
-				called[count] = true
+				t.eq(window.veryGlobalCounter, num)
+				t.no(called[num], 'already called')
+				called[num] = true
 				t.done()
 			}
 			
@@ -72,6 +72,25 @@ Tests.test(function (t)
 		})
 	})
 	
+	var count = 64
+	t.test('check ' + count + ' limit for count of require() calls', function (t)
+	{
+		var total = 0
+		
+		function onload (e)
+		{
+			if (++total == count)
+			{
+				t.eq(total, count, 'total')
+				t.done()
+			}
+		}
+		
+		for (var i = 0; i < count; i++)
+			require('require-file-3.js', onload)
+		
+		t.wait(30000)
+	})
 })
 </script>
 </body>
