@@ -48,7 +48,7 @@ Tests.test(function (t)
 				t.eq(window.veryGlobalCounter, num)
 				t.no(called[num], 'already called')
 				called[num] = true
-				t.done()
+				setTimeout(function () { t.done() }, 250)
 			}
 			
 			require('require-file-2.js', onload)
@@ -88,6 +88,7 @@ Tests.test(function (t)
 		
 		for (var i = 0; i < count; i++)
 			require('require-file-3.js', onload)
+			// setTimeout(onload, 10)
 		
 		t.wait(30000)
 	})
