@@ -154,7 +154,7 @@ Me.prototype =
 		if (timers[name])
 			holder.clearTimeout(timers[name])
 		
-		return timers[name] = holder.setTimeout(func, delay)
+		return timers[name] = holder.setTimeout(func, delay || 0)
 	},
 	
 	timersClear: function ()
