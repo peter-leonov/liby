@@ -19,10 +19,10 @@ Tests.test(function (t)
 	{
 		t.expect(1)
 		var script = document.getElementsByTagName('head')[0].appendChild(document.createElement('script'))
-		script.addEventListener('load', load, false)
+		script.addEventListener('load', onload, false)
 		script.src = 'require-file-1.js?ac=' + Math.random()
 		t.time('load')
-		function load (e)
+		function onload (e)
 		{
 			t.timeEnd('load')
 			t.ok(window.veryGlobalVaiable, 'global variable set')
@@ -31,6 +31,44 @@ Tests.test(function (t)
 		
 		t.wait(10000)
 	})
+	
+	t.test('require()', function (t)
+	{
+		t.parallel(1)
+		
+		window.veryGlobalCounter = 0
+		
+		function test (t, count)
+		{
+			t.expect(1)
+			
+			function onload (e)
+			{
+				t.eq(window.veryGlobalCounter, count)
+				t.done()
+			}
+			
+			require('require-file-2.js', onload)
+			
+			t.wait(10000)
+		}
+		
+		t.test('fist', function (t)
+		{
+			test(t, 1)
+		})
+		
+		t.test('second', function (t)
+		{
+			test(t, 2)
+		})
+		
+		t.test('third', function (t)
+		{
+			test(t, 3)
+		})
+	})
+	
 })
 </script>
 </body>
