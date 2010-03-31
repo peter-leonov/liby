@@ -345,7 +345,7 @@ Me.prototype =
 	}
 }
 
-self[myName] = Me
+Test[myName] = Me
 
 Test.Tool.prototype.inspect = function (val)
 {
