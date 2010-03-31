@@ -42,6 +42,9 @@ var myName = 'Tests', Me =
 		var test = this.mainTest = new Test(this, title, null, this.callback)
 		test.reporter = reporter
 		test.run()
+		
+		var hide = reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
+		hide.onclick = function () { reporter.hide() }
 	},
 	
 	childTest: function ()
@@ -93,6 +96,11 @@ Reporter.prototype =
 		else
 			main.className += ' ' + s
 		this.lastStatus = s
+	},
+	
+	hide: function ()
+	{
+		this.nodes.main.style.display = 'none'
 	},
 	
 	summary: function (text)
