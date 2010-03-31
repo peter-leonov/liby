@@ -64,7 +64,14 @@ var prototype =
 	
 	unlike: function (a, b, d)
 	{
-		if (this.inspect(a, 10, true) !== this.inspect(b, 10, true))
+		var same = false
+		try
+		{
+			same = this.inspect(a, 10, true) === this.inspect(b, 10, true)
+		}
+		catch (ex) {}
+		
+		if (!same)
 			this.pass([a, 'is unlike', b], d)
 		else
 			this.fail([a, 'is like', b], d)
