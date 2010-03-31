@@ -61,6 +61,8 @@ body{font: 12px Arial,sans-serif;}
 	margin-left: 2em;
 }
 
+#tests-output .line .middle-text { color: #aaa; }
+
 #tests-output .line a { text-decoration: none; }
 #tests-output .line a:hover { border-bottom: 0.1em dashed; }
 

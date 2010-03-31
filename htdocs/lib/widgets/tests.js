@@ -129,7 +129,7 @@ Reporter.prototype =
 			{
 				row.appendChild(this.inspect(m[0]))
 				row.appendChild(T(' '))
-				row.appendChild(T(m[1]))
+				row.appendChild(N('span', 'middle-text', m[1]))
 				row.appendChild(T(' '))
 				row.appendChild(this.inspect(m[2]))
 			}
