@@ -12,6 +12,28 @@ Tests.test(function (t)
 {
 	t.ok(true, 'in the root test')
 	
+	t.test('inspector', function (t)
+	{
+		t.failing(true)
+		
+		t.test('exception', function (t)
+		{
+			lalala()
+		})
+		
+		var obj = {add: {a: 1, b: 2}, change: {}, remove: {}, total: 3}
+		t.like(obj, obj, 'small object')
+		t.like(obj, [obj], 'small object')
+		
+		function Lalala () {}
+		function Lololo () {}
+		
+		t.like(Lalala, Lololo, 'functions')
+		
+		t.like(window, document, 'window and document')
+	})
+	
+	
 	t.test('nested fail', function (t)
 	{
 		t.failing(true)
