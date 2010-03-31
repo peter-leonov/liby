@@ -371,8 +371,15 @@ Me.prototype =
 				}
 			
 			case 'function':
-				if (!(res = val.className))
-					res = String(val)
+				if (res = val.className)
+					res = '[class ' + res + ']'
+				else
+				{
+					if (res = /^(.*?)\s*\{/.exec(val))
+						res = res[1]
+					else
+						res = 'function ? (?)'
+				}
 				break
 			
 			default:

@@ -30,7 +30,15 @@ Tests.test(function (t)
 		
 		t.like(Lalala, Lololo, 'functions')
 		
+		Lalala.className = 'Lalala'
+		Lololo.className = 'Lololo'
+		t.like(Lalala, Lololo, 'classes')
+		
+		
+		t.like(Lalala, Lololo, 'functions')
+		
 		t.like(window, document, 'window and document')
+		
 	})
 	
 	
