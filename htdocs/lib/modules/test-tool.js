@@ -49,7 +49,14 @@ var prototype =
 	
 	like: function (a, b, d)
 	{
-		if (this.inspect(a, 10, true) === this.inspect(b, 10, true))
+		var same = false
+		try
+		{
+			same = this.inspect(a, 10, true) === this.inspect(b, 10, true)
+		}
+		catch (ex) {}
+		
+		if (same)
 			this.pass([a, 'is like', b], d)
 		else
 			this.fail([a, 'is unlike', b], d)
@@ -234,14 +241,17 @@ Me.prototype =
 	deep: 1,
 	hard: false,
 	level: 0,
+	maxElements: 8,
 	indc: '	',
 	
-	inspect: function (val, deep, hard)
+	inspect: function (val, deep, hard, maxElements)
 	{
 		if (deep !== undefined)
 			this.deep = deep
 		if (hard !== undefined)
 			this.hard = hard
+		if (maxElements !== undefined)
+			this.maxElements = maxElements
 		
 		try
 		{
@@ -294,7 +304,9 @@ Me.prototype =
 				}
 				
 				// remember complex objects
-				var seen = this.seen, num = seen.indexOf(val)
+				var seen = this.seen,
+					maxElements = this.maxElements,
+					num = seen.indexOf(val)
 				if (num >= 0)
 					return '#' + num
 				seen.push(val)
@@ -309,7 +321,15 @@ Me.prototype =
 					
 					var elements = []
 					for (var i = 0, il = val.length; i < il; i++)
+					{
+						if (i >= maxElements)
+						{
+							elements.push('…')
+							break
+						}
+						
 						elements.push(this.walk(val[i]))
+					}
 					res = (this.level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + ']'
 					break
 				}
@@ -330,6 +350,12 @@ Me.prototype =
 					var elements = []
 					for (var i = 0, il = keys.length; i < il; i++)
 					{
+						if (i >= maxElements)
+						{
+							elements.push('…')
+							break
+						}
+						
 						var k = keys[i]
 						try
 						{
