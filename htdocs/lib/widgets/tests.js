@@ -14,6 +14,7 @@ function N (tag, cn, text)
 
 var myName = 'Tests', Me = self[myName] =
 {
+	maxLabelLength: 100,
 	nodes: {},
 	onload: function ()
 	{
@@ -104,8 +105,9 @@ Reporter.prototype =
 	
 	makeLablel: function (v)
 	{
-		var label = String(v)
-		return label.length > 75 ? label.substr(0, 75) + ' …' : label
+		var label = String(v),
+			ml = this.maxLabelLength
+		return label.length > ml ? label.substr(0, ml) + ' …' : label
 	},
 	
 	inspect: function (v)
