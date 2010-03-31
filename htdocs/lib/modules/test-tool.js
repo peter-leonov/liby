@@ -50,17 +50,17 @@ var prototype =
 	like: function (a, b, d)
 	{
 		if (this.inspect(a, 10, true) === this.inspect(b, 10, true))
-			this.pass([a, '===', b], d)
+			this.pass([a, 'is like', b], d)
 		else
-			this.fail([a, '!==', b], d)
+			this.fail([a, 'is unlike', b], d)
 	},
 	
 	unlike: function (a, b, d)
 	{
 		if (this.inspect(a, 10, true) !== this.inspect(b, 10, true))
-			this.pass([a, '!==', b], d)
+			this.pass([a, 'is unlike', b], d)
 		else
-			this.fail([a, '===', b], d)
+			this.fail([a, 'is like', b], d)
 	},
 	
 	lt: function (a, b, d)
