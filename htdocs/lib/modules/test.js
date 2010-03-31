@@ -208,6 +208,7 @@ for (var k in prototype)
 	proto[k] = prototype[k]
 Me.prototype = proto
 
+Me.className = myName
 self[myName] = Me
 
 var empty = function () {}, devNull =

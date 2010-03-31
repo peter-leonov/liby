@@ -12,7 +12,7 @@ function N (tag, cn, text)
 	return node
 }
 
-var myName = 'Tests', Me = self[myName] =
+var myName = 'Tests', Me =
 {
 	maxLabelLength: 100,
 	nodes: {},
@@ -55,6 +55,9 @@ var myName = 'Tests', Me = self[myName] =
 	sigchild: function () {}
 }
 
+Me.className = myName
+self[myName] = Me
+
 window.onload = function () { Me.onload() }
 
 
@@ -68,6 +71,7 @@ var Reporter = function (name)
 	nodes.body = nodes.main.appendChild(N('dt', 'body'))
 	nodes.output = nodes.body.appendChild(N('ol'))
 }
+
 Reporter.prototype =
 {
 	create: function ()
@@ -153,6 +157,7 @@ Reporter.prototype =
 	log:  function (m, d) { this.line('log', m, d) }
 }
 
+Reporter.className = 'Reporter'
 
 
 var s = self
