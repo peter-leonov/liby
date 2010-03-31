@@ -102,6 +102,20 @@ Reporter.prototype =
 		row.appendChild(node)
 	},
 	
+	makeLablel: function (v)
+	{
+		var label = String(v)
+		return label.length > 75 ? label.substr(0, 75) + ' …' : label
+	},
+	
+	inspect: function (v)
+	{
+		var link = N('a')
+		link.onclick = (function (v) { return function () { console.dir(v) } })(v)
+		link.appendChild(T(this.makeLablel(v)))
+		return link
+	},
+	
 	line: function (cn, m, desc)
 	{
 		var row = this.nodes.output.appendChild(N('li', 'line ' + cn))
@@ -109,15 +123,22 @@ Reporter.prototype =
 		if (desc !== undefined)
 			row.appendChild(T(desc + ': '))
 		
-		if (m.constructor === Array)
+		if (typeof m == 'object' && m.constructor === Array)
 		{
-			for (var i = 0; i < m.length; i++)
+			if (m.length == 3)
 			{
-				var elem = String(m[i])
-				if (elem.length > 75)
-					elem = elem.substr(0, 75) + ' …'
-				row.appendChild(T(elem + ' '))
+				row.appendChild(this.inspect(m[0]))
+				row.appendChild(T(' '))
+				row.appendChild(T(m[1]))
+				row.appendChild(T(' '))
+				row.appendChild(this.inspect(m[2]))
 			}
+			else
+				for (var i = 0; i < m.length; i++)
+				{
+					row.appendChild(this.inspect(m[i]))
+					row.appendChild(T(' '))
+				}
 		}
 		else
 			row.appendChild(T(m))
