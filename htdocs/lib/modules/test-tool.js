@@ -287,6 +287,12 @@ Me.prototype =
 					break
 				}
 				
+				if (val instanceof Error)
+				{
+					res = val.message + ' at ' + (val.fileName || val.sourceURL) + ':' + (val.line || val.lineNumber)
+					break
+				}
+				
 				// remember complex objects
 				var seen = this.seen, num = seen.indexOf(val)
 				if (num >= 0)

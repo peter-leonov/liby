@@ -43,7 +43,7 @@ var sup = Super.prototype,
 		}
 		catch (ex)
 		{
-			this.fail([ex.message, ex.fileName || ex.sourceURL, ex.line || ex.lineNumber], 'got an exception')
+			this.fail([ex], 'got an exception')
 		}
 	},
 	
