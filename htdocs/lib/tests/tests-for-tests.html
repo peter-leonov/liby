@@ -23,7 +23,7 @@ Tests.test(function (t)
 		
 		var obj = {add: {a: 1, b: 2}, change: {}, remove: {}, total: 3}
 		t.like(obj, obj, 'small object')
-		t.like(obj, [obj], 'small object')
+		t.like(obj, {}, 'small object')
 		
 		function Lalala () {}
 		function Lololo () {}
