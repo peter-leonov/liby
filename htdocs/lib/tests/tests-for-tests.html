@@ -38,7 +38,12 @@ Tests.test(function (t)
 		t.like(Lalala, Lololo, 'functions')
 		
 		t.like(window, document, 'window and document')
+		t.unlike(window, document, 'window and document')
 		
+		t.time('lalala')
+		t.timeEnd('lalala')
+		
+		t.eq(5, 5, 'eq')
 	})
 	
 	

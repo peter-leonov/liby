@@ -1,7 +1,6 @@
 ;(function(){
 
-
-var doc = document
+var doc = document, Label = Test.Label
 
 function T (text) { return doc.createTextNode(text) }
 function N (tag, cn, text)
@@ -123,32 +122,26 @@ Reporter.prototype =
 		return link
 	},
 	
-	line: function (cn, m, desc)
+	line: function (cn, m, d)
 	{
 		var row = this.nodes.output.appendChild(N('li', 'line ' + cn))
 		
-		if (desc !== undefined)
-			row.appendChild(T(desc + ': '))
+		if (d !== undefined)
+			row.appendChild(T(d + ': '))
 		
-		if (typeof m == 'object' && m.constructor === Array)
+		if (!m || typeof m != 'object' || m.constructor != Array)
+			m = [m]
+		
+		for (var i = 0; i < m.length; i++)
 		{
-			if (m.length == 3)
-			{
-				row.appendChild(this.inspect(m[0]))
-				row.appendChild(T(' '))
-				row.appendChild(N('span', 'middle-text', m[1]))
-				row.appendChild(T(' '))
-				row.appendChild(this.inspect(m[2]))
-			}
+			var v = m[i]
+			
+			if (v instanceof Label)
+				row.appendChild(N('span', v.className, v.text))
 			else
-				for (var i = 0; i < m.length; i++)
-				{
-					row.appendChild(this.inspect(m[i]))
-					row.appendChild(T(' '))
-				}
+				row.appendChild(this.inspect(m[i]))
+			row.appendChild(T(' '))
 		}
-		else
-			row.appendChild(T(m))
 	},
 	
 	fail: function (m, d) { this.line('fail', m, d) },
