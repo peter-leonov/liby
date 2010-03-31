@@ -99,7 +99,7 @@ Tests.test(function (t)
 		m.sort(byX)
 	}
 	var mtime = t.timeEnd('multiple')
-	t.eqo(m, sorted, 'multiple sorts as expected')
+	t.like(m, sorted, 'multiple sorts as expected')
 	
 	
 	
@@ -110,7 +110,7 @@ Tests.test(function (t)
 		s.sort(single)
 	}
 	var stime = t.timeEnd('single')
-	t.eqo(s, sorted, 'single sorts as expected')
+	t.like(s, sorted, 'single sorts as expected')
 	
 	
 	
@@ -121,18 +121,18 @@ Tests.test(function (t)
 		c.sort(combined)
 	}
 	var ctime = t.timeEnd('combined')
-	t.eqo(c, sorted, 'combined sorts as expected')
+	t.like(c, sorted, 'combined sorts as expected')
 	
 	
-	t.eqo(s, m, 'single and multiple sorts acts the same')
-	t.eqo(s, c, 'single and combined sorts acts the same')
-	t.neo(m, messed, 'doublecheck: multiple is not messed')
-	t.neo(s, messed, 'doublecheck: single is not messed')
+	t.like(s, m, 'single and multiple sorts acts the same')
+	t.like(s, c, 'single and combined sorts acts the same')
+	t.unlike(m, messed, 'doublecheck: multiple is not messed')
+	t.unlike(s, messed, 'doublecheck: single is not messed')
 	t.gt(mtime, stime, 'multiple takes more time then single')
 	t.gt(mtime, stime, 'single takes more time then combined')
 	
-	t.eqo(messed, backup, 'messed left untouched')
-	t.eqo(messed, backup, 'messed not equals to sorted')
+	t.like(messed, backup, 'messed left untouched')
+	t.like(messed, backup, 'messed not equals to sorted')
 })
 </script>
 </body>

@@ -41,11 +41,11 @@ Tests.test(function (t)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
-		t.eqo([box.x, box.y, box.w, box.h], [10 + 10, 20 + 20, 30, 40], 'a box')
+		t.like([box.x, box.y, box.w, box.h], [10 + 10, 20 + 20, 30, 40], 'a box')
 		
 		var box = boxes[1]
 		t.eq(box.node, children[1], 'b node')
-		t.eqo([box.x, box.y, box.w, box.h], [50 + 10, 60 + 20, 70, 80], 'b box')
+		t.like([box.x, box.y, box.w, box.h], [50 + 10, 60 + 20, 70, 80], 'b box')
 	})
 	
 	t.test('nodes with different boundaries', function (t)
@@ -56,11 +56,11 @@ Tests.test(function (t)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
-		t.eqo([box.x, box.y, box.w, box.h], [10, 20, 30, 40], 'a box')
+		t.like([box.x, box.y, box.w, box.h], [10, 20, 30, 40], 'a box')
 		
 		var box = boxes[1]
 		t.eq(box.node, children[1], 'b node')
-		t.eqo([box.x, box.y, box.w, box.h], [50, 60, 70, 80], 'b box')
+		t.like([box.x, box.y, box.w, box.h], [50, 60, 70, 80], 'b box')
 	})
 	
 	t.test('different nodes with custom width and height', function (t)
@@ -71,11 +71,11 @@ Tests.test(function (t)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
-		t.eqo([box.x, box.y, box.w, box.h], [10, 20, 55, 66], 'a box')
+		t.like([box.x, box.y, box.w, box.h], [10, 20, 55, 66], 'a box')
 		
 		var box = boxes[1]
 		t.eq(box.node, children[1], 'b node')
-		t.eqo([box.x, box.y, box.w, box.h], [50, 60, 55, 66], 'b box')
+		t.like([box.x, box.y, box.w, box.h], [50, 60, 55, 66], 'b box')
 	})
 	
 	t.test('nodes with same boundaries', function (t)
@@ -86,18 +86,18 @@ Tests.test(function (t)
 		
 		var box = boxes[0]
 		t.eq(box.node, children[0], 'a node')
-		t.eqo([box.x, box.y, box.w, box.h], [10, 20, 10, 20], 'a box')
+		t.like([box.x, box.y, box.w, box.h], [10, 20, 10, 20], 'a box')
 		
 		var box = boxes[1]
 		t.eq(box.node, children[1], 'b node')
-		t.eqo([box.x, box.y, box.w, box.h], [30, 40, 10, 20], 'b box')
+		t.like([box.x, box.y, box.w, box.h], [30, 40, 10, 20], 'b box')
 	})
 	
 	t.test('empty nodes array', function (t)
 	{
-		t.eqo(Boxer.nodesToBoxes([]), [], 'nodesToBoxes()')
-		t.eqo(Boxer.nodesToBoxes([], null, 100, 200), [], 'nodesToBoxesWH()')
-		t.eqo(Boxer.sameNodesToBoxes([]), [], 'sameNodesToBoxes()')
+		t.like(Boxer.nodesToBoxes([]), [], 'nodesToBoxes()')
+		t.like(Boxer.nodesToBoxes([], null, 100, 200), [], 'nodesToBoxesWH()')
+		t.like(Boxer.sameNodesToBoxes([]), [], 'sameNodesToBoxes()')
 	})
 })
 </script>

@@ -47,7 +47,7 @@ var prototype =
 			this.fail([a, '===', b], d)
 	},
 	
-	eqo: function (a, b, d)
+	like: function (a, b, d)
 	{
 		if (this.inspect(a, 10, true) === this.inspect(b, 10, true))
 			this.pass([a, '===', b], d)
@@ -55,7 +55,7 @@ var prototype =
 			this.fail([a, '!==', b], d)
 	},
 	
-	neo: function (a, b, d)
+	unlike: function (a, b, d)
 	{
 		if (this.inspect(a, 10, true) !== this.inspect(b, 10, true))
 			this.pass([a, '!==', b], d)

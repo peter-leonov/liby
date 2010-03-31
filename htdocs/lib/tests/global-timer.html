@@ -20,7 +20,7 @@ Tests.test(function (t)
 	t.test('initial state', function (t)
 	{
 		t.eq(Me.timer, null, 'timer == null')
-		t.eqo(Me.timers, {}, 'timers == {}')
+		t.like(Me.timers, {}, 'timers == {}')
 		t.ne(Me.fps, undefined, 'fps is present')
 	})
 	
@@ -48,14 +48,14 @@ Tests.test(function (t)
 		t.eq(Me.total, 3, 'total == 3')
 		
 		t.eq(Object.keys(Me.timers).length, 3, 'timers count is 3')
-		t.eqo(Object.keys(Me.timers).sort(), ['1', '2', '3'], 'all 3 times are in')
+		t.like(Object.keys(Me.timers).sort(), ['1', '2', '3'], 'all 3 times are in')
 		
 		t.eq(Me.remove(timer2), callback2, 'remove(2) returns proper callback')
 		t.ne(Me.timer, null, 'timer is not null')
 		t.eq(Me.total, 2, 'total == 2')
 		
 		t.eq(Object.keys(Me.timers).length, 2, 'timers count is 2')
-		t.eqo(Object.keys(Me.timers).sort(), ['1', '3'], 'all 2 times are in')
+		t.like(Object.keys(Me.timers).sort(), ['1', '3'], 'all 2 times are in')
 		
 		t.eq(Me.remove(timer1), callback1, 'remove(1) returns proper callback')
 		t.ne(Me.timer, null, 'timer is not null')
@@ -114,7 +114,7 @@ Tests.test(function (t)
 		
 		Me.remove(timer2)
 		
-		t.async(function () { t.eqo(order, [1, 3, 5, 1, 3, 5, 1, 5, 5, 5]) }, 1000)
+		t.async(function () { t.like(order, [1, 3, 5, 1, 3, 5, 1, 5, 5, 5]) }, 1000)
 	})
 })
 </script>

@@ -168,7 +168,7 @@ Tests.test(function (t)
 		
 		var shape = new Shape()
 		t.notinstance(shape, Shape)
-		t.eqo(shape, {a:123}, '{a:123} was not kicked off')
+		t.like(shape, {a:123}, '{a:123} was not kicked off')
 		
 		function Circle ()
 		{
@@ -177,7 +177,7 @@ Tests.test(function (t)
 		
 		var shape = new Circle()
 		t.instance(shape, Circle)
-		t.eqo(shape, {}, '123 was kicked off')
+		t.like(shape, {}, '123 was kicked off')
 	})
 	
 	t.test('exceptions', function (t)

@@ -84,7 +84,7 @@ Tests.test(function (t)
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
-		t.eqo(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
+		t.like(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
 		
 		var event1, event2, event3
 		node.addEventListener(type, function (e) { event1 = e; e.abc++ }, false)

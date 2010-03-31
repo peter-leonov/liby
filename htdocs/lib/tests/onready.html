@@ -23,7 +23,7 @@ Tests.test(function (t)
 {
 	t.test('load order', function (t)
 	{
-		t.eqo(loadOrder, ['script1', 'script2', 'onready1', 'onready2', 'onload1', 'onload2'])
+		t.like(loadOrder, ['script1', 'script2', 'onready1', 'onready2', 'onload1', 'onload2'])
 	})
 	
 	t.test('onload vs. onready delay', function (t)

@@ -28,15 +28,14 @@ Tests.test(function (t)
 		C.prototype.z = 'C'
 		
 		var c = new C()
-		t.eqo(c, {x: 'A', y: 'B', z: 'C'})
+		t.like(c, {x: 'A', y: 'B', z: 'C'})
 		
 		var M = function () {}
 		M.prototype.x = 'M'
 		M.prototype.q = 'M'
 		M.prototype.y = 'M'
 		B.mixIn(M)
-		t.eqo(c, {x: 'A', y: 'B', z: 'C', q: 'M'})
-		
+		t.like(c, {x: 'A', y: 'B', z: 'C', q: 'M'})
 	})
 })
 </script>
