@@ -331,7 +331,14 @@ Me.prototype =
 					for (var i = 0, il = keys.length; i < il; i++)
 					{
 						var k = keys[i]
-						elements.push(this.walk(k) + ': ' + this.walk(val[k]))
+						try
+						{
+							elements.push(this.walk(k) + ': ' + this.walk(val[k]))
+						}
+						catch (ex)
+						{
+							elements.push(this.walk(k) + ': [exception ' + ex.message + ']')
+						}
 					}
 					res = (this.level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + '}'
 					break
