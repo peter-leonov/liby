@@ -118,7 +118,7 @@ Tests.test(function (t)
 		"})\n"
 		)(t, words)
 		
-		t.eqo([foundRex, foundHash, foundIf, foundSwitch], [foundHash, foundIf, foundSwitch, foundRex], 'check founds')
+		t.like([foundRex, foundHash, foundIf, foundSwitch], [foundHash, foundIf, foundSwitch, foundRex], 'check founds')
 	}
 	
 	var words = bakeWords(),

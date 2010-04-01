@@ -43,7 +43,7 @@ var sup = Super.prototype,
 		}
 		catch (ex)
 		{
-			this.fail([ex.message, ex.fileName || ex.sourceURL, ex.line || ex.lineNumber], 'got an exception')
+			this.fail([ex], 'got an exception')
 		}
 	},
 	
@@ -208,6 +208,7 @@ for (var k in prototype)
 	proto[k] = prototype[k]
 Me.prototype = proto
 
+Me.className = myName
 self[myName] = Me
 
 var empty = function () {}, devNull =

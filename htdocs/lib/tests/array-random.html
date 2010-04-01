@@ -17,12 +17,12 @@ Tests.test(function (t)
 	{
 		var array = [1, 2, 3, 4, 5]
 		
-		t.eqo(array.random(0), [], 'zero')
+		t.like(array.random(0), [], 'zero')
 		t.eq(array.random(1).length, 1, 'one length')
 		t.type(array.random(1)[0], 'number', 'one value')
 		t.eq(array.random(array.length).length, array.length, 'full length')
 		t.eq(array.random(array.length + 1).length, array.length, 'greater then length')
-		t.eqo(array.random(-1), [], 'less then zero')
+		t.like(array.random(-1), [], 'less then zero')
 		t.eq(array.random(2.5).length, 2, 'float point')
 	})
 	

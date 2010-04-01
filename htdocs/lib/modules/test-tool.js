@@ -18,108 +18,122 @@ var prototype =
 	ok: function (v, d)
 	{
 		if (v)
-			this.pass([v, 'is true'], d)
+			this.pass([v, new Label('is true')], d)
 		else
-			this.fail([v, 'is not true'], d)
+			this.fail([v, new Label('is not true')], d)
 	},
 	
 	no: function (v, d)
 	{
 		if (!v)
-			this.pass([v, 'is false'], d)
+			this.pass([v, new Label('is false')], d)
 		else
-			this.fail([v, 'is not false'], d)
+			this.fail([v, new Label('is not false')], d)
 	},
 	
 	eq: function (a, b, d)
 	{
 		if (a === b)
-			this.pass([a, '===', b], d)
+			this.pass([a, new Label('===', 'label middle'), b], d)
 		else
-			this.fail([a, '!==', b], d)
+			this.fail([a, new Label('!==', 'label middle'), b], d)
 	},
 	
 	ne: function (a, b, d)
 	{
 		if (a !== b)
-			this.pass([a, '!==', b], d)
+			this.pass([a, new Label('!==', 'label middle'), b], d)
 		else
-			this.fail([a, '===', b], d)
+			this.fail([a, new Label('===', 'label middle'), b], d)
 	},
 	
-	eqo: function (a, b, d)
+	like: function (a, b, d)
 	{
-		if (this.inspect(a, 10, true) === this.inspect(b, 10, true))
-			this.pass([a, '===', b], d)
+		var same = false
+		try
+		{
+			same = this.inspect(a, 10, true) === this.inspect(b, 10, true)
+		}
+		catch (ex) {}
+		
+		if (same)
+			this.pass([a, new Label('is like', 'label middle'), b], d)
 		else
-			this.fail([a, '!==', b], d)
+			this.fail([a, new Label('is unlike', 'label middle'), b], d)
 	},
 	
-	neo: function (a, b, d)
+	unlike: function (a, b, d)
 	{
-		if (this.inspect(a, 10, true) !== this.inspect(b, 10, true))
-			this.pass([a, '!==', b], d)
+		var same = false
+		try
+		{
+			same = this.inspect(a, 10, true) === this.inspect(b, 10, true)
+		}
+		catch (ex) {}
+		
+		if (!same)
+			this.pass([a, new Label('is unlike', 'label middle'), b], d)
 		else
-			this.fail([a, '===', b], d)
+			this.fail([a, new Label('is like', 'label middle'), b], d)
 	},
 	
 	lt: function (a, b, d)
 	{
 		if (a < b)
-			this.pass([a, '<', b], d)
+			this.pass([a, new Label('<', 'label middle'), b], d)
 		else
-			this.fail([a, '>=', b], d)
+			this.fail([a, new Label('>=', 'label middle'), b], d)
 	},
 	lte: function (a, b, d)
 	{
 		if (a <= b)
-			this.pass([a, '<=', b], d)
+			this.pass([a, new Label('<=', 'label middle'), b], d)
 		else
-			this.fail([a, '>', b], d)
+			this.fail([a, new Label('>', 'label middle'), b], d)
 	},
 	gte: function (a, b, d)
 	{
 		if (a >= b)
-			this.pass([a, '>=', b], d)
+			this.pass([a, new Label('>=', 'label middle'), b], d)
 		else
-			this.fail([a, '<', b], d)
+			this.fail([a, new Label('<', 'label middle'), b], d)
 	},
 	gt: function (a, b, d)
 	{
 		if (a > b)
-			this.pass([a, '>', b], d)
+			this.pass([a, new Label('>', 'label middle'), b], d)
 		else
-			this.fail([a, '<=', b], d)
+			this.fail([a, new Label('<=', 'label middle'), b], d)
 	},
 	
 	instance: function (a, b, d)
 	{
 		if (a instanceof b)
-			this.pass([a, 'instanceof', b], d)
+			this.pass([a, new Label('instanceof', 'label middle'), b], d)
 		else
-			this.fail([a, 'is not instanceof', b], d)
+			this.fail([a, new Label('is not instanceof', 'label middle'), b], d)
 	},
 	notinstance: function (a, b, d)
 	{
 		if (!(a instanceof b))
-			this.pass([a, 'is not instanceof', b], d)
+			this.pass([a, new Label('is not instanceof', 'label middle'), b], d)
 		else
-			this.fail([a, 'instanceof', b], d)
+			this.fail([a, new Label('instanceof', 'label middle'), b], d)
 	},
 	
 	type: function (a, b, d)
 	{
 		if (typeof a === b)
-			this.pass([a, 'typeof', b], d)
+			this.pass([a, new Label('typeof', 'label middle'), b], d)
 		else
-			this.fail([a, 'is not typeof', b], d)
+			this.fail([a, new Label('is not typeof', 'label middle'), b], d)
 	},
 	nottype: function (a, b, d)
 	{
 		if (!(typeof a === b))
-			this.pass([a, 'is not typeof', b], d)
+			this.pass([a, new Label('is not typeof', 'label middle'), b], d)
 		else
-			this.fail([a, 'typeof', b], d)
+			this.fail([a, new Label('typeof', 'label middle'), b], d)
 	},
 	
 	exception: function (f, c, d)
@@ -134,13 +148,13 @@ var prototype =
 		}
 		catch (ex)
 		{
-			this.pass(['exception was thrown', ex], d)
+			this.pass([new Label('exception was thrown'), ex], d)
 			if (c)
 				c(this, ex)
 			return
 		}
 		
-		this.fail('no exception was thrown', d)
+		this.fail(new Label('no exception was thrown'), d)
 	},
 	noexception: function (f, d)
 	{
@@ -150,11 +164,11 @@ var prototype =
 		}
 		catch (ex)
 		{
-			this.fail(['exception was thrown', ex], d)
+			this.fail([new Label('exception was thrown'), ex], d)
 			return
 		}
 		
-		this.pass('no exception was thrown', d)
+		this.pass(new Label('no exception was thrown'), d)
 	},
 	
 	_times: {},
@@ -166,7 +180,7 @@ var prototype =
 	timeEnd: function (name)
 	{
 		var diff = new Date() - this._times[name]
-		this.info((name || 'time') + ': ' + diff + 'ms')
+		this.info(new Label(diff + 'ms'), name || 'time')
 		return diff
 	},
 	
@@ -187,6 +201,9 @@ var prototype =
 		return speed
 	}
 }
+
+function Label (text, cn) { this.text = text; this.className = cn }
+self.Test.Label = Label
 
 function proxyParent (name) { return function () { return this.parent[name].apply(this.parent, arguments) } }
 
@@ -234,14 +251,17 @@ Me.prototype =
 	deep: 1,
 	hard: false,
 	level: 0,
+	maxElements: 8,
 	indc: '	',
 	
-	inspect: function (val, deep, hard)
+	inspect: function (val, deep, hard, maxElements)
 	{
 		if (deep !== undefined)
 			this.deep = deep
 		if (hard !== undefined)
 			this.hard = hard
+		if (maxElements !== undefined)
+			this.maxElements = maxElements
 		
 		try
 		{
@@ -287,8 +307,16 @@ Me.prototype =
 					break
 				}
 				
+				if (val instanceof Error)
+				{
+					res = val.message + ' at ' + (val.fileName || val.sourceURL) + ':' + (val.line || val.lineNumber)
+					break
+				}
+				
 				// remember complex objects
-				var seen = this.seen, num = seen.indexOf(val)
+				var seen = this.seen,
+					maxElements = this.maxElements,
+					num = seen.indexOf(val)
 				if (num >= 0)
 					return '#' + num
 				seen.push(val)
@@ -303,7 +331,15 @@ Me.prototype =
 					
 					var elements = []
 					for (var i = 0, il = val.length; i < il; i++)
+					{
+						if (i >= maxElements)
+						{
+							elements.push('…')
+							break
+						}
+						
 						elements.push(this.walk(val[i]))
+					}
 					res = (this.level > 1 ? '\n\r' : '') + ind + '[\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + ']'
 					break
 				}
@@ -324,16 +360,36 @@ Me.prototype =
 					var elements = []
 					for (var i = 0, il = keys.length; i < il; i++)
 					{
+						if (i >= maxElements)
+						{
+							elements.push('…')
+							break
+						}
+						
 						var k = keys[i]
-						elements.push(this.walk(k) + ': ' + this.walk(val[k]))
+						try
+						{
+							elements.push(this.walk(k) + ': ' + this.walk(val[k]))
+						}
+						catch (ex)
+						{
+							elements.push(this.walk(k) + ': [exception ' + ex.message + ']')
+						}
 					}
 					res = (this.level > 1 ? '\n\r' : '') + ind + '{\n\r' + ind + this.indc + elements.join(',\n\r' + ind + this.indc) + '\n\r' + ind + '}'
 					break
 				}
 			
 			case 'function':
-				if (!(res = val.className))
-					res = String(val)
+				if (res = val.className)
+					res = '[class ' + res + ']'
+				else
+				{
+					if (res = /^(.*?)\s*\{/.exec(val))
+						res = res[1]
+					else
+						res = 'function ? (?)'
+				}
 				break
 			
 			default:
@@ -345,7 +401,7 @@ Me.prototype =
 	}
 }
 
-self[myName] = Me
+Test[myName] = Me
 
 Test.Tool.prototype.inspect = function (val)
 {

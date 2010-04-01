@@ -1,7 +1,6 @@
 ;(function(){
 
-
-var doc = document
+var doc = document, Label = Test.Label
 
 function T (text) { return doc.createTextNode(text) }
 function N (tag, cn, text)
@@ -12,8 +11,9 @@ function N (tag, cn, text)
 	return node
 }
 
-var myName = 'Tests', Me = self[myName] =
+var myName = 'Tests', Me =
 {
+	maxLabelLength: 100,
 	nodes: {},
 	onload: function ()
 	{
@@ -42,6 +42,9 @@ var myName = 'Tests', Me = self[myName] =
 		var test = this.mainTest = new Test(this, title, null, this.callback)
 		test.reporter = reporter
 		test.run()
+		
+		var hide = reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
+		hide.onclick = function () { reporter.hide() }
 	},
 	
 	childTest: function ()
@@ -53,6 +56,9 @@ var myName = 'Tests', Me = self[myName] =
 	// ignore raw sigchilds
 	sigchild: function () {}
 }
+
+Me.className = myName
+self[myName] = Me
 
 window.onload = function () { Me.onload() }
 
@@ -67,6 +73,7 @@ var Reporter = function (name)
 	nodes.body = nodes.main.appendChild(N('dt', 'body'))
 	nodes.output = nodes.body.appendChild(N('ol'))
 }
+
 Reporter.prototype =
 {
 	create: function ()
@@ -91,6 +98,11 @@ Reporter.prototype =
 		this.lastStatus = s
 	},
 	
+	hide: function ()
+	{
+		this.nodes.main.style.display = 'none'
+	},
+	
 	summary: function (text)
 	{
 		this.nodes.summary.appendChild(T(text))
@@ -102,25 +114,42 @@ Reporter.prototype =
 		row.appendChild(node)
 	},
 	
-	line: function (cn, m, desc)
+	makeLablel: function (v)
+	{
+		var label = String(v),
+			ml = this.maxLabelLength
+		return label.length > ml ? label.substr(0, ml) + ' …' : label
+	},
+	
+	inspect: function (v)
+	{
+		var link = N('a')
+		link.onclick = (function (v) { return function () { console.dir(v) } })(v)
+		var inspector = new Test.Inspector()
+		link.appendChild(T(this.makeLablel(inspector.inspect(v))))
+		return link
+	},
+	
+	line: function (cn, m, d)
 	{
 		var row = this.nodes.output.appendChild(N('li', 'line ' + cn))
 		
-		if (desc !== undefined)
-			row.appendChild(T(desc + ': '))
+		if (d !== undefined)
+			row.appendChild(T(d + ': '))
 		
-		if (m.constructor === Array)
+		if (!m || typeof m != 'object' || m.constructor != Array)
+			m = [m]
+		
+		for (var i = 0; i < m.length; i++)
 		{
-			for (var i = 0; i < m.length; i++)
-			{
-				var elem = String(m[i])
-				if (elem.length > 75)
-					elem = elem.substr(0, 75) + ' …'
-				row.appendChild(T(elem + ' '))
-			}
+			var v = m[i]
+			
+			if (v instanceof Label)
+				row.appendChild(N('span', v.className, v.text))
+			else
+				row.appendChild(this.inspect(m[i]))
+			row.appendChild(T(' '))
 		}
-		else
-			row.appendChild(T(m))
 	},
 	
 	fail: function (m, d) { this.line('fail', m, d) },
@@ -129,6 +158,7 @@ Reporter.prototype =
 	log:  function (m, d) { this.line('log', m, d) }
 }
 
+Reporter.className = 'Reporter'
 
 
 var s = self

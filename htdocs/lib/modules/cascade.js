@@ -168,6 +168,7 @@ Me.prototype =
 	}
 }
 
+Me.className = myName
 self[myName] = Me
 
 })();
