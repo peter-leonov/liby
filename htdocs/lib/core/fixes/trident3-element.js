@@ -2,9 +2,11 @@
 
 var doc = document, win = window
 
-if (win.Element)
-	return
+if (!win.Element)
+win.Element = function () {}
 
-win.Element = {prototype:{}}
+if (!win.HTMLScriptElement)
+win.HTMLScriptElement = function () {}
+win.HTMLScriptElement.prototype = new Element()
 
 })();
