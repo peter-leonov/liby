@@ -3,23 +3,16 @@
 
 var myName = 'require'
 
-function getRoot ()
-{
-	return document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] || document.documentElement
-}
-
 function Me (src, f)
 {
-	var root = getRoot()
-	if (!root)
-		throw new Error('can not get a root node to append a script to')
-	
-	var script = root.appendChild(document.createElement('script'))
+	var script = Me.rootNode.appendChild(document.createElement('script'))
 	script.addEventListener('load', f, false)
 	script.src = src
 	
 	return script
 }
+
+Me.rootNode = document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] || document.documentElement
 
 Me.className = myName
 self[myName] = Me
