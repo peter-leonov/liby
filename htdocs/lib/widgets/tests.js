@@ -15,7 +15,7 @@ var myName = 'Tests', Me =
 {
 	maxLabelLength: 100,
 	nodes: {},
-	onload: function ()
+	load: function ()
 	{
 		var main = this.nodes.main = N('div')
 		main.id = 'tests-output'
@@ -23,12 +23,17 @@ var myName = 'Tests', Me =
 		
 		this.run()
 	},
+	onload: function () { Me.load() },
 	
 	oncomplete: function () {},
 	
 	test: function (f)
 	{
 		this.callback = f
+		if (window.addEventListener)
+			window.addEventListener('load', this.onload, false)
+		else
+			window.onload = this.onload
 	},
 	
 	run: function ()
@@ -59,9 +64,6 @@ var myName = 'Tests', Me =
 
 Me.className = myName
 self[myName] = Me
-
-window.onload = function () { Me.onload() }
-
 
 var Reporter = function (name)
 {
