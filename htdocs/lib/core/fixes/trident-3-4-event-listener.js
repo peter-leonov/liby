@@ -120,6 +120,22 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	if (dir === undef)
 		dir = false
 	
+	if (this.tagName == 'SCRIPT' && type == 'load')
+	{
+		var me = this
+		function onreadystatechange (e)
+		{
+			if (me.readyState == 'loaded')
+			{
+				var ne = document.createEvent('Event')
+				ne.initEvent('load', false, true)
+				if (!this.dispatchEvent(ne))
+					e.preventDefault()
+			}
+		}
+		this.addEventListener('readystatechange', onreadystatechange, dir)
+	}
+	
 	var all = this.__pmc__eventListeners
 	if (!all)
 		all = this.__pmc__eventListeners = {}
