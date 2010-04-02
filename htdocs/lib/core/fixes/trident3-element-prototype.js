@@ -1,6 +1,10 @@
 ;(function(){
 
-var doc = document, win = window, Ep = win.Element.prototype
+var doc = document, win = window, Ep = win.Element.prototype,
+	byNodeName =
+	{
+		'SCRIPT': HTMLScriptElement.prototype
+	}
 
 function fixNodes (nodes)
 {
@@ -10,7 +14,12 @@ function fixNodes (nodes)
 
 function fixNode (node)
 {
-	var proto = Ep
+	if (node.__pmc__nodeFixed)
+		return
+	node.__pmc__nodeFixed = true
+	
+	// it is possible when byNodeName[…] inherits from Ep
+	var proto = byNodeName[node.nodeName] || Ep
 	for (var p in proto)
 		node[p] = proto[p]
 }
