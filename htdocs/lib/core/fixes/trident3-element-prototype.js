@@ -41,11 +41,11 @@ function fixNode (node)
 }
 
 
-doc.createElementReal = doc.createElement
-doc.createElement = function (type) { return fixNode(doc.createElementReal(type)) }
+doc.__pmc__createElement = doc.createElement
+doc.createElement = function (type) { return fixNode(doc.__pmc__createElement(type)) }
 
 // events must be fixed at this point to preserve handlers call order
 win.addEventListener('load', function () { fixNodes(doc.all) })
-document.__fixNodes = fixNodes
+document.__pmc__fixNodes = fixNodes
 
 })();

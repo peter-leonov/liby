@@ -12,10 +12,10 @@ function checkready ()
 	clearInterval(checkready.interval)
 	
 	// IE8 gain native support for Element.prototype
-	// so __fixNodes is no more needed
-	if (doc.__fixNodes)
-		// IE 6-7
-		doc.__fixNodes(doc.all)
+	// so __pmc__fixNodes is no more needed
+	if (doc.__pmc__fixNodes)
+		// IE 6 and 7
+		doc.__pmc__fixNodes(doc.all)
 	
 	if (self.$ && self.$.onready)
 		self.$.onready.run()
