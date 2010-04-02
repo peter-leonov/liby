@@ -2,15 +2,6 @@
 
 var doc = document, win = window, Ep = win.Element.prototype
 
-function onpropertychange ()
-{
-	var e = event
-	if (e.propertyName == 'innerHTML')
-		fixNodes(e.srcElement.all)
-}
-
-// function appendChild (node) { this.appendChildReal(node) }
-
 function fixNodes (nodes)
 {
 	var proto = Ep
@@ -20,10 +11,6 @@ function fixNodes (nodes)
 		
 		for (var p in proto)
 			node[p] = proto[p]
-		
-		node.attachEvent('onpropertychange', onpropertychange)
-		// node.appendChildReal = node.appendChild
-		// node.appendChild = fixAppendChild
 	}
 }
 
@@ -32,10 +19,6 @@ function fixNode (node)
 	var proto = Ep
 	for (var p in proto)
 		node[p] = proto[p]
-	
-	node.attachEvent('onpropertychange', onpropertychange)
-	// node.appendChildReal = node.appendChild
-	// node.appendChild = fixAppendChild
 	
 	return node
 }
