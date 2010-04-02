@@ -17,8 +17,11 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	function run (t, kind, type, node)
+	function run (t, kind, type, node, conf)
 	{
+		if (!conf)
+			conf = {}
+		
 		var calls = 0, e, exception = null
 		function handler (e) { calls++ }
 		
@@ -52,12 +55,15 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		t.eq(calls, 1, 'handler called ok twice')
 		
-		calls = 0
-		e = document.createEvent(kind)
-		e.initEvent(type, true, true)
-		document.addEventListener(type, handler, false)
-		node.dispatchEvent(e)
-		t.eq(calls, 2, 'document handler called ok')
+		if (conf.document !== false)
+		{
+			calls = 0
+			e = document.createEvent(kind)
+			e.initEvent(type, true, true)
+			document.addEventListener(type, handler, false)
+			node.dispatchEvent(e)
+			t.eq(calls, 2, 'document handler called ok')
+		}
 		
 		calls = 0
 		node.removeEventListener(type, handler, false)
