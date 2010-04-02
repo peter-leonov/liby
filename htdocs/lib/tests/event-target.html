@@ -119,6 +119,11 @@ Tests.test(function (t)
 	}
 	
 	
+	t.test('Event: load on script', function (t)
+	{
+		run(t, 'Event', 'load', document.body.appendChild(document.createElement('script')), {document: false})
+	})
+	
 	t.test('Event: hide on node', function (t)
 	{
 		run(t, 'Event', 'hide', document.getElementById('test-node-1'))
