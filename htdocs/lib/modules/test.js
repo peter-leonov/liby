@@ -76,7 +76,7 @@ var sup = Super.prototype,
 	
 	timedOut: function ()
 	{
-		this.fail('test timed out')
+		this.fail(new Me.Label('test timed out'))
 		this.done()
 	},
 	
@@ -93,7 +93,7 @@ var sup = Super.prototype,
 		var results = this.results, expect = this.conf.expect
 		
 		if (expect !== undefined && expect != results.length)
-			this.fail(expect + ' expected but ' + results.length + ' run')
+			this.fail(new Me.Label(expect + ' expected but ' + results.length + ' run'))
 		
 		var ok = true
 		for (var i = 0; i < results.length; i++)
