@@ -50,7 +50,7 @@ Tests.test(function (t)
 				setTimeout(function () { t.done() }, 250)
 			}
 			
-			require('require-file-2.js', onload)
+			require('require-file-2.js?ac=' + Math.random(), onload)
 			
 			t.wait(10000)
 		}
@@ -86,7 +86,7 @@ Tests.test(function (t)
 		}
 		
 		for (var i = 0; i < count; i++)
-			require('require-file-3.js', onload)
+			require('require-file-3.js?ac=' + Math.random(), onload)
 			// setTimeout(onload, 10)
 		
 		t.wait(30000)
