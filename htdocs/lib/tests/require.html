@@ -71,7 +71,7 @@ Tests.test(function (t)
 		})
 	})
 	
-	t.test('caching', function (t)
+	t.test('caching, order and names in one test ;)', function (t)
 	{
 		t.expect(3)
 		
@@ -87,9 +87,11 @@ Tests.test(function (t)
 			t.done()
 		}
 		
+		require.names['lalala'] = src
+		
 		var scriptA = require(src, function () { order.push(1) })
 		var scriptB = require(src, function () { order.push(2) })
-		require(src, function () { order.push(3) })
+		require('lalala', function () { order.push(3) })
 		require(src, function () { order.push(4) })
 		require(src, function () { order.push(5); require(src, done) })
 		

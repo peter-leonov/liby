@@ -10,8 +10,10 @@ function run (callbacks)
 		setTimeout(callbacks[i], 0)
 }
 
-function Me (src, f)
+function Me (name, f)
 {
+	var src = Me.names[name] || name
+	
 	var state = states[src]
 	
 	if (state)
@@ -42,6 +44,7 @@ function Me (src, f)
 	return state.node
 }
 
+Me.names = {}
 Me.rootNode = document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] || document.documentElement
 
 Me.className = myName
