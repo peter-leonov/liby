@@ -25,8 +25,17 @@ function Me (src, f)
 	{
 		state = states[src] = {callbacks: [f]}
 		
+		function onload ()
+		{
+			if (state.loaded)
+				return
+			state.loaded = true
+			
+			run(state.callbacks)
+		}
+		
 		script = state.node = Me.rootNode.appendChild(document.createElement('script'))
-		script.addEventListener('load', function () { state.loaded = true; run(state.callbacks) }, false)
+		script.addEventListener('load', onload, false)
 		script.src = src
 	}
 	
