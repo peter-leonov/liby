@@ -24,6 +24,7 @@ Tests.test(function (t)
 		
 		var calls = 0, e, exception = null
 		function handler (e) { calls++ }
+		function stopPropagation (e) { e.stopPropagation() }
 		
 		e = document.createEvent(kind)
 		e.initEvent(type, true, true)
@@ -46,8 +47,9 @@ Tests.test(function (t)
 		
 		calls = 0
 		t.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
-		node.dispatchEvent(e)
+		var res = node.dispatchEvent(e)
 		t.eq(calls, 1, 'dispatchEvent does call handler')
+		t.ok(res, 'dispatchEvent result')
 		
 		calls = 0
 		e = document.createEvent(kind)
@@ -62,6 +64,7 @@ Tests.test(function (t)
 			e.initEvent(type, true, true)
 			document.addEventListener(type, handler, false)
 			node.dispatchEvent(e)
+			document.removeEventListener(type, handler, false)
 			t.eq(calls, 2, 'document handler called ok')
 		}
 		
@@ -72,6 +75,18 @@ Tests.test(function (t)
 		e.initEvent(type, true, true)
 		node.dispatchEvent(e)
 		t.eq(calls, 0, 'removeEventListener works fine')
+		
+		calls = 0
+		e = document.createEvent(kind)
+		e.initEvent(type, true, true)
+		node.parentNode.addEventListener(type, handler, false)
+		node.addEventListener(type, handler, false)
+		node.addEventListener(type, stopPropagation, false)
+		node.dispatchEvent(e)
+		node.parentNode.removeEventListener(type, handler, false)
+		node.removeEventListener(type, handler, false)
+		node.removeEventListener(type, stopPropagation, false)
+		t.eq(calls, 1, 'stopPropagation() works well')
 		
 		calls = 0
 		node.addEventListener(type, handler, false)
