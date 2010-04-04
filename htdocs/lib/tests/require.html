@@ -103,19 +103,20 @@ Tests.test(function (t)
 	t.test('check unlimited count of require() calls', function (t)
 	{
 		var total = 0
+		window.veryGlobalCounter2 = 0
 		
 		function onload (e)
 		{
 			if (++total == count)
 			{
 				t.eq(total, count, 'total')
+				t.eq(window.veryGlobalCounter2, count, 'veryGlobalCounter2')
 				t.done()
 			}
 		}
 		
 		for (var i = 0; i < count; i++)
 			require('require-file-3.js?ac=' + Math.random(), onload)
-			// setTimeout(onload, 10)
 		
 		t.wait(30000)
 	})
