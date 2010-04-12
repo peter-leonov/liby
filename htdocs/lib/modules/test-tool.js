@@ -191,7 +191,7 @@ var prototype =
 		var lag = this._lags[name] = {}
 		
 		if (delay === undefined)
-			delay = 20
+			delay = 10
 		
 		lag.delay = delay
 		
