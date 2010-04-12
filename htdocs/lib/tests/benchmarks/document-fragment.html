@@ -26,20 +26,23 @@ Tests.test(function (t)
 	t.test('direct', function (t)
 	{
 		var root = $('root-1')
-		t.lag('appendChild')
+		t.lag('lag')
+		t.time('time')
 		for (var i = 0; i < count; i++)
 		{
 			var node = document.createElement('li')
 			node.appendChild(document.createTextNode(i))
 			root.appendChild(node)
 		}
-		t.async(function () { t.lagEnd('appendChild') }, wait)
+		t.timeEnd('time')
+		t.async(function () { t.lagEnd('lag') }, wait)
 	})
 	
 	t.test('via fragment', function (t)
 	{
 		var root = $('root-2')
-		t.lag('appendChild')
+		t.lag('lag')
+		t.time('time')
 		var fragment = document.createDocumentFragment()
 		for (var i = 0; i < count; i++)
 		{
@@ -48,7 +51,8 @@ Tests.test(function (t)
 			fragment.appendChild(node)
 		}
 		root.appendChild(fragment)
-		t.async(function () { t.lagEnd('appendChild') }, wait)
+		t.timeEnd('time')
+		t.async(function () { t.lagEnd('lag') }, wait)
 	})
 })
 </script>
