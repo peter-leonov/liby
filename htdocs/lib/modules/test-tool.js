@@ -174,13 +174,14 @@ var prototype =
 	_times: {},
 	time: function (name)
 	{
-		return this._times[name] = new Date()
+		var times = this._times
+		times[name] = new Date()
 	},
 	
 	timeEnd: function (name)
 	{
 		var diff = new Date() - this._times[name]
-		this.info(new Label(diff + 'ms'), name || 'time')
+		this.info(new Label((name || 'time') + ': ' + diff + 'ms'))
 		return diff
 	},
 	
