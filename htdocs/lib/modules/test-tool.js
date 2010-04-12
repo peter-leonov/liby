@@ -185,6 +185,49 @@ var prototype =
 		return diff
 	},
 	
+	_lags: {},
+	lag: function (name, delay)
+	{
+		var lag = this._lags[name] = {}
+		
+		if (delay === undefined)
+			delay = 20
+		
+		lag.delay = delay
+		
+		var times = lag.times = []
+		function shot ()
+		{
+			times.push(new Date())
+		}
+		
+		lag.timer = setInterval(shot, delay)
+		shot()
+	},
+	
+	lagEnd: function (name)
+	{
+		var lag = this._lags[name]
+		if (!lag)
+			return
+		
+		clearInterval(lag.timer)
+		
+		var times = lag.times
+		if (times.length < 2)
+			return NaN
+		
+		var delay = lag.delay, max = 0
+		for (var i = 0, il = times.length - 1; i < il; i++)
+		{
+			var a = times[i + 1] - times[i] - delay
+			if (a > max)
+				max = a
+		}
+		
+		this.info(new Label((name || 'lag') + ': ' + max + 'ms'))
+	},
+	
 	speed: function (f)
 	{
 		var count = 1
