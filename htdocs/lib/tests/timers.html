@@ -12,9 +12,10 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	var oneGlobalTimer
+	var oneGlobalTimer, setTimerCallsCount = 0
 	Timers.prototype.setTimer = function (f, d)
 	{
+		setTimerCallsCount++
 		window.clearTimeout(oneGlobalTimer)
 		var me = this
 		oneGlobalTimer = window.setTimeout(function () { f.call(me) }, d)
@@ -32,6 +33,7 @@ Tests.test(function (t)
 			if (--count == 0)
 			{
 				t.like(order, right)
+				t.lte(setTimerCallsCount, 9, 'setTimer() calls') // 13 calls are highly inefficient
 				t.done()
 			}
 		}

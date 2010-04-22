@@ -27,7 +27,11 @@ Me.prototype =
 		else
 			timers[t] = [f]
 		
-		this.setTimer(this.expireTimers, 0) // setTimer invokes with this
+		if (t < (this.__timers_nextTimer || Infinity))
+		{
+			this.__timers_nextTimer = t
+			this.setTimer(this.expireTimers, d) // setTimer invokes with this
+		}
 	},
 	
 	expireTimers: function ()
@@ -69,7 +73,10 @@ Me.prototype =
 		}
 		
 		if (min < Infinity)
+		{
+			this.__timers_nextTimer = now + min
 			this.setTimer(this.expireTimers, min) // setTimer invokes with this
+		}
 	}
 }
 
