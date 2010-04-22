@@ -4,43 +4,6 @@ var myName = 'Timers'
 
 function Me () {}
 
-function expireTimers ()
-{
-	var timers
-	if (!(timers = this.__timers))
-		return
-	
-	var now = +new Date(), todo = [], min = Infinity
-	for (var k in timers)
-	{
-		var d = k - now
-		if (d <= 0)
-			todo.push(+k)
-		else
-			if (d < min)
-				min = d
-	}
-	
-	todo.sort()
-	for (var i = todo.length - 1; i >= 0; i--)
-	{
-		var t = todo[i], arr = timers[t]
-		delete timers[t]
-		for (var j = 0; j < arr.length; j++)
-		{
-			var f = arr[j]
-			try
-			{
-				f.call(this, -d)
-			}
-			catch (ex) { Nginx.logError(Nginx.LOG_CRIT, ex.message) }
-		}
-	}
-	
-	if (min < Infinity)
-		this.setTimer(expireTimers, min)
-}
-
 Me.prototype =
 {
 	setTimeout: function (f, d)
@@ -64,7 +27,49 @@ Me.prototype =
 		else
 			timers[t] = [f]
 		
-		this.setTimer(expireTimers, 1)
+		this.setTimer(this.expireTimers, 0) // setTimer invokes with this
+	},
+	
+	expireTimers: function ()
+	{
+		var timers
+		if (!(timers = this.__timers))
+			return
+		
+		var todo = []
+		
+		var now = +new Date(), min = Infinity
+		for (var k in timers)
+		{
+			var d = k - now
+			if (d <= 0)
+				todo.push(k)
+			else
+			{
+				if (d < min)
+					min = d
+			}
+		}
+		
+		todo.sort()
+		
+		for (var i = 0, il = todo.length; i < il; i++)
+		{
+			var t = todo[i], arr = timers[t]
+			delete timers[t]
+			for (var j = 0, jl = arr.length; j < jl; j++)
+			{
+				var f = arr[j]
+				try
+				{
+					f.call(this, now - t)
+				}
+				catch (ex) { /* needs to be reported */ }
+			}
+		}
+		
+		if (min < Infinity)
+			this.setTimer(this.expireTimers, min) // setTimer invokes with this
 	}
 }
 
