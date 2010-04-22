@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Timers tests</title>
+	<script src="tests.common.js"></script>
+	
+	<script src="../modules/timers.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var oneGlobalTimer
+	Timers.prototype.setTimer = function (f, d)
+	{
+		window.clearTimeout(oneGlobalTimer)
+		var me = this
+		oneGlobalTimer = window.setTimeout(function () { f.call(me) }, d)
+	}
+	
+	t.test('order', function (t)
+	{
+		var r = new Timers()
+		
+		var order = [], count = 9
+		function handler (num)
+		{
+			order.push(num)
+			t.log(num + ' has expired')
+			if (--count == 0)
+			{
+				t.like(order, right)
+				t.done()
+			}
+		}
+		
+		r.setTimeout(function () { handler(1) }, 0)
+		r.setTimeout(function () { handler(2) }, 0)
+		r.setTimeout(function () { handler(3) }, 0)
+		r.setTimeout(function () { handler(4) }, 10)
+		r.setTimeout(function () { handler(5) }, 5)
+		r.setTimeout(function () { handler(6) }, 2000)
+		r.setTimeout(function () { handler(7) }, 1000)
+		r.setTimeout(function () { handler(8) }, 0)
+		r.setTimeout(function () { handler(9) }, 1001)
+		
+		var right = [1, 2, 3, 8, 5, 4, 7, 9, 6]
+		
+		t.wait(10000)
+	})
+	
+})
+</script>
+</body>
+</html>
