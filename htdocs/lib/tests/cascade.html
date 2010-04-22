@@ -10,6 +10,8 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	Cascade.prototype.holder = window
+	
 	t.test('parallel(1)', function (t)
 	{
 		var order = []

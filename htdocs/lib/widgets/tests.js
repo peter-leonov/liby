@@ -41,11 +41,12 @@ var myName = 'Tests', Me =
 		try { var title = doc.getElementsByTagName('title')[0].firstChild.nodeValue }
 		catch (ex) { title = 'main' }
 		
-		var reporter = new Reporter()
+		var test = this.mainTest = new Test(this, title, null, this.callback)
+		test.holder = window
+		
+		var reporter = test.reporter = new Reporter()
 		this.nodes.main.appendChild(reporter.nodes.main)
 		
-		var test = this.mainTest = new Test(this, title, null, this.callback)
-		test.reporter = reporter
 		test.run()
 		
 		var hide = reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
