@@ -8,22 +8,41 @@ Me.prototype =
 {
 	setTimeout: function (f, d)
 	{
-		var timers
+		var timers, callbacks
 		if (!(timers = this.__timers))
+		{
 			timers = this.__timers = {}
+			callbacks = this.__callbacks = []
+		}
+		else
+			callbacks = this.__callbacks
+		
+		var n = callbacks.length
+		callbacks.push(f)
 		
 		var t = +new Date() + d
 		
 		if (timers[t])
-			timers[t].push(f)
+			timers[t].push(n)
 		else
-			timers[t] = [f]
+			timers[t] = [n]
 		
 		if (t < (this.__timers_nextTimer || Infinity))
 		{
 			this.__timers_nextTimer = t
 			this.setTimer(this.expireTimers, d) // setTimer invokes with this
 		}
+		
+		return n
+	},
+	
+	clearTimeout: function (n)
+	{
+		var callbacks = this.__callbacks
+		if (!callbacks)
+			return
+		
+		delete callbacks[n]
 	},
 	
 	expireTimers: function ()
@@ -33,6 +52,8 @@ Me.prototype =
 		var timers
 		if (!(timers = this.__timers))
 			return
+		
+		var callbacks = this.__callbacks
 		
 		var todo = []
 		
@@ -57,7 +78,10 @@ Me.prototype =
 			delete timers[t]
 			for (var j = 0, jl = arr.length; j < jl; j++)
 			{
-				var f = arr[j]
+				var f = callbacks[arr[j]]
+				if (!f)
+					continue
+				
 				try
 				{
 					f.call(this, now - t)
