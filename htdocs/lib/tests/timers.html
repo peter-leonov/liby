@@ -43,16 +43,15 @@ Tests.test(function (t)
 		r.setTimeout(function (d) { handler(3, d) }, 0)
 		r.setTimeout(function (d) { handler(4, d) }, 10)
 		r.setTimeout(function (d) { handler(5, d) }, 5)
-		r.setTimeout(function (d) { handler(6, d) }, 2000)
-		r.setTimeout(function (d) { handler(7, d) }, 1000)
+		r.setTimeout(function (d) { handler(6, d) }, 200)
+		r.setTimeout(function (d) { handler(7, d) }, 100)
 		r.setTimeout(function (d) { handler(8, d) }, 0)
-		r.setTimeout(function (d) { handler(9, d) }, 1001)
+		r.setTimeout(function (d) { handler(9, d) }, 101)
 		
 		var right = [1, 2, 3, 8, 5, 4, 7, 9, 6]
 		
 		t.wait(10000)
 	})
-	
 })
 </script>
 </body>
