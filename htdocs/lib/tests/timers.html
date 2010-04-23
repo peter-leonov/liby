@@ -21,6 +21,34 @@ Tests.test(function (t)
 		oneGlobalTimer = window.setTimeout(function () { f.call(me) }, d)
 	}
 	
+	t.parallel(1)
+	
+	t.test('same function', function (t)
+	{
+		var r = new Timers()
+		
+		var order = [], count = 3
+		function handler (num, d)
+		{
+			order.push(num)
+			t.log(num + ' has expired (' + d + ')')
+			if (--count == 0)
+			{
+				t.like(order, right)
+				t.done()
+			}
+		}
+		
+		function same (d) { handler(1, d) }
+		r.setTimeout(same, 0)
+		r.setTimeout(same, 0)
+		r.setTimeout(same, 0)
+		
+		var right = [1, 1, 1]
+		
+		t.wait(10000)
+	})
+	
 	t.test('order', function (t)
 	{
 		var r = new Timers()
