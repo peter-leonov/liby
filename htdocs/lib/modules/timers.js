@@ -8,14 +8,6 @@ Me.prototype =
 {
 	setTimeout: function (f, d)
 	{
-		if ((d = +d)) // isn't a NaN
-		{
-			if (d < 0)
-				d = 0
-		}
-		else
-			d = 0
-		
 		var timers
 		if (!(timers = this.__timers))
 			timers = this.__timers = {}
