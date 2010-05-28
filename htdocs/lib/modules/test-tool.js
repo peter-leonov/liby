@@ -50,6 +50,30 @@ var prototype =
 			this.fail([a, new Label('===', 'label middle'), b], d)
 	},
 	
+	peq: function (a, b, p, d)
+	{
+		if (Math.abs(a - b) <= p)
+			this.pass([a, new Label('≈', 'label middle'), b], d)
+		else
+			this.fail([a, new Label('!≈', 'label middle'), b], d)
+	},
+	
+	match: function (a, b, d)
+	{
+		if (b.test(a))
+			this.pass([a, new Label('matches', 'label middle'), b], d)
+		else
+			this.fail([a, new Label('does not match', 'label middle'), b], d)
+	},
+	
+	ina: function (a, b, d)
+	{
+		if (b.indexOf(a) != -1)
+			this.pass([a, new Label('in', 'label middle'), b], d)
+		else
+			this.fail([a, new Label('is not in', 'label middle'), b], d)
+	},
+	
 	like: function (a, b, d)
 	{
 		var same = false
