@@ -44,7 +44,7 @@ var myName = 'Tests', Me =
 		var test = this.mainTest = new Test(this, title, null, this.callback)
 		test.holder = window
 		
-		var reporter = test.reporter = new Reporter()
+		var reporter = test.reporter = new Reporter(test.holder, test)
 		this.nodes.main.appendChild(reporter.nodes.main)
 		
 		test.run()
@@ -66,9 +66,12 @@ var myName = 'Tests', Me =
 Me.className = myName
 self[myName] = Me
 
-var Reporter = function (name)
+var Reporter = function (holder, parent)
 {
 	var nodes = this.nodes = {}
+	
+	this.holder = holder
+	this.parent = parent
 	
 	nodes.main = N('dl', 'test')
 	nodes.head = nodes.main.appendChild(N('dt', 'head'))
@@ -79,9 +82,9 @@ var Reporter = function (name)
 
 Reporter.prototype =
 {
-	create: function ()
+	create: function (holder, parent)
 	{
-		var reporter = new Reporter()
+		var reporter = new Reporter(holder, parent)
 		this.node(reporter.nodes.main)
 		return reporter
 	},
