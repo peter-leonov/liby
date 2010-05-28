@@ -13,12 +13,14 @@ Me.prototype =
 		{
 			timers = this.__timers = {}
 			callbacks = this.__callbacks = []
+			callbacks.total = 0
 		}
 		else
 			callbacks = this.__callbacks
 		
 		var n = callbacks.length
 		callbacks.push(f)
+		callbacks.total++
 		
 		var t = +new Date() + d
 		
@@ -42,7 +44,14 @@ Me.prototype =
 		if (!callbacks)
 			return
 		
-		delete callbacks[n]
+		if (callbacks[n])
+		{
+			delete callbacks[n]
+			callbacks.total--
+		}
+		
+		if (callbacks.total == 0)
+			this.clearTimer()
 	},
 	
 	expireTimers: function ()
@@ -78,9 +87,14 @@ Me.prototype =
 			delete timers[t]
 			for (var j = 0, jl = arr.length; j < jl; j++)
 			{
-				var f = callbacks[arr[j]]
+				var n = arr[j]
+				var f = callbacks[n]
+				
 				if (!f)
 					continue
+				
+				delete callbacks[n]
+				callbacks.total--
 				
 				try
 				{
@@ -90,7 +104,7 @@ Me.prototype =
 			}
 		}
 		
-		if (min < Infinity)
+		if (min < Infinity && callbacks.total >= 1)
 		{
 			this.__timers_nextTimer = now + min
 			this.setTimer(this.expireTimers, min) // setTimer invokes with this
