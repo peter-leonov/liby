@@ -158,6 +158,7 @@ Reporter.prototype =
 		}
 	},
 	
+	warn: function (m, d) { this.line('warn', m, d) },
 	fail: function (m, d) { this.line('fail', m, d) },
 	pass: function (m, d) { this.line('pass', m, d) },
 	info: function (m, d) { this.line('info', m, d) },
