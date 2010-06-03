@@ -31,7 +31,7 @@ var Me = self[myName] =
 			r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
 		if (callback)
 			r.callback = callback
-		r.send(urlEncode(params))
+		r.send(typeof params == 'string' ? params : urlEncode(params))
 		if (sync)
 			onreadystatechange.call(r)
 		
