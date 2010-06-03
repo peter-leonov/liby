@@ -453,6 +453,13 @@ Me.prototype =
 				}
 			
 			case 'function':
+				// Safari treats rexes as a function
+				if (val.constructor === RegExp)
+				{
+					res = val.toString()
+					break
+				}
+				
 				if (res = val.className)
 					res = '[class ' + res + ']'
 				else
