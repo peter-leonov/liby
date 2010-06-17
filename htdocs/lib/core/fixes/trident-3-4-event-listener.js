@@ -19,6 +19,8 @@ var supportedEventsByNodeName =
 	'SCRIPT': scriptSupportedEvents.prototype
 }
 
+var eventConversion = {keypress: 'keydown'}
+
 function getEventTransport (node, type)
 {
 	return (supportedEventsByNodeName[node.nodeName] || supportedEvents)[type] ? type : eventTransport
@@ -125,6 +127,8 @@ function getEventWrapper (e, kind)
 
 win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 {
+	type = eventConversion[type] || type
+	
 	if (dir === undef)
 		dir = false
 	
@@ -180,6 +184,8 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
 {
+	type = eventConversion[type] || type
+	
 	if (dir === undef)
 		dir = false
 	
