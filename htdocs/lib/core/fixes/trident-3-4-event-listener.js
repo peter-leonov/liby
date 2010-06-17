@@ -19,9 +19,9 @@ var supportedEventsByNodeName =
 	'SCRIPT': scriptSupportedEvents.prototype
 }
 
-function isEventSupported (node, type)
+function getEventTransport (node, type)
 {
-	return (supportedEventsByNodeName[node.nodeName] || supportedEvents)[type]
+	return (supportedEventsByNodeName[node.nodeName] || supportedEvents)[type] ? type : eventTransport
 }
 
 var Event = win.Event = function () { this.constructor = Event }
@@ -172,7 +172,7 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 			delete w.__isDispatching
 		}
 		
-		var transport = isEventSupported(this, type) ? type : eventTransport
+		var transport = getEventTransport(this, type)
 		this.attachEvent('on' + transport, dispatcher)
 		listeners.dispatcher = dispatcher
 	}
@@ -200,7 +200,7 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 	if (!listeners.length)
 	{
 		delete all[key]
-		var transport = isEventSupported(this, type) ? type : eventTransport
+		var transport = getEventTransport(this, type)
 		this.detachEvent('on' + transport, listeners.dispatcher)
 	}
 }
@@ -213,7 +213,7 @@ doc.createEvent = function (kind)
 doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 {
 	var type = w.type,
-		transport = isEventSupported(this, type) ? type : eventTransport
+		transport = getEventTransport(this, type)
 	
 	w.__isDispatching = true
 	w.defaultPrevented = false
