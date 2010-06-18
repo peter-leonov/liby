@@ -86,7 +86,7 @@ Tests.test(function (t)
 		node.selectionEnd = 3
 		t.eq(node.selectionEnd, 3, 'set on lengthy enough')
 		
-		node.selectionStart = 10
+		node.selectionEnd = 10
 		t.eq(node.selectionEnd, 6, 'set on lengthy enough')
 		
 		node.selectionEnd = -10
