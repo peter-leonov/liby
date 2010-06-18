@@ -69,6 +69,7 @@ Tests.test(function (t)
 		t.eq(node.selectionEnd, 0, 'set on empty')
 		
 		node.value = 'lololo'
+		node.selectionStart = 0
 		node.selectionEnd = 3
 		t.eq(node.selectionEnd, 3, 'set on lengthy enough')
 	})
