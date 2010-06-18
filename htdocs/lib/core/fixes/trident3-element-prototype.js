@@ -1,17 +1,12 @@
 ;(function(){
 
-var doc = document, win = window, Ep = win.Element.prototype
+var doc = document, win = window, Element = win.Element
 
 var classByNodeName =
 {
 	'SCRIPT': HTMLScriptElement,
 	'INPUT': HTMLInputElement
 }
-
-// cache prototypes
-var prototypeByNodeName = {}
-for (var k in classByNodeName)
-	prototypeByNodeName[k] = classByNodeName[k].prototype
 
 function fixNodes (nodes)
 {
@@ -25,8 +20,11 @@ function fixNode (node)
 		return
 	node.__pmc__nodeFixed = true
 	
-	// it is possible when prototypeByNodeName[…] inherits from Ep
-	var proto = prototypeByNodeName[node.nodeName] || Ep
+	var klass = classByNodeName[node.nodeName] || Element
+	
+	// it is possible to use only one prototype,
+	// if classByNodeName[…] inherits from Element
+	var proto = klass.prototype
 	for (var p in proto)
 		node[p] = proto[p]
 }
