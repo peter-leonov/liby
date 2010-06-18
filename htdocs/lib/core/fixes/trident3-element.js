@@ -1,21 +1,34 @@
 ;(function(){
 
-var doc = document, win = window
+if (window.Element)
+	return
 
-if (!win.Element)
-	win.Element = function () {}
+window.Element = function () {}
 
-if (!win.HTMLScriptElement)
-{
-	win.HTMLScriptElement = function () {}
-	win.HTMLScriptElement.prototype = new Element()
-}
+})();
 
 
-if (!win.HTMLInputElement)
-{
-	win.HTMLInputElement = function () {}
-	win.HTMLInputElement.prototype = new Element()
-}
+;(function(){
+
+if (window.HTMLScriptElement)
+	return
+
+function Me () {}
+Me.prototype = new Element()
+
+window.HTMLScriptElement = Me
+
+})();
+
+
+;(function(){
+
+if (window.HTMLInputElement)
+	return
+
+function Me () {}
+Me.prototype = new Element()
+
+window.HTMLInputElement = Me
 
 })();
