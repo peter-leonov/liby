@@ -55,6 +55,9 @@ Tests.test(function (t)
 		
 		node.selectionStart = -10
 		t.eq(node.selectionStart, 0, 'negative')
+		
+		node.selectionStart = 3.3
+		t.eq(node.selectionStart, 3, 'float')
 	})
 	
 	t.test('selectionEnd', function (t)
@@ -88,6 +91,9 @@ Tests.test(function (t)
 		
 		node.selectionEnd = -10
 		t.eq(node.selectionEnd, 0, 'negative')
+		
+		node.selectionEnd = 3.3
+		t.eq(node.selectionEnd, 3, 'negative')
 	})
 	
 	t.test('selectionStart with selectionEnd', function (t)
