@@ -104,7 +104,16 @@ Tests.test(function (t)
 			t.eq(node.selectionEnd, 4, 'end')
 		})
 		
-		t.test('mixed out of order', function (t)
+		t.test('mixed out of order (start)', function (t)
+		{
+			node.selectionStart = 0
+			node.selectionEnd = 3
+			node.selectionStart = 5
+			t.eq(node.selectionStart, 5, 'start')
+			t.eq(node.selectionEnd, 5, 'end')
+		})
+		
+		t.test('mixed out of order (end)', function (t)
 		{
 			node.selectionStart = 5
 			node.selectionEnd = 3
