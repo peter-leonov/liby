@@ -4,7 +4,8 @@ var doc = document, win = window, Ep = win.Element.prototype
 
 var classByNodeName =
 {
-	'SCRIPT': HTMLScriptElement
+	'SCRIPT': HTMLScriptElement,
+	'INPUT': HTMLInputElement
 }
 
 // cache prototypes
