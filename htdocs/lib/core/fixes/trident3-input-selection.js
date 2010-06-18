@@ -22,6 +22,10 @@ function setStart (node, pos)
 	sel.select()
 }
 
+function setEnd (node, pos)
+{
+}
+
 var internal = false
 
 function setter ()
@@ -55,12 +59,37 @@ function setter ()
 		
 		node.selectionStart = v
 		
+		if (v > node.selectionEnd)
+			node.selectionEnd = v
+		
 		try
 		{
 			setStart(node, v)
 		}
 		catch (ex) { setTimeout(function () { throw ex }, 10) }
+	}
+	else if (name == 'selectionEnd')
+	{
+		v >>= 0
+		if (v < 0)
+			v = 0
+		else
+		{
+			var len = node.value.length
+			if (v > len)
+				v = len
+		}
 		
+		node.selectionEnd = v
+		
+		if (v < node.selectionStart)
+			node.selectionStart = v
+		
+		try
+		{
+			setEnd(node, v)
+		}
+		catch (ex) { setTimeout(function () { throw ex }, 10) }
 	}
 	
 	internal = false
