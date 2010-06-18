@@ -14,11 +14,17 @@ function setStart (node, pos)
 	var sel = selection.createRange()
 	
 	// jump to the begin
-	sel.moveStart('character', -node.value.length)
+	var len = node.value.length
+	sel.moveStart('character', -len)
+	sel.moveEnd('character', -len)
+	
+	
+	var start = node.selectionStart,
+		end = node.selectionEnd
 	
 	// jump to set postion
-	sel.moveStart('character', pos)
-	sel.moveEnd('character', 0)
+	sel.moveStart('character', start)
+	sel.moveEnd('character', end - start)
 	sel.select()
 }
 
