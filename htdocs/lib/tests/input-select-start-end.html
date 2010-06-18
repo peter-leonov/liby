@@ -12,6 +12,7 @@
 <body>
 <input type="text" id="test-1"/>
 <input type="text" id="test-2"/>
+<input type="text" id="test-3"/>
 <script type="text/javascript">
 function $ (id) { return document.getElementById(id) }
 Tests.test(function (t)
@@ -24,7 +25,7 @@ Tests.test(function (t)
 		t.eq(node.selectionEnd, 0, 'selectionEnd')
 	})
 	
-	t.test('simple selectionStart set/get', function (t)
+	t.test('selectionStart', function (t)
 	{
 		var node = $('test-2')
 		
@@ -48,7 +49,7 @@ Tests.test(function (t)
 		t.eq(node.selectionStart, 3, 'set on lengthy enough')
 	})
 	
-	t.test('simple selectionEnd set/get', function (t)
+	t.test('selectionEnd', function (t)
 	{
 		var node = $('test-2')
 		
@@ -70,6 +71,45 @@ Tests.test(function (t)
 		node.value = 'lololo'
 		node.selectionEnd = 3
 		t.eq(node.selectionEnd, 3, 'set on lengthy enough')
+	})
+	
+	t.test('selectionStart with selectionEnd', function (t)
+	{
+		var node = $('test-3')
+		
+		node.value = '123456'
+		
+		t.test('both at the begin', function (t)
+		{
+			node.selectionStart = 0
+			node.selectionEnd = 0
+			t.eq(node.selectionStart, 0, 'start')
+			t.eq(node.selectionEnd, 0, 'end')
+		})
+		
+		t.test('both at the end', function (t)
+		{
+			node.selectionStart = 6
+			node.selectionEnd = 6
+			t.eq(node.selectionStart, 6, 'start')
+			t.eq(node.selectionEnd, 6, 'end')
+		})
+		
+		t.test('mixed in order', function (t)
+		{
+			node.selectionStart = 3
+			node.selectionEnd = 4
+			t.eq(node.selectionStart, 3, 'start')
+			t.eq(node.selectionEnd, 4, 'end')
+		})
+		
+		t.test('mixed out of order', function (t)
+		{
+			node.selectionStart = 5
+			node.selectionEnd = 3
+			t.eq(node.selectionStart, 3, 'start')
+			t.eq(node.selectionEnd, 3, 'end')
+		})
 	})
 })
 </script>
