@@ -27,6 +27,10 @@ function fixNode (node)
 	var proto = klass.prototype
 	for (var p in proto)
 		node[p] = proto[p]
+	
+	var hook = klass.__pmc_fixHook
+	if (hook)
+		hook(node)
 }
 
 
