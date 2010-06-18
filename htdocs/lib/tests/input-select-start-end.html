@@ -44,11 +44,17 @@ Tests.test(function (t)
 		node.selectionStart = 3
 		t.eq(node.selectionStart, 0, 'set on empty')
 		
+		
 		node.value = 'lololo'
+		
 		node.selectionStart = 3
 		t.eq(node.selectionStart, 3, 'set on lengthy enough')
+		
 		node.selectionStart = 10
 		t.eq(node.selectionStart, 6, 'set on lengthy enough')
+		
+		node.selectionStart = -10
+		t.eq(node.selectionStart, 0, 'negative')
 	})
 	
 	t.test('selectionEnd', function (t)
@@ -70,12 +76,18 @@ Tests.test(function (t)
 		node.selectionEnd = 3
 		t.eq(node.selectionEnd, 0, 'set on empty')
 		
+		
 		node.value = 'lololo'
+		
 		node.selectionStart = 0
 		node.selectionEnd = 3
 		t.eq(node.selectionEnd, 3, 'set on lengthy enough')
+		
 		node.selectionStart = 10
 		t.eq(node.selectionEnd, 6, 'set on lengthy enough')
+		
+		node.selectionEnd = -10
+		t.eq(node.selectionEnd, 0, 'negative')
 	})
 	
 	t.test('selectionStart with selectionEnd', function (t)
