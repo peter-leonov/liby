@@ -17,13 +17,18 @@
 <input type="text" id="test-3"/>
 <script type="text/javascript">
 function $ (id) { return document.getElementById(id) }
+
+var selection
+if (/MSIE [678]/.test(navigator.userAgent))
+	selection = function (node) { return document.selection.createRange().text }
+else
+	selection = function (node) { return node.value.substring(node.selectionStart, node.selectionEnd) }
+
 Tests.test(function (t)
 {
 	if (/MSIE [678]/.test(navigator.userAgent))
 	t.test('IE specific tests', function (t)
 	{
-		function selection () { return document.selection.createRange().text }
-		
 		t.test('actual selection', function (t)
 		{
 			var node = $('ie-actual-selection')
@@ -32,20 +37,20 @@ Tests.test(function (t)
 			
 			node.selectionStart = 2
 			node.selectionEnd = 4
-			t.eq(selection(), '34', '2 – 4')
+			t.eq(selection(node), '34', '2 – 4')
 			
 			node.selectionStart = 0
 			node.selectionEnd = 0
-			t.eq(selection(), '', '0 – 0')
+			t.eq(selection(node), '', '0 – 0')
 			
 			node.selectionStart = 4
 			node.selectionEnd = 3
-			t.eq(selection(), '', '4 – 3')
+			t.eq(selection(node), '', '4 – 3')
 			
 			node.selectionStart = node.selectionEnd = 0
 			node.selectionEnd = 5
 			node.selectionStart = 2
-			t.eq(selection(), '345', '2 – 5')
+			t.eq(selection(node), '345', '2 – 5')
 		})
 		
 		
@@ -161,6 +166,7 @@ Tests.test(function (t)
 			node.selectionEnd = 0
 			t.eq(node.selectionStart, 0, 'start')
 			t.eq(node.selectionEnd, 0, 'end')
+			t.eq(selection(node), '', 'selection 0 – 0')
 		})
 		
 		t.test('both at the end', function (t)
@@ -169,6 +175,7 @@ Tests.test(function (t)
 			node.selectionEnd = 6
 			t.eq(node.selectionStart, 6, 'start')
 			t.eq(node.selectionEnd, 6, 'end')
+			t.eq(selection(node), '', 'selection 6 – 6')
 		})
 		
 		t.test('mixed in order', function (t)
@@ -177,6 +184,17 @@ Tests.test(function (t)
 			node.selectionEnd = 4
 			t.eq(node.selectionStart, 3, 'start')
 			t.eq(node.selectionEnd, 4, 'end')
+			t.eq(selection(node), '4', 'selection 3 – 4')
+		})
+		
+		t.test('mixed in order (end)', function (t)
+		{
+			node.selectionStart = 0
+			node.selectionEnd = 4
+			node.selectionStart = 3
+			t.eq(node.selectionStart, 3, 'start')
+			t.eq(node.selectionEnd, 4, 'end')
+			t.eq(selection(node), '4', 'selection 3 – 4')
 		})
 		
 		t.test('mixed out of order (start)', function (t)
@@ -186,6 +204,7 @@ Tests.test(function (t)
 			node.selectionStart = 5
 			t.eq(node.selectionStart, 5, 'start')
 			t.eq(node.selectionEnd, 5, 'end')
+			t.eq(selection(node), '', 'selection 5 – 3')
 		})
 		
 		t.test('mixed out of order (end)', function (t)
@@ -194,6 +213,7 @@ Tests.test(function (t)
 			node.selectionEnd = 3
 			t.eq(node.selectionStart, 3, 'start')
 			t.eq(node.selectionEnd, 3, 'end')
+			t.eq(selection(node), '', 'selection 5 – 3')
 		})
 	})
 })
