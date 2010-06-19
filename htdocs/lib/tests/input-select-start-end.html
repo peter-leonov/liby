@@ -11,6 +11,7 @@
 </head>
 <body>
 <input type="text" id="ie-actual-selection"/>
+<div>lalalala<input type="text" id="ie-selection-create-range"/>lololololo</div>
 <input type="text" id="test-1"/>
 <input type="text" id="test-2"/>
 <input type="text" id="test-3"/>
@@ -47,6 +48,20 @@ Tests.test(function (t)
 			t.eq(selection(), '345', '2 – 5')
 		})
 		
+		
+		t.test('actual selection', function (t)
+		{
+			var node = $('ie-selection-create-range')
+			
+			node.value = 'abcdefghij'
+			node.focus()
+			
+			var sel = document.selection.createRange().duplicate()
+			sel.moveStart('character', -100000)
+			sel.moveEnd('character', 100000)
+			
+			t.eq(sel.text, 'abcdefghij', '-500 – 500')
+		})
 	})
 	
 	
