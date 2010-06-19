@@ -31,20 +31,20 @@ Tests.test(function (t)
 			
 			node.selectionStart = 2
 			node.selectionEnd = 4
-			t.eq(selection(), '34', '2-4')
+			t.eq(selection(), '34', '2 – 4')
 			
 			node.selectionStart = 0
 			node.selectionEnd = 0
-			t.eq(selection(), '', '0-0')
+			t.eq(selection(), '', '0 – 0')
 			
 			node.selectionStart = 4
 			node.selectionEnd = 3
-			t.eq(selection(), '', '4-3')
+			t.eq(selection(), '', '4 – 3')
 			
 			node.selectionStart = node.selectionEnd = 0
 			node.selectionEnd = 5
 			node.selectionStart = 2
-			t.eq(selection(), '345', '2-5')
+			t.eq(selection(), '345', '2 – 5')
 		})
 		
 	})
