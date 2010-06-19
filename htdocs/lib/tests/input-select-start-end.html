@@ -57,10 +57,15 @@ Tests.test(function (t)
 			node.focus()
 			
 			var sel = document.selection.createRange().duplicate()
+			
 			sel.moveStart('character', -100000)
 			sel.moveEnd('character', 100000)
+			t.eq(sel.text, 'abcdefghij', '-100000 – +100000')
 			
-			t.eq(sel.text, 'abcdefghij', '-500 – 500')
+			sel.collapse()
+			sel.moveStart('character', 1)
+			sel.moveEnd('character', 3)
+			t.eq(sel.text, 'bcd', '1 – 4')
 		})
 	})
 	
