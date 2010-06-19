@@ -6,7 +6,7 @@
 var selection = document.selection,
 	Me = HTMLInputElement
 
-function setStart (node, pos)
+function updateSelection (node)
 {
 	// jump to the end
 	node.focus()
@@ -26,10 +26,6 @@ function setStart (node, pos)
 	sel.moveStart('character', start)
 	sel.moveEnd('character', end - start)
 	sel.select()
-}
-
-function setEnd (node, pos)
-{
 }
 
 var internal = false
@@ -70,7 +66,7 @@ function setter ()
 		
 		try
 		{
-			setStart(node, v)
+			updateSelection(node)
 		}
 		catch (ex) { setTimeout(function () { throw ex }, 10) }
 	}
@@ -93,7 +89,7 @@ function setter ()
 		
 		try
 		{
-			setEnd(node, v)
+			updateSelection(node)
 		}
 		catch (ex) { setTimeout(function () { throw ex }, 10) }
 	}
