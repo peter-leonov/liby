@@ -10,6 +10,7 @@
 	<!--[if gte IE 8]><script type="text/javascript" src="../core/fixes/trident4.js"></script><![endif]-->
 </head>
 <body>
+<input type="text" id="ie-actual-selection"/>
 <input type="text" id="test-1"/>
 <input type="text" id="test-2"/>
 <input type="text" id="test-3"/>
@@ -17,6 +18,38 @@
 function $ (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
+	if (/MSIE [678]/.test(navigator.userAgent))
+	t.test('IE specific tests', function (t)
+	{
+		function selection () { return document.selection.createRange().text }
+		
+		t.test('actual selection', function (t)
+		{
+			var node = $('ie-actual-selection')
+			
+			node.value = '1234567890'
+			
+			node.selectionStart = 2
+			node.selectionEnd = 4
+			t.eq(selection(), '34', '2-4')
+			
+			node.selectionStart = 0
+			node.selectionEnd = 0
+			t.eq(selection(), '', '0-0')
+			
+			node.selectionStart = 4
+			node.selectionEnd = 3
+			t.eq(selection(), '', '4-3')
+			
+			node.selectionStart = node.selectionEnd = 0
+			node.selectionEnd = 5
+			node.selectionStart = 2
+			t.eq(selection(), '345', '2-5')
+		})
+		
+	})
+	
+	
 	t.test('initial state', function (t)
 	{
 		var node = $('test-1')
