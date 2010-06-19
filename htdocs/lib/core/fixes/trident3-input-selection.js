@@ -1,31 +1,33 @@
 ;(function(){
 
-// selection logic from:
+// selection logic is a compilation of:
 // http://www.webdeveloper.com/forum/showthread.php?t=74982
+// http://javascript.nwbox.com/cursor_position/
+// http://msdn.microsoft.com/en-us/library/ms536620(v=VS.85).aspx
 
 var selection = document.selection,
 	Me = HTMLInputElement
 
 function updateSelection (node)
 {
-	// jump to the end
+	// jump to the input if not already in it
 	node.focus()
 	
-	var sel = selection.createRange()
+	// create a range within the input
+	var r = selection.createRange()
 	
-	// jump to the begin
-	var len = node.value.length
-	sel.moveStart('character', -len)
-	sel.moveEnd('character', -len)
+	// move start and end to the begin of the input
+	r.moveStart('character', -100000)
+	r.collapse()
 	
-	
+	// get values of the emulated properties
 	var start = node.selectionStart,
 		end = node.selectionEnd
 	
-	// jump to set postion
-	sel.moveStart('character', start)
-	sel.moveEnd('character', end - start)
-	sel.select()
+	// set current position
+	r.moveStart('character', start)
+	r.moveEnd('character', end - start)
+	r.select()
 }
 
 var internal = false
