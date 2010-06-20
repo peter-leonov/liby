@@ -123,16 +123,42 @@ function setter ()
 	internal = false
 }
 
-function updateDelayer ()
-{
-	var node = this
-	setTimeout(function () { updateProperties(node) }, 0)
-}
 
 Me.__pmc_fixHook = function (node)
 {
 	node.attachEvent('onpropertychange', setter)
-	node.addEventListener('keypress', updateDelayer, false)
+	
+	function updateDelayed ()
+	{
+		setTimeout(function () { updateProperties(node) }, 0)
+	}
+	
+	node.addEventListener('keypress', updateDelayed, false)
+	
+	
+	function update ()
+	{
+		updateProperties(node)
+	}
+	
+	function mousedown (e)
+	{
+		updateDelayed()
+		document.addEventListener('mousemove', update, false)
+		document.addEventListener('mouseup', mouseup, false)
+	}
+	
+	function mouseup (e)
+	{
+		updateDelayed()
+		document.removeEventListener('mousemove', update, false)
+		document.removeEventListener('mousemove', mouseup, false)
+	}
+	
+	node.addEventListener('click', updateDelayed, false)
+	node.addEventListener('doubleclick', updateDelayed, false)
+	node.addEventListener('mousedown', mousedown, false)
+	node.addEventListener('select', update, false)
 }
 
 Me.prototype.selectionStart = 0
