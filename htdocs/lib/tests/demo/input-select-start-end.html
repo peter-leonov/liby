@@ -13,9 +13,10 @@
 	<style type="text/css">
 	body { padding: 20px; }
 	#output, #input { font-size: 20px; padding: 0; margin: 0; }
-	#output { margin: 10px 0; border: 2px solid transparent; }
+	#output { margin: 10px 0; border: 3px solid #fff; }
 	#selection { background-color: #8af; }
-	#selection.empty { background-color: #888; padding-left: 1px; }
+	#output.empty #selection { background-color: #000; padding-left: 1px; zoom: 1; }
+	#output.empty #after { margin-left: -1px; }
 	</style>
 </head>
 <body>
@@ -26,7 +27,8 @@ function $ (id) { return document.getElementById(id) }
 
 function loaded (e)
 {
-	var before = $('before').firstChild,
+	var output = $('output')
+		before = $('before').firstChild,
 		selection = $('selection').firstChild,
 		after = $('after').firstChild
 	
@@ -42,7 +44,7 @@ function loaded (e)
 		before.nodeValue = v.substring(0, node.selectionStart)
 		
 		var s = selection.nodeValue = v.substring(node.selectionStart, node.selectionEnd)
-		selection.className = s ? '' : 'empty'
+		output.className = s ? '' : 'empty'
 		
 		after.nodeValue = v.substring(node.selectionEnd, v.length)
 	}
