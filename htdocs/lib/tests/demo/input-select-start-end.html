@@ -8,30 +8,52 @@
 	
 	<!--[if lte IE 7]><script type="text/javascript" src="../../core/fixes/trident3.js"></script><![endif]-->
 	<!--[if gte IE 8]><script type="text/javascript" src="../../core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../../core/fixes/webkit-keypress.js"></script>
 	
 	<style type="text/css">
 	body { padding: 20px; }
-	input { font-size: 20px; }
+	#output, #input { font-size: 20px; padding: 0; margin: 0; }
+	#output { margin: 10px 0; border: 2px solid transparent; }
+	#selection { background-color: #8af; }
+	#selection.empty { background-color: #888; padding-left: 1px; }
 	</style>
 </head>
 <body>
-<div><input type="text" id="first-input" value="Viva the Web!"/></div>
-<div><input type="text" id="second-input" value="Viva the Web!"/></div>
-<div id="first-output"></div>
+<div><input type="text" id="input" value="Viva the Web!"/></div>
+<div id="output"><span id="before"> </span><span id="selection"> </span><span id="after"> </span></div>
 <script type="text/javascript">
 function $ (id) { return document.getElementById(id) }
 
 function loaded (e)
 {
-	var input = $('first-input')
+	var before = $('before').firstChild,
+		selection = $('selection').firstChild,
+		after = $('after').firstChild
+	
+	function delay (node)
+	{
+		setTimeout(function () { update(node) }, 0)
+	}
+	
+	function update (node)
+	{
+		var v = node.value
+		
+		before.nodeValue = v.substring(0, node.selectionStart)
+		
+		var s = selection.nodeValue = v.substring(node.selectionStart, node.selectionEnd)
+		selection.className = s ? '' : 'empty'
+		
+		after.nodeValue = v.substring(node.selectionEnd, v.length)
+	}
+	
+	
+	var input = $('input')
+	input.addEventListener('keypress', function (e) { delay(this) }, false)
+	input.focus()
 	input.selectionStart = 3
 	input.selectionEnd = 10
-	
-	var input = $('second-input')
-	input.selectionStart = 3
-	input.selectionEnd = 10
-	
-	
+	update(input)
 }
 
 window.addEventListener('load', loaded, false)
