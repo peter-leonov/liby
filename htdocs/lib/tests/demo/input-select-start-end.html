@@ -27,14 +27,15 @@ function $ (id) { return document.getElementById(id) }
 
 function loaded (e)
 {
-	var output = $('output')
+	var input = $('input'),
+		output = $('output'),
 		before = $('before').firstChild,
 		selection = $('selection').firstChild,
 		after = $('after').firstChild
 	
-	function delay (node)
+	function delay ()
 	{
-		setTimeout(function () { update(node) }, 0)
+		setTimeout(function () { update(input) }, 0)
 	}
 	
 	function update (node)
@@ -50,8 +51,9 @@ function loaded (e)
 	}
 	
 	
-	var input = $('input')
-	input.addEventListener('keypress', function (e) { delay(this) }, false)
+	input.addEventListener('keypress', delay, false)
+	input.addEventListener('mousedown', function () { delay(); document.addEventListener('mousemove', delay, false) }, false)
+	document.addEventListener('mouseup', function () { delay(); document.removeEventListener('mousemove', delay, false) }, false)
 	input.focus()
 	input.selectionStart = 3
 	input.selectionEnd = 10
