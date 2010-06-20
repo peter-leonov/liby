@@ -30,6 +30,30 @@ function updateSelection (node)
 	r.select()
 }
 
+function updateProperties (node)
+{
+	internal = true
+	
+	// create a range copy
+	var r = selection.createRange().duplicate()
+	
+	// move start to the begin of the input
+	r.moveStart('character', -100000)
+	
+	node.selectionEnd = r.text.length
+	
+	
+	// create a range copy
+	var r = selection.createRange().duplicate()
+	
+	// move end to the end of the input
+	r.moveEnd('character', 100000)
+	
+	node.selectionStart = node.value.length - r.text.length
+	
+	internal = false
+}
+
 var internal = false
 
 function setter ()
@@ -99,9 +123,16 @@ function setter ()
 	internal = false
 }
 
+function updateDelayer ()
+{
+	var node = this
+	setTimeout(function () { updateProperties(node) }, 0)
+}
+
 Me.__pmc_fixHook = function (node)
 {
 	node.attachEvent('onpropertychange', setter)
+	node.addEventListener('keypress', updateDelayer, false)
 }
 
 Me.prototype.selectionStart = 0
