@@ -19,14 +19,14 @@
 function $ (id) { return document.getElementById(id) }
 
 var selection
-if (/MSIE [678]/.test(navigator.userAgent))
+if (/MSIE [678]\./.test(navigator.userAgent))
 	selection = function (node) { return document.selection.createRange().text }
 else
 	selection = function (node) { return node.value.substring(node.selectionStart, node.selectionEnd) }
 
 Tests.test(function (t)
 {
-	if (/MSIE [678]/.test(navigator.userAgent))
+	if (/MSIE [678]\./.test(navigator.userAgent))
 	t.test('IE specific tests', function (t)
 	{
 		t.test('actual selection', function (t)
