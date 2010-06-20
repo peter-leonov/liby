@@ -52,6 +52,8 @@ function loaded (e)
 	
 	
 	input.addEventListener('keypress', delay, false)
+	input.addEventListener('focus', delay, false)
+	input.addEventListener('blur', delay, false)
 	input.addEventListener('mousedown', function () { delay(); document.addEventListener('mousemove', delay, false) }, false)
 	document.addEventListener('mouseup', function () { delay(); document.removeEventListener('mousemove', delay, false) }, false)
 	input.focus()

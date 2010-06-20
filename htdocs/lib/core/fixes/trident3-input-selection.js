@@ -133,9 +133,9 @@ Me.__pmc_fixHook = function (node)
 	
 	node.addEventListener('keypress', updateDelayed, false)
 	node.addEventListener('mousedown', updateDelayed, false)
+	node.addEventListener('mouseup', updateDelayed, false)
 	node.addEventListener('click', updateDelayed, false)
 	node.addEventListener('select', updateDelayed, false)
-	node.addEventListener('blur', updateDelayed, false)
 	node.addEventListener('focus', updateDelayed, false)
 }
 
