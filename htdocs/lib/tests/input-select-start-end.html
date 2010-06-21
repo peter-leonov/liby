@@ -21,6 +21,7 @@
 <input type="text" id="test-1"/>
 <input type="text" id="test-2"/>
 <input type="text" id="test-3"/>
+<input type="text" id="test-4"/>
 <script type="text/javascript">
 function $ (id) { return document.getElementById(id) }
 
@@ -92,6 +93,7 @@ Tests.test(function (t)
 	t.test('selectionStart', function (t)
 	{
 		var node = $('test-2')
+		node.focus()
 		
 		node.value = ''
 		t.eq(node.selectionStart, 0, 'empty')
@@ -101,6 +103,9 @@ Tests.test(function (t)
 		
 		node.value = 'lalala'
 		t.eq(node.selectionStart, 6, 'with "lalala" value')
+		
+		node.value = 'test'
+		t.eq(node.selectionStart, 4, 'with "test" value again')
 		
 		node.value = ''
 		t.eq(node.selectionStart, 0, 'empty again')
@@ -126,7 +131,8 @@ Tests.test(function (t)
 	
 	t.test('selectionEnd', function (t)
 	{
-		var node = $('test-2')
+		var node = $('test-3')
+		node.focus()
 		
 		node.value = ''
 		t.eq(node.selectionEnd, 0, 'empty')
@@ -136,6 +142,9 @@ Tests.test(function (t)
 		
 		node.value = 'lalala'
 		t.eq(node.selectionEnd, 6, 'with "lalala" value')
+		
+		node.value = 'test'
+		t.eq(node.selectionEnd, 4, 'with "test" value again')
 		
 		node.value = ''
 		t.eq(node.selectionEnd, 0, 'empty again')
@@ -162,7 +171,7 @@ Tests.test(function (t)
 	
 	t.test('selectionStart with selectionEnd', function (t)
 	{
-		var node = $('test-3')
+		var node = $('test-4')
 		
 		node.value = '123456'
 		
