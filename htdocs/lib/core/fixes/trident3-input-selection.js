@@ -45,8 +45,11 @@ function updateProperties (node)
 	
 	// create a range copy
 	var r = selection.createRange().duplicate()
+	
+	// move end to start
 	r.collapse()
-	// move end to the end of the input
+	
+	// move start to the begin of the input
 	r.moveStart('character', -100000)
 	
 	node.selectionStart = r.text.length
