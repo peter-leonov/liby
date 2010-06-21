@@ -12,10 +12,13 @@ var selectionStart =
 		// create a range copy
 		var r = selection.createRange().duplicate()
 		
-		// move end to the end of the input
-		r.moveEnd('character', 100000)
+		// move end to start
+		r.collapse()
 		
-		return this.value.length - r.text.length
+		// move start to the begin of the input
+		r.moveStart('character', -100000)
+		
+		return r.text.length
 	},
 	
 	set: function (v)
