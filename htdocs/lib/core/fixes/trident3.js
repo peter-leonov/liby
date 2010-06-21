@@ -1,5 +1,4 @@
 <!--# include virtual="trident3-element.js" -->
-<!--# include virtual="trident3-input-selection.js" -->
 <!--# include virtual="trident-3-4-prototype.js" -->
 <!--# include virtual="trident-3-default-view.js" -->
 <!--# include virtual="trident-3-4-event-listener.js" -->
