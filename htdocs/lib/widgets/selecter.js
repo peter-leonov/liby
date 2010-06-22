@@ -23,7 +23,61 @@ Me.prototype =
 		this.nodes = nodes
 		nodes.optionsCache = []
 		
+		this.bindEvents()
+		
 		return this
+	},
+	
+	bindEvents: function ()
+	{
+		var nodes = this.nodes,
+			main = nodes.main,
+			me = this
+		
+		function open (e)
+		{
+			me.open()
+			// Selecter.closeAll()
+			e.stopPropagation()
+			main.addEventListener('mousedown', close, false)
+			main.removeEventListener('mousedown', open, false)
+			document.addEventListener('mouseup', close, false)
+		}
+		
+		function close (e)
+		{
+			me.close()
+			e.stopPropagation()
+			main.addEventListener('mousedown', open, false)
+			main.removeEventListener('mousedown', close, false)
+			document.removeEventListener('mouseup', close, false)
+		}
+		
+		function select (e)
+		{
+			close(e)
+			me.select(e.target.getAttribute('data-selecter-option-num'))
+		}
+		
+		main.open = open
+		main.close = close
+		
+		main.addEventListener('mousedown', open, false)
+		main.addEventListener('mouseup', function (e) { e.stopPropagation() }, false)
+		
+		var options = nodes.options
+		options.addEventListener('mousedown', select, false)
+		options.addEventListener('mouseup', select, false)
+	},
+	
+	open: function ()
+	{
+		this.nodes.main.addClassName('open')
+	},
+	
+	close: function ()
+	{
+		this.nodes.main.removeClassName('open')
 	},
 	
 	setOptions: function (options)
@@ -56,6 +110,7 @@ Me.prototype =
 			optionPresent[i] = true
 			
 			var li = optionsCache[i] = Nc('li', 'option')
+			li.setAttribute('data-selecter-option-num', i)
 			li.appendChild(T(option))
 			root.appendChild(li)
 		}
@@ -77,9 +132,6 @@ Me.prototype =
 	
 	select: function (num)
 	{
-		if (typeof num !== 'number')
-			num = this.valToNum[num]
-		
 		if (!this.optionPresent[num])
 			return
 		
@@ -90,11 +142,13 @@ Me.prototype =
 		
 	},
 	
+	renderSelectedValue: function (value)
+	{
+		this.renderSelected(this.valToNum[value])
+	},
+	
 	renderSelected: function (num)
 	{
-		if (typeof num !== 'number')
-			num = this.valToNum[num]
-		
 		if (num === this.lastSelected)
 			return
 		
