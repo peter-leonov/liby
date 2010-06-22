@@ -2,7 +2,7 @@
 
 var myName = 'Selecter'
 
-function Me ()
+function Me (group)
 {
 	this.nodes = {optionsCache: []}
 	this.constructor = Me
@@ -12,7 +12,28 @@ function Me ()
 	this.optionPresent = []
 	
 	this.lastSelected = -1
+	
+	this.group = group
+	
+	var arr = Me.groups[group]
+	if (arr)
+		arr.push(this)
+	else
+		Me.groups[group] = [this]
 }
+
+Me.groups = {}
+Me.closeGoup = function (group)
+{
+	var arr = Me.groups[group]
+	
+	if (!arr)
+		return
+	
+	for (var i = 0, il = arr.length; i < il; i++)
+		arr[i].close()
+}
+
 
 eval(NodesShortcut.include())
 
@@ -36,25 +57,20 @@ Me.prototype =
 		
 		function open (e)
 		{
-			me.open()
-			// Selecter.closeAll()
 			e.stopPropagation()
-			main.addEventListener('mousedown', close, false)
-			main.removeEventListener('mousedown', open, false)
-			document.addEventListener('mouseup', close, false)
+			Me.closeGoup(me.group)
+			me.open()
 		}
 		
 		function close (e)
 		{
-			me.close()
 			e.stopPropagation()
-			main.addEventListener('mousedown', open, false)
-			main.removeEventListener('mousedown', close, false)
-			document.removeEventListener('mouseup', close, false)
+			me.close()
 		}
 		
 		function select (e)
 		{
+			e.stopPropagation()
 			close(e)
 			me.select(e.target.getAttribute('data-selecter-option-num'))
 		}
@@ -72,12 +88,22 @@ Me.prototype =
 	
 	open: function ()
 	{
-		this.nodes.main.addClassName('open')
+		var main = this.nodes.main
+		
+		main.addClassName('open')
+		main.addEventListener('mousedown', close, false)
+		main.removeEventListener('mousedown', open, false)
+		document.addEventListener('mouseup', close, false)
 	},
 	
 	close: function ()
 	{
-		this.nodes.main.removeClassName('open')
+		var main = this.nodes.main
+		
+		main.removeClassName('open')
+		main.addEventListener('mousedown', open, false)
+		main.removeEventListener('mousedown', close, false)
+		document.removeEventListener('mouseup', close, false)
 	},
 	
 	setOptions: function (options)
