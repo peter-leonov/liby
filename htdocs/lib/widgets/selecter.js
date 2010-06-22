@@ -57,6 +57,7 @@ Me.prototype =
 		
 		function open (e)
 		{
+			e.preventDefault()
 			Me.closeGoup(me.group)
 			
 			main.addClassName('open')
