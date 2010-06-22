@@ -57,7 +57,6 @@ Me.prototype =
 		
 		function open (e)
 		{
-			e.stopPropagation()
 			Me.closeGoup(me.group)
 			
 			main.addClassName('open')
@@ -66,10 +65,8 @@ Me.prototype =
 			document.addEventListener('mouseup', close, false)
 		}
 		
-		function close (e)
+		function close ()
 		{
-			e.stopPropagation()
-			
 			main.removeClassName('open')
 			main.addEventListener('mousedown', open, false)
 			main.removeEventListener('mousedown', close, false)
@@ -83,8 +80,7 @@ Me.prototype =
 			me.select(e.target.getAttribute('data-selecter-option-num'))
 		}
 		
-		main.open = open
-		main.close = close
+		this.close = close
 		
 		main.addEventListener('mousedown', open, false)
 		main.addEventListener('mouseup', function (e) { e.stopPropagation() }, false)
