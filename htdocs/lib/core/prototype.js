@@ -22,9 +22,14 @@ add
 
 add(S, {localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }})
 
-add(Fp, {mixIn: function (module) { return add(this.prototype, module.prototype) }})
-
-add(Fp, {extend: function (s) { for (var k in s) this[k] = s[k]; return this }})
+add
+(
+	Fp,
+	{
+		mixIn: function (module) { return add(this.prototype, module.prototype) },
+		extend: function (s) { for (var k in s) this[k] = s[k]; return this }
+	}
+)
 
 var ceil = M.ceil, floor = M.floor, round = M.round, random = M.random
 add(M, {longRandom: function () { return (new D()).getTime().toString() + round(random() * 1E+17) }})
