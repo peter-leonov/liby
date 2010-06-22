@@ -59,13 +59,21 @@ Me.prototype =
 		{
 			e.stopPropagation()
 			Me.closeGoup(me.group)
-			me.open()
+			
+			main.addClassName('open')
+			main.addEventListener('mousedown', close, false)
+			main.removeEventListener('mousedown', open, false)
+			document.addEventListener('mouseup', close, false)
 		}
 		
 		function close (e)
 		{
 			e.stopPropagation()
-			me.close()
+			
+			main.removeClassName('open')
+			main.addEventListener('mousedown', open, false)
+			main.removeEventListener('mousedown', close, false)
+			document.removeEventListener('mouseup', close, false)
 		}
 		
 		function select (e)
@@ -86,25 +94,7 @@ Me.prototype =
 		options.addEventListener('mouseup', select, false)
 	},
 	
-	open: function ()
-	{
-		var main = this.nodes.main
-		
-		main.addClassName('open')
-		main.addEventListener('mousedown', close, false)
-		main.removeEventListener('mousedown', open, false)
-		document.addEventListener('mouseup', close, false)
-	},
-	
-	close: function ()
-	{
-		var main = this.nodes.main
-		
-		main.removeClassName('open')
-		main.addEventListener('mousedown', open, false)
-		main.removeEventListener('mousedown', close, false)
-		document.removeEventListener('mouseup', close, false)
-	},
+	close: function () {},
 	
 	setOptions: function (options)
 	{
