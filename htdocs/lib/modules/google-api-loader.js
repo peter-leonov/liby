@@ -12,8 +12,6 @@ function Me (keys, host, language)
 	this.prerequisites = {}
 }
 
-Me.mixIn(EventDriven)
-
 Me.prototype =
 {
 	load: function (name, version)
@@ -90,6 +88,8 @@ Me.prototype =
 		this.dispatchEvent({type: api.name, api: this.google[api.name]})
 	}
 }
+
+Me.mixIn(EventDriven)
 
 Me.className = myName
 self[myName] = Me
