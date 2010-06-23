@@ -2,15 +2,17 @@
 
 var myName = 'MapLightMarker'
 
-function Me (map)
-{
-	var node = this.node || (this.node = this.createNode())
-	map.getPane(G_MAP_MARKER_PANE).appendChild(node)
-	this.map = map
-}
+function Me () {}
 
 Me.prototype =
 {
+	initialize: function (map)
+	{
+		var node = this.node || (this.node = this.createNode())
+		map.getPane(G_MAP_MARKER_PANE).appendChild(node)
+		this.map = map
+	},
+	
 	redraw: function (force)
 	{
 		if (!force)
