@@ -11,10 +11,9 @@ var myName = 'Map',
 
 var myProto = 
 {
-	bind: function (main, center, zoom)
+	bind: function (main)
 	{
-		this.view.bind({main:main}, center, zoom)
-		this.todos = []
+		this.view.bind({main:main})
 		return this
 	},
 	
@@ -48,11 +47,9 @@ var myProto =
 		this.visibleMarkers = {}
 	},
 	
-	bind: function (nodes, center, zoom)
+	bind: function (nodes)
 	{
 		this.nodes = nodes
-		this.center = center
-		this.zoom = zoom
 		
 		googleApiLoader.load('maps', 2)
 		nodes.main.addClassName('loading')
