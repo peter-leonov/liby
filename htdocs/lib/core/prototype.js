@@ -5,13 +5,14 @@
 var O = Object, A = Array, Ap = A.prototype, S = String, Fp = Function.prototype, D = Date, M = Math
 
 function add (d, s) { if (d) for (var k in s) if (!(k in d)) d[k] = s[k]; return d }
+function extend (d, s) { if (d) for (var k in s) d[k] = s[k]; return d }
 
 add
 (
 	O,
 	{
 		add: add,
-		extend: function (d, s) { if (d) for (var k in s) d[k] = s[k]; return d },
+		extend: extend,
 		copy: function (s) { var d = {}; for (var k in s) d[k] = s[k]; return d },
 		keys: function (s) { var r = []; for (var k in s) r.push(k); return r },
 		keysCount: function (s) { var l = 0; for (var k in s) l++; return l },
@@ -26,7 +27,7 @@ add
 (
 	Fp,
 	{
-		mixIn: function (module) { return add(this.prototype, module.prototype) },
+		mixIn: function (module) { return extend(this.prototype, module.prototype) },
 		extend: function (s) { for (var k in s) this[k] = s[k]; return this },
 		bind: function (inv, args) { var me = this; return function () { me.apply(inv, args || arguments) } }
 	}
