@@ -56,7 +56,7 @@ var myProto =
 		googleApiLoader.load('maps', 2)
 		nodes.main.addClassName('loading')
 		var me = this
-		self.googleApiLoader.addEventListener('maps', function (e) { me.apiLoaded(e) }, false)
+		googleApiLoader.addEventListener('maps', function (e) { me.apiLoaded(e) }, false)
 	},
 	
 	apiLoaded: function (e)
