@@ -217,7 +217,7 @@ var myProto =
 		var latlng = point.latlng, api = this.api, me = this, node
 		
 		marker = cache[point.id] = new this.markerClass()
-		marker.latlng = new GLatLng(latlng.lat, latlng.lng)
+		marker.latlng = new this.api.LatLng(latlng.lat, latlng.lng)
 		node = marker.node = point.createNode()
 		node.addEventListener('mousedown', function (e) { e.stopPropagation(); me.pointClicked(point) }, false)
 		return marker
