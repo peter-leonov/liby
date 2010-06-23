@@ -19,6 +19,7 @@ var myProto =
 	},
 	
 	setMode: function (mode) { this.controller.setMode(mode) },
+	setCenter: function (center, zoom) { this.model.setCenter(center, zoom) },
 	setPoints: function (points) { this.model.setPoints(points) },
 	selectPoint: function (point) { this.controller.selectPoint(point) },
 	apiLoaded: function () { this.dispatchEvent('ready') }
@@ -79,7 +80,14 @@ var myProto =
 		map = this.map = new api.Map2(main)
 		api.Event.addListener(map, 'load', function () { me.mapLoaded(this) })
 		map.enableContinuousZoom()
-		map.setCenter(new api.LatLng(this.center.lat, this.center.lng), this.zoom)
+	},
+	
+	setCenter: function (center, zoom)
+	{
+		if (!this.ready)
+			return
+		
+		this.map.setCenter(new this.api.LatLng(center.lat, center.lng), zoom)
 	},
 	
 	mapLoaded: function ()
@@ -266,7 +274,17 @@ var myProto =
 	
 	setMode: function (mode) { this.mode = mode },
 	
-	apiLoaded: function () { this.view.renderPoints(this.points, this.state) },
+	apiLoaded: function ()
+	{
+		this.view.setCenter(this.center, this.zoom)
+		this.view.renderPoints(this.points, this.state)
+	},
+	
+	setCenter: function (center, zoom)
+	{
+		this.center = center
+		this.zoom = zoom
+	},
 	
 	setPoints: function (points)
 	{
