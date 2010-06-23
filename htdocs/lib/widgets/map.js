@@ -102,15 +102,15 @@ var myProto =
 		
 		var main = this.nodes.main, map = this.map, control
 		
-		control = main.appendChild(N('div', 'position-control'))
+		control = main.appendChild(Nc('div', 'position-control'))
 		
-		control.appendChild(N('div', 'to-top'))
-		control.appendChild(N('div', 'to-right'))
-		control.appendChild(N('div', 'to-bottom'))
-		control.appendChild(N('div', 'to-left'))
+		control.appendChild(Nc('div', 'to-top'))
+		control.appendChild(Nc('div', 'to-right'))
+		control.appendChild(Nc('div', 'to-bottom'))
+		control.appendChild(Nc('div', 'to-left'))
 		
-		control.appendChild(N('div', 'to-plus'))
-		control.appendChild(N('div', 'to-minus'))
+		control.appendChild(Nc('div', 'to-plus'))
+		control.appendChild(Nc('div', 'to-minus'))
 		
 		function move (e)
 		{
