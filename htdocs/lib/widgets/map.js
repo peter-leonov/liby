@@ -147,7 +147,7 @@ var myProto =
 			var klass = this.markerClass = function () {  },
 				kp = klass.prototype = new this.api.Overlay()
 			// kp.createNode = function () { return this.point.createNode() }
-			klass.mixIn(MapLiteMarker)
+			klass.mixIn(MapLightMarker)
 		}
 	},
 	
