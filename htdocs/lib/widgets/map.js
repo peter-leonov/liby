@@ -46,11 +46,12 @@ var myProto =
 	bind: function (nodes)
 	{
 		this.nodes = nodes
-		
-		googleApiLoader.load('maps', 2)
-		nodes.main.addClassName('loading')
+		if (!nodes.wrapper)
+			nodes.wrapper = nodes.main
 		var me = this
 		googleApiLoader.addEventListener('maps', function (e) { me.apiLoaded(e) }, false)
+		googleApiLoader.load('maps', 2)
+		nodes.wrapper.addClassName('loading')
 	},
 	
 	apiLoaded: function (e)
@@ -65,12 +66,10 @@ var myProto =
 	
 	createMap: function ()
 	{
-		var api = this.api, main = this.nodes.main,
-			map, me = this
+		var api = this.api
 		
-		main.removeClassName('loading')
-		
-		map = this.map = new api.Map2(main)
+		var map = this.map = new api.Map2(this.nodes.main)
+		var me = this
 		api.Event.addListener(map, 'load', function () { me.mapLoaded(this) })
 		map.enableContinuousZoom()
 	},
@@ -85,8 +84,8 @@ var myProto =
 	
 	mapLoaded: function ()
 	{
-		// log('mapLoaded')
 		var me = this
+		this.nodes.wrapper.removeClassName('loading')
 		this.api.Event.addListener(this.map, 'moveend', function () { me.mapMoveEnd(this) })
 		this.addControls()
 	},
