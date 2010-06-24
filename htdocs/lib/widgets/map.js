@@ -47,7 +47,6 @@ var myProto =
 	initialize: function ()
 	{
 		this.nodes = {}
-		this.markersCache = {}
 		this.visibleMarkers = {}
 	},
 	
@@ -56,6 +55,7 @@ var myProto =
 		this.nodes = nodes
 		if (!nodes.wrapper)
 			nodes.wrapper = nodes.main
+		
 		var me = this
 		googleApiLoader.addEventListener('maps', function (e) { me.apiLoaded(e) }, false)
 		googleApiLoader.load('maps', 2)
@@ -65,7 +65,7 @@ var myProto =
 	apiLoaded: function (e)
 	{
 		var api = this.api = e.api
-		this.updateOverlayInheritance()
+		this.updateOverlayProto()
 		this.createMap()
 		
 		this.ready = true
@@ -135,7 +135,7 @@ var myProto =
 		control.addEventListener('click', move, false)
 	},
 	
-	updateOverlayInheritance: function ()
+	updateOverlayProto: function ()
 	{
 		var proto = Papa.Overlay.prototype,
 			api = this.api
@@ -150,11 +150,6 @@ var myProto =
 		this.controller.moved(map.getCenter(), map.getZoom(), {lat:sw.lat(), lng:sw.lng()}, {lat:ne.lat(), lng:ne.lng()})
 	},
 	
-	pointClicked: function (point)
-	{
-		this.controller.pointInvoked(point)
-	},
-	
 	renderPoints: function (points)
 	{
 		if (!this.ready)
@@ -164,18 +159,16 @@ var myProto =
 			visible = this.visibleMarkers,
 			now = this.visibleMarkers = {}
 		
-		// map.clearOverlays()
-		// removeOverlay
 		for (var i = 0; i < points.length; i++)
 		{
 			var point = points[i], pid = point.id
 			
 			// get the marker and insert it into the new visibleMarkers hash
-			var marker = now[pid] = point//this.getMarker(point)
+			now[pid] = point
 			
 			// add marker (and delete its record) only if it isn't already shown
 			if (!visible[pid])
-				map.addOverlay(marker)
+				map.addOverlay(point)
 			else
 				delete visible[pid]
 		}
@@ -183,21 +176,6 @@ var myProto =
 		// remove all the markers that are still visible
 		for (var k in visible)
 			map.removeOverlay(visible[k])
-	},
-	
-	getMarker: function (point)
-	{
-		var cache = this.markersCache, marker
-		if ((marker = cache[point.id]))
-			return marker
-		
-		var latlng = point.latlng, api = this.api, me = this, node
-		
-		marker = cache[point.id] = new this.markerClass()
-		marker.latlng = new this.api.LatLng(latlng.lat, latlng.lng)
-		node = marker.node = point.createNode()
-		node.addEventListener('mousedown', function (e) { e.stopPropagation(); me.pointClicked(point) }, false)
-		return marker
 	}
 }
 
@@ -215,11 +193,6 @@ var myProto =
 	moved: function (center, zoom, sw, ne)
 	{
 		this.parent.dispatchEvent({type:'moved', center:center, zoom:zoom, sw:sw, ne:ne})
-	},
-	
-	pointInvoked: function (point)
-	{
-		this.model.pointInvoked(point)
 	},
 	
 	apiLoaded: function () { this.model.apiLoaded(); this.parent.apiLoaded() }
@@ -260,11 +233,6 @@ var myProto =
 		
 		this.points = points
 		this.view.renderPoints(points)
-	},
-	
-	pointInvoked: function (point)
-	{
-		this.parent.dispatchEvent({type:'pointInvoked', point: point})
 	}
 }
 
