@@ -30,6 +30,14 @@ self[myName] = Me
 
 ;(function(){
 
+function Me () {}
+Papa.Overlay = Me
+
+})();
+
+
+;(function(){
+
 var Me = Papa.View
 
 eval(NodesShortcut.include())
@@ -57,7 +65,7 @@ var myProto =
 	apiLoaded: function (e)
 	{
 		var api = this.api = e.api
-		this.createMarkerClass()
+		this.updateOverlayInheritance()
 		this.createMap()
 		
 		this.ready = true
@@ -127,15 +135,13 @@ var myProto =
 		control.addEventListener('click', move, false)
 	},
 	
-	createMarkerClass: function ()
+	updateOverlayInheritance: function ()
 	{
-		if (!this.markerClass)
-		{
-			var klass = this.markerClass = function () {  },
-				kp = klass.prototype = new this.api.Overlay()
-			// kp.createNode = function () { return this.point.createNode() }
-			klass.mixIn(MapLightMarker)
-		}
+		var proto = Papa.Overlay.prototype,
+			api = this.api
+		
+		Object.extend(proto, new api.Overlay())
+		proto.api = api
 	},
 	
 	mapMoveEnd: function (map)
@@ -165,7 +171,7 @@ var myProto =
 			var point = points[i], pid = point.id
 			
 			// get the marker and insert it into the new visibleMarkers hash
-			var marker = now[pid] = this.getGMarker(point)
+			var marker = now[pid] = point//this.getMarker(point)
 			
 			// add marker (and delete its record) only if it isn't already shown
 			if (!visible[pid])
@@ -179,7 +185,7 @@ var myProto =
 			map.removeOverlay(visible[k])
 	},
 	
-	getGMarker: function (point)
+	getMarker: function (point)
 	{
 		var cache = this.markersCache, marker
 		if ((marker = cache[point.id]))
