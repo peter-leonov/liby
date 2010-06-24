@@ -9,9 +9,9 @@ var myName = 'Map',
 
 var myProto = 
 {
-	bind: function (main)
+	bind: function (nodes)
 	{
-		this.view.bind({main:main})
+		this.view.bind(nodes)
 		return this
 	},
 	
@@ -93,46 +93,47 @@ var myProto =
 	
 	addControls: function ()
 	{
-		// var api = this.api, controlPosition = new api.ControlPosition(api.ANCHOR_TOP_LEFT, new api.Size(10, 15))
-		// this.map.addControl(new api.SmallMapControl(), controlPosition)
+		var nodes = this.nodes,
+			control = nodes.control
 		
-		var main = this.nodes.main, map = this.map, control
+		if (!control)
+		{
+			var api = this.api, controlPosition = new api.ControlPosition(api.ANCHOR_TOP_LEFT, new api.Size(10, 15))
+			this.map.addControl(new api.SmallMapControl(), controlPosition)
+			return
+		}
 		
-		control = main.appendChild(Nc('ul', 'position-control'))
+		var main = nodes.main,
+			map = this.map
 		
-		control.appendChild(Nc('li', 'to-top'))
-		control.appendChild(Nc('li', 'to-right'))
-		control.appendChild(Nc('li', 'to-bottom'))
-		control.appendChild(Nc('li', 'to-left'))
-		
-		control.appendChild(Nc('li', 'to-plus'))
-		control.appendChild(Nc('li', 'to-minus'))
+		main.appendChild(control)
 		
 		function move (e)
 		{
-			switch (e.target.className)
+			var action = e.target.getAttribute('data-map-action')
+			switch (action)
 			{
-				case 'to-top':
+				case 'top':
 				map.panDirection(0, 1)
 				break
 				
-				case 'to-right':
+				case 'right':
 				map.panDirection(-1, 0)
 				break
 				
-				case 'to-bottom':
+				case 'bottom':
 				map.panDirection(0, -1)
 				break
 				
-				case 'to-left':
+				case 'left':
 				map.panDirection(1, 0)
 				break
 				
-				case 'to-plus':
+				case 'plus':
 				map.zoomIn()
 				break
 				
-				case 'to-minus':
+				case 'minus':
 				map.zoomOut()
 				break
 			}
