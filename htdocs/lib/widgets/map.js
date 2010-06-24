@@ -161,7 +161,7 @@ var myProto =
 		
 		for (var i = 0; i < points.length; i++)
 		{
-			var point = points[i], pid = point.id
+			var point = points[i], pid = point.mapPointId
 			
 			// get the marker and insert it into the new visibleMarkers hash
 			now[pid] = point
@@ -212,6 +212,7 @@ var myProto =
 	initialize: function ()
 	{
 		this.points = []
+		this.count = 0
 	},
 	
 	apiLoaded: function ()
@@ -230,6 +231,15 @@ var myProto =
 	{
 		if (!this.parent.dispatchEvent({type:'pointsSet', points: points}))
 			return
+		
+		var count = this.count
+		for (var i = 0, il = points.length; i < il; i++)
+		{
+			var point = points[i]
+			if (!point.mapPointId)
+				point.mapPointId = ++count
+		}
+		this.count = count
 		
 		this.points = points
 		this.view.renderPoints(points)
