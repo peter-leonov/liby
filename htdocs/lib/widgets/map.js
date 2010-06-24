@@ -108,35 +108,21 @@ var myProto =
 		
 		main.appendChild(control)
 		
+		var actions =
+		{
+			top:    ['panDirection', 0, 1],
+			right:  ['panDirection', -1, 0],
+			bottom: ['panDirection', 0, -1],
+			left:   ['panDirection', 1, 0],
+			plus:   ['zoomIn'],
+			minus:  ['zoomOut']
+		}
+		
 		function move (e)
 		{
-			var action = e.target.getAttribute('data-map-action')
-			switch (action)
-			{
-				case 'top':
-				map.panDirection(0, 1)
-				break
-				
-				case 'right':
-				map.panDirection(-1, 0)
-				break
-				
-				case 'bottom':
-				map.panDirection(0, -1)
-				break
-				
-				case 'left':
-				map.panDirection(1, 0)
-				break
-				
-				case 'plus':
-				map.zoomIn()
-				break
-				
-				case 'minus':
-				map.zoomOut()
-				break
-			}
+			var action = actions[e.target.getAttribute('data-map-action')]
+			if (action)
+				map[action[0]].apply(map, action.slice(1))
 		}
 		
 		control.addEventListener('mousedown', move, false)
