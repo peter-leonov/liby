@@ -5,9 +5,7 @@ var Papa
 ;(function(){
 
 var myName = 'Map',
-	Me = Papa = MVC.create(myName),
-	MODE_SINGLE = Me.MODE_SINGLE = 0,
-	MODE_MULTY = Me.MODE_SINGLE = 1
+	Me = Papa = MVC.create(myName)
 
 var myProto = 
 {
@@ -17,10 +15,8 @@ var myProto =
 		return this
 	},
 	
-	setMode: function (mode) { this.controller.setMode(mode) },
 	setCenter: function (center, zoom) { this.model.setCenter(center, zoom) },
 	setPoints: function (points) { this.model.setPoints(points) },
-	selectPoint: function (point) { this.controller.selectPoint(point) },
 	apiLoaded: function () { this.dispatchEvent('ready') }
 }
 
@@ -167,7 +163,7 @@ var myProto =
 		this.controller.pointInvoked(point)
 	},
 	
-	renderPoints: function (points, state)
+	renderPoints: function (points)
 	{
 		if (!this.ready)
 			return
@@ -190,22 +186,11 @@ var myProto =
 				map.addOverlay(marker)
 			else
 				delete visible[pid]
-			
-			marker.node.toggleClassName('selected', !!state[point.id])
 		}
 		
 		// remove all the markers that are still visible
 		for (var k in visible)
 			map.removeOverlay(visible[k])
-	},
-	
-	updatePoint: function (point, state)
-	{
-		if (!this.ready)
-			return
-		
-		var marker = this.getGMarker(point)
-		marker.node.toggleClassName('selected', state)
 	},
 	
 	getGMarker: function (point)
@@ -245,8 +230,6 @@ var myProto =
 		this.model.pointInvoked(point)
 	},
 	
-	setMode: function (mode) { this.model.setMode(mode) },
-	selectPoint: function (point) { this.model.pointInvoked(point, true) },
 	apiLoaded: function () { this.model.apiLoaded(); this.parent.apiLoaded() }
 }
 
@@ -264,17 +247,12 @@ var myProto =
 	initialize: function ()
 	{
 		this.points = []
-		this.state = {}
-		this.mode = 1
-		this.pointsById = {}
 	},
-	
-	setMode: function (mode) { this.mode = mode },
 	
 	apiLoaded: function ()
 	{
 		this.view.setCenter(this.center, this.zoom)
-		this.view.renderPoints(this.points, this.state)
+		this.view.renderPoints(this.points)
 	},
 	
 	setCenter: function (center, zoom)
@@ -285,61 +263,16 @@ var myProto =
 	
 	setPoints: function (points)
 	{
+		if (!this.parent.dispatchEvent({type:'pointsSet', points: points}))
+			return
+		
 		this.points = points
-		for (var i = 0; i < points.length; i++)
-		{
-			var point = points[i]
-			this.pointsById[point.id] = point
-		}
-		this.fireModelChanged()
-		this.view.renderPoints(points, this.state)
+		this.view.renderPoints(points)
 	},
 	
-	pointInvoked: function (point, status)
+	pointInvoked: function (point)
 	{
-		var view = this.view, state = this.state, id = point.id
-		
-		if (status === undefined)
-			status = !state[id]
-		
-		if (!this.parent.dispatchEvent({type:'pointInvoked', point: point, status: status}))
-			return false
-		
-		if (this.mode === MODE_MULTY)
-		{
-			if (status)
-				state[id] = true
-			else
-				delete state[id]
-		}
-		else if (this.mode === MODE_SINGLE)
-		{
-			var pointsById = this.pointsById
-			for (var k in state)
-			{
-				var p = this.pointsById[k]
-				if (p !== point)
-					view.updatePoint(p, false)
-			}
-			
-			state = this.state = {}
-			if (status)
-				state[id] = status
-		}
-		
-		this.fireModelChanged()
-		view.updatePoint(point, status)
-	},
-	
-	fireModelChanged: function ()
-	{
-		var byId = this.pointsById, state = this.state, selected = []
-		
-		for (var k in state)
-			if (state[k])
-			 	selected.push(byId[k])
-		
-		this.parent.dispatchEvent({type:'modelChanged', state: this.state, selected: selected})
+		this.parent.dispatchEvent({type:'pointInvoked', point: point})
 	}
 }
 
