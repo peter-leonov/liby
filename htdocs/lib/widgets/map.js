@@ -125,7 +125,7 @@ var myProto =
 				map[action[0]].apply(map, action.slice(1))
 		}
 		
-		control.addEventListener('mousedown', move, false)
+		control.addEventListener('click', move, false)
 	},
 	
 	createMarkerClass: function ()
