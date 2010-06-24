@@ -225,6 +225,7 @@ var myProto =
 	{
 		this.center = center
 		this.zoom = zoom
+		this.view.setCenter(center, zoom)
 	},
 	
 	setPoints: function (points)
