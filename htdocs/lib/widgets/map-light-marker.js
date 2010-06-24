@@ -12,7 +12,6 @@ var myProto =
 {
 	initialize: function (map)
 	{
-		log(this, new Map.Overlay())
 		var ll = this.ll
 		this.latlng = new this.api.LatLng(ll.lat, ll.lng)
 		
