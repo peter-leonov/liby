@@ -15,7 +15,16 @@ function onclick (e)
 	}
 }
 Me.dropClick = function () { dropClick = true }
-document.addEventListener('click', onclick, true)
+
+var clickListener = false
+Me.bindClickListened = function ()
+{
+	if (clickListener)
+		return
+	
+	document.addEventListener('click', onclick, true)
+	clickListener = true
+}
 
 Me.prototype =
 {
@@ -32,6 +41,8 @@ Me.prototype =
 		
 		node.addEventListener('mousedown', this.mousedown, false)
 		node.addEventListener('selectstart', preventDefault, false)
+		
+		Me.bindClickListened()
 		
 		return this
 	},
