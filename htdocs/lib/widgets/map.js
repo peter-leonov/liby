@@ -146,8 +146,12 @@ var myProto =
 	
 	mapMoveEnd: function (map)
 	{
-		var bounds = map.getBounds(), sw = bounds.getSouthWest(), ne = bounds.getNorthEast()
-		this.controller.moved(map.getCenter(), map.getZoom(), {lat:sw.lat(), lng:sw.lng()}, {lat:ne.lat(), lng:ne.lng()})
+		var center = map.getCenter(),
+			bounds = map.getBounds(),
+			sw = bounds.getSouthWest(),
+			ne = bounds.getNorthEast()
+		
+		this.controller.moved({lat:center.lat(), lng:center.lng()}, map.getZoom(), {lat:sw.lat(), lng:sw.lng()}, {lat:ne.lat(), lng:ne.lng()})
 	},
 	
 	renderPoints: function (points)
