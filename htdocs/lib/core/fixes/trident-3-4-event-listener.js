@@ -35,6 +35,7 @@ Event.prototype =
 		this.type = e.type
 		this.clientX = e.clientX
 		this.clientY = e.clientY
+		this.button = e.button
 		this.charCode = e.charCode
 		this.keyCode = e.keyCode
 		this.currentTarget = this.target = e.srcElement
