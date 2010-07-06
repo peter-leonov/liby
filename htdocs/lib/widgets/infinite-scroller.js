@@ -46,7 +46,6 @@ Me.prototype =
 			root.scrollLeft = Math.round(real)
 			this.onscroll(x, real)
 		}
-		// this.setY = function (v) { root.scrollTop = v }
 		
 		
 		var space = this.space = new Kinematics.Space()

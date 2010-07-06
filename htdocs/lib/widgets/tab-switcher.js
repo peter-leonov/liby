@@ -29,9 +29,6 @@ Me.prototype =
 	
 	onMouse: function (e, node)
 	{
-		// if (e.target != node)
-		// 	return
-		
 		var tabs = this.nodes.tabs,
 			i, num = -1, value
 		
@@ -102,7 +99,6 @@ Me.prototype =
 			if ((node = sections[i]))
 				node.toggleClassName('hidden', num !== i)
 	}
-	
 }
 
 Me.mixIn(EventDriven)
