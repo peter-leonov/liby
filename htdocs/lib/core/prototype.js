@@ -21,7 +21,14 @@ add
 	}
 )
 
-add(S, {localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }})
+add
+(
+	S,
+	{
+		localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) },
+		trim: function () { return this.replace(/^\s+|\s+$/g, '') }
+	}
+)
 
 add
 (
