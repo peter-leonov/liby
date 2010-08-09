@@ -171,10 +171,13 @@ Me.prototype =
 		if (last)
 			last.removeClassName('selected')
 		
-		
 		optionsCache[num].addClassName('selected')
 		
 		this.setCaption(this.options[num])
+		
+		var main = this.nodes.main
+		main.removeClassName('selected-option-' + this.lastSelected)
+		main.addClassName('selected-option-' + num)
 		
 		this.lastSelected = num
 	}
