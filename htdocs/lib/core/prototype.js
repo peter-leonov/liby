@@ -2,7 +2,7 @@
 // this code is heavily minified and it couldn not be changed frequently
 ;(function(){
 
-var O = Object, A = Array, Ap = A.prototype, S = String, Fp = Function.prototype, D = Date, M = Math
+var O = Object, A = Array, Ap = A.prototype, S = String, Sp = S.prototype, Fp = Function.prototype, D = Date, M = Math
 
 function add (d, s) { if (d) for (var k in s) if (!(k in d)) d[k] = s[k]; return d }
 function extend (d, s) { if (d) for (var k in s) d[k] = s[k]; return d }
@@ -25,7 +25,14 @@ add
 (
 	S,
 	{
-		localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) },
+		localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }
+	}
+)
+
+add
+(
+	Sp,
+	{
 		trim: function () { return this.replace(/^\s+|\s+$/g, '') }
 	}
 )
