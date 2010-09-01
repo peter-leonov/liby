@@ -28,6 +28,12 @@
 		<li class="item3">3</li>
 	</ul>
 	
+	<ul id="root3" class="root3">
+		<li class="item1" lalala="lalala">1</li>
+		<li class="item2" data-lalala="lalala">2</li>
+		<li class="item3">3</li>
+	</ul>
+	
 <script type="text/javascript">
 Tests.test(function (t)
 {
@@ -104,6 +110,52 @@ Tests.test(function (t)
 		t.ne(clone.nodes.item3, item3, 'item3 cloned')
 		t.eq(clone.nodes.item3.className, item3.className, 'item3 class cloned')
 		
+	})
+	
+	t.test('non-standart attributes', function (t)
+	{
+		var root = $('root3'),
+			item1 = root.getElementsByTagName('li')[0],
+			item2 = root.getElementsByTagName('li')[1],
+			item3 = root.getElementsByTagName('li')[2]
+		
+		var hehehe = ['he', 'he', 'he']
+		
+		item3.setAttribute('lololo', 'lololo')
+		item3.hehehe = hehehe
+		
+		t.test('check values', function (t)
+		{
+			t.eq(item1.getAttribute('lalala'), 'lalala', 'non-standart attribute')
+			t.eq(item2.getAttribute('data-lalala'), 'lalala', 'non-standart “data-” attribute')
+			t.eq(item3.getAttribute('lololo'), 'lololo', 'non-standart runtime attribute')
+			t.eq(item3.hehehe, hehehe, 'non-standart runtime property')
+		})
+		
+		
+		var nodes = { item1: item1, item2: item2, item3: item3 }
+		
+		var cloner = new Cloner()
+		cloner.bind(root, nodes)
+		
+		var clone = cloner.create()
+		
+		t.ne(clone.root, root, 'root cloned')
+		t.eq(clone.root.className, root.className, 'root class cloned')
+		
+		t.ne(clone.nodes.item1, item1, 'item1 cloned')
+		t.eq(clone.nodes.item1.className, item1.className, 'item1 class cloned')
+		t.eq(clone.nodes.item1.getAttribute('lalala'), item1.getAttribute('lalala'), 'non-standart attribute cloned')
+		
+		t.ne(clone.nodes.item2, item2, 'item2 cloned')
+		t.eq(clone.nodes.item2.className, item2.className, 'item2 class cloned')
+		t.eq(clone.nodes.item2.getAttribute('data-lalala'), item2.getAttribute('data-lalala'), 'non-standart “data-” attribute cloned')
+		
+		t.ne(clone.nodes.item3, item3, 'item3 cloned')
+		t.eq(clone.nodes.item3.className, item3.className, 'item3 class cloned')
+		t.eq(clone.nodes.item3.getAttribute('lololo'), item3.getAttribute('lololo'), 'non-standart runtime attribute cloned')
+		if (!/IE [67]\./.test(navigator.userAgent))
+			t.eq(clone.nodes.item3.hehehe, undefined, 'non-standart runtime property undefined')
 	})
 })
 </script>
