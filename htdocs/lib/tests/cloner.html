@@ -61,7 +61,7 @@ Tests.test(function (t)
 		t.eq(clone.nodes.text.firstChild.nodeValue, text.firstChild.nodeValue, 'text text cloned')
 	})
 	
-	t.test('changed tree clone', function (t)
+	t.test('sync()', function (t)
 	{
 		var root = $('root2'),
 			item1 = root.getElementsByTagName('li')[0],
@@ -88,8 +88,8 @@ Tests.test(function (t)
 		t.eq(clone.nodes.item3.className, item3.className, 'item3 class cloned')
 		
 		root.appendChild(item1)
-		
 		cloner.sync()
+		
 		var clone = cloner.create()
 		
 		t.ne(clone.root, root, 'root cloned')
