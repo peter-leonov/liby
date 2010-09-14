@@ -56,7 +56,7 @@ Tests.test(function (t)
 		var loaded = false
 		function check ()
 		{
-			t.eq(calls, 1, '“load” captures pnly')
+			t.eq(calls, 1, '“load” captures only')
 			t.eq(loaded, true, 'load was fired on the node itself')
 			
 			t.done()
