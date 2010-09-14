@@ -8,8 +8,7 @@ HTMLScriptElement.__pmc_fixHook = function (node)
 		{
 			var ne = document.createEvent('Event')
 			ne.initEvent('load', false, true)
-			if (!node.dispatchEvent(ne))
-				e.preventDefault()
+			node.dispatchEvent(ne)
 		}
 	}
 	
