@@ -24,6 +24,7 @@ Tests.test(function (t)
 		
 		var calls = 0, e, exception = null
 		function handler (e) { calls++ }
+		function handlerA (e) { calls++ }
 		function stopPropagation (e) { e.stopPropagation() }
 		
 		t.log('testing node "' + node.nodeName + '" with event type "' + type + '"')
@@ -77,11 +78,13 @@ Tests.test(function (t)
 		node.parentNode.addEventListener(type, handler, false)
 		node.addEventListener(type, handler, false)
 		node.addEventListener(type, stopPropagation, false)
+		node.addEventListener(type, handlerA, false)
 		node.dispatchEvent(e)
 		node.parentNode.removeEventListener(type, handler, false)
 		node.removeEventListener(type, handler, false)
+		node.removeEventListener(type, handlerA, false)
 		node.removeEventListener(type, stopPropagation, false)
-		t.eq(calls, 1, 'stopPropagation() works well')
+		t.eq(calls, 2, 'stopPropagation() works well')
 		
 		var order = []
 		function handler1 () { order.push(1) }
