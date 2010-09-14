@@ -42,6 +42,31 @@ Tests.test(function (t)
 		t.eq(calls, 2, '“submit” captures and bubbles')
 		t.eq(submitted, true, 'an attemp to submit took place')
 	})
+	
+	t.test('load on script', function (t)
+	{
+		var node = document.createElement('script')
+		document.body.appendChild(node)
+		
+		var calls = 0
+		function handler () { calls++ }
+		document.addEventListener('load', handler, true)
+		document.addEventListener('load', handler, false)
+		
+		var loaded = false
+		function check ()
+		{
+			t.eq(calls, 1, '“load” captures pnly')
+			t.eq(loaded, true, 'load was fired on the node itself')
+			
+			t.done()
+		}
+		node.onload = function () { loaded = true; setTimeout(check, 10) }
+		
+		node.src = 'require-file-1.js'
+		
+		t.wait(1000)
+	})
 })
 </script>
 </body>
