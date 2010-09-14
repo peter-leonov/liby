@@ -123,7 +123,7 @@ function getEventWrapper (e, kind)
 	return w
 }
 
-win.__pmc_attachEvent = doc.__pmc_attachEvent = Element.prototype.__pmc_attachEvent = function (type, func)
+win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getListeners = function (type)
 {
 	var all = this.__pmc__eventListeners
 	if (!all)
@@ -131,44 +131,48 @@ win.__pmc_attachEvent = doc.__pmc_attachEvent = Element.prototype.__pmc_attachEv
 	
 	var listeners = all[type]
 	if (listeners)
+		return listeners
+	listeners = all[type] = []
+	
+	var node = this
+	function dispatcher ()
 	{
-		var dup = listeners.indexOf(func)
-		if (dup != -1)
-			listeners.splice(dup, 1)
+		var w = getEventWrapper(event)
+		// check if we got a custom event that does not match our type
+		if (type !== w.type)
+			return
 		
-		listeners.push(func)
-	}
-	else
-	{
-		listeners = all[type] = [func]
-		
-		var me = this
-		function dispatcher ()
+		for (var i = 0, il = listeners.length; i < il; i++)
 		{
-			var w = getEventWrapper(event)
-			// check if we got a custom event that does not match our type
-			if (type !== w.type)
-				return
-			
-			for (var i = 0, il = listeners.length; i < il; i++)
+			try
 			{
-				try
-				{
-					listeners[i].call(me, w)
-				}
-				catch (ex)
-				{
-					// this trick is useful to report errors from all listeners
-					// 1000 delay helps to avoid sensitive lag when error reporting is on
-					setTimeout(function () { throw ex }, 1000)
-				}
+				listeners[i].call(node, w)
+			}
+			catch (ex)
+			{
+				// this trick is useful to report errors from all listeners
+				// 1000 delay helps to avoid sensitive lag when error reporting is on
+				setTimeout(function () { throw ex }, 1000)
 			}
 		}
-		
-		var transport = getEventTransport(this, type)
-		this.attachEvent('on' + transport, dispatcher)
-		listeners.dispatcher = dispatcher
 	}
+	
+	var transport = getEventTransport(this, type)
+	this.attachEvent('on' + transport, dispatcher)
+	listeners.dispatcher = dispatcher
+	
+	return listeners
+}
+
+win.__pmc_attachEvent = doc.__pmc_attachEvent = Element.prototype.__pmc_attachEvent = function (type, func)
+{
+	var listeners = this.__pmc_getListeners(type)
+	
+	var dup = listeners.indexOf(func)
+	if (dup != -1)
+		listeners.splice(dup, 1)
+	
+	listeners.push(func)
 }
 
 win.__pmc_detachEvent = doc.__pmc_detachEvent = Element.prototype.__pmc_detachEvent = function (type, func)
