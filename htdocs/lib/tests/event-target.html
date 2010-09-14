@@ -26,11 +26,6 @@ Tests.test(function (t)
 		function handler (e) { calls++ }
 		function stopPropagation (e) { e.stopPropagation() }
 		
-		e = document.createEvent(kind)
-		e.initEvent(type, true, true)
-		e.preventDefault()
-		t.eq(e.defaultPrevented, undefined, 'single preventDefault() does not set defaultPrevented')
-		
 		t.log('testing node "' + node.nodeName + '" with event type "' + type + '"')
 		t.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
 		node.addEventListener(type, handler, false)

@@ -54,11 +54,8 @@ Event.prototype =
 	
 	preventDefault: function ()
 	{
-		if (this.__isDispatching)
-		{
-			this.__pmc__event.returnValue = false
-			this.defaultPrevented = true
-		}
+		this.__pmc__event.returnValue = false
+		this.defaultPrevented = true
 	},
 	
 	stopPropagation: function ()
@@ -160,7 +157,6 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 			if (type !== w.type)
 				return
 			
-			w.__isDispatching = true
 			for (var i = 0, il = listeners.length; i < il; i++)
 			{
 				try
@@ -174,7 +170,6 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 					setTimeout(function () { throw ex }, 1000)
 				}
 			}
-			delete w.__isDispatching
 		}
 		
 		var transport = getEventTransport(this, type)
@@ -222,11 +217,9 @@ doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 	var type = w.type,
 		transport = getEventTransport(this, type)
 	
-	w.__isDispatching = true
 	w.defaultPrevented = false
 	w.target = this
 	this.fireEvent('on' + transport, w.__pmc__event)
-	delete w.__isDispatching
 	return !w.defaultPrevented
 }
 
