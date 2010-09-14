@@ -19,7 +19,7 @@ Tests.test(function (t)
 		document.body.appendChild(node)
 		
 		var submitted = false
-		node.addEventListener('submit', function (e) { submitted = true; e.preventDefault() }, false)
+		node.onsubmit = function (e) { submitted = true; if (e) { e.preventDefault() } else {return false} }
 		
 		var calls = 0
 		function handler () { calls++ }
