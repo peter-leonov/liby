@@ -8,7 +8,7 @@ if (win.addEventListener || !win.attachEvent)
 var eventTransport = doc.__pmc__eventTransport = 'beforeeditfocus'
 
 function elementSupportedEvents () {}
-var supportedEvents = elementSupportedEvents.prototype = {abort:1, activate:1, afterprint:1, afterupdate:1, beforeactivate:1, beforecopy:1, beforecut:1, beforedeactivate:1, beforeeditfocus:1, beforepaste:1, beforeprint:1, beforeunload:1, beforeupdate:1, blur:1, bounce:1, cellchange:1, change:1, click:1, contextmenu:1, controlselect:1, copy:1, cut:1, dataavailable:1, datasetchanged:1, datasetcomplete:1, dblclick:1, deactivate:1, drag:1, dragend:1, dragenter:1, dragleave:1, dragover:1, dragstart:1, drop:1, error:1, errorupdate:1, filterchange:1, finish:1, focus:1, focusin:1, focusout:1, hashchange:1, help:1, keydown:1, keypress:1, keyup:1, layoutcomplete:1, load:1, losecapture:1, message:1, mousedown:1, mouseenter:1, mouseleave:1, mousemove:1, mouseout:1, mouseover:1, mouseup:1, mousewheel:1, move:1, moveend:1, movestart:1, offline:1, online:1, page:1, paste:1, progress:1, propertychange:1, readystatechange:1, reset:1, resize:1, resizeend:1, resizestart:1, rowenter:1, rowexit:1, rowsdelete:1, rowsinserted:1, scroll:1, select:1, selectionchange:1, selectstart:1, start:1, stop:1, storage:1, storagecommit:1, submit:1, timeout:1, unload:1}
+var supportedEvents = elementSupportedEvents.prototype = {abort:1, activate:1, afterprint:1, afterupdate:1, beforeactivate:1, beforecopy:1, beforecut:1, beforedeactivate:1, beforeeditfocus:1, beforepaste:1, beforeprint:1, beforeunload:1, beforeupdate:1, blur:1, bounce:1, cellchange:1, change:1, click:1, contextmenu:1, controlselect:1, copy:1, cut:1, dataavailable:1, datasetchanged:1, datasetcomplete:1, dblclick:1, deactivate:1, drag:1, dragend:1, dragenter:1, dragleave:1, dragover:1, dragstart:1, drop:1, error:1, errorupdate:1, filterchange:1, finish:1, focus:1, focusin:1, focusout:1, hashchange:1, help:1, keydown:1, keypress:1, keyup:1, layoutcomplete:1, load:2, losecapture:1, message:1, mousedown:1, mouseenter:1, mouseleave:1, mousemove:1, mouseout:1, mouseover:1, mouseup:1, mousewheel:1, move:1, moveend:1, movestart:1, offline:1, online:1, page:1, paste:1, progress:1, propertychange:1, readystatechange:1, reset:1, resize:1, resizeend:1, resizestart:1, rowenter:1, rowexit:1, rowsdelete:1, rowsinserted:1, scroll:1, select:1, selectionchange:1, selectstart:1, start:1, stop:1, storage:1, storagecommit:1, submit:1, timeout:1, unload:1}
 
 function scriptSupportedEvents () {}
 scriptSupportedEvents.prototype = new elementSupportedEvents()
@@ -117,10 +117,36 @@ function getEventWrapper (e, kind)
 		return e.__pmc__wrapper
 	var w = new (eventConstructors[kind] || Event)()
 	w.__updateFromNative(e)
+	w.__pmc__listeners = []
 	w.__pmc__event = e
 	e.__pmc__wrapper = w
 	
 	return w
+}
+
+function dispatchCaughtEvent (w)
+{
+	log('dispatchCaughtEvent ' + w.type)
+	
+	var bubbles = w.__pmc__listeners
+	for (var i = 0, il = bubbles.length; i < il; i++)
+	{
+		var listeners = bubbles[i]
+		
+		for (var j = 0, jl = listeners.length; j < jl; j++)
+		{
+			try
+			{
+				listeners[j].call(this, w)
+			}
+			catch (ex)
+			{
+				// this trick is useful to report errors from all listeners
+				// 1000 delay helps to avoid sensitive lag when error reporting is on
+				setTimeout(function () { throw ex }, 1000)
+			}
+		}
+	}
 }
 
 win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getListeners = function (type)
@@ -142,19 +168,10 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 		if (type !== w.type)
 			return
 		
-		for (var i = 0, il = listeners.length; i < il; i++)
-		{
-			try
-			{
-				listeners[i].call(node, w)
-			}
-			catch (ex)
-			{
-				// this trick is useful to report errors from all listeners
-				// 1000 delay helps to avoid sensitive lag when error reporting is on
-				setTimeout(function () { throw ex }, 1000)
-			}
-		}
+		w.__pmc__listeners.push(listeners)
+		
+		if (listeners.katch)
+			dispatchCaughtEvent.call(node, w)
 	}
 	
 	var transport = getEventTransport(this, type)
@@ -173,6 +190,12 @@ win.__pmc_attachEvent = doc.__pmc_attachEvent = Element.prototype.__pmc_attachEv
 		listeners.splice(dup, 1)
 	
 	listeners.push(func)
+}
+
+win.__pmc_attachCatcher = doc.__pmc_attachCatcher = Element.prototype.__pmc_attachCatcher = function (type)
+{
+	var listeners = this.__pmc_getListeners(type)
+	listeners.katch = true
 }
 
 win.__pmc_detachEvent = doc.__pmc_detachEvent = Element.prototype.__pmc_detachEvent = function (type, func)
@@ -204,6 +227,11 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	
 	if (dir === undef)
 		dir = false
+	
+	if (supportedEvents[type] == 2)
+		this.__pmc_attachCatcher(type)
+	else
+		document.__pmc_attachCatcher(type)
 	
 	this.__pmc_attachEvent(type, func)
 }
