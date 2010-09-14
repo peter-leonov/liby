@@ -60,6 +60,7 @@ Event.prototype =
 	
 	stopPropagation: function ()
 	{
+		this.defaultPrevented = true
 		this.__pmc__event.cancelBubble = true
 	}
 }
@@ -126,7 +127,7 @@ function getEventWrapper (e, kind)
 
 function dispatchCaughtEvent (w)
 {
-	log('dispatchCaughtEvent ' + w.type)
+	w.defaultPrevented = false
 	
 	var bubbles = w.__pmc__listeners
 	for (var i = 0, il = bubbles.length; i < il; i++)
@@ -146,6 +147,9 @@ function dispatchCaughtEvent (w)
 				setTimeout(function () { throw ex }, 1000)
 			}
 		}
+		
+		if (w.defaultPrevented)
+			return
 	}
 }
 
