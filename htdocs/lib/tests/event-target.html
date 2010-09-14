@@ -83,6 +83,30 @@ Tests.test(function (t)
 		node.removeEventListener(type, stopPropagation, false)
 		t.eq(calls, 1, 'stopPropagation() works well')
 		
+		var order = []
+		function handler1 () { order.push(1) }
+		function handler2 () { order.push(2) }
+		function handler3 () { order.push(3) }
+		function handler4 () { order.push(4) }
+		function handler5 () { order.push(5) }
+		function handler6 () { order.push(6) }
+		e = document.createEvent(kind)
+		e.initEvent(type, true, true)
+		document.addEventListener(type, handler1, true)
+		document.addEventListener(type, handler6, false)
+		node.parentNode.addEventListener(type, handler2, true)
+		node.parentNode.addEventListener(type, handler5, false)
+		node.addEventListener(type, handler3, true)
+		node.addEventListener(type, handler4, false)
+		node.dispatchEvent(e)
+		document.removeEventListener(type, handler1, true)
+		document.removeEventListener(type, handler6, false)
+		node.parentNode.removeEventListener(type, handler2, true)
+		node.parentNode.removeEventListener(type, handler5, false)
+		node.removeEventListener(type, handler3, true)
+		node.removeEventListener(type, handler4, false)
+		t.like(order, [1,2,3,4,5,6], 'capturing and bubbling works well')
+		
 		calls = 0
 		node.addEventListener(type, handler, false)
 		node.addEventListener(type, handler, false)
