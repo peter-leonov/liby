@@ -61,7 +61,12 @@ Tests.test(function (t)
 			
 			t.done()
 		}
-		node.onload = function () { loaded = true; setTimeout(check, 10) }
+		
+		function onload () { loaded = true; setTimeout(check, 10) }
+		if (node.attachEvent)
+			node.attachEvent('onreadystatechange', function () { if (node.readyState == 'loaded') onload() })
+		else
+			node.onload = onload
 		
 		node.src = 'require-file-1.js'
 		
