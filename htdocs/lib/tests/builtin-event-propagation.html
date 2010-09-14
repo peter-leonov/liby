@@ -10,21 +10,22 @@
 	<!--[if gte IE 8]><script type="text/javascript" src="../core/fixes/trident4.js"></script><![endif]-->
 </head>
 <body>
-<form id="form-1"><button>Click me!</button></form>
 <script type="text/javascript">
-function $ (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
-	var node = $('form-1')
+	var node = document.createElement('form')
+	document.body.appendChild(node)
+	node.onsubmit = function () { return false }
 	
-	var order = []
-	node.addEventListener('submit', function (e) { order.push('form'); e.preventDefault() }, false)
-	document.addEventListener('submit', function (e) { order.push('document') }, false)
+	var calls = 0
+	function handler () { calls++ }
+	document.addEventListener('submit', handler, true)
+	document.addEventListener('submit', handler, false)
 
 	var e = document.createEvent('Event')
 	e.initEvent('submit', true, true)
 	node.dispatchEvent(e)
-	t.like(order, ['form', 'document'], 'proper event dispatching order')
+	t.eq(calls, 2, '“submit” captures and bubbles')
 })
 </script>
 </body>
