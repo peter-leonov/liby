@@ -13,32 +13,34 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	function run (t, kind, type, node)
-	{
-		var calls = 0
-		function handler () { calls++ }
-		document.addEventListener(type, handler, true)
-		document.addEventListener(type, handler, false)
-		
-		var e = document.createEvent(kind)
-		e.initEvent(type, true, true)
-		node.dispatchEvent(e)
-		t.eq(calls, 2, '“' + type + '” captures and bubbles')
-	}
-	
 	t.test('submit on form', function (t)
 	{
 		var node = document.createElement('form')
 		document.body.appendChild(node)
-		node.onsubmit = function () { return false }
-		run(t, 'Event', 'submit', node)
-	})
-	
-	t.test('load on script', function (t)
-	{
-		var node = document.createElement('script')
-		document.body.appendChild(node)
-		run(t, 'Event', 'submit', node)
+		
+		var submitted = false
+		node.addEventListener('submit', function (e) { submitted = true; e.preventDefault() }, false)
+		
+		var calls = 0
+		function handler () { calls++ }
+		document.addEventListener('submit', handler, true)
+		document.addEventListener('submit', handler, false)
+		
+		var e = document.createEvent('MouseEvent')
+		e.initEvent('click', true, true)
+		var button = node.appendChild(document.createElement('button'))
+		try
+		{
+			button.click()
+		}
+		catch (ex)
+		{
+			button.dispatchEvent(e)
+		}
+		
+		
+		t.eq(calls, 2, '“submit” captures and bubbles')
+		t.eq(submitted, true, 'an attemp to submit took place')
 	})
 })
 </script>
