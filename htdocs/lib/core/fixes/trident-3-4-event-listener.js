@@ -123,20 +123,13 @@ function getEventWrapper (e, kind)
 	return w
 }
 
-win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
+win.__pmc_attachEvent = doc.__pmc_attachEvent = Element.prototype.__pmc_attachEvent = function (type, func)
 {
-	type = eventConversion[type] || type
-	
-	if (dir === undef)
-		dir = false
-	
 	var all = this.__pmc__eventListeners
 	if (!all)
 		all = this.__pmc__eventListeners = {}
 	
-	var key = type + ':' + dir
-	
-	var listeners = all[key]
+	var listeners = all[type]
 	if (listeners)
 	{
 		var dup = listeners.indexOf(func)
@@ -147,7 +140,7 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	}
 	else
 	{
-		listeners = all[key] = [func]
+		listeners = all[type] = [func]
 		
 		var me = this
 		function dispatcher ()
@@ -178,20 +171,13 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	}
 }
 
-win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
+win.__pmc_detachEvent = doc.__pmc_detachEvent = Element.prototype.__pmc_detachEvent = function (type, func)
 {
-	type = eventConversion[type] || type
-	
-	if (dir === undef)
-		dir = false
-	
 	var all = this.__pmc__eventListeners
 	if (!all)
 		return
 	
-	var key = type + ':' + dir
-	
-	var listeners = all[key]
+	var listeners = all[type]
 	if (!listeners)
 		return
 	
@@ -201,11 +187,33 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 	
 	if (!listeners.length)
 	{
-		delete all[key]
+		delete all[type]
 		var transport = getEventTransport(this, type)
 		this.detachEvent('on' + transport, listeners.dispatcher)
 	}
 }
+
+
+win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
+{
+	type = eventConversion[type] || type
+	
+	if (dir === undef)
+		dir = false
+	
+	this.__pmc_attachEvent(type, func)
+}
+
+win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
+{
+	type = eventConversion[type] || type
+	
+	if (dir === undef)
+		dir = false
+	
+	this.__pmc_detachEvent(type, func)
+}
+
 
 doc.createEvent = function (kind)
 {
