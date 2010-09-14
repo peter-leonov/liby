@@ -1,27 +1,20 @@
 (function(){
 
-var prototype = HTMLScriptElement.prototype
-
-var addEventListener = prototype.addEventListener
-HTMLScriptElement.prototype.addEventListener = function (type, func, dir)
+HTMLScriptElement.__pmc_fixHook = function (node)
 {
-	if (type == 'load')
+	function onreadystatechange (e)
 	{
-		var me = this
-		function onreadystatechange (e)
+		if (node.readyState == 'loaded')
 		{
-			if (me.readyState == 'loaded')
-			{
-				var ne = document.createEvent('Event')
-				ne.initEvent('load', false, true)
-				if (!this.dispatchEvent(ne))
-					e.preventDefault()
-			}
+			var ne = document.createEvent('Event')
+			ne.initEvent('load', false, true)
+			if (!node.dispatchEvent(ne))
+				e.preventDefault()
 		}
-		addEventListener.call(this, 'readystatechange', onreadystatechange, dir)
 	}
 	
-	return addEventListener.call(this, type, func, dir)
+	node.attachEvent('onreadystatechange', onreadystatechange)
+	node.__pmc_getListeners('load')
 }
 
 })();
