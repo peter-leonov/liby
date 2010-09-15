@@ -13,10 +13,13 @@
 
 <button id="test-node-1">test node 1</button>
 <button id="test-node-2">test node 2</button>
+<script id="test-node-3"></script>
 
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	function $ (id) { return document.getElementById(id) }
+	
 	function run (t, kind, type, node, conf)
 	{
 		if (!conf)
@@ -176,17 +179,17 @@ Tests.test(function (t)
 	
 	t.test('Event: load on script', function (t)
 	{
-		run(t, 'Event', 'load', document.body.appendChild(document.createElement('script')), {document: false, bubbles: false})
+		run(t, 'Event', 'load', $('test-node-3'), {document: false, bubbles: false})
 	})
 	
 	t.test('Event: hide on node', function (t)
 	{
-		run(t, 'Event', 'hide', document.getElementById('test-node-1'), {bubbles: true})
+		run(t, 'Event', 'hide', $('test-node-1'), {bubbles: true})
 	})
 	
 	t.test('MouseEvent: click on node', function (t)
 	{
-		run(t, 'MouseEvent', 'click', document.getElementById('test-node-2'), {bubbles: true})
+		run(t, 'MouseEvent', 'click', $('test-node-2'), {bubbles: true})
 	})
 })
 </script>
