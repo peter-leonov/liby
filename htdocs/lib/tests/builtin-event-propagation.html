@@ -75,6 +75,36 @@ Tests.test(function (t)
 		
 		t.wait(1000)
 	})
+	
+	t.test('keydown on input', function (t)
+	{
+		var node = document.createElement('input')
+		document.body.appendChild(node)
+		
+		var order = []
+		function captures () { order.push('captures') }
+		function bubbles () { order.push('bubbles') }
+		document.addEventListener('keydown', captures, true)
+		document.addEventListener('keydown', bubbles, false)
+		
+		var fired = false
+		function fire () { fired = true }
+		node.onkeydown = fire
+		
+		try
+		{
+			node.fireEvent('onkeydown')
+		}
+		catch (ex)
+		{
+			var e = document.createEvent('UIEvent')
+			e.initEvent('keydown', true, true)
+			node.dispatchEvent(e)
+		}
+		
+		t.like(order, ['captures', 'bubbles'], '“keydown” captures and bubbles')
+		t.eq(fired, true, '“keydown” was fired on the node itself')
+	})
 })
 </script>
 </body>
