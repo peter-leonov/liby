@@ -14,6 +14,8 @@
 <form id="node-1"><input type="submit"/></form>
 <script id="node-2"></script>
 <input id="node-3"/>
+<input id="node-4"/>
+
 <script type="text/javascript">
 Tests.test(function (t)
 {
@@ -106,6 +108,26 @@ Tests.test(function (t)
 		
 		t.like(order, ['captures', 'bubbles'], '“keydown” captures and bubbles')
 		t.eq(fired, true, '“keydown” was fired on the node itself')
+	})
+	
+	t.test('focus on input', function (t)
+	{
+		var node = $('node-4')
+		
+		var order = []
+		function captures () { order.push('captures') }
+		function bubbles () { order.push('bubbles') }
+		document.addEventListener('focus', captures, true)
+		document.addEventListener('focus', bubbles, false)
+		
+		var fired = false
+		function fire () { fired = true }
+		node.onfocus = fire
+		
+		node.focus()
+		
+		t.like(order, ['captures'], '“focus” captures only')
+		t.eq(fired, true, '“focus” was fired on the node itself')
 	})
 })
 </script>
