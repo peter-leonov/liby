@@ -26,21 +26,22 @@ Tests.test(function (t)
 		document.addEventListener('submit', handler, true)
 		document.addEventListener('submit', handler, false)
 		
-		var e = document.createEvent('MouseEvent')
-		e.initEvent('click', true, true)
-		var button = node.appendChild(document.createElement('button'))
+		node.innerHTML = '<input type="submit"/>'
+		var button = node.firstChild
 		try
 		{
 			button.click()
 		}
 		catch (ex)
 		{
+			var e = document.createEvent('MouseEvent')
+			e.initEvent('click', true, true)
 			button.dispatchEvent(e)
 		}
 		
 		
 		t.eq(calls, 2, '“submit” captures and bubbles')
-		t.eq(submitted, true, 'an attemp to submit took place')
+		t.eq(submitted, true, 'an attemp to submit has took place')
 	})
 	
 	t.test('load on script', function (t)
