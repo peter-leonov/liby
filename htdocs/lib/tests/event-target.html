@@ -25,7 +25,7 @@ Tests.test(function (t)
 	{
 		var node = $('test-node-4')
 		
-		var order = []
+		var order
 		window.addEventListener('click', function (e) { order.push('window-c') }, true)
 		window.addEventListener('click', function (e) { order.push('window-b') }, false)
 		document.addEventListener('click', function (e) { order.push('document-c') }, true)
@@ -35,11 +35,41 @@ Tests.test(function (t)
 		node.addEventListener('click', function (e) { order.push('node-c') }, true)
 		node.addEventListener('click', function (e) { order.push('node-b') }, false)
 		
+		
+		var order = []
+		
 		var e = document.createEvent('Event')
 		e.initEvent('click', true, true)
 		node.dispatchEvent(e)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'right order')
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on node')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		node.parentNode.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on parentNode')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		document.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'document-c', 'document-b', 'window-b'], 'dispatch on document')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		window.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'window-b'], 'dispatch on window')
 	})
 	
 	
