@@ -10,13 +10,18 @@
 	<!--[if gte IE 8]><script type="text/javascript" src="../core/fixes/trident4.js"></script><![endif]-->
 </head>
 <body>
+
+<form id="node-1"><input type="submit"/></form>
+<script id="node-2"></script>
+<input id="node-3"/>
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	function $ (id) { return document.getElementById(id) }
+	
 	t.test('submit on form', function (t)
 	{
-		var node = document.createElement('form')
-		document.body.appendChild(node)
+		var node = $('node-1')
 		
 		var fired = false
 		node.onsubmit = function (e) { fired = true; if (e) { e.preventDefault() } else {return false} }
@@ -27,7 +32,6 @@ Tests.test(function (t)
 		document.addEventListener('submit', captures, true)
 		document.addEventListener('submit', bubbles, false)
 		
-		node.innerHTML = '<input type="submit"/>'
 		var button = node.firstChild
 		try
 		{
@@ -47,8 +51,7 @@ Tests.test(function (t)
 	
 	t.test('load on script', function (t)
 	{
-		var node = document.createElement('script')
-		document.body.appendChild(node)
+		var node = $('node-2')
 		
 		var order = []
 		function captures () { order.push('captures') }
@@ -78,8 +81,7 @@ Tests.test(function (t)
 	
 	t.test('keydown on input', function (t)
 	{
-		var node = document.createElement('input')
-		document.body.appendChild(node)
+		var node = $('node-3')
 		
 		var order = []
 		function captures () { order.push('captures') }
