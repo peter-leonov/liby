@@ -8,6 +8,7 @@ function updade ()
 	win.pageYOffset = de.scrollTop
 }
 
+// do not use attachEvent dew to its anomalies with execution order
 win.addEventListener('scroll', updade, false)
 updade()
 
