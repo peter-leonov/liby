@@ -124,10 +124,14 @@ Tests.test(function (t)
 		function fire () { fired = true }
 		node.onfocus = fire
 		
+		node.blur()
 		node.focus()
 		
-		t.like(order, ['captures'], '“focus” captures only')
-		t.eq(fired, true, '“focus” was fired on the node itself')
+		t.async(function (t)
+		{
+			t.like(order, ['captures'], '“focus” captures only')
+			t.eq(fired, true, '“focus” was fired on the node itself')
+		}, 10)
 	})
 })
 </script>
