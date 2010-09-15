@@ -18,13 +18,14 @@ Tests.test(function (t)
 		var node = document.createElement('form')
 		document.body.appendChild(node)
 		
-		var submitted = false
-		node.onsubmit = function (e) { submitted = true; if (e) { e.preventDefault() } else {return false} }
+		var fired = false
+		node.onsubmit = function (e) { fired = true; if (e) { e.preventDefault() } else {return false} }
 		
-		var calls = 0
-		function handler () { calls++ }
-		document.addEventListener('submit', handler, true)
-		document.addEventListener('submit', handler, false)
+		var order = []
+		function captures () { order.push('captures') }
+		function bubbles () { order.push('bubbles') }
+		document.addEventListener('submit', captures, true)
+		document.addEventListener('submit', bubbles, false)
 		
 		node.innerHTML = '<input type="submit"/>'
 		var button = node.firstChild
@@ -40,8 +41,8 @@ Tests.test(function (t)
 		}
 		
 		
-		t.eq(calls, 2, '“submit” captures and bubbles')
-		t.eq(submitted, true, 'an attemp to submit has took place')
+		t.like(order, ['captures', 'bubbles'], '“submit” captures and bubbles')
+		t.eq(fired, true, '“submit” was fired on the node itself')
 	})
 	
 	t.test('load on script', function (t)
@@ -49,25 +50,26 @@ Tests.test(function (t)
 		var node = document.createElement('script')
 		document.body.appendChild(node)
 		
-		var calls = 0
-		function handler () { calls++ }
-		document.addEventListener('load', handler, true)
-		document.addEventListener('load', handler, false)
+		var order = []
+		function captures () { order.push('captures') }
+		function bubbles () { order.push('bubbles') }
+		document.addEventListener('load', captures, true)
+		document.addEventListener('load', bubbles, false)
 		
-		var loaded = false
+		var fired = false
 		function check ()
 		{
-			t.eq(calls, 1, '“load” captures only')
-			t.eq(loaded, true, 'load was fired on the node itself')
+			t.like(order, ['captures'], '“load” captures only')
+			t.eq(fired, true, '“load” was fired on the node itself')
 			
 			t.done()
 		}
 		
-		function onload () { loaded = true; setTimeout(check, 10) }
+		function fire () { fired = true; setTimeout(check, 10) }
 		if (node.attachEvent)
-			node.attachEvent('onreadystatechange', function () { if (node.readyState == 'loaded') onload() })
+			node.attachEvent('onreadystatechange', function () { if (node.readyState == 'loaded') fire() })
 		else
-			node.onload = onload
+			node.onload = fire
 		
 		node.src = 'require-file-1.js'
 		
