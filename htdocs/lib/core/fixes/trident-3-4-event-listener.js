@@ -118,18 +118,42 @@ function getEventWrapper (e, kind)
 		return e.__pmc__wrapper
 	var w = new (eventConstructors[kind] || Event)()
 	w.__updateFromNative(e)
-	w.__pmc__listeners = []
 	w.__pmc__event = e
 	e.__pmc__wrapper = w
 	
 	return w
 }
 
-function dispatchCaughtEvent (w)
+document.__pmc__eventListeners = {}
+window.__pmc__eventListeners = {}
+
+win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_dispatchEvent = function (w)
 {
-	w.defaultPrevented = false
+	var bubbles = []
 	
-	var bubbles = w.__pmc__listeners
+	var type = w.type
+	for (var node = w.target; node; node = node.parentNode)
+	{
+		var all = node.__pmc__eventListeners
+		if (!all)
+			continue
+		
+		var listeners = all[type]
+		if (!listeners)
+			continue
+		
+		bubbles.push(listeners)
+	}
+	
+	var listeners = document.__pmc__eventListeners[type]
+	if (listeners)
+		bubbles.push(listeners)
+	
+	var listeners = window.__pmc__eventListeners[type]
+	if (listeners)
+		bubbles.push(listeners)
+	
+	w.defaultPrevented = false
 	for (var i = 0, il = bubbles.length; i < il; i++)
 	{
 		var listeners = bubbles[i]
@@ -167,15 +191,13 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 	var node = this
 	function dispatcher ()
 	{
+		event.cancelBubble = true
 		var w = getEventWrapper(event)
 		// check if we got a custom event that does not match our type
 		if (type !== w.type)
 			return
 		
-		w.__pmc__listeners.push(listeners)
-		
-		if (listeners.katch)
-			dispatchCaughtEvent.call(node, w)
+		node.__pmc_dispatchEvent(w)
 	}
 	
 	var transport = getEventTransport(this, type)
@@ -198,8 +220,7 @@ win.__pmc_attachEvent = doc.__pmc_attachEvent = Element.prototype.__pmc_attachEv
 
 win.__pmc_attachCatcher = doc.__pmc_attachCatcher = Element.prototype.__pmc_attachCatcher = function (type)
 {
-	var listeners = this.__pmc_getListeners(type)
-	listeners.katch = true
+	this.__pmc_getListeners(type)
 }
 
 win.__pmc_detachEvent = doc.__pmc_detachEvent = Element.prototype.__pmc_detachEvent = function (type, func)
@@ -232,10 +253,7 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	if (dir === undef)
 		dir = false
 	
-	if (supportedEvents[type] == 2)
-		this.__pmc_attachCatcher(type)
-	else
-		document.__pmc_attachCatcher(type)
+	this.__pmc_attachCatcher(type)
 	
 	this.__pmc_attachEvent(type, func)
 }
