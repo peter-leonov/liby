@@ -285,7 +285,9 @@ var prototype =
 		
 		var speed = count * 1000 / diff
 		return speed
-	}
+	},
+	
+	indexOf: indexOf
 }
 
 function Label (text, cn) { this.text = text; this.className = cn }
