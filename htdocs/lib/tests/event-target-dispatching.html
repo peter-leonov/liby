@@ -101,7 +101,7 @@ Tests.test(function (t)
 		var objects = [window, document],
 			names = ['window', 'document']
 		
-		function name (o) { return names[objects.indexOf(o)] }
+		function name (o) { return names[t.indexOf(objects, o)] }
 		
 		
 		var order
