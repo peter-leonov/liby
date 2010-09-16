@@ -1,5 +1,7 @@
 (function(){
 
+window.__pmc_itIsWindow = true
+
 var doc = document, docelem = doc.documentElement, win = window, undef
 
 if (win.addEventListener || !win.attachEvent)
@@ -124,18 +126,19 @@ function getEventWrapper (e, kind)
 	return w
 }
 
-document.__pmc__eventListeners = {}
-window.__pmc__eventListeners = {}
+doc.__pmc__eventListeners = {}
+win.__pmc__eventListeners = {}
 
 win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_dispatchEvent = function (w)
 {
-	var node = w.target,
+	var target = w.target,
+		node = this,
 		type = w.type
 	
 	var captures = [], bubbles = [],
 		all, byType, listeners
 	
-	if (node)
+	if (target)
 	{
 		for (; node; node = node.parentNode)
 		{
@@ -151,8 +154,9 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 			}
 		}
 	}
-	else
+	else if (!this.__pmc_itIsWindow)
 	{
+		// log(this, win, this == win)
 		if ((all = document.__pmc__eventListeners) && (byType = all[type]))
 		{
 			listeners = byType[0]
@@ -165,7 +169,7 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		}
 	}
 	
-	if ((all = window.__pmc__eventListeners) && (byType = all[type]))
+	if ((all = win.__pmc__eventListeners) && (byType = all[type]))
 	{
 		listeners = byType[0]
 		if (listeners)
@@ -319,14 +323,21 @@ doc.createEvent = function (kind)
 	return getEventWrapper(doc.createEventObject(), kind)
 }
 
-doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
+win.dispatchEvent = doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 {
 	var type = w.type,
 		transport = getEventTransport(this, type)
 	
-	w.defaultPrevented = false
 	w.target = this
 	this.fireEvent('on' + transport, w.__pmc__event)
+	return !w.defaultPrevented
+}
+
+// MSIE doesn't support fireEvent() on window,
+// so do the direct dispatch
+win.dispatchEvent = function (w)
+{
+	this.__pmc_dispatchEvent(w)
 	return !w.defaultPrevented
 }
 
