@@ -1,5 +1,20 @@
 ;(function(){
 
+function indexOf (a, v, i)
+{
+	var len = a.length,
+		i = +i || 0
+	i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
+
+	for (; i < len; i++)
+		if (i in a && a[i] === v)
+			return i
+	return -1
+}
+
+
+;(function(){
+
 var myName = 'Tool'
 
 function Me (parent)
@@ -68,7 +83,7 @@ var prototype =
 	
 	ina: function (a, b, d)
 	{
-		if (b.indexOf(a) != -1)
+		if (indexOf(b, a) != -1)
 			this.pass([a, new Label('in', 'label middle'), b], d)
 		else
 			this.fail([a, new Label('is not in', 'label middle'), b], d)
@@ -297,20 +312,6 @@ function escapeString (str)
 	return str.replace(/(["\\\n\r\t])/g, function (v) { return escapeChars[v] })
 }
 
-if (!Array.prototype.indexOf)
-Array.prototype.indexOf = function(v, i)
-{
-	var len = this.length,
-		i = +i || 0
-	i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
-
-	for (; i < len; i++)
-		if (i in this && this[i] === v)
-			return i
-	return -1
-}
-
-
 var myName = 'Inspector'
 function Me ()
 {
@@ -388,7 +389,7 @@ Me.prototype =
 				// remember complex objects
 				var seen = this.seen,
 					maxElements = this.maxElements,
-					num = seen.indexOf(val)
+					num = indexOf(seen, val)
 				if (num >= 0)
 					return '#' + num
 				seen.push(val)
@@ -488,5 +489,7 @@ Test.Tool.prototype.inspect = function (val)
 	return me.inspect.apply(me, arguments)
 }
 
+
+})();
 
 })();
