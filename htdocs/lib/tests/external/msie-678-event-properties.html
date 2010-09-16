@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>MSIE event object description</title>
+</head>
+<body>
+
+<pre id="output"></pre>
+
+<script>
+var output = document.getElementById('output')
+
+function describe ()
+{
+	var text = ''
+	for (var k in event)
+		text += (k + '=' + event[k]) + '\n'
+	
+	output.appendChild(document.createTextNode(text))
+}
+
+window.attachEvent('onload', describe)
+document.attachEvent('onreadystatechange', describe)
+</script>
+
+</body>
+</html>
