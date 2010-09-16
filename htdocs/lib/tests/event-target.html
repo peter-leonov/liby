@@ -14,64 +14,11 @@
 <button id="test-node-1">test node 1</button>
 <button id="test-node-2">test node 2</button>
 <script id="test-node-3"></script>
-<div><div id="test-node-4">test node 3</div></div>
 
 <script type="text/javascript">
 Tests.test(function (t)
 {
 	function $ (id) { return document.getElementById(id) }
-	
-	t.test('node → parentNode → document → window', function (t)
-	{
-		var node = $('test-node-4')
-		
-		var order
-		window.addEventListener('click', function (e) { order.push('window-c') }, true)
-		window.addEventListener('click', function (e) { order.push('window-b') }, false)
-		document.addEventListener('click', function (e) { order.push('document-c') }, true)
-		document.addEventListener('click', function (e) { order.push('document-b') }, false)
-		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-c') }, true)
-		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-b') }, false)
-		node.addEventListener('click', function (e) { order.push('node-c') }, true)
-		node.addEventListener('click', function (e) { order.push('node-b') }, false)
-		
-		
-		var order = []
-		
-		var e = document.createEvent('Event')
-		e.initEvent('click', true, true)
-		node.dispatchEvent(e)
-		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on node')
-		
-		
-		var order = []
-		
-		var e = document.createEvent('Event')
-		e.initEvent('click', true, true)
-		node.parentNode.dispatchEvent(e)
-		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on parentNode')
-		
-		
-		var order = []
-		
-		var e = document.createEvent('Event')
-		e.initEvent('click', true, true)
-		document.dispatchEvent(e)
-		
-		t.like(order,  ['window-c', 'document-c', 'document-b', 'window-b'], 'dispatch on document')
-		
-		
-		var order = []
-		
-		var e = document.createEvent('Event')
-		e.initEvent('click', true, true)
-		window.dispatchEvent(e)
-		
-		t.like(order,  ['window-c', 'window-b'], 'dispatch on window')
-	})
-	
 	
 	function run (t, kind, type, node, conf)
 	{

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>EventTarget dispatching tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../core/fixes/trident4.js"></script><![endif]-->
+</head>
+<body>
+
+<div><div id="test-node-1">test node 1</div></div>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function $ (id) { return document.getElementById(id) }
+	
+	t.test('node → parentNode → document → window', function (t)
+	{
+		var node = $('test-node-1')
+		
+		var order
+		window.addEventListener('click', function (e) { order.push('window-c') }, true)
+		window.addEventListener('click', function (e) { order.push('window-b') }, false)
+		document.addEventListener('click', function (e) { order.push('document-c') }, true)
+		document.addEventListener('click', function (e) { order.push('document-b') }, false)
+		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-c') }, true)
+		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-b') }, false)
+		node.addEventListener('click', function (e) { order.push('node-c') }, true)
+		node.addEventListener('click', function (e) { order.push('node-b') }, false)
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		node.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on node')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		node.parentNode.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on parentNode')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		document.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'document-c', 'document-b', 'window-b'], 'dispatch on document')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		window.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'window-b'], 'dispatch on window')
+	})
+	
+	t.test('document and window', function (t)
+	{
+		var objects = [window, document],
+			names = ['window', 'document']
+		
+		var order = []
+		window.addEventListener('mousedown', function (e) { order.push('window-c') }, true)
+		window.addEventListener('mousedown', function (e) { order.push('window-b') }, false)
+		
+		var e = document.createEvent('Event')
+		e.initEvent('mousedown', true, true)
+		document.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'window-b'], 'dispatch on document')
+		
+		
+		var order = []
+		document.addEventListener('mouseup', function (e) { order.push('document-c') }, true)
+		document.addEventListener('mouseup', function (e) { order.push('document-b') }, false)
+		
+		var e = document.createEvent('Event')
+		e.initEvent('mouseup', true, true)
+		window.dispatchEvent(e)
+		
+		t.like(order,  [], 'dispatch on window')
+	})
+	
+	t.test('targets', function (t)
+	{
+		var objects = [window, document],
+			names = ['window', 'document']
+		
+		function name (obj) { return names[objects.indexOf(e.target)] }
+		
+		var order
+		window.addEventListener('mousemove', function (e) { order.push('window-c:' + name(e.target)) }, true)
+		window.addEventListener('mousemove', function (e) { order.push('window-b:' + name(e.target)) }, false)
+		document.addEventListener('mousemove', function (e) { order.push('document-c:' + name(e.target)) }, true)
+		document.addEventListener('mousemove', function (e) { order.push('document-b:' + name(e.target)) }, false)
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('mousemove', true, true)
+		document.dispatchEvent(e)
+		
+		t.like(order,  ['window-c:document', 'document-c:document', 'document-b:document', 'window-b:document'], 'dispatch on document')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('mousemove', true, true)
+		window.dispatchEvent(e)
+		
+		t.like(order,  ['window-c:window', 'window-b:window'], 'dispatch on window')
+	})
+})
+</script>
+</body>
+</html>
