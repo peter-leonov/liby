@@ -60,7 +60,7 @@ Event.prototype =
 	
 	stopPropagation: function ()
 	{
-		this.defaultPrevented = true
+		this.__propagationStopped = true
 		this.__pmc__event.cancelBubble = true
 	}
 }
@@ -129,31 +129,73 @@ window.__pmc__eventListeners = {}
 
 win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_dispatchEvent = function (w)
 {
-	var bubbles = []
+	var captures = [], bubbles = []
 	
-	var type = w.type
+	var type = w.type,
+		ckey = type + ':__pmc__:true',
+		bkey = type + ':__pmc__:false'
 	for (var node = w.target; node; node = node.parentNode)
 	{
 		var all = node.__pmc__eventListeners
 		if (!all)
 			continue
 		
-		var listeners = all[type]
-		if (!listeners)
-			continue
+		var listeners = all[ckey]
+		if (listeners)
+			captures.push(listeners)
 		
-		bubbles.push(listeners)
+		var listeners = all[bkey]
+		if (listeners)
+			bubbles.push(listeners)
 	}
 	
-	var listeners = document.__pmc__eventListeners[type]
+	
+	var all = document.__pmc__eventListeners
+	var listeners = all[ckey]
+	if (listeners)
+		captures.push(listeners)
+	
+	var listeners = all[bkey]
 	if (listeners)
 		bubbles.push(listeners)
 	
-	var listeners = window.__pmc__eventListeners[type]
+	
+	var all = window.__pmc__eventListeners
+	var listeners = all[ckey]
+	if (listeners)
+		captures.push(listeners)
+	
+	var listeners = all[bkey]
 	if (listeners)
 		bubbles.push(listeners)
+	
+	// log(captures.length + '/' + bubbles.length)
 	
 	w.defaultPrevented = false
+	w.__propagationStopped = false
+	
+	for (var i = captures.length - 1; i >= 0; i--)
+	{
+		var listeners = captures[i]
+		
+		for (var j = 0, jl = listeners.length; j < jl; j++)
+		{
+			try
+			{
+				listeners[j].call(this, w)
+			}
+			catch (ex)
+			{
+				// this trick is useful to report errors from all listeners
+				// 1000 delay helps to avoid sensitive lag when error reporting is on
+				setTimeout(function () { throw ex }, 1000)
+			}
+		}
+		
+		if (w.__propagationStopped)
+			return
+	}
+	
 	for (var i = 0, il = bubbles.length; i < il; i++)
 	{
 		var listeners = bubbles[i]
@@ -172,21 +214,23 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 			}
 		}
 		
-		if (w.defaultPrevented)
+		if (w.__propagationStopped)
 			return
 	}
 }
 
-win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getListeners = function (type)
+win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getListeners = function (type, dir)
 {
 	var all = this.__pmc__eventListeners
 	if (!all)
 		all = this.__pmc__eventListeners = {}
 	
-	var listeners = all[type]
+	var key = type + ':__pmc__:' + dir
+	
+	var listeners = all[key]
 	if (listeners)
 		return listeners
-	listeners = all[type] = []
+	listeners = all[key] = []
 	
 	var node = this
 	function dispatcher ()
@@ -207,20 +251,15 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 	return listeners
 }
 
-win.__pmc_attachEvent = doc.__pmc_attachEvent = Element.prototype.__pmc_attachEvent = function (type, func)
+win.__pmc_addEventListener = doc.__pmc_addEventListener = Element.prototype.__pmc_addEventListener = function (type, func, dir)
 {
-	var listeners = this.__pmc_getListeners(type)
+	var listeners = this.__pmc_getListeners(type, dir)
 	
 	var dup = listeners.indexOf(func)
 	if (dup != -1)
 		listeners.splice(dup, 1)
 	
 	listeners.push(func)
-}
-
-win.__pmc_attachCatcher = doc.__pmc_attachCatcher = Element.prototype.__pmc_attachCatcher = function (type)
-{
-	this.__pmc_getListeners(type)
 }
 
 win.__pmc_detachEvent = doc.__pmc_detachEvent = Element.prototype.__pmc_detachEvent = function (type, func)
@@ -253,9 +292,7 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 	if (dir === undef)
 		dir = false
 	
-	this.__pmc_attachCatcher(type)
-	
-	this.__pmc_attachEvent(type, func)
+	this.__pmc_addEventListener(type, func, dir)
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
