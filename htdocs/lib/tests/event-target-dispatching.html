@@ -101,7 +101,8 @@ Tests.test(function (t)
 		var objects = [window, document],
 			names = ['window', 'document']
 		
-		function name (obj) { return names[objects.indexOf(e.target)] }
+		function name (o) { return names[objects.indexOf(o)] }
+		
 		
 		var order
 		window.addEventListener('mousemove', function (e) { order.push('window-c:' + name(e.target)) }, true)
