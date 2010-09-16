@@ -129,45 +129,52 @@ window.__pmc__eventListeners = {}
 
 win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_dispatchEvent = function (w)
 {
-	var captures = [], bubbles = []
+	var node = w.target,
+		type = w.type
 	
-	var type = w.type,
-		ckey = type + ':__pmc__:true',
-		bkey = type + ':__pmc__:false'
-	for (var node = w.target; node; node = node.parentNode)
+	var captures = [], bubbles = [],
+		all, byType, listeners
+	
+	if (node)
 	{
-		var all = node.__pmc__eventListeners
-		if (!all)
-			continue
+		for (; node; node = node.parentNode)
+		{
+			if ((all = node.__pmc__eventListeners) && (byType = all[type]))
+			{
+				listeners = byType[0]
+				if (listeners)
+					bubbles.push(listeners)
+			
+				listeners = byType[1]
+				if (listeners)
+					captures.push(listeners)
+			}
+		}
+	}
+	else
+	{
+		if ((all = document.__pmc__eventListeners) && (byType = all[type]))
+		{
+			listeners = byType[0]
+			if (listeners)
+				bubbles.push(listeners)
 		
-		var listeners = all[ckey]
-		if (listeners)
-			captures.push(listeners)
-		
-		var listeners = all[bkey]
-		if (listeners)
-			bubbles.push(listeners)
+			listeners = byType[1]
+			if (listeners)
+				captures.push(listeners)
+		}
 	}
 	
-	
-	var all = document.__pmc__eventListeners
-	var listeners = all[ckey]
-	if (listeners)
-		captures.push(listeners)
-	
-	var listeners = all[bkey]
-	if (listeners)
-		bubbles.push(listeners)
-	
-	
-	var all = window.__pmc__eventListeners
-	var listeners = all[ckey]
-	if (listeners)
-		captures.push(listeners)
-	
-	var listeners = all[bkey]
-	if (listeners)
-		bubbles.push(listeners)
+	if ((all = window.__pmc__eventListeners) && (byType = all[type]))
+	{
+		listeners = byType[0]
+		if (listeners)
+			bubbles.push(listeners)
+		
+		listeners = byType[1]
+		if (listeners)
+			captures.push(listeners)
+	}
 	
 	// log(captures.length + '/' + bubbles.length)
 	
@@ -225,13 +232,22 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 	if (!all)
 		all = this.__pmc__eventListeners = {}
 	
-	var key = type + ':__pmc__:' + dir
+	var byType = all[type]
+	if (!byType)
+	{
+		byType = all[type] = []
+		this.__pmc__bindCatcher(type, byType)
+	}
 	
-	var listeners = all[key]
-	if (listeners)
-		return listeners
-	listeners = all[key] = []
+	var listeners = byType[dir]
+	if (!listeners)
+		listeners = byType[dir] = []
 	
+	return listeners
+}
+
+win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindCatcher = function (type, byType)
+{
 	var node = this
 	function dispatcher ()
 	{
@@ -246,9 +262,7 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 	
 	var transport = getEventTransport(this, type)
 	this.attachEvent('on' + transport, dispatcher)
-	listeners.dispatcher = dispatcher
-	
-	return listeners
+	byType.dispatcher = dispatcher
 }
 
 win.__pmc_addEventListener = doc.__pmc_addEventListener = Element.prototype.__pmc_addEventListener = function (type, func, dir)
@@ -289,20 +303,14 @@ win.addEventListener = doc.addEventListener = Element.prototype.addEventListener
 {
 	type = eventConversion[type] || type
 	
-	if (dir === undef)
-		dir = false
-	
-	this.__pmc_addEventListener(type, func, dir)
+	this.__pmc_addEventListener(type, func, dir ? 1 : 0)
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
 {
 	type = eventConversion[type] || type
 	
-	if (dir === undef)
-		dir = false
-	
-	this.__pmc_detachEvent(type, func)
+	this.__pmc_detachEvent(type, func, dir ? 1 : 0)
 }
 
 
