@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>Opera Array#indexOf(event.target) bug (DFL-1310@bugs.opera.com)</title>
+</head>
+<body>
+
+<script>
+;(function(){
+
+function onclick (e)
+{
+	var objects = [window]
+	
+	alert(objects.indexOf(e.target) == 0 ? 'passed' : 'failed')
+}
+
+window.addEventListener('click', onclick, true)
+
+var e = document.createEvent('MouseEvent')
+e.initEvent('click', true, true)
+window.dispatchEvent(e)
+
+})();
+</script>
+
+</body>
+</html>
