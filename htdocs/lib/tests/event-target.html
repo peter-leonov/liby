@@ -127,6 +127,20 @@ Tests.test(function (t)
 		node.parentNode.removeEventListener(type, handlerBubble, false)
 		t.like(order, conf.bubbles ? [1] : [1,2], 'stopPropagation() in node capture does not call parentNode bubble')
 		
+		var order = []
+		node.__tests_objectName = 'node'
+		node.parentNode.__tests_objectName = 'parentNode'
+		function handlerNode () { order.push(this.__tests_objectName) }
+		function handlerParentNode () { order.push(this.__tests_objectName) }
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.addEventListener(type, handlerNode, true)
+		node.parentNode.addEventListener(type, handlerParentNode, false)
+		node.dispatchEvent(e)
+		node.removeEventListener(type, handlerNode, true)
+		node.parentNode.removeEventListener(type, handlerParentNode, false)
+		t.like(order, conf.bubbles ? ['node', 'parentNode'] : ['node'], '“this” preserved')
+		
 		calls = 0
 		e = document.createEvent(kind)
 		e.initEvent(type, conf.bubbles, true)
