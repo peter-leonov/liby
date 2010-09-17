@@ -105,16 +105,16 @@ Tests.test(function (t)
 		
 		
 		var order
-		window.addEventListener('mouseenter', function (e) { order.push('window-c:' + name(e.target)) }, true)
-		window.addEventListener('mouseenter', function (e) { order.push('window-b:' + name(e.target)) }, false)
-		document.addEventListener('mouseenter', function (e) { order.push('document-c:' + name(e.target)) }, true)
-		document.addEventListener('mouseenter', function (e) { order.push('document-b:' + name(e.target)) }, false)
+		window.addEventListener('keydown', function (e) { order.push('window-c:' + name(e.target)) }, true)
+		window.addEventListener('keydown', function (e) { order.push('window-b:' + name(e.target)) }, false)
+		document.addEventListener('keydown', function (e) { order.push('document-c:' + name(e.target)) }, true)
+		document.addEventListener('keydown', function (e) { order.push('document-b:' + name(e.target)) }, false)
 		
 		
 		var order = []
 		
 		var e = document.createEvent('Event')
-		e.initEvent('mouseenter', true, true)
+		e.initEvent('keydown', true, true)
 		document.dispatchEvent(e)
 		
 		t.like(order,  ['window-c:document', 'document-c:document', 'document-b:document', 'window-b:document'], 'dispatch on document')
@@ -123,7 +123,7 @@ Tests.test(function (t)
 		var order = []
 		
 		var e = document.createEvent('Event')
-		e.initEvent('mouseenter', true, true)
+		e.initEvent('keydown', true, true)
 		window.dispatchEvent(e)
 		
 		t.like(order,  ['window-c:window', 'window-b:window'], 'dispatch on window')
