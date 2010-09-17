@@ -24,15 +24,20 @@ Tests.test(function (t)
 		
 		var node = $('test-node-1')
 		
+		var pn = {}
+		pn[Event.CAPTURING_PHASE] = 1
+		pn[Event.AT_TARGET] = 2
+		pn[Event.BUBBLING_PHASE] = 3
+		
 		var order
-		window.addEventListener('click', function (e) { order.push('window-c') }, true)
-		window.addEventListener('click', function (e) { order.push('window-b') }, false)
-		document.addEventListener('click', function (e) { order.push('document-c') }, true)
-		document.addEventListener('click', function (e) { order.push('document-b') }, false)
-		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-c') }, true)
-		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-b') }, false)
-		node.addEventListener('click', function (e) { order.push('node-c') }, true)
-		node.addEventListener('click', function (e) { order.push('node-b') }, false)
+		window.addEventListener('click', function (e) { order.push('window-c-' + pn[e.eventPhase]) }, true)
+		window.addEventListener('click', function (e) { order.push('window-b-' + pn[e.eventPhase]) }, false)
+		document.addEventListener('click', function (e) { order.push('document-c-' + pn[e.eventPhase]) }, true)
+		document.addEventListener('click', function (e) { order.push('document-b-' + pn[e.eventPhase]) }, false)
+		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-c-' + pn[e.eventPhase]) }, true)
+		node.parentNode.addEventListener('click', function (e) { order.push('parentNode-b-' + pn[e.eventPhase]) }, false)
+		node.addEventListener('click', function (e) { order.push('node-c-' + pn[e.eventPhase]) }, true)
+		node.addEventListener('click', function (e) { order.push('node-b-' + pn[e.eventPhase]) }, false)
 		
 		
 		var order = []
@@ -41,7 +46,7 @@ Tests.test(function (t)
 		e.initEvent('click', true, true)
 		node.dispatchEvent(e)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on node')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-1', 'node-c-2', 'node-b-2', 'parentNode-b-3', 'document-b-3', 'window-b-3'], 'dispatch on node')
 		
 		
 		var order = []
@@ -50,7 +55,7 @@ Tests.test(function (t)
 		e.initEvent('click', false, true)
 		node.dispatchEvent(e)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b'], 'dispatch on node without bubbling')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-1', 'node-c-2', 'node-b-2'], 'dispatch on node without bubbling')
 		
 		
 		var order = []
@@ -61,7 +66,7 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		node.removeEventListener('click', stopPropagation, true)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b'], 'stop on node capture')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-1', 'node-c-2', 'node-b-2'], 'stop on node capture')
 		
 		
 		var order = []
@@ -72,7 +77,7 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		node.removeEventListener('click', stopPropagation, false)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b'], 'stop on node bubble')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-1', 'node-c-2', 'node-b-2'], 'stop on node bubble')
 		
 		
 		var order = []
@@ -83,7 +88,7 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		node.parentNode.removeEventListener('click', stopPropagation, true)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c'], 'stop on parentNode bubble')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-1'], 'stop on parentNode capture')
 		
 		
 		var order = []
@@ -94,7 +99,7 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		node.parentNode.removeEventListener('click', stopPropagation, false)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b'], 'stop on node bubble')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-1', 'node-c-2', 'node-b-2', 'parentNode-b-3'], 'stop on node bubble')
 		
 		
 		var order = []
@@ -107,7 +112,7 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		node.removeEventListener('click', add, true)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'add bubble on node capture')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-1', 'node-c-2', 'node-b-2', 'parentNode-b-3', 'document-b-3', 'window-b-3'], 'add bubble on node capture')
 		
 		
 		var order = []
@@ -116,7 +121,7 @@ Tests.test(function (t)
 		e.initEvent('click', true, true)
 		node.parentNode.dispatchEvent(e)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on parentNode')
+		t.like(order,  ['window-c-1', 'document-c-1', 'parentNode-c-2', 'parentNode-b-2', 'document-b-3', 'window-b-3'], 'dispatch on parentNode')
 		
 		
 		var order = []
@@ -125,7 +130,7 @@ Tests.test(function (t)
 		e.initEvent('click', true, true)
 		document.dispatchEvent(e)
 		
-		t.like(order,  ['window-c', 'document-c', 'document-b', 'window-b'], 'dispatch on document')
+		t.like(order,  ['window-c-1', 'document-c-2', 'document-b-2', 'window-b-3'], 'dispatch on document')
 		
 		
 		var order = []
@@ -134,7 +139,7 @@ Tests.test(function (t)
 		e.initEvent('click', true, true)
 		window.dispatchEvent(e)
 		
-		t.like(order,  ['window-c', 'window-b'], 'dispatch on window')
+		t.like(order,  ['window-c-2', 'window-b-2'], 'dispatch on window')
 	})
 	
 	t.test('document and window', function (t)
