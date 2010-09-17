@@ -40,7 +40,7 @@ Event.prototype =
 		this.button = e.button
 		this.charCode = e.charCode
 		this.keyCode = e.keyCode
-		this.currentTarget = this.target = e.srcElement
+		this.currentTarget = this.target = (e.srcElement || document) // dirty hack for window/document targets
 		this.detail = - e.wheelDelta / 30
 		this.pageX = e.clientX + docelem.scrollLeft - document.body.clientLeft // document.body.scrollLeft
 		this.pageY = e.clientY + docelem.scrollTop  - document.body.clientTop // document.body.scrollTop
