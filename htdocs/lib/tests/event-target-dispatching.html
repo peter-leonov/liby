@@ -47,6 +47,15 @@ Tests.test(function (t)
 		var order = []
 		
 		var e = document.createEvent('Event')
+		e.initEvent('click', false, true)
+		node.dispatchEvent(e)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b'], 'dispatch on node without bubbling')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
 		e.initEvent('click', true, true)
 		node.addEventListener('click', stopPropagation, true)
 		node.dispatchEvent(e)
