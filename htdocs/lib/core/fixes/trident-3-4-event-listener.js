@@ -1,6 +1,7 @@
 (function(){
 
 var doc = document, docelem = doc.documentElement, win = window, undef
+win.__pmc_isWindow = true
 
 if (win.addEventListener || !win.attachEvent)
 	return
@@ -28,6 +29,10 @@ function getEventTransport (node, type)
 
 var Event = win.Event = function () { this.constructor = Event }
 
+Event.CAPTURING_PHASE = 1
+Event.AT_TARGET = 2
+Event.BUBBLING_PHASE = 3
+
 Event.prototype =
 {
 	__updateFromNative: function (e)
@@ -38,10 +43,10 @@ Event.prototype =
 		this.button = e.button
 		this.charCode = e.charCode
 		this.keyCode = e.keyCode
-		this.currentTarget = this.target = (e.srcElement || document) // dirty hack for window/document targets
+		this.currentTarget = this.target = (e.srcElement || doc) // dirty hack for window/document targets
 		this.detail = - e.wheelDelta / 30
-		this.pageX = e.clientX + docelem.scrollLeft - document.body.clientLeft // document.body.scrollLeft
-		this.pageY = e.clientY + docelem.scrollTop  - document.body.clientTop // document.body.scrollTop
+		this.pageX = e.clientX + docelem.scrollLeft - doc.body.clientLeft // document.body.scrollLeft
+		this.pageY = e.clientY + docelem.scrollTop  - doc.body.clientTop // document.body.scrollTop
 	},
 	
 	initEvent: function (type, bubbles, cancelable)
@@ -133,56 +138,53 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		node = this,
 		type = w.type
 	
-	var captures = [], bubbles = [],
+	var branch = [], branchListeners = [], head, headListeners, // captures = [], bubbles = [],
 		all, byType, listeners
-	
-	if (target !== document)
+	log(this, target)
+	if (target.__pmc_isWindow)
 	{
-		for (; node; node = node.parentNode)
-		{
-			if ((all = node.__pmc__eventListeners) && (byType = all[type]))
-			{
-				listeners = byType[0]
-				if (listeners)
-					bubbles.push(listeners)
-			
-				listeners = byType[1]
-				if (listeners)
-					captures.push(listeners)
-			}
-		}
+		branch.push(doc)
+		all = doc.__pmc__eventListeners
+		branchListeners.push(all && all[type])
+	}
+	else if (target === doc)
+	{
+		branch.push(doc)
+		all = doc.__pmc__eventListeners
+		branchListeners.push(all && all[type])
+		
+		branch.push(win)
+		all = win.__pmc__eventListeners
+		branchListeners.push(all && all[type])
 	}
 	else
 	{
-		// log(this, win, this == win)
-		if ((all = document.__pmc__eventListeners) && (byType = all[type]))
+		for (; node; node = node.parentNode)
 		{
-			listeners = byType[0]
-			if (listeners)
-				bubbles.push(listeners)
-		
-			listeners = byType[1]
-			if (listeners)
-				captures.push(listeners)
+			branch.push(node)
+			all = node.__pmc__eventListeners
+			branchListeners.push(all && all[type])
 		}
-	}
-	
-	if ((all = win.__pmc__eventListeners) && (byType = all[type]))
-	{
-		listeners = byType[0]
-		if (listeners)
-			bubbles.push(listeners)
 		
-		listeners = byType[1]
-		if (listeners)
-			captures.push(listeners)
+		branch.push(win)
+		all = win.__pmc__eventListeners
+		branchListeners.push(all && all[type])
 	}
 	
-	// log(captures.length + '/' + bubbles.length)
+	if (this === target)
+	{
+		head = target
+		headListeners = branchListeners[0]
+		branchListeners[0] = null
+	}
 	
+	
+	log(branchListeners.length)
+	return
 	w.defaultPrevented = false
 	w.__propagationStopped = false
 	
+	w.eventPhase = 1
 	for (var i = captures.length - 1; i >= 0; i--)
 	{
 		var listeners = captures[i]
@@ -205,6 +207,7 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 			return
 	}
 	
+	w.eventPhase = 3
 	for (var i = 0, il = bubbles.length; i < il; i++)
 	{
 		var listeners = bubbles[i]
