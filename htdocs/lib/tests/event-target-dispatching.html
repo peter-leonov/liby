@@ -20,6 +20,8 @@ Tests.test(function (t)
 	
 	t.test('node → parentNode → document → window', function (t)
 	{
+		function stopPropagation (e) { e.stopPropagation() }
+		
 		var node = $('test-node-1')
 		
 		var order
@@ -40,6 +42,50 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		
 		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on node')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		node.addEventListener('click', stopPropagation, true)
+		node.dispatchEvent(e)
+		node.removeEventListener('click', stopPropagation, true)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b'], 'stop on node capture')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		node.addEventListener('click', stopPropagation, false)
+		node.dispatchEvent(e)
+		node.removeEventListener('click', stopPropagation, false)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b'], 'stop on node bubble')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		node.parentNode.addEventListener('click', stopPropagation, true)
+		node.dispatchEvent(e)
+		node.parentNode.removeEventListener('click', stopPropagation, true)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c'], 'stop on node bubble')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
+		node.parentNode.addEventListener('click', stopPropagation, false)
+		node.dispatchEvent(e)
+		node.parentNode.removeEventListener('click', stopPropagation, false)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b'], 'stop on node bubble')
 		
 		
 		var order = []
