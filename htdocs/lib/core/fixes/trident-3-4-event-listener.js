@@ -278,13 +278,17 @@ win.__pmc_addEventListener = doc.__pmc_addEventListener = Element.prototype.__pm
 	listeners.push(func)
 }
 
-win.__pmc_detachEvent = doc.__pmc_detachEvent = Element.prototype.__pmc_detachEvent = function (type, func)
+win.__pmc_removeEventListener = doc.__pmc_removeEventListener = Element.prototype.__pmc_removeEventListener = function (type, func, dir)
 {
 	var all = this.__pmc__eventListeners
 	if (!all)
 		return
 	
-	var listeners = all[type]
+	var byType = all[type]
+	if (!byType)
+		return
+	
+	var listeners = byType[dir]
 	if (!listeners)
 		return
 	
@@ -294,9 +298,9 @@ win.__pmc_detachEvent = doc.__pmc_detachEvent = Element.prototype.__pmc_detachEv
 	
 	if (!listeners.length)
 	{
-		delete all[type]
+		delete byType[dir]
 		var transport = getEventTransport(this, type)
-		this.detachEvent('on' + transport, listeners.dispatcher)
+		this.detachEvent('on' + transport, byType.dispatcher)
 	}
 }
 
@@ -312,7 +316,7 @@ win.removeEventListener = doc.removeEventListener = Element.prototype.removeEven
 {
 	type = eventConversion[type] || type
 	
-	this.__pmc_detachEvent(type, func, dir ? 1 : 0)
+	this.__pmc_removeEventListener(type, func, dir ? 1 : 0)
 }
 
 
