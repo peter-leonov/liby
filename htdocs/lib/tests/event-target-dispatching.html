@@ -92,6 +92,19 @@ Tests.test(function (t)
 		
 		var e = document.createEvent('Event')
 		e.initEvent('click', true, true)
+		function added () { order.push('node-added') }
+		function add () { node.addEventListener('click', add, false) }
+		node.addEventListener('click', add, true)
+		node.dispatchEvent(e)
+		node.removeEventListener('click', add, true)
+		
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'node-c', 'node-b', 'parentNode-b', 'document-b', 'window-b'], 'add bubble on node capture')
+		
+		
+		var order = []
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', true, true)
 		node.parentNode.dispatchEvent(e)
 		
 		t.like(order,  ['window-c', 'document-c', 'parentNode-c', 'parentNode-b', 'document-b', 'window-b'], 'dispatch on parentNode')
