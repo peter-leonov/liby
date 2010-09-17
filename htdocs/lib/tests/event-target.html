@@ -150,17 +150,17 @@ Tests.test(function (t)
 		t.like(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
 		
 		var event1, event2, event3
-		node.addEventListener(type, function (e) { event1 = e; e.abc++ }, false)
-		node.addEventListener(type, function (e) { event2 = e; e.abc++ }, false)
-		node.addEventListener(type, function (e) { event3 = e; e.abc++ }, false)
+		node.addEventListener(type, function (e) { event1 = e; e.abc[0] = true }, false)
+		node.addEventListener(type, function (e) { event2 = e; e.abc[1] = true }, false)
+		node.addEventListener(type, function (e) { event3 = e; e.abc[2] = true }, false)
 		e = document.createEvent(kind)
 		e.initEvent(type, conf.bubbles, true)
-		e.abc = 0
+		e.abc = []
 		node.dispatchEvent(e)
 		t.eq(event1, e, 'first listener got the same event object')
 		t.eq(event2, e, 'second listener got the same event object')
 		t.eq(event3, e, 'third listener got the same event object')
-		t.eq(e.abc, 3, 'listeners can write custom fields')
+		t.like(e.abc, [true, true, true], 'listeners can write custom fields')
 		
 		function prevent (e) { e.preventDefault() }
 		e = document.createEvent(kind)
