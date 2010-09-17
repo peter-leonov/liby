@@ -253,7 +253,10 @@ win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindC
 	var node = this
 	function dispatcher ()
 	{
-		event.cancelBubble = true
+		if (event.__pmc_dispatched)
+			return
+		event.__pmc_dispatched = true
+		
 		var w = getEventWrapper(event)
 		// check if we got a custom event that does not match our type
 		if (type !== w.type)
