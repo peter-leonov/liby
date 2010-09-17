@@ -98,17 +98,14 @@ Tests.test(function (t)
 	
 	t.test('targets', function (t)
 	{
-		var objects = [window, document],
-			names = ['window', 'document']
-		
-		function name (o) { return names[t.indexOf(objects, o)] }
-		
+		window.__tests_objectName = 'window'
+		document.__tests_objectName = 'document'
 		
 		var order
-		window.addEventListener('keydown', function (e) { order.push('window-c:' + name(e.target)) }, true)
-		window.addEventListener('keydown', function (e) { order.push('window-b:' + name(e.target)) }, false)
-		document.addEventListener('keydown', function (e) { order.push('document-c:' + name(e.target)) }, true)
-		document.addEventListener('keydown', function (e) { order.push('document-b:' + name(e.target)) }, false)
+		window.addEventListener('keydown', function (e) { order.push('window-c:' + e.target.__tests_objectName) }, true)
+		window.addEventListener('keydown', function (e) { order.push('window-b:' + e.target.__tests_objectName) }, false)
+		document.addEventListener('keydown', function (e) { order.push('document-c:' + e.target.__tests_objectName) }, true)
+		document.addEventListener('keydown', function (e) { order.push('document-b:' + e.target.__tests_objectName) }, false)
 		
 		
 		var order = []
@@ -127,6 +124,9 @@ Tests.test(function (t)
 		window.dispatchEvent(e)
 		
 		t.like(order,  ['window-c:window', 'window-b:window'], 'dispatch on window')
+		
+		delete window.__tests_objectName
+		delete document.__tests_objectName
 	})
 })
 </script>
