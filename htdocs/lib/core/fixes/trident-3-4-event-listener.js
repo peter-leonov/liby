@@ -1,7 +1,5 @@
 (function(){
 
-window.__pmc_itIsWindow = true
-
 var doc = document, docelem = doc.documentElement, win = window, undef
 
 if (win.addEventListener || !win.attachEvent)
@@ -138,7 +136,7 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 	var captures = [], bubbles = [],
 		all, byType, listeners
 	
-	if (target)
+	if (target !== document)
 	{
 		for (; node; node = node.parentNode)
 		{
@@ -154,7 +152,7 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 			}
 		}
 	}
-	else if (!this.__pmc_itIsWindow)
+	else
 	{
 		// log(this, win, this == win)
 		if ((all = document.__pmc__eventListeners) && (byType = all[type]))
@@ -337,6 +335,7 @@ win.dispatchEvent = doc.dispatchEvent = Element.prototype.dispatchEvent = functi
 // so do the direct dispatch
 win.dispatchEvent = function (w)
 {
+	w.target = this
 	this.__pmc_dispatchEvent(w)
 	return !w.defaultPrevented
 }
