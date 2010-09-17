@@ -113,6 +113,20 @@ Tests.test(function (t)
 		node.removeEventListener(type, handler4, false)
 		t.like(order, conf.bubbles ? [1,2,3,4,5,6] : [1,2,3,4], 'capturing and bubbling does all in proper order')
 		
+		var order = []
+		function handlerCapture () { order.push(1) }
+		function handlerBubble () { order.push(2) }
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.addEventListener(type, handlerCapture, true)
+		node.addEventListener(type, stopPropagation, true)
+		node.parentNode.addEventListener(type, handlerBubble, false)
+		node.dispatchEvent(e)
+		node.removeEventListener(type, handlerCapture, true)
+		node.removeEventListener(type, stopPropagation, true)
+		node.parentNode.removeEventListener(type, handlerBubble, false)
+		t.like(order, conf.bubbles ? [1] : [1,2], 'stopPropagation() in node capture does not call parentNode bubble')
+		
 		calls = 0
 		e = document.createEvent(kind)
 		e.initEvent(type, conf.bubbles, true)
