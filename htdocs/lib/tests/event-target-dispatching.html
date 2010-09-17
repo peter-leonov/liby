@@ -74,7 +74,7 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		node.parentNode.removeEventListener('click', stopPropagation, true)
 		
-		t.like(order,  ['window-c', 'document-c', 'parentNode-c'], 'stop on node bubble')
+		t.like(order,  ['window-c', 'document-c', 'parentNode-c'], 'stop on parentNode bubble')
 		
 		
 		var order = []
