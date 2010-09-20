@@ -372,13 +372,13 @@ win.__pmc_removeEventListener = doc.__pmc_removeEventListener = Element.prototyp
 	
 	var dup = listeners.indexOf(func)
 	if (dup != -1)
-		listeners.splice(dup, 1)
-	
-	if (!listeners.length)
 	{
-		delete byType[dir]
-		var transport = getEventTransport(this, type)
-		this.detachEvent('on' + transport, byType.dispatcher)
+		listeners.splice(dup, 1)
+		// if (--byType.total == 0)
+		// {
+		// 	var transport = getEventTransport(this, type)
+		// 	this.detachEvent('on' + transport, byType.dispatcher)
+		// }
 	}
 }
 
