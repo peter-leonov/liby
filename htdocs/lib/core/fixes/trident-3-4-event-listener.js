@@ -335,10 +335,6 @@ win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindC
 		
 		var w = getEventWrapper(event)
 		
-		// check if we got a custom event that does not match our type
-		if (type !== w.type)
-			return
-		
 		node.__pmc_dispatchEvent(w)
 	}
 	
