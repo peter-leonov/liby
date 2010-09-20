@@ -314,7 +314,7 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 	if (!byType)
 	{
 		byType = all[type] = []
-		this.__pmc__bindCatcher(type, byType)
+		byType.catcher = this.__pmc__bindCatcher(type)
 	}
 	
 	var listeners = byType[dir]
@@ -324,7 +324,7 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 	return listeners
 }
 
-win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindCatcher = function (type, byType)
+win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindCatcher = function (type)
 {
 	var node = this
 	function catcher ()
@@ -339,7 +339,7 @@ win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindC
 	}
 	
 	this.attachEvent('on' + type, catcher)
-	byType.catcher = catcher
+	return catcher
 }
 
 win.__pmc_addEventListener = doc.__pmc_addEventListener = Element.prototype.__pmc_addEventListener = function (type, func, dir)
