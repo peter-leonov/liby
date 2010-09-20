@@ -180,14 +180,20 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 	
 	
 	log(branchListeners.length)
-	return
+	
 	w.defaultPrevented = false
 	w.__propagationStopped = false
 	
 	w.eventPhase = 1
-	for (var i = captures.length - 1; i >= 0; i--)
+	for (var i = branchListeners.length - 1; i >= 0; i--)
 	{
-		var listeners = captures[i]
+		var listeners = branchListeners[i]
+		if (!listeners)
+			continue
+		
+		listeners = listeners[1]
+		if (!listeners)
+			continue
 		
 		for (var j = 0, jl = listeners.length; j < jl; j++)
 		{
@@ -207,10 +213,71 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 			return
 	}
 	
-	w.eventPhase = 3
-	for (var i = 0, il = bubbles.length; i < il; i++)
+	
+	w.eventPhase = 2
+	
+	capture:
 	{
-		var listeners = bubbles[i]
+		if (!headListeners)
+			break capture
+		
+		listeners = headListeners[1]
+		if (!listeners)
+			break capture
+		
+		for (var j = 0, jl = listeners.length; j < jl; j++)
+		{
+			try
+			{
+				listeners[j].call(this, w)
+			}
+			catch (ex)
+			{
+				// this trick is useful to report errors from all listeners
+				// 1000 delay helps to avoid sensitive lag when error reporting is on
+				setTimeout(function () { throw ex }, 1000)
+			}
+		}
+	}
+	
+	bubble:
+	{
+		if (!headListeners)
+			break bubble
+		
+		listeners = headListeners[0]
+		if (!listeners)
+			break bubble
+		
+		for (var j = 0, jl = listeners.length; j < jl; j++)
+		{
+			try
+			{
+				listeners[j].call(this, w)
+			}
+			catch (ex)
+			{
+				// this trick is useful to report errors from all listeners
+				// 1000 delay helps to avoid sensitive lag when error reporting is on
+				setTimeout(function () { throw ex }, 1000)
+			}
+		}
+	}
+	
+	if (w.__propagationStopped)
+		return
+	
+	
+	w.eventPhase = 3
+	for (var i = 0, il = branchListeners.length; i < il; i++)
+	{
+		var listeners = branchListeners[i]
+		if (!listeners)
+			continue
+		
+		listeners = listeners[0]
+		if (!listeners)
+			continue
 		
 		for (var j = 0, jl = listeners.length; j < jl; j++)
 		{
