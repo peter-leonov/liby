@@ -377,8 +377,15 @@ win.__pmc_removeEventListener = doc.__pmc_removeEventListener = Element.prototyp
 }
 
 
-win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
+doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 {
+	this.__pmc_addEventListener(type, func, dir ? 1 : 0)
+}
+
+win.addEventListener = function (type, func, dir)
+{
+	// returned catcher is useless ATM
+	document.__pmc__bindCatcher(type)
 	this.__pmc_addEventListener(type, func, dir ? 1 : 0)
 }
 
