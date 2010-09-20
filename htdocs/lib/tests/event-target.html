@@ -75,15 +75,23 @@ Tests.test(function (t)
 		node.dispatchEvent(e)
 		t.eq(calls, 0, 'removeEventListener works fine')
 		
-		calls = 0
+		var order = []
+		function handler1 () { order.push(1) }
+		function handler2 () { order.push(2) }
+		function handler3 () { order.push(3) }
+		function handler4 () { order.push(4) }
+		function handler5 () { order.push(5) }
+		function handler6 () { order.push(6) }
 		e = document.createEvent(kind)
 		e.initEvent(type, conf.bubbles, true)
-		node.addEventListener(type, handler, false)
-		node.addEventListener(type, handlerA, false)
+		node.addEventListener(type, handler1, false)
+		node.addEventListener(type, handler2, false)
+		node.addEventListener(type, handler3, false)
 		node.dispatchEvent(e)
-		node.removeEventListener(type, handler, false)
-		node.removeEventListener(type, handlerA, false)
-		t.eq(calls, 2, 'multiple listeners work well')
+		node.removeEventListener(type, handler1, false)
+		node.removeEventListener(type, handler2, false)
+		node.removeEventListener(type, handler3, false)
+		t.like(order, [1, 2, 3], 'multiple listeners work well')
 		
 		calls = 0
 		e = document.createEvent(kind)
@@ -100,12 +108,6 @@ Tests.test(function (t)
 		t.eq(calls, 2, 'stopPropagation() works well')
 		
 		var order = []
-		function handler1 () { order.push(1) }
-		function handler2 () { order.push(2) }
-		function handler3 () { order.push(3) }
-		function handler4 () { order.push(4) }
-		function handler5 () { order.push(5) }
-		function handler6 () { order.push(6) }
 		e = document.createEvent(kind)
 		e.initEvent(type, conf.bubbles, true)
 		document.addEventListener(type, handler1, true)
