@@ -64,7 +64,7 @@ Tests.test(function (t)
 			document.addEventListener(type, handler, false)
 			node.dispatchEvent(e)
 			document.removeEventListener(type, handler, false)
-			t.eq(calls, 2, 'document handler called ok')
+			t.eq(calls, conf.bubbles ? 2 : 1, 'document handler called ok')
 		}
 		
 		calls = 0
@@ -137,7 +137,7 @@ Tests.test(function (t)
 		node.removeEventListener(type, handlerCapture, true)
 		node.removeEventListener(type, stopPropagation, true)
 		node.parentNode.removeEventListener(type, handlerBubble, false)
-		t.like(order, conf.bubbles ? [1] : [1,2], 'stopPropagation() in node capture does not call parentNode bubble')
+		t.like(order, [1], 'stopPropagation() in node capture does not call parentNode bubble')
 		
 		var order = []
 		node.__tests_objectName = 'node'
