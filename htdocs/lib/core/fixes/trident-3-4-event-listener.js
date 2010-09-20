@@ -22,9 +22,9 @@ var supportedEventsByNodeName =
 
 var eventConversion = {keypress: 'keydown'}
 
-function getEventTransport (node, type)
+function isEventSupportedOnNode (node, type)
 {
-	return (supportedEventsByNodeName[node.nodeName] || supportedEvents)[type] ? type : eventTransport
+	return (supportedEventsByNodeName[node.nodeName] || supportedEvents)[type]
 }
 
 var Event = win.Event = function () { this.constructor = Event }
@@ -342,8 +342,7 @@ win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindC
 		node.__pmc_dispatchEvent(w)
 	}
 	
-	var transport = getEventTransport(this, type)
-	this.attachEvent('on' + transport, dispatcher)
+	this.attachEvent('on' + type, dispatcher)
 	byType.dispatcher = dispatcher
 }
 
@@ -378,8 +377,7 @@ win.__pmc_removeEventListener = doc.__pmc_removeEventListener = Element.prototyp
 		listeners.splice(dup, 1)
 		// if (--byType.total == 0)
 		// {
-		// 	var transport = getEventTransport(this, type)
-		// 	this.detachEvent('on' + transport, byType.dispatcher)
+		// 	this.detachEvent('on' + type, byType.dispatcher)
 		// }
 	}
 }
@@ -407,11 +405,15 @@ doc.createEvent = function (kind)
 
 win.dispatchEvent = doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 {
-	var type = w.type,
-		transport = getEventTransport(this, type)
+	var type = w.type
 	
 	w.target = this
-	this.fireEvent('on' + transport, w.__pmc__event)
+	
+	if (isEventSupportedOnNode(this, type))
+		this.fireEvent('on' + type, w.__pmc__event)
+	else
+		this.__pmc_dispatchEvent(w)
+	
 	return !w.defaultPrevented
 }
 
