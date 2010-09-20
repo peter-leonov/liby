@@ -140,11 +140,11 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 	
 	var branch = [], branchListeners = [], head, headListeners, // captures = [], bubbles = [],
 		all, byType, listeners
-	// log(this, target)
+	
 	if (target.__pmc_isWindow)
 	{
-		branch.push(doc)
-		all = doc.__pmc__eventListeners
+		branch.push(win)
+		all = win.__pmc__eventListeners
 		branchListeners.push(all && all[type])
 	}
 	else if (target === doc)
