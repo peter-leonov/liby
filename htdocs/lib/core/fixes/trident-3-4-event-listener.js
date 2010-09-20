@@ -199,7 +199,7 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		{
 			try
 			{
-				listeners[j].call(this, w)
+				listeners[j].call(branch[i], w)
 			}
 			catch (ex)
 			{
@@ -213,53 +213,55 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 			return
 	}
 	
-	
-	w.eventPhase = 2
-	
-	capture:
+	if (head)
 	{
-		if (!headListeners)
-			break capture
+		w.eventPhase = 2
 		
-		listeners = headListeners[1]
-		if (!listeners)
-			break capture
-		
-		for (var j = 0, jl = listeners.length; j < jl; j++)
+		capture:
 		{
-			try
+			if (!headListeners)
+				break capture
+		
+			listeners = headListeners[1]
+			if (!listeners)
+				break capture
+		
+			for (var j = 0, jl = listeners.length; j < jl; j++)
 			{
-				listeners[j].call(this, w)
-			}
-			catch (ex)
-			{
-				// this trick is useful to report errors from all listeners
-				// 1000 delay helps to avoid sensitive lag when error reporting is on
-				setTimeout(function () { throw ex }, 1000)
+				try
+				{
+					listeners[j].call(head, w)
+				}
+				catch (ex)
+				{
+					// this trick is useful to report errors from all listeners
+					// 1000 delay helps to avoid sensitive lag when error reporting is on
+					setTimeout(function () { throw ex }, 1000)
+				}
 			}
 		}
-	}
 	
-	bubble:
-	{
-		if (!headListeners)
-			break bubble
-		
-		listeners = headListeners[0]
-		if (!listeners)
-			break bubble
-		
-		for (var j = 0, jl = listeners.length; j < jl; j++)
+		bubble:
 		{
-			try
+			if (!headListeners)
+				break bubble
+		
+			listeners = headListeners[0]
+			if (!listeners)
+				break bubble
+		
+			for (var j = 0, jl = listeners.length; j < jl; j++)
 			{
-				listeners[j].call(this, w)
-			}
-			catch (ex)
-			{
-				// this trick is useful to report errors from all listeners
-				// 1000 delay helps to avoid sensitive lag when error reporting is on
-				setTimeout(function () { throw ex }, 1000)
+				try
+				{
+					listeners[j].call(head, w)
+				}
+				catch (ex)
+				{
+					// this trick is useful to report errors from all listeners
+					// 1000 delay helps to avoid sensitive lag when error reporting is on
+					setTimeout(function () { throw ex }, 1000)
+				}
 			}
 		}
 	}
@@ -287,7 +289,7 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		{
 			try
 			{
-				listeners[j].call(this, w)
+				listeners[j].call(branch[i], w)
 			}
 			catch (ex)
 			{
