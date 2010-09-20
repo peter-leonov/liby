@@ -198,8 +198,8 @@ Tests.test(function (t)
 		
 		t.like(order,  ['window-c:window', 'window-b:window'], 'dispatch on window')
 		
-		delete window.__tests_objectName
-		delete document.__tests_objectName
+		window.__tests_objectName = undefined
+		document.__tests_objectName = undefined
 	})
 })
 </script>
