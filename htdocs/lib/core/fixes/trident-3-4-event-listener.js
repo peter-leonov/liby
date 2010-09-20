@@ -37,7 +37,7 @@ Event.prototype =
 {
 	__updateFromNative: function (e)
 	{
-		this.type = e.type
+		this.initEvent(e.type, true, true)
 		this.clientX = e.clientX
 		this.clientY = e.clientY
 		this.button = e.button
@@ -140,7 +140,7 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 	
 	var branch = [], branchListeners = [], head, headListeners, // captures = [], bubbles = [],
 		all, byType, listeners
-	log(this, target)
+	// log(this, target)
 	if (target.__pmc_isWindow)
 	{
 		branch.push(doc)
@@ -179,12 +179,12 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 	}
 	
 	
-	log(branchListeners.length)
-	
 	w.defaultPrevented = false
 	w.__propagationStopped = false
 	
+	
 	w.eventPhase = 1
+	
 	for (var i = branchListeners.length - 1; i >= 0; i--)
 	{
 		var listeners = branchListeners[i]
@@ -264,11 +264,15 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		}
 	}
 	
+	if (!w.bubbles)
+		return
+	
 	if (w.__propagationStopped)
 		return
 	
 	
 	w.eventPhase = 3
+	
 	for (var i = 0, il = branchListeners.length; i < il; i++)
 	{
 		var listeners = branchListeners[i]
@@ -328,6 +332,7 @@ win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindC
 		event.__pmc_dispatched = true
 		
 		var w = getEventWrapper(event)
+		
 		// check if we got a custom event that does not match our type
 		if (type !== w.type)
 			return
