@@ -399,7 +399,7 @@ doc.createEvent = function (kind)
 	return getEventWrapper(doc.createEventObject(), kind)
 }
 
-win.dispatchEvent = doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
+doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 {
 	var type = w.type
 	
