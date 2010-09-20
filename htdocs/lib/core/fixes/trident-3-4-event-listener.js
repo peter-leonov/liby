@@ -20,8 +20,6 @@ var supportedEventsByNodeName =
 	'SCRIPT': scriptSupportedEvents.prototype
 }
 
-var eventConversion = {keypress: 'keydown'}
-
 function isEventSupportedOnNode (node, type)
 {
 	return (supportedEventsByNodeName[node.nodeName] || supportedEvents)[type]
@@ -381,15 +379,11 @@ win.__pmc_removeEventListener = doc.__pmc_removeEventListener = Element.prototyp
 
 win.addEventListener = doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 {
-	type = eventConversion[type] || type
-	
 	this.__pmc_addEventListener(type, func, dir ? 1 : 0)
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
 {
-	type = eventConversion[type] || type
-	
 	this.__pmc_removeEventListener(type, func, dir ? 1 : 0)
 }
 
