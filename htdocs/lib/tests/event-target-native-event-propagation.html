@@ -15,6 +15,7 @@
 <script id="node-2"></script>
 <input id="node-3"/>
 <input id="node-4"/>
+<div id="spacer" style="height:20000px"></div>
 
 <script type="text/javascript">
 Tests.test(function (t)
@@ -133,6 +134,41 @@ Tests.test(function (t)
 			t.like(order, ['captures'], '“focus” captures only')
 			t.eq(fired, true, '“focus” was fired on the node itself')
 		}, 10)
+	})
+	
+	t.test('scroll on window', function (t)
+	{
+		var type = 'scroll'
+		
+		var node = window
+		node.scrollTo(0, 0)
+		
+		var order = []
+		function captures () { order.push('captures') }
+		function bubbles () { order.push('bubbles') }
+		
+		var fired = false
+		function fire () { fired = true }
+		node['on' + type] = fire
+		
+		t.async(function (t)
+		{
+			node.addEventListener(type, captures, true)
+			node.addEventListener(type, bubbles, false)
+			
+			node.scrollTo(0, 1)
+			
+			t.async(function (t)
+			{
+				t.like(order, ['captures', 'bubbles'], '“' + type + '” captures and bubbles')
+				t.eq(fired, true, '“' + type + '” was fired on the node itself')
+				
+				// hide it here, otherwise scroll event called twice
+				node.scrollTo(0, 0)
+				$('spacer').style.display = 'none'
+			}, 0)
+		}, 100)
+		
 	})
 })
 </script>
