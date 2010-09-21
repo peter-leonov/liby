@@ -22,16 +22,27 @@ Tests.test(function (t)
 {
 	function $ (id) { return document.getElementById(id) }
 	
+	window.__tests_objectName = 'window'
+	document.__tests_objectName = 'document'
+	
+	var pn = {}
+	pn[Event.CAPTURING_PHASE] = 1
+	pn[Event.AT_TARGET] = 2
+	pn[Event.BUBBLING_PHASE] = 3
+	
+	function p (text, e) { return text + '-' + pn[e.eventPhase] + ':' + e.target.__tests_objectName }
+	
 	t.test('submit on form', function (t)
 	{
 		var node = $('node-1')
+		node.__tests_objectName = 'node'
 		
 		var fired = false
 		node.onsubmit = function (e) { fired = true; if (e) { e.preventDefault() } else {return false} }
 		
 		var order = []
-		function captures () { order.push('captures') }
-		function bubbles () { order.push('bubbles') }
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
 		document.addEventListener('submit', captures, true)
 		document.addEventListener('submit', bubbles, false)
 		
@@ -48,24 +59,25 @@ Tests.test(function (t)
 		}
 		
 		
-		t.like(order, ['captures', 'bubbles'], '“submit” captures and bubbles')
+		t.like(order, ['captures-1:node', 'bubbles-3:node'], '“submit” captures and bubbles')
 		t.eq(fired, true, '“submit” was fired on the node itself')
 	})
 	
 	t.test('load on script', function (t)
 	{
 		var node = $('node-2')
+		node.__tests_objectName = 'node'
 		
 		var order = []
-		function captures () { order.push('captures') }
-		function bubbles () { order.push('bubbles') }
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
 		document.addEventListener('load', captures, true)
 		document.addEventListener('load', bubbles, false)
 		
 		var fired = false
 		function check ()
 		{
-			t.like(order, ['captures'], '“load” captures only')
+			t.like(order, ['captures-1:node'], '“load” captures only')
 			t.eq(fired, true, '“load” was fired on the node itself')
 			
 			t.done()
@@ -85,10 +97,11 @@ Tests.test(function (t)
 	t.test('keydown on input', function (t)
 	{
 		var node = $('node-3')
+		node.__tests_objectName = 'node'
 		
 		var order = []
-		function captures () { order.push('captures') }
-		function bubbles () { order.push('bubbles') }
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
 		document.addEventListener('keydown', captures, true)
 		document.addEventListener('keydown', bubbles, false)
 		
@@ -107,17 +120,18 @@ Tests.test(function (t)
 			node.dispatchEvent(e)
 		}
 		
-		t.like(order, ['captures', 'bubbles'], '“keydown” captures and bubbles')
+		t.like(order, ['captures-1:node', 'bubbles-3:node'], '“keydown” captures and bubbles')
 		t.eq(fired, true, '“keydown” was fired on the node itself')
 	})
 	
 	t.test('focus on input', function (t)
 	{
 		var node = $('node-4')
+		node.__tests_objectName = 'node'
 		
 		var order = []
-		function captures () { order.push('captures') }
-		function bubbles () { order.push('bubbles') }
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
 		document.addEventListener('focus', captures, true)
 		document.addEventListener('focus', bubbles, false)
 		
@@ -131,7 +145,7 @@ Tests.test(function (t)
 		
 		t.async(function (t)
 		{
-			t.like(order, ['captures'], '“focus” captures only')
+			t.like(order, ['captures-1:node'], '“focus” captures only')
 			t.eq(fired, true, '“focus” was fired on the node itself')
 		}, 10)
 	})
@@ -144,8 +158,8 @@ Tests.test(function (t)
 		node.scrollTo(0, 0)
 		
 		var order = []
-		function captures () { order.push('captures') }
-		function bubbles () { order.push('bubbles') }
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
 		
 		var fired = false
 		function fire () { fired = true }
@@ -160,7 +174,7 @@ Tests.test(function (t)
 			
 			t.async(function (t)
 			{
-				t.like(order, ['captures', 'bubbles'], '“' + type + '” captures and bubbles')
+				t.like(order, ['captures-1:document', 'bubbles-3:document'], '“' + type + '” captures and bubbles')
 				t.eq(fired, true, '“' + type + '” was fired on the node itself')
 				
 				// hide it here, otherwise scroll event called twice
