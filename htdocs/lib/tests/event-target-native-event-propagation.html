@@ -30,7 +30,7 @@ Tests.test(function (t)
 	pn[Event.AT_TARGET] = 2
 	pn[Event.BUBBLING_PHASE] = 3
 	
-	function p (text, e) { return text + '-' + pn[e.eventPhase] + ':' + e.target.__tests_objectName }
+	function p (text, e) { return text + '-' + e.type + '-' + pn[e.eventPhase] + ':' + e.target.__tests_objectName }
 	
 	t.test('submit on form', function (t)
 	{
@@ -59,7 +59,7 @@ Tests.test(function (t)
 		}
 		
 		
-		t.like(order, ['captures-1:node', 'bubbles-3:node'], '“submit” captures and bubbles')
+		t.like(order, ['captures-submit-1:node', 'bubbles-submit-3:node'], '“submit” captures and bubbles')
 		t.eq(fired, true, '“submit” was fired on the node itself')
 	})
 	
@@ -77,7 +77,7 @@ Tests.test(function (t)
 		var fired = false
 		function check ()
 		{
-			t.like(order, ['captures-1:node'], '“load” captures only')
+			t.like(order, ['captures-load-1:node'], '“load” captures only')
 			t.eq(fired, true, '“load” was fired on the node itself')
 			
 			t.done()
@@ -120,7 +120,7 @@ Tests.test(function (t)
 			node.dispatchEvent(e)
 		}
 		
-		t.like(order, ['captures-1:node', 'bubbles-3:node'], '“keydown” captures and bubbles')
+		t.like(order, ['captures-keydown-1:node', 'bubbles-keydown-3:node'], '“keydown” captures and bubbles')
 		t.eq(fired, true, '“keydown” was fired on the node itself')
 	})
 	
@@ -152,8 +152,6 @@ Tests.test(function (t)
 	
 	t.test('scroll on window', function (t)
 	{
-		var type = 'scroll'
-		
 		var node = window
 		node.scrollTo(0, 0)
 		
@@ -163,19 +161,19 @@ Tests.test(function (t)
 		
 		var fired = false
 		function fire () { fired = true }
-		node['on' + type] = fire
+		node.onscroll = fire
 		
 		t.async(function (t)
 		{
-			node.addEventListener(type, captures, true)
-			node.addEventListener(type, bubbles, false)
+			node.addEventListener('scroll', captures, true)
+			node.addEventListener('scroll', bubbles, false)
 			
 			node.scrollTo(0, 1)
 			
 			t.async(function (t)
 			{
-				t.like(order, ['captures-1:document', 'bubbles-3:document'], '“' + type + '” captures and bubbles')
-				t.eq(fired, true, '“' + type + '” was fired on the node itself')
+				t.like(order, ['captures-scroll-1:document', 'bubbles-scroll-3:document'], '“scroll” captures and bubbles')
+				t.eq(fired, true, '“scroll” was fired on the node itself')
 				
 				// hide it here, otherwise scroll event called twice
 				node.scrollTo(0, 0)
