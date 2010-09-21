@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>Opera onscroll bugs (DSK-314166)</title>
+</head>
+<body>
+
+<script>
+;(function(){
+
+document.body.style.height = '10000px'
+var eventPhase
+window.addEventListener('scroll', function (e) { eventPhase = e.eventPhase }, true)
+window.scrollTo(0, 1)
+alert(eventPhase == Event.CAPTURING_PHASE ? 'passed' : 'failed')
+
+document.body.style.height = '10000px'
+var fired
+document.addEventListener('scroll', function (e) { fired = true }, true)
+window.scrollTo(0, 2)
+alert(fired ? 'passed' : 'failed')
+
+})();
+</script>
+
+</body>
+</html>
