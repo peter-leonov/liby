@@ -2,6 +2,18 @@
 
 var myName = 'Test', Super = Cascade
 
+function indexOf (a, v, i)
+{
+	var len = a.length,
+		i = +i || 0
+	i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
+
+	for (; i < len; i++)
+		if (i in a && a[i] === v)
+			return i
+	return -1
+}
+
 function Me (parent, name, conf, callback)
 {
 	Super.call(this)
@@ -95,7 +107,7 @@ var sup = Super.prototype,
 		if (typeof expect == 'number')
 			expect = [expect]
 		
-		if (expect !== undefined && expect.indexOf(results.length) == -1)
+		if (expect !== undefined && indexOf(expect, results.length) == -1)
 			this.fail(new Me.Label(expect + ' expected but ' + results.length + ' run'))
 		
 		var ok = true
