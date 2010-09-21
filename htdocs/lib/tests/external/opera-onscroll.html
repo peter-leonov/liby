@@ -13,13 +13,14 @@ document.body.style.height = '10000px'
 var eventPhase
 window.addEventListener('scroll', function (e) { eventPhase = e.eventPhase }, true)
 window.scrollTo(0, 1)
-alert(eventPhase == Event.CAPTURING_PHASE ? 'passed' : 'failed')
+setTimeout(function () { alert(eventPhase == Event.CAPTURING_PHASE ? 'passed' : 'failed') }, 0)
+
 
 document.body.style.height = '10000px'
 var fired
 document.addEventListener('scroll', function (e) { fired = true }, true)
 window.scrollTo(0, 2)
-alert(fired ? 'passed' : 'failed')
+setTimeout(function () { alert(fired ? 'passed' : 'failed') }, 0)
 
 })();
 </script>
