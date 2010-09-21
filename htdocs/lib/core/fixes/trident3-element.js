@@ -32,3 +32,16 @@ Me.prototype = new Element()
 window.HTMLInputElement = Me
 
 })();
+
+
+;(function(){
+
+if (window.HTMLFormElement)
+	return
+
+function Me () {}
+Me.prototype = new Element()
+
+window.HTMLFormElement = Me
+
+})();

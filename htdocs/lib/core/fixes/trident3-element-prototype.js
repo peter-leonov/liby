@@ -5,7 +5,8 @@ var doc = document, win = window, Element = win.Element
 var classByNodeName =
 {
 	'SCRIPT': HTMLScriptElement,
-	'INPUT': HTMLInputElement
+	'INPUT': HTMLInputElement,
+	'FORM': HTMLFormElement
 }
 
 function fixNodes (nodes)
