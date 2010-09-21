@@ -36,7 +36,7 @@ Tests.test(function (t)
 	{
 		var node = $('node-1')
 		node.__tests_objectName = 'node'
-		// node.__pmc__bindCatcher('submit')
+		
 		var fired = false
 		node.onsubmit = function (e) { fired = true; if (e) { e.preventDefault() } else {return false} }
 		
