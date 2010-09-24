@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>Delayed event target in MSIE 9 (bug 604658)</title>
+</head>
+<body>
+
+<button id="test-1">Click me!</button>
+<script>
+;(function(){
+
+var node = document.getElementById('test-1')
+function onclick (e)
+{
+	setTimeout(function () { alert(e.target === node ? 'passed' : 'failed') }, 0)
+}
+node.addEventListener('click', onclick, false)
+
+})();
+</script>
+
+</body>
+</html>
