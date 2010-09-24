@@ -139,9 +139,11 @@ Tests.test(function (t)
 		document.addEventListener('blur', captures, true)
 		document.addEventListener('blur', bubbles, false)
 		
-		var fired = false
-		function fire () { fired = true }
-		node.onfocus = fire
+		var focused = false
+		node.onfocus = function () { focused = true }
+		
+		var blured = false
+		node.onblur = function () { blured = true }
 		
 		node.blur()
 		node.focus()
@@ -150,7 +152,8 @@ Tests.test(function (t)
 		t.async(function (t)
 		{
 			t.like(order, ['captures-focus-1:node', 'captures-blur-1:node'], '“focus+blur” captures only')
-			t.ok(fired, '“focus” was fired on the node itself')
+			t.ok(focused, '“focus” was fired on the node itself')
+			t.ok(blured, '“blur” was fired on the node itself')
 		}, 10)
 	})
 	
