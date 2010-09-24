@@ -15,6 +15,7 @@
 <script id="node-2"></script>
 <input id="node-3"/>
 <input id="node-4"/>
+<input id="node-5"/>
 <div id="spacer" style="height:20000px"></div>
 
 <script type="text/javascript">
@@ -30,7 +31,7 @@ Tests.test(function (t)
 	pn[Event.AT_TARGET] = 2
 	pn[Event.BUBBLING_PHASE] = 3
 	
-	function p (text, e) { return text + '-' + e.type + '-' + pn[e.eventPhase] + ':' + e.target.__tests_objectName }
+	function p (text, e) { return text + '-' + e.type + '-' + pn[e.eventPhase] + ':' + (e.target.__tests_objectName || e.target) }
 	
 	t.test('submit on form', function (t)
 	{
@@ -126,10 +127,14 @@ Tests.test(function (t)
 	
 	window.focus()
 	
+	
+	var focusDonor = $('node-5')
+	focusDonor.focus()
 	t.test('focus+blur on input', function (t)
 	{
 		var node = $('node-4')
 		node.__tests_objectName = 'node'
+		focusDonor.__tests_objectName = 'donor'
 		
 		var order = []
 		function captures (e) { order.push(p('captures', e)) }
@@ -145,13 +150,12 @@ Tests.test(function (t)
 		var blured = false
 		node.onblur = function () { blured = true }
 		
-		node.blur()
 		node.focus()
-		node.blur()
+		focusDonor.focus()
 		
 		t.async(function (t)
 		{
-			t.like(order, ['captures-focus-1:node', 'captures-blur-1:node'], '“focus+blur” captures only')
+			t.like(order, ['captures-blur-1:donor', 'captures-focus-1:node', 'captures-blur-1:node', 'captures-focus-1:donor'], '“focus+blur” captures only')
 			t.ok(focused, '“focus” was fired on the node itself')
 			t.ok(blured, '“blur” was fired on the node itself')
 		}, 10)
