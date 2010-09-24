@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>dispatchEvent() and preventDefault() in MSIE 9 (bug 604681)</title>
+</head>
+<body>
+
+<div id="test-1"></div>
+<script>
+;(function(){
+
+var node = document.getElementById('test-1')
+
+function preventDefault (e) { e.preventDefault() }
+node.addEventListener('click', preventDefault, false)
+
+var e = document.createEvent('MouseEvent')
+e.initEvent('click', true, true)
+var result = node.dispatchEvent(e)
+alert(result === false ? 'passed' : 'falied: ' + result)
+
+})();
+</script>
+
+</body>
+</html>
