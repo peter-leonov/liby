@@ -186,9 +186,8 @@ var m, ua = navigator.userAgent
 Me.ua =
 	((m = /(MSIE) (\d+\.?\d*)/.exec(ua)) && m[0]) ||
 	((m = /(Firefox)\/(\d+\.\d+)/.exec(ua)) && m[1]+' '+m[2]) ||
+	((m = /(Chrome)\/(\d+\.\d+)/.exec(ua)) && m[1]+' '+m[2]) ||
 	((m = /(Opera)\/(\d+\.\d)/.exec(ua)) && m[1]+' '+m[2]) ||
 	((m = /Version\/(\d+\.\d) (Safari)\//.exec(ua)) && m[2]+' '+m[1])
-
-
 
 })();
