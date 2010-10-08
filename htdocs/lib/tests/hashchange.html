@@ -18,6 +18,23 @@ Tests.test(function (t)
 	{
 		t.isin('onhashchange', window, 'window')
 	})
+	
+	t.test('dispath on location.hash = …', function (t)
+	{
+		function onhashchange (e)
+		{
+			window.removeEventListener('hashchange', onhashchange, false)
+			
+			t.eq(e.type, 'hashchange', 'event.type')
+			
+			t.done()
+		}
+		
+		window.addEventListener('hashchange', onhashchange, false)
+		
+		setTimeout(function () { window.location.hash = Math.longRandom() }, 0)
+		t.wait(100)
+	})
 })
 </script>
 </body>
