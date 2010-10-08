@@ -2,6 +2,18 @@
 
 var myName = 'Cascade'
 
+function indexOf (a, v, i)
+{
+	var len = a.length,
+		i = +i || 0
+	i = (i < 0) ? (Math.ceil(i) + len) : Math.floor(i)
+
+	for (; i < len; i++)
+		if (i in a && a[i] === v)
+			return i
+	return -1
+}
+
 function Me (job)
 {
 	this.timers = {}
@@ -48,7 +60,7 @@ Me.prototype =
 			job.holder = this.holder
 		}
 		else
-			if (children.indexOf(job) >= 0)
+			if (indexOf(children, job) >= 0)
 				return null
 		
 		job.parent = this
