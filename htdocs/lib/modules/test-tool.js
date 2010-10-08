@@ -386,6 +386,18 @@ Me.prototype =
 					break
 				}
 				
+				if (val === window)
+				{
+					res = 'window'
+					break
+				}
+				
+				if (val === document)
+				{
+					res = 'document'
+					break
+				}
+				
 				if (val.constructor === Date)
 				{
 					res = val.toString() + ' (' + (+val) + ')'
