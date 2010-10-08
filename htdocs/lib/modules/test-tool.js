@@ -89,6 +89,22 @@ var prototype =
 			this.fail([a, new Label('is not in', 'label middle'), b], d)
 	},
 	
+	isin: function (a, b, d)
+	{
+		if (a in b)
+			this.pass([a, new Label('is in', 'label middle'), b], d)
+		else
+			this.fail([a, new Label('is not in', 'label middle'), b], d)
+	},
+	
+	isntin: function (a, b, d)
+	{
+		if (!(a in b))
+			this.pass([a, new Label('is not in', 'label middle'), b], d)
+		else
+			this.fail([a, new Label('is in', 'label middle'), b], d)
+	},
+	
 	like: function (a, b, d)
 	{
 		var same = false
