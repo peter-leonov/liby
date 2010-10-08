@@ -14,6 +14,8 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.parallel(1)
+	
 	t.test('signs of presence', function (t)
 	{
 		t.isin('onhashchange', window, 'window')
@@ -33,6 +35,29 @@ Tests.test(function (t)
 		window.addEventListener('hashchange', onhashchange, false)
 		
 		setTimeout(function () { window.location.hash = Math.longRandom() }, 0)
+		t.wait(100)
+	})
+	
+	t.test('dispath on history.back()', function (t)
+	{
+		// window.location.hash = Math.longRandom()
+		
+		function onhashchange (e)
+		{
+			window.removeEventListener('hashchange', onhashchange, false)
+			
+			t.eq(e.type, 'hashchange', 'event.type')
+			
+			t.done()
+		}
+		
+		function back (e)
+		{
+			window.addEventListener('hashchange', onhashchange, false)
+			history.back()
+		}
+		
+		setTimeout(back, 1)
 		t.wait(100)
 	})
 })
