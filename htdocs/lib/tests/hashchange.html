@@ -12,6 +12,30 @@
 </head>
 <body>
 <script type="text/javascript">
+
+;(function(){
+
+window.onhashchange = null
+
+var location = window.location,
+	lastHash = location.hash
+
+setInterval(function () { 
+	
+	var hash = location.hash
+	
+	if (hash == lastHash)
+		return
+	lastHash = hash
+	
+	var e = document.createEvent('Event')
+	e.initEvent('hashchange', true, false)
+	document.dispatchEvent(e)
+	
+}, 250)
+
+})();
+
 Tests.test(function (t)
 {
 	t.parallel(1)
