@@ -9,33 +9,10 @@
 	<!--[if lte IE 7]><script type="text/javascript" src="../core/fixes/trident3.js"></script><![endif]-->
 	<!--[if gte IE 8]><script type="text/javascript" src="../core/fixes/trident4.js"></script><![endif]-->
 	<script type="text/javascript" src="../core/prototype.js"></script>
+	<script type="text/javascript" src="../core/fixes/onhashchange.js"></script>
 </head>
 <body>
 <script type="text/javascript">
-
-;(function(){
-
-window.onhashchange = null
-
-var location = window.location,
-	lastHash = location.hash
-
-setInterval(function () { 
-	
-	var hash = location.hash
-	
-	if (hash == lastHash)
-		return
-	lastHash = hash
-	
-	var e = document.createEvent('Event')
-	e.initEvent('hashchange', true, false)
-	document.dispatchEvent(e)
-	
-}, 250)
-
-})();
-
 Tests.test(function (t)
 {
 	t.parallel(1)
