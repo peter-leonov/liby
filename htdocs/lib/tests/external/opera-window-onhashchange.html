@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>Opera window.onhashchange bug (DSK-315774@bugs.opera.com)</title>
+</head>
+<body>
+
+<script>
+;(function(){
+
+alert(('onhashchange' in window) ? 'pass' : 'fail')
+
+})();
+</script>
+
+</body>
+</html>
