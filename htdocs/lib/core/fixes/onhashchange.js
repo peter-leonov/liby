@@ -1,8 +1,6 @@
 if (!('onhashchange' in window)) //  || /Opera\/(9\.|10\.[0-5])/.test(navigator.userAgent)
 (function(){
 
-try { console.log('emulating window.onhashchange') } catch (ex) {}
-
 // mark browser as supporting one
 window.onhashchange = null
 
