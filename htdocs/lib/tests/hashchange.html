@@ -59,7 +59,7 @@ Tests.test(function (t)
 		window.addEventListener('hashchange', onhashchange, false)
 		
 		setTimeout(function () { window.location.hash = Math.longRandom() }, 0)
-		t.wait(100)
+		t.wait(1000)
 	})
 	
 	t.test('dispath on history.back()', function (t)
@@ -85,7 +85,7 @@ Tests.test(function (t)
 		}
 		
 		setTimeout(back, 1)
-		t.wait(100)
+		t.wait(1000)
 	})
 })
 </script>
