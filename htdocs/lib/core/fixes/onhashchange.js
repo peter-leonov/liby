@@ -1,4 +1,4 @@
-if (!('onhashchange' in window)) //  || /Opera\/(9\.|10\.[0-5])/.test(navigator.userAgent)
+if (!('onhashchange' in window) && !/Opera\/.+ Version\/1\d\.[6789]/.test(navigator.userAgent))
 (function(){
 
 // mark browser as supporting one
