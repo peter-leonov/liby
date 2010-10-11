@@ -20,6 +20,18 @@ function check ()
 	document.dispatchEvent(e)
 }
 
-setInterval(check, 250)
+var timer
+function restart (d)
+{
+	clearInterval(timer)
+	if (d < 0)
+		return
+	
+	timer = setInterval(check, d || 250)
+}
+
+restart(250)
+
+window.location.setHashchangeCheckInterval = restart
 
 })();
