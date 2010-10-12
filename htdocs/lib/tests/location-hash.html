@@ -17,27 +17,21 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	function Window () { this.location = {hash: ''} }
-	Window.prototype =
-	{
-		setHash: function (v)
-		{
-			this.location.hash = '#' + v
-			this.dispatchEventData('hashchange')
-		}
-	}
-	Window.mixIn(EventDriven)
-	
-	var win = new Window()
-	
-	var lh = new LocationHash()
-	lh.bind(win)
+	var lh = new LocationHash().bind(window)
 	
 	t.test('setting and getting', function (t)
 	{
-		lh.set('aaa')
-		t.eq(lh.get(), 'aaa', 'get')
-		t.eq(win.location.hash, 'aaa', 'location.hash')
+		lh.set('string')
+		t.eq(lh.get(), 'string', 'get')
+		t.eq(location.hash, '#string', 'location.hash')
+		
+		lh.set('# —  ')
+		t.eq(lh.get(), '#hash', 'get')
+		t.eq(location.hash, '###hash', 'location.hash')
+		
+		lh.set(123)
+		t.eq(lh.get(), '123', 'get')
+		t.eq(location.hash, '#123', 'location.hash')
 	})
 	
 })
