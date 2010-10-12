@@ -25,9 +25,10 @@ Tests.test(function (t)
 		t.eq(lh.get(), 'string', 'get')
 		t.eq(location.hash, '#string', 'location.hash')
 		
-		lh.set('# —  ')
-		t.eq(lh.get(), '#hash', 'get')
-		t.eq(location.hash, '###hash', 'location.hash')
+		var unicode = '# —   … ляляля 章亦春'
+		lh.set(unicode)
+		t.eq(lh.get(), unicode, 'get')
+		t.eq(location.hash, '#' + encodeURIComponent(unicode), 'location.hash')
 		
 		lh.set(123)
 		t.eq(lh.get(), '123', 'get')

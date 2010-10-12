@@ -17,12 +17,15 @@ Me.prototype =
 		var location = this.location = win.location
 		var hash = this.hash = location.hash
 		this.value = hash.substr(1)
+		
+		return this
 	},
 	
 	set: function (v)
 	{
-		this.location.hash = v
-		this.value = v
+		var str = '' + v
+		this.location.hash = encodeURIComponent(str)
+		this.value = str
 	},
 	
 	get: function ()
