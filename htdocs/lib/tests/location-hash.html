@@ -14,9 +14,19 @@
 	<script type="text/javascript" src="../modules/location-hash.js"></script>
 </head>
 <body>
+<a id="test-1" href="blablabla##%D0%BB%D1%8F%D0%BB%D1%8F%D0%BB%D1%8F%20">blablabla</a>
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	function $ (id) { return document.getElementById(id) }
+	
+	t.test('a.hash', function (t)
+	{
+		var node = $('test-1')
+		t.ok(node.hash, 'unicode')
+	})
+	
+	
 	var lh = new LocationHash().bind(window)
 	
 	t.test('setting and getting', function (t)
