@@ -88,6 +88,7 @@ Tests.test(function (t)
 			
 			function onchange ()
 			{
+				lh.removeEventListener('change', onchange, false)
 				t.eq(lh.get(), text, 'get')
 				t.done()
 			}
@@ -99,8 +100,21 @@ Tests.test(function (t)
 			t.wait(1000)
 		})
 		
+		t.test('no change event on set', function (t)
+		{
+			function onchange ()
+			{
+				lh.removeEventListener('change', onchange, false)
+				t.fail('change event')
+			}
+			
+			lh.addEventListener('change', onchange, false)
+			
+			setTimeout(function () { lh.set('123') }, 0)
+			
+			t.async(function () {}, 1000)
+		})
 	})
-	
 })
 </script>
 </body>

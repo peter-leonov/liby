@@ -33,7 +33,9 @@ Me.prototype =
 	
 	set: function (v)
 	{
-		this.location.hash = encodeURIComponent(v)
+		var location = this.location
+		location.hash = encodeURIComponent(v)
+		this.hash = location.hash
 	},
 	
 	get: function ()
