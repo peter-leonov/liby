@@ -17,6 +17,13 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	// enable intensive checking for 10 seconds
+	if (window.location.setHashchangeCheckInterval)
+	{
+		window.location.setHashchangeCheckInterval(1)
+		setTimeout(function () { window.location.setHashchangeCheckInterval() }, 10000)
+	}
+	
 	t.test('a.hash', function (t)
 	{
 		var a = document.createElement('a')
@@ -112,7 +119,7 @@ Tests.test(function (t)
 			
 			setTimeout(function () { lh.set('123') }, 0)
 			
-			t.async(function () {}, 1000)
+			t.async(function () {}, 100)
 		})
 	})
 })
