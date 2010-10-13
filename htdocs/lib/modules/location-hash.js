@@ -30,7 +30,10 @@ Me.prototype =
 	
 	get: function ()
 	{
-		return this.value
+		var hash = this.location.hash
+		var v = decodeURIComponent(hash.substr(1))
+		this.value = v
+		return v
 	}
 }
 
