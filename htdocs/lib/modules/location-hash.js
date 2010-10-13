@@ -14,7 +14,21 @@ Me.prototype =
 		var location = this.location = win.location
 		this.hash = location.hash
 		
+		var me = this
+		function onhashchange (e) { me.onhashchange() }
+		win.addEventListener('hashchange', onhashchange, false)
+		
 		return this
+	},
+	
+	onhashchange: function (e)
+	{
+		var hash = this.location.hash
+		if (hash === this.hash)
+			return
+		this.hash = hash
+		
+		this.dispatchEventData('change')
 	},
 	
 	set: function (v)
