@@ -15,33 +15,24 @@ Me.prototype =
 			win = window
 		
 		var location = this.location = win.location
-		var hash = this.hash = location.hash
-		this.value = hash.substr(1)
+		this.hash = location.hash
 		
 		return this
 	},
 	
 	set: function (v)
 	{
-		var str = '' + v
-		this.location.hash = encodeURIComponent(str)
-		this.value = str
+		this.location.hash = encodeURIComponent(v)
 	},
 	
 	get: function ()
 	{
-		var hash = this.location.hash
-		var v = decodeURIComponent(hash.substr(1))
-		this.value = v
-		return v
+		return decodeURIComponent(this.location.hash.substr(1))
 	},
 	
 	getUndecoded: function ()
 	{
-		var hash = this.location.hash
-		var v = hash.substr(1)
-		this.value = v
-		return v
+		return this.location.hash.substr(1)
 	}
 }
 
