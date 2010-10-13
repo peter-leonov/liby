@@ -34,10 +34,18 @@ Tests.test(function (t)
 		window.location.hash = a.hash = encodeURIComponent(text)
 		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
 		
-		if (/Firefox/.test(Tests.ua))
-			t.eq(window.location.hash, '#' + text, 'description')
-		else
-			t.eq(decodeURIComponent(window.location.hash), '#' + text, 'description')
+		t.test('needs decode', function (t)
+		{
+			function needsDecode ()
+			{
+				var a = document.createElement('a')
+				a.href = 'abc'
+				a.hash = encodeURIComponent('&%')
+				return a.hash !== '#&%'
+			}
+			
+			t.eq(/Firefox/.test(Tests.ua), !needsDecode(), 'needs')
+		})
 	})
 	
 	
