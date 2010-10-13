@@ -45,16 +45,8 @@ Me.prototype =
 	}
 }
 
-function needsDecode ()
-{
-	var a = document.createElement('a')
-	a.href = 'abc'
-	a.hash = encodeURIComponent('&%')
-	return a.hash !== '#&%'
-}
-
-if (!needsDecode())
-Me.prototype.get = Me.prototype.getUndecoded
+if (/Firefox\//.test(navigator.userAgent))
+	Me.prototype.get = Me.prototype.getUndecoded
 
 
 Me.mixIn(EventDriven)
