@@ -24,11 +24,13 @@ Tests.test(function (t)
 		// makes a.hash to work
 		a.href = 'abc'
 		
-		a.hash = '#123'
+		var leadingHash = /Opera/.test(Tests.ua) ? '#' : ''
+		
+		a.hash = leadingHash + '123'
 		t.eq(a.hash, '#123', 'get')
 		
 		var text = '#%20& '
-		window.location.hash = a.hash = '#' + encodeURIComponent(text)
+		window.location.hash = a.hash = leadingHash + encodeURIComponent(text)
 		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
 		
 		t.test('needs decode', function (t)
