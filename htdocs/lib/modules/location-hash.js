@@ -2,10 +2,7 @@
 
 var myName = 'LocationHash'
 
-function Me ()
-{
-	
-}
+function Me () {}
 
 Me.prototype =
 {
