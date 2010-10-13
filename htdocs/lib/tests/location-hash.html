@@ -27,9 +27,6 @@ Tests.test(function (t)
 		a.hash = '123'
 		t.eq(a.hash, '#123', 'get')
 		
-		a.hash = '123'
-		t.eq(a.hash, '#123', 'get')
-		
 		var text = '#%20& '
 		window.location.hash = a.hash = encodeURIComponent(text)
 		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
