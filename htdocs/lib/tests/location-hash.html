@@ -68,6 +68,16 @@ Tests.test(function (t)
 		t.eq(lh.get(), '123', 'get')
 	})
 	
+	t.test('external changing', function (t)
+	{
+		t.test('broken URI encoding', function (t)
+		{
+			var text = 'abc%def%ghi'
+			window.location.hash = text
+			t.eq(lh.get(), text, 'get %')
+		})
+	})
+	
 })
 </script>
 </body>
