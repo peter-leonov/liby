@@ -34,8 +34,28 @@ Me.prototype =
 		var v = decodeURIComponent(hash.substr(1))
 		this.value = v
 		return v
+	},
+	
+	getUndecoded: function ()
+	{
+		var hash = this.location.hash
+		var v = hash.substr(1)
+		this.value = v
+		return v
 	}
 }
+
+function needsDecode ()
+{
+	var a = document.createElement('a')
+	a.href = 'abc'
+	a.hash = encodeURIComponent('&%')
+	return a.hash !== '#&%'
+}
+
+if (!needsDecode())
+Me.prototype.get = Me.prototype.getUndecoded
+
 
 Me.mixIn(EventDriven)
 
