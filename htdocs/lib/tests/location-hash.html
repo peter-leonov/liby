@@ -14,16 +14,30 @@
 	<script type="text/javascript" src="../modules/location-hash.js"></script>
 </head>
 <body>
-<a id="test-1" href="blablabla##%D0%BB%D1%8F%D0%BB%D1%8F%D0%BB%D1%8F%20">blablabla</a>
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
-	
 	t.test('a.hash', function (t)
 	{
-		var node = $('test-1')
-		t.ok(node.hash, 'unicode')
+		var a = document.createElement('a')
+		
+		// makes a.hash to work
+		a.href = 'abc'
+		
+		a.hash = '123'
+		t.eq(a.hash, '#123', 'get')
+		
+		a.hash = '123'
+		t.eq(a.hash, '#123', 'get')
+		
+		var text = '#%20& '
+		window.location.hash = a.hash = encodeURIComponent(text)
+		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
+		
+		if (/Firefox/.test(Tests.ua))
+			t.eq(window.location.hash, '#' + text, 'description')
+		else
+			t.eq(decodeURIComponent(window.location.hash), '#' + text, 'description')
 	})
 	
 	
