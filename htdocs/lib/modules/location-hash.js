@@ -24,7 +24,19 @@ Me.prototype =
 	
 	get: function ()
 	{
-		return decodeURIComponent(this.location.hash.substr(1))
+		var hash = this.location.hash.substr(1)
+		
+		var v
+		try
+		{
+			v = decodeURIComponent(hash)
+		}
+		catch (ex)
+		{
+			v = decodeURIComponent(hash.replace(/%/g, '%25'))
+		}
+		
+		return v
 	},
 	
 	getUndecoded: function ()
