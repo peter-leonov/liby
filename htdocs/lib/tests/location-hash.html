@@ -70,12 +70,32 @@ Tests.test(function (t)
 	
 	t.test('external changing', function (t)
 	{
+		t.parallel(1)
+		
 		t.test('broken URI encoding', function (t)
 		{
 			var text = 'abc%def%ghi'
 			window.location.hash = text
 			t.eq(lh.get(), text, 'get %')
 		})
+		
+		t.test('change event', function (t)
+		{
+			var text = 'abc'
+			
+			function onchange ()
+			{
+				t.eq(lh.get(), text, 'get')
+				t.done()
+			}
+			
+			lh.addEventListener('change', onchange, false)
+			
+			setTimeout(function () { window.location.hash = text }, 0)
+			
+			t.wait(1000)
+		})
+		
 	})
 	
 })
