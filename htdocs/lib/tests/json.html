@@ -51,13 +51,17 @@ Tests.test(function (t)
 		{
 			var set =
 			[
+				'()', ';', ':', '/', '.', '>', 'x+x', 'Ж',
+				
 				'"abc""', '"\\"', '\\""', '"\n"', '"\n()"', '"\\n\\0"',
 				
 				'+1',
 				'123.123.123',
 				'5e', '777e+', '33e0.4', '2e++1',
 				
-				'{a:b}', 'a:1', '[a:123]', 'falsee', 'null.', '(false)'
+				'{a:b}', 'a:1', '[a:123]', 'falsee', 'null.', '(false)',
+				
+				'aaa', 'aaa.bbb', 'xxx()', 'n()'
 			]
 			
 			for (var i = 0; i < set.length; i++)
