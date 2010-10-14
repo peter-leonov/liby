@@ -13,7 +13,7 @@ Tests.test(function (t)
 	// {abc: 123, abc: [1, "two", 0.3e-0]}
 	function isSafe (str)
 	{
-		str = str.replace(/"(\\["\\\/bfnrtu]|[^\\"\n\r])*"|[+-]?\d+/g, '')
+		str = str.replace(/"(?:\\["\\\/bfnrtu]|[^\\"\n\r])*"|-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][\+\-]?\d+)?/g, '')
 		
 		return /^[\{\}\[\]\:\s]*$/.test(str)
 	}
@@ -49,7 +49,7 @@ Tests.test(function (t)
 			[
 				'"abc""', '"\\"', '\\""', '"\n"', '"\n()"', '"\\n\\0"',
 				
-				'0123', '+1', '5e', '777e+',
+				'0123', '+1', '5e', '777e+', '33e0.4', '2e++1',
 				
 				'{a:b}'
 			]
