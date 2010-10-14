@@ -15,7 +15,7 @@ Tests.test(function (t)
 	{
 		str = str.replace(/"(?:\\["\\\/bfnrtu]|[^\\"\n\r])*"|-?\d+(?:\.\d+)?(?:[eE][\+\-]?\d+)?|[\{\,][a-zA-Z]:|true|false|null/g, '')
 		
-		return /^[\{\}\[\]\:\s]*$/.test(str)
+		return /^[\{\}\[\]\s\,]*$/.test(str)
 	}
 	
 	t.test('parse', function (t)
@@ -35,7 +35,9 @@ Tests.test(function (t)
 				'0123', '123.123 123.123',
 				
 				
-				'{a:1}', ',a:2', 'true', 'false', 'null'
+				'{a:1}', ',a:2', 'true', 'false', 'null',
+				
+				'[1,2,3]'
 			]
 			
 			for (var i = 0; i < set.length; i++)
