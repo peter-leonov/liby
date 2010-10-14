@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Some tests for JSON</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	// {abc: 123, abc: [1, "two", 0.3e-0]}
+	function isSafe (str)
+	{
+		str = str.replace(/"(\\["\\\/bfnrtu]|[^\\"\n\r])*"/g, '')
+		
+		return /^[\{\}\[\]\:\s]*$/.test(str)
+	}
+	
+	t.test('parse', function (t)
+	{
+		t.test('safe', function (t)
+		{
+			var set =
+			[
+				'""', '"abc"', '"window.reload()"', '"\'"', '"\\"()"'
+				
+			]
+			
+			for (var i = 0; i < set.length; i++)
+			{
+				var str = set[i]
+				t.ok(isSafe(str), str)
+			}
+		})
+		
+		t.test('unsafe', function (t)
+		{
+			var set =
+			[
+				'"abc""', '"\\"', '\\""', '"\n"', '"\n()"', '"\\n\\0"'
+				
+			]
+			
+			for (var i = 0; i < set.length; i++)
+			{
+				var str = set[i]
+				t.no(isSafe(str), str)
+			}
+		})
+	})
+})
+</script>
+</body>
+</html>
