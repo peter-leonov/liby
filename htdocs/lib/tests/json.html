@@ -13,9 +13,11 @@ Tests.test(function (t)
 	// {abc: 123, abc: [1, "two", 0.3e-0]}
 	function isSafe (str)
 	{
-		str = str.replace(/"(?:\\["\\\/bfnrtu]|[^\\"\n\r])*"|-?\d+(?:\.\d+)?(?:[eE][\+\-]?\d+)?|[\{\,][a-zA-Z][a-zA-Z0-9]*:|true|false|null/g, '')
+		str = str.replace(/"(?:\\["\\\/bfnrtu]|[^\\"\n\r])*"/g, '') // strings
+		         .replace(/\s+/g, '') // spaces
+		         .replace(/-?\d+(?:\.\d+)?(?:[eE][\+\-]?\d+)?|[\{\,][a-zA-Z][a-zA-Z0-9]*:|true|false|null/g, '') // digits, props and builtins
 		
-		return /^[\{\}\[\]\s\,]*$/.test(str)
+		return /^[\{\}\[\]\,]*$/.test(str)
 	}
 	
 	t.test('parse', function (t)
@@ -32,10 +34,10 @@ Tests.test(function (t)
 				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '1000', '-1', '-0',
 				'1234567890.1234567890', '0.0', '-95.0',
 				'1e0', '2e+1', '3e-22222', '0E0', '4E-123', '990E+0',
-				'0123', '123.123 123.123',
+				'0123',
 				
 				
-				'{a:1}', '{x5xx7:555}', ',abc:2', 'true', 'false', 'null',
+				'{a:1}', '{x5xx7:555}', '{aaa\n:\n777}', ',abc:2', 'true', 'false', 'null', 
 				
 				'[1,2,3]'
 			]
@@ -56,12 +58,14 @@ Tests.test(function (t)
 				'"abc""', '"\\"', '\\""', '"\n"', '"\n()"', '"\\n\\0"',
 				
 				'+1',
-				'123.123.123',
+				'123.123.123', '123.123 123.123',
 				'5e', '777e+', '33e0.4', '2e++1',
 				
 				'{a:b}', 'a:1', '[a:123]', 'falsee', 'null.', '(false)',
 				
-				'aaa', 'aaa.bbb', 'xxx()', 'n()'
+				'aaa', 'aaa.bbb', 'xxx()', 'n()',
+				
+				'5.5aaa:'
 			]
 			
 			for (var i = 0; i < set.length; i++)
