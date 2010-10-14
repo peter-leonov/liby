@@ -33,5 +33,6 @@ function restart (d)
 window.location.setHashchangeCheckInterval = restart
 
 restart()
+document.addEventListener('mouseup', function () { setTimeout(function () { check() }, 0) }, true)
 
 })();
