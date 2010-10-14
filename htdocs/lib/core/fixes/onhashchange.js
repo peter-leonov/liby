@@ -27,11 +27,11 @@ function restart (d)
 	if (d < 0)
 		return
 	
-	timer = setInterval(check, d || 250)
+	timer = setInterval(check, d || 500)
 }
 
-restart(250)
-
 window.location.setHashchangeCheckInterval = restart
+
+restart()
 
 })();
