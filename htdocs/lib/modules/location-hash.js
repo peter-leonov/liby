@@ -38,6 +38,13 @@ Me.prototype =
 		this.hash = location.hash
 	},
 	
+	setRaw: function (v)
+	{
+		var location = this.location
+		location.hash = v
+		this.hash = location.hash
+	},
+	
 	get: function ()
 	{
 		var hash = this.location.hash.substr(1)
@@ -55,14 +62,14 @@ Me.prototype =
 		return v
 	},
 	
-	getUndecoded: function ()
+	getRaw: function ()
 	{
 		return this.location.hash.substr(1)
 	}
 }
 
 if (/Firefox\//.test(navigator.userAgent))
-	Me.prototype.get = Me.prototype.getUndecoded
+	Me.prototype.get = Me.prototype.getRaw
 
 
 Me.mixIn(EventDriven)
