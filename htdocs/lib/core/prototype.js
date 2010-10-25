@@ -42,6 +42,15 @@ add
 	Fp,
 	{
 		mixIn: function (module) { return extend(this.prototype, module.prototype) },
+		inherit: function (s)
+		{
+			var proto = this.prototype
+			for (var k in s)
+			{
+				var v = s[k]
+				
+			}
+		},
 		extend: function (s) { for (var k in s) this[k] = s[k]; return this },
 		bind: function (inv, args) { var me = this; return function () { me.apply(inv, args || arguments) } }
 	}
