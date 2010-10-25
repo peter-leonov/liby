@@ -42,6 +42,27 @@ Tests.test(function (t)
 		
 		var b = new B()
 		t.eq(b.foo(), 'A.foo:B.foo', 'description')
+	})
+	
+	t.test('Function#inheritLive()', function (t)
+	{
+		function A () {}
+		A.prototype =
+		{
+			foo: function () { return 'A.foo' },
+			bar: function () { return 'A.bar' },
+			baz: function () { return 'A.baz' }
+		}
+		
+		function B () {}
+		B.prototype = new A()
+		B.inheritLive
+		({
+			foo: function () { return this.superFoo() + ':B.foo' }
+		})
+		
+		var b = new B()
+		t.eq(b.foo(), 'A.foo:B.foo', 'description')
 		
 		A.prototype.foo = function () { return 'A.foo2' }
 		t.eq(b.foo(), 'A.foo2:B.foo', 'description')

@@ -45,6 +45,26 @@ add
 		mixIn: function (module) { return extend(this.prototype, module.prototype) },
 		inherit: function (s)
 		{
+			var proto = this.prototype
+			
+			for (var k in s)
+			{
+				var v = s[k]
+				
+				if (typeof v != 'function')
+				{
+					proto[k] = v
+					continue
+				}
+				
+				// save super property “abc” as “superAbc”
+				proto['super' + k.capitalize()] = proto[k]
+				
+				proto[k] = v
+			}
+		},
+		inheritLive: function (s)
+		{
 			// save original prototype
 			var original = this.prototype
 			
