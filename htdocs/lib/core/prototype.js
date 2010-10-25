@@ -45,7 +45,17 @@ add
 		mixIn: function (module) { return extend(this.prototype, module.prototype) },
 		inherit: function (s)
 		{
-			var proto = this.prototype
+			// save original prototype
+			var original = this.prototype
+			
+			// make a live-clone of the original
+			function Proxy () {}
+			Proxy.prototype = original
+			var proto = new Proxy()
+			
+			// set the live-clone as our prototype
+			this.prototype = proto
+			
 			for (var k in s)
 			{
 				var v = s[k]
@@ -56,8 +66,8 @@ add
 					continue
 				}
 				
-				// save super property “abc” as superAbc
-				proto['super' + k.capitalize()] = proto[k]
+				// save super property “abc” as “superAbc”
+				proto['super' + k.capitalize()] = (function (k) { return function () { return original[k].apply(this, arguments) } })(k)
 				
 				proto[k] = v
 			}
