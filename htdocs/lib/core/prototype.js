@@ -50,6 +50,16 @@ add
 			{
 				var v = s[k]
 				
+				if (typeof v != 'function')
+				{
+					proto[k] = v
+					continue
+				}
+				
+				// save super property “abc” as superAbc
+				proto['super' + k.capitalize()] = proto[k]
+				
+				proto[k] = v
 			}
 		},
 		extend: function (s) { for (var k in s) this[k] = s[k]; return this },

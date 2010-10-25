@@ -25,7 +25,26 @@ Tests.test(function (t)
 	
 	t.test('Function#inherit()', function (t)
 	{
+		function A () {}
+		A.prototype =
+		{
+			foo: function () { return 'A.foo' },
+			bar: function () { return 'A.bar' },
+			baz: function () { return 'A.baz' }
+		}
 		
+		function B () {}
+		B.prototype = new A()
+		B.inherit
+		({
+			foo: function () { return this.superFoo() + ':B.foo' }
+		})
+		
+		var b = new B()
+		t.eq(b.foo(), 'A.foo:B.foo', 'description')
+		
+		A.prototype.foo = function () { return 'A.foo2' }
+		t.eq(b.foo(), 'A.foo2:B.foo', 'description')
 	})
 })
 </script>
