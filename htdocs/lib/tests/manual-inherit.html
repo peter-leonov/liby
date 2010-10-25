@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for plain in-code inheritance</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('live', function (t)
+	{
+		function A () {}
+		A.prototype =
+		{
+			foo: function () { return 'A.foo' },
+			bar: function () { return 'A.bar' },
+			baz: function () { return 'A.baz' }
+		}
+		
+		
+		function B () {}
+		B.prototype = new A()
+		B.prototype.foo = function () { return A.prototype.foo.apply(this) + ':B.foo' }
+		B.prototype.bar = function () { return A.prototype.bar.apply(this) + ':B.bar' }
+		
+		var b = new B()
+		t.eq(b.foo(), 'A.foo:B.foo', 'inherited')
+		t.eq(b.bar(), 'A.bar:B.bar', 'inherited')
+		
+		A.prototype.foo = function () { return 'A.foo2' }
+		t.eq(b.foo(), 'A.foo2:B.foo', 'inherited and changed')
+		
+		
+		function C () {}
+		C.prototype = new B()
+		C.prototype.foo = function () { return B.prototype.foo.apply(this) + ':C.foo' }
+		C.prototype.bar = function () { return B.prototype.bar.apply(this) + ':C.bar' }
+		
+		var c = new C()
+		t.eq(c.foo(), 'A.foo2:B.foo:C.foo', 'tripple inherited')
+		t.eq(c.bar(), 'A.bar:B.bar:C.bar', 'tripple inherited')
+	})
+})
+</script>
+</body>
+</html>
