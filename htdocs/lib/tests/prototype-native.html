@@ -60,6 +60,17 @@ Tests.test(function (t)
 		t.notinstance(b, A, 'replaced')
 	})
 	
+	t.test('constructor', function (t)
+	{
+		function A () {}
+		
+		var a = new A()
+		t.eq(a.constructor, A, 'a.constructor')
+		
+		A.prototype = {}
+		var a = new A()
+		t.ne(a.constructor, A, 'a.constructor')
+	})
 })
 </script>
 </body>
