@@ -1,6 +1,6 @@
 #!/bin/sh
 
-NAME="lib-0.3"
+NAME="lib"
 
 PROJ_ROOT="/www/$NAME"
 NGINX="/usr/local/nginx/sbin/nginx"
