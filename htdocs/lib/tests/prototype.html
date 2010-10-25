@@ -37,11 +37,13 @@ Tests.test(function (t)
 		B.prototype = new A()
 		B.inherit
 		({
-			foo: function () { return this.superFoo() + ':B.foo' }
+			foo: function () { return this.superFoo() + ':B.foo' },
+			bar: function () { return this.superBar() + ':B.bar' }
 		})
 		
 		var b = new B()
-		t.eq(b.foo(), 'A.foo:B.foo', 'description')
+		t.eq(b.foo(), 'A.foo:B.foo', 'inherited')
+		t.eq(b.bar(), 'A.bar:B.bar', 'inherited')
 	})
 	
 	t.test('Function#inheritLive()', function (t)
@@ -54,18 +56,21 @@ Tests.test(function (t)
 			baz: function () { return 'A.baz' }
 		}
 		
+		
 		function B () {}
 		B.prototype = new A()
 		B.inheritLive
 		({
-			foo: function () { return this.superFoo() + ':B.foo' }
+			foo: function () { return this.superFoo() + ':B.foo' },
+			bar: function () { return this.superBar() + ':B.bar' }
 		})
 		
 		var b = new B()
-		t.eq(b.foo(), 'A.foo:B.foo', 'description')
+		t.eq(b.foo(), 'A.foo:B.foo', 'inherited')
+		t.eq(b.bar(), 'A.bar:B.bar', 'inherited')
 		
 		A.prototype.foo = function () { return 'A.foo2' }
-		t.eq(b.foo(), 'A.foo2:B.foo', 'description')
+		t.eq(b.foo(), 'A.foo2:B.foo', 'inherited and changed')
 	})
 })
 </script>
