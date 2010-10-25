@@ -33,7 +33,8 @@ add
 (
 	Sp,
 	{
-		trim: function () { return this.replace(/^\s+|\s+$/g, '') }
+		trim: function () { return this.replace(/^\s+|\s+$/g, '') },
+		capitalize: function () { return this.charAt(0).toUpperCase() + this.substr(1) }
 	}
 )
 

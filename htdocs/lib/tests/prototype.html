@@ -12,6 +12,17 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.test('String#capitalize()', function (t)
+	{
+		t.eq(''.capitalize(), '', 'empty string')
+		t.eq('123'.capitalize(), '123', '123')
+		
+		t.eq('abc'.capitalize(), 'Abc', 'abc')
+		t.eq('Abc'.capitalize(), 'Abc', 'Abc')
+		t.eq('эюя'.capitalize(), 'Эюя', 'эюя')
+		t.eq('Эюя'.capitalize(), 'Эюя', 'Эюя')
+	})
+	
 	t.test('Function#inherit()', function (t)
 	{
 		
