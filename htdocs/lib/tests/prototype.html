@@ -33,17 +33,31 @@ Tests.test(function (t)
 			baz: function () { return 'A.baz' }
 		}
 		
+		
 		function B () {}
 		B.prototype = new A()
 		B.inherit
 		({
-			foo: function () { return this.superFoo() + ':B.foo' },
-			bar: function () { return this.superBar() + ':B.bar' }
-		})
+			foo: function () { return this.aFoo() + ':B.foo' },
+			bar: function () { return this.aBar() + ':B.bar' }
+		}, 'a')
 		
 		var b = new B()
 		t.eq(b.foo(), 'A.foo:B.foo', 'inherited')
 		t.eq(b.bar(), 'A.bar:B.bar', 'inherited')
+		
+		
+		function C () {}
+		C.prototype = new B()
+		C.inherit
+		({
+			foo: function () { return this.bFoo() + ':C.foo' },
+			bar: function () { return this.bBar() + ':C.bar' }
+		}, 'b')
+		
+		var c = new C()
+		t.eq(c.foo(), 'A.foo:B.foo:C.foo', 'inherited')
+		t.eq(c.bar(), 'A.bar:B.bar:C.bar', 'inherited')
 	})
 	
 	t.test('Function#inheritLive()', function (t)
@@ -61,9 +75,9 @@ Tests.test(function (t)
 		B.prototype = new A()
 		B.inheritLive
 		({
-			foo: function () { return this.superFoo() + ':B.foo' },
-			bar: function () { return this.superBar() + ':B.bar' }
-		})
+			foo: function () { return this.aFoo() + ':B.foo' },
+			bar: function () { return this.aBar() + ':B.bar' }
+		}, 'a')
 		
 		var b = new B()
 		t.eq(b.foo(), 'A.foo:B.foo', 'inherited')
@@ -71,6 +85,17 @@ Tests.test(function (t)
 		
 		A.prototype.foo = function () { return 'A.foo2' }
 		t.eq(b.foo(), 'A.foo2:B.foo', 'inherited and changed')
+		
+		
+		function C () {}
+		C.prototype = new B()
+		C.inheritLive
+		({
+			bar: function () { return this.bBar() + ':C.bar' }
+		}, 'b')
+		
+		var c = new C()
+		t.eq(c.bar(), 'A.bar:B.bar:C.bar', 'tripple inherited')
 	})
 })
 </script>

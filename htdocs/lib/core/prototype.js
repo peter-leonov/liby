@@ -43,8 +43,11 @@ add
 	Fp,
 	{
 		mixIn: function (module) { return extend(this.prototype, module.prototype) },
-		inherit: function (s)
+		inherit: function (s, prefix)
 		{
+			if (!prefix)
+				prefix = 'super'
+			
 			var proto = this.prototype
 			
 			for (var k in s)
@@ -58,13 +61,16 @@ add
 				}
 				
 				// save super property “abc” as “superAbc”
-				proto['super' + k.capitalize()] = proto[k]
+				proto[prefix + k.capitalize()] = proto[k]
 				
 				proto[k] = v
 			}
 		},
-		inheritLive: function (s)
+		inheritLive: function (s, prefix)
 		{
+			if (!prefix)
+				prefix = 'super'
+				
 			// save original prototype
 			var original = this.prototype
 			
@@ -87,7 +93,7 @@ add
 				}
 				
 				// save super property “abc” as “superAbc”
-				proto['super' + k.capitalize()] = (function (k) { return function () { return original[k].apply(this, arguments) } })(k)
+				proto[prefix + k.capitalize()] = (function (k) { return function () { return original[k].apply(this, arguments) } })(k)
 				
 				proto[k] = v
 			}
