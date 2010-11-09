@@ -12,8 +12,13 @@ document.addEventListener
 		
 		var ne = document.createEvent('Event')
 		ne.initEvent('keypress', true, true)
-		for (var k in e)
-			ne[k] = e[k]
+		
+		// copying valueable data
+		ne.altKey = e.altKey
+		ne.ctrlKey = e.ctrlKey
+		ne.metaKey = e.metaKey
+		ne.charCode = e.charCode
+		ne.keyCode = e.keyCode
 		
 		if (status[e.keyCode])
 			e.stopPropagation()
