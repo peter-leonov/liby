@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>MSIE RegExp object lastIndex test (bug 620217)</title>
+</head>
+<body>
+
+<script>
+var rex = /^/
+rex.exec('')
+alert(rex.lastIndex == 0 ? 'passed' : 'failed')
+</script>
+
+</body>
+</html>
