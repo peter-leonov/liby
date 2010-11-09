@@ -1,4 +1,4 @@
-if (/WebKit\//.test(navigator.userAgent))
+if (/WebKit\/|MSIE [678]\./.test(navigator.userAgent))
 (function(){
 
 var status = {}
@@ -31,7 +31,7 @@ document.addEventListener
 	'keyup',
 	function (e)
 	{
-		delete status[e.keyCode]
+		status[e.keyCode] = false
 	},
 	true
 )
