@@ -1,4 +1,4 @@
-if (/WebKit\/|MSIE [678]\./.test(navigator.userAgent))
+if (/WebKit\/|MSIE [6789]\./.test(navigator.userAgent))
 (function(){
 
 var status = {}
