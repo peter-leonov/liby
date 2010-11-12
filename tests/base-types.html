@@ -14,22 +14,22 @@ Tests.test(function (t)
 	{
 		t.test('simple', function (t)
 		{
-			t.eqo(['b', 'a', 'c'].sort(), ['a', 'b', 'c'], 'array of strings')
-			t.eqo([1, 2, 11].sort(), [1, 11, 2], 'array of numbers')
-			t.eqo([1, '2', 'x', 11, 'b'].sort(), [1, 11, '2', 'b', 'x'], 'array of strings and numbers')
-			t.eqo([[2],[1],[1,2]].sort(), [[1],[1,2],[2]], 'array of arrays')
+			t.like(['b', 'a', 'c'].sort(), ['a', 'b', 'c'], 'array of strings')
+			t.like([1, 2, 11].sort(), [1, 11, 2], 'array of numbers')
+			t.like([1, '2', 'x', 11, 'b'].sort(), [1, 11, '2', 'b', 'x'], 'array of strings and numbers')
+			t.like([[2],[1],[1,2]].sort(), [[1],[1,2],[2]], 'array of arrays')
 		})
 		
 		t.test('unicode', function (t)
 		{
-			t.eqo(['б', 'и', 'я', 'а', 'е', 'в', 'й', 'ё'].sort(), ['а', 'б', 'в', 'е', 'и', 'й', 'я', 'ё'], 'unicode binary')
-			t.eqo(['б', 'и', 'я', 'а', 'е', 'в', 'й', 'ё'].sort(function (a, b) { return a.localeCompare(b) }), ['а', 'б', 'в', 'е', 'ё', 'и', 'й', 'я'], 'unicode localeCompare')
+			t.like(['б', 'и', 'я', 'а', 'е', 'в', 'й', 'ё'].sort(), ['а', 'б', 'в', 'е', 'и', 'й', 'я', 'ё'], 'unicode binary')
+			t.like(['б', 'и', 'я', 'а', 'е', 'в', 'й', 'ё'].sort(function (a, b) { return a.localeCompare(b) }), ['а', 'б', 'в', 'е', 'ё', 'и', 'й', 'я'], 'unicode localeCompare')
 		})
 		
 		t.test('complicated', function (t)
 		{
-			t.eqo(['a', 'c', 'b', 'n', 'm', 'd', 11, 9].sort(), [11, 9, 'a', 'b', 'c', 'd', 'm', 'n'])
-			t.eqo(['a', 'c', 'b', 'n', 'm', 'd'].sort(function (a, b) { return a > b }), ['a', 'b', 'c', 'd', 'm', 'n'])
+			t.like(['a', 'c', 'b', 'n', 'm', 'd', 11, 9].sort(), [11, 9, 'a', 'b', 'c', 'd', 'm', 'n'])
+			t.like(['a', 'c', 'b', 'n', 'm', 'd'].sort(function (a, b) { return a > b }), ['a', 'b', 'c', 'd', 'm', 'n'])
 		})
 		
 	})
