@@ -43,6 +43,5 @@ Me.prototype =
 }
 
 self[myName] = Me
-Me.types = <!--#include virtual="motion-types.js" -->
 
 })();
