@@ -54,8 +54,6 @@
 	<script src="../../modules/event-recorder.js"></script>
 	<script src="../../widgets/recorder.js"></script>
 	-->
-	
-	<script src="../tests.common.js"></script>
 </head>
 <body>
 
@@ -94,39 +92,35 @@
 <div id="recorder-cursor"></div>
 
 <script type="text/javascript">
-Tests.test(function (t)
+function onload ()
 {
-	t.test('recorded mouse', function (t)
+	var node = document.getElementById('test-node-1')
+	
+	var is = new InfiniteScroller().bind(node, undefined, 420)
+	new InfiniteScroller().bind(document.getElementById('test-node-2'))
+	
+	var player = new EventPlayer()
+	player.bind()
+	
+	var cursor = document.getElementById('recorder-cursor')
+	player.onstep = function (n, a)
 	{
-		var node = document.getElementById('test-node-1')
-		
-		var is = new InfiniteScroller().bind(node, undefined, 420)
-		new InfiniteScroller().bind(document.getElementById('test-node-2'))
-		
-		t.ok(is instanceof InfiniteScroller, 'instance InfiniteScroller')
-		
-		var player = new EventPlayer()
-		player.bind()
-		
-		var cursor = document.getElementById('recorder-cursor')
-		player.onstep = function (n, a)
+		var p
+		if ((p = a.p))
 		{
-			var p
-			if ((p = a.p))
-			{
-				var style = cursor.style
-				style.left = p[0] + 'px'
-				style.top = p[1] + 'px'
-			}
+			var style = cursor.style
+			style.left = p[0] + 'px'
+			style.top = p[1] + 'px'
 		}
-		
-		// scrollerScript lais in infinite-scroller-script.json
-		player.load(scrollerScript)
-		player.play()
-		
-		// new Recorder().bind()
-	})
-})
+	}
+	
+	// scrollerScript lais in infinite-scroller-script.json
+	player.load(scrollerScript)
+	player.play()
+	
+	// new Recorder().bind()
+
+}
 </script>
 </body>
 </html>
