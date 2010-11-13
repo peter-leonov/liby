@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Custom event tests</title>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+
+<button id="test-node-1">test node 1</button>
+<button id="test-node-2">test node 2</button>
+<button id="test-node-3">test node 3</button>
+<button id="test-node-4">test node 4</button>
+<button id="test-node-5">test node 5</button>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('IE only tests', function (t)
+	{
+		if (!/IE [678]/.test(navigator.userAgent))
+			return t.ok('this is ' + navigator.userAgent)
+		
+		t.test('transport event', function (t)
+		{
+			var node = document.getElementById('test-node-2'), calls = 0
+			function handler (e) { calls++ }
+			
+			var type = document.__pmc__eventTransport
+			t.log('transport event is "' + document.__pmc__eventTransport + '"')
+			
+			document.attachEvent('on' + type, handler)
+			node.fireEvent('on' + type, document.createEventObject())
+			t.eq(calls, 1, type + ' event is bubling')
+			
+			node.focus()
+			t.eq(calls, 1, 'focus() does not affects ' + type + ' event')
+			
+			document.detachEvent('on' + type, handler)
+			node.fireEvent('on' + type, document.createEventObject())
+			t.eq(calls, 1, type + ' detaching works')
+			
+			document.attachEvent('on' + type, function () { event.returnValue = false })
+			t.ok(node.fireEvent('on' + type, document.createEventObject()) === false, type + ' returnValue works')
+			
+		})
+	})
+	
+	t.test('two custom with handler for the first one only', function (t)
+	{
+		var node = document.getElementById('test-node-3'), calls = 0
+		function handler (e) { calls++ }
+		
+		var e = document.createEvent('UIEvents'), e2 = document.createEvent('UIEvents'),
+			type = 'hide', type2 = 'show'
+		t.log('custom event is "' + type + '"')
+		
+		e.initEvent(type, true, true)
+		node.addEventListener(type, handler, false)
+		node.dispatchEvent(e)
+		e2.initEvent(type2, true, true)
+		node.dispatchEvent(e2)
+		t.eq(calls, 1, 'custom handler called once')
+		t.eq(e2.type, type2, 'the event preserves its type')
+	})
+	
+	function orderTest (t, node, type)
+	{
+		var order = []
+		
+		var e = document.createEvent('UIEvents')
+		e.initEvent(type, true, true)
+		
+		function a () { order.push(9) }
+		
+		// so many are to avoid false positives with hashing algorithm
+		node.addEventListener(type, a, false)
+		node.addEventListener(type, function () { order.push(1) }, false)
+		node.addEventListener(type, function () { order.push(2) }, false)
+		node.addEventListener(type, function () { order.push(3) }, false)
+		node.addEventListener(type, function () { order.push(4) }, false)
+		node.addEventListener(type, function () { order.push(5) }, false)
+		node.addEventListener(type, function () { order.push(6) }, false)
+		node.addEventListener(type, function () { order.push(7) }, false)
+		node.addEventListener(type, function () { order.push(8) }, false)
+		node.addEventListener(type, a, false)
+		
+		node.dispatchEvent(e)
+		
+		t.eq(order.length, 9, '8 total calls')
+		t.eq(order.join(','), '1,2,3,4,5,6,7,8,9', 'proper order')
+	}
+	
+	t.test('calls order for native', function (t)
+	{
+		orderTest(t, document.getElementById('test-node-4'), 'click')
+		orderTest(t, document.getElementById('test-node-4'), 'mousedown')
+	})
+	
+	t.test('calls order for custom', function (t)
+	{
+		orderTest(t, document.getElementById('test-node-5'), 'became-visible')
+		orderTest(t, document.getElementById('test-node-5'), 'hide')
+	})
+})
+</script>
+</body>
+</html>

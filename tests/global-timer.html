@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for GlobalTimer</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/modules/global-timer.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var Me = GlobalTimer
+	t.test('initial state', function (t)
+	{
+		t.eq(Me.timer, null, 'timer == null')
+		t.like(Me.timers, {}, 'timers == {}')
+		t.ne(Me.fps, undefined, 'fps is present')
+	})
+	
+	t.test('proper timer ids', function (t)
+	{
+		function callback1 (e) {}
+		function callback2 (e) {}
+		function callback3 (e) {}
+		
+		t.eq(Me.timer, null, 'timer is null')
+		t.eq(Me.total, 0, 'total == 0')
+		var timer1 = Me.add(callback1)
+		t.eq(timer1, 1)
+		t.ne(Me.timer, null, 'timer is not null')
+		t.eq(Me.total, 1, 'total == 1')
+		
+		var timer2 = Me.add(callback2)
+		t.eq(timer2, 2)
+		t.ne(Me.timer, null, 'timer is not null')
+		t.eq(Me.total, 2, 'total == 2')
+		
+		var timer3 = Me.add(callback3)
+		t.eq(timer3, 3)
+		t.ne(Me.timer, null, 'timer is not null')
+		t.eq(Me.total, 3, 'total == 3')
+		
+		t.eq(Object.keys(Me.timers).length, 3, 'timers count is 3')
+		t.like(Object.keys(Me.timers).sort(), ['1', '2', '3'], 'all 3 times are in')
+		
+		t.eq(Me.remove(timer2), callback2, 'remove(2) returns proper callback')
+		t.ne(Me.timer, null, 'timer is not null')
+		t.eq(Me.total, 2, 'total == 2')
+		
+		t.eq(Object.keys(Me.timers).length, 2, 'timers count is 2')
+		t.like(Object.keys(Me.timers).sort(), ['1', '3'], 'all 2 times are in')
+		
+		t.eq(Me.remove(timer1), callback1, 'remove(1) returns proper callback')
+		t.ne(Me.timer, null, 'timer is not null')
+		t.eq(Me.total, 1, 'total == 1')
+		t.eq(Me.remove(timer3), callback3, 'remove(3) returns proper callback')
+		t.eq(Me.timer, null, 'timer null again')
+		t.eq(Me.total, 0, 'total == 0 again')
+	})
+	
+	t.test('remove non-existent timer', function (t)
+	{
+		t.eq(Me.remove(555), undefined, 'remove(555)')
+	})
+	
+	
+	t.test('call order', function (t)
+	{
+		var order = []
+		var timer1 = Me.add(function () { order.push(1) })
+		var timer2 = Me.add(function () { order.push(2) })
+		var timer3 = Me.add(function () { order.push(3), Me.remove(timer4); })
+		var timer4 = Me.add(function () { order.push(4) })
+		
+		// waiting for t.waitFor()
+		function done (e)
+		{
+			t.test('same callback', function (t)
+			{
+				var count = 0
+				function callback () { count++ }
+				Me.add(callback)
+				Me.add(callback)
+				Me.remove(Me.add(callback))
+				Me.add(function () { Me.clear() })
+				
+				t.async(function () { t.eq(count, 2) }, 500)
+			})
+		}
+		
+		var count = 0
+		function callback5 ()
+		{
+			order.push(5)
+			count++
+			if (count >= 2)
+				Me.remove(timer3)
+			if (count >= 3)
+				Me.remove(timer1)
+			if (count >= 5)
+			{
+				Me.clear()
+				done()
+			}
+		}
+		var timer5 = Me.add(callback5)
+		
+		Me.remove(timer2)
+		
+		t.async(function () { t.like(order, [1, 3, 5, 1, 3, 5, 1, 5, 5, 5]) }, 1000)
+	})
+})
+</script>
+</body>
+</html>

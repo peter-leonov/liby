@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Reorder visibility tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+
+<ul id="test-1-0"></ul>
+<ul id="test-1-1"></ul>
+<ul id="test-1-2"></ul>
+<ul id="test-2" style="visibility: hidden"></ul>
+<ul id="test-3" style="display: none"></ul>
+<ul id="test-4" style="width: 100px; height: 100px; overflow: hidden"></ul>
+<ul id="test-5" style="position: absolute"></ul>
+<ul id="test-6"></ul>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var globalTime = new Date()
+	
+	function fill (root)
+	{
+		var nodes = []
+		// t.time('fill')
+		for (var i = 0; i < 3000; i++)
+			root.appendChild(nodes[i] = document.createElement('li')).appendChild(document.createTextNode(i))
+		// t.timeEnd('fill')
+		return nodes
+	}
+	
+	function job (root, nodes)
+	{
+		for (var i = 0, il = nodes.length; i < il; i++)
+			root.appendChild(nodes[i])
+	}
+	
+	
+	
+	t.test('normal', function (t)
+	{
+		var root = document.getElementById('test-1-0'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		t.time()
+		job(root, nodes)
+		t.async(function () { t.timeEnd() })
+	})
+	
+	t.test('style.visibility = hidden', function (t)
+	{
+		var root = document.getElementById('test-1-1'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		
+		t.time()
+		root.style.visibility = 'hidden'
+		job(root, nodes)
+		root.style.visibility = 'visible'
+		t.async(function () { t.timeEnd() })
+	})
+	
+	t.test('style.display = none', function (t)
+	{
+		var root = document.getElementById('test-1-2'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		t.time()
+		root.style.display = 'none'
+		job(root, nodes)
+		root.style.display = 'block'
+		t.async(function () { t.timeEnd() })
+	})
+	
+	
+	t.test('visibility: hidden', function (t)
+	{
+		var root = document.getElementById('test-2'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		t.time()
+		job(root, nodes)
+		t.async(function () { t.timeEnd() })
+	})
+	
+	
+	t.test('display: none', function (t)
+	{
+		var root = document.getElementById('test-3'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		t.time()
+		job(root, nodes)
+		t.async(function () { t.timeEnd() })
+	})
+	
+	
+	t.test('overflow: hidden', function (t)
+	{
+		var root = document.getElementById('test-4'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		t.time()
+		job(root, nodes)
+		t.async(function () { t.timeEnd() })
+	})
+	
+	
+	t.test('position: absolute', function (t)
+	{
+		var root = document.getElementById('test-5'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		t.time()
+		job(root, nodes)
+		t.async(function () { t.timeEnd() })
+	})
+	
+	
+	t.test('removed-n-appended', function (t)
+	{
+		var root = document.getElementById('test-5'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		var parent = root.parentNode
+		t.time()
+		parent.removeChild(root)
+		job(root, nodes)
+		parent.appendChild(root)
+		t.async(function () { t.timeEnd() })
+	})
+	
+	
+	t.test('not appended', function (t)
+	{
+		var root = document.createElement('ul'),
+			nodes = fill(root)
+		
+		// warming
+		job(root, nodes)
+		
+		t.time()
+		job(root, nodes)
+		t.async(function () { t.timeEnd() })
+	})
+})
+</script>
+</body>
+</html>

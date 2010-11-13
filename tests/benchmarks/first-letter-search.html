@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Best way to search smt. by letter</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script src="../../src/modules/regexp-escape.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function bakeWords (e)
+	{
+		var words = [],
+			letters = 'qwertyuiopasdfghjklzxcvbnm1234567890йцукенгшщзхъфывапролджэёячсмитьбю'.split(''),
+			suffixes = ['', 'a', 'aa', 'aaa', 'aaaa', 'aaaaa', 'aaaaaa', 'aaaaaaa', 'aaaaaaaa', 'aaaaaaaaa']
+			ll = letters.length
+		
+		for (var i = 0; i < 1000; i++)
+			words[i] = letters[i % ll] + letters[(i + 10) % ll] + letters[(i + 20) % ll] + letters[(i + 25) % ll] + suffixes[i % 10]
+		
+		return words
+	}
+	
+	function run (t, words, letters, count)
+	{
+		letters = letters.split('')
+		
+		
+		var rex = new RegExp('^[' + RegExp.escape(letters.join('')) + ']')
+		
+		var foundRex
+		t.time('regexp')
+		for (var i = 0; i < count; i++)
+		{
+			foundRex = 0
+			for (var j = 0, jl = words.length; j < jl; j++)
+				if (rex.test(words[j]))
+					foundRex++
+		}
+		t.timeEnd('regexp')
+		
+		
+		
+		var hash = {}
+		for (var i = 0; i < letters.length; i++)
+			hash[letters[i]] = true
+		
+		var foundHash
+		t.time('charAt() + hash')
+		for (var i = 0; i < count; i++)
+		{
+			foundHash = 0
+			for (var j = 0, jl = words.length; j < jl; j++)
+				if (hash[words[j].charAt(0)])
+					foundHash++
+			
+		}
+		t.timeEnd('charAt() + hash')
+		
+		
+		
+		var cases = []
+		for (var i = 0; i < letters.length; i++)
+			cases[i] = "letter == '" + letters[i] + "'"
+		
+		var foundIf = eval
+		(
+		"(function (t, words)\n" +
+		"{\n" +
+			"var foundIf\n" +
+			"t.time('charAt() + if')\n" +
+			"for (var i = 0; i < count; i++)\n" +
+			"{\n" +
+				"foundIf = 0\n" +
+				"for (var j = 0, jl = words.length; j < jl; j++)\n" +
+				"{\n" +
+					"var letter = words[j].charAt(0)\n" +
+					"if (" + cases.join(' || ') + ")\n" +
+						"foundIf++\n" +
+				"}\n" +
+			"}\n" +
+			"t.timeEnd('charAt() + if')\n" +
+			"return foundIf\n" +
+		"})\n"
+		)(t, words)
+		
+		
+		
+		var cases = []
+		for (var i = 0; i < letters.length; i++)
+			cases[i] = "case '" + letters[i] + "':"
+		
+		var foundSwitch = eval
+		(
+		"(function (t, words)\n" +
+		"{\n" +
+			"var foundSwitch\n" +
+			"t.time('charAt() + switch')\n" +
+			"for (var i = 0; i < count; i++)\n" +
+			"{\n" +
+				"foundSwitch = 0\n" +
+				"for (var j = 0, jl = words.length; j < jl; j++)\n" +
+				"{\n" +
+					"var letter = words[j].charAt(0)\n" +
+					"switch (letter)\n" +
+					"{\n" +
+						cases.join(' ') + "\n" +
+						"foundSwitch++\n" +
+					"}\n" +
+				"}\n" +
+			"}\n" +
+			"t.timeEnd('charAt() + switch')\n" +
+			"return foundSwitch\n" +
+		"})\n"
+		)(t, words)
+		
+		t.like([foundRex, foundHash, foundIf, foundSwitch], [foundHash, foundIf, foundSwitch, foundRex], 'check founds')
+	}
+	
+	var words = bakeWords(),
+		count = 100
+	
+	t.test('one letter', function (t)
+	{
+		run(t, words, 'x', count)
+	})
+	
+	t.test('three letters', function (t)
+	{
+		run(t, words, 'h8ж', count)
+	})
+	
+	t.test('nine letters', function (t)
+	{
+		run(t, words, 'hqf189жшы', count)
+	})
+	
+	t.test('sixty nine letters', function (t)
+	{
+		run(t, words, 'qwertyuiopasdfghjklzxcvbnm1234567890йцукенгшщзхъфывапролджэёячсмитьбю', count)
+	})
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Gridder benchmark</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script src="../../src/modules/gridder.js" type="text/javascript"></script>
+	<script src="../../src/core/prototype.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('reflow', function (t)
+	{
+		var boxes = [], count = 10000, w = 200, h = 200
+		for (var i = 0; i < count; i++)
+			boxes[i] = {x: i * 100, y: i * 100, w: w, h: h}
+		
+		t.log(count + ' boxes ' + w + 'x' + h)
+		
+		var gridder = new Gridder()
+		gridder.maxSteps = count * 10
+		
+		// fast loading as almost nothing to calculate
+		gridder.setStep(10000, 10000)
+		gridder.setBoxes(boxes)
+		
+		t.time('setStep 10000x10000')
+		gridder.setStep(10000, 10000)
+		t.timeEnd('setStep 10000x10000')
+		t.log('cells count ' + Object.keysCount(gridder.grid))
+		
+		t.time('setStep 1000x1000')
+		gridder.setStep(1000, 1000)
+		t.timeEnd('setStep 1000x1000')
+		t.log('cells count ' + Object.keysCount(gridder.grid))
+		
+		t.time('setStep 100x100')
+		gridder.setStep(100, 100)
+		t.timeEnd('setStep 100x100')
+		t.log('cells count ' + Object.keysCount(gridder.grid))
+	})
+})
+</script>
+</body>
+</html>

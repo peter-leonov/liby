@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>MVC tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="../src/modules/mvc.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('create()', function (t)
+	{
+		var A = MVC.create('A')
+		
+		t.eq(A.className, 'A', 'className')
+		t.instance(new A(), MVC, 'className')
+	})
+	
+	t.test('setup()', function (t)
+	{
+		function A ()
+		{
+			this.abc = 123
+		}
+		MVC.setup(A, 'A')
+		
+		t.eq(A.className, 'A', 'className')
+		t.instance(new A(), MVC, 'className')
+	})
+	
+	t.test('create(): model & view & controller', function (t)
+	{
+		var A = MVC.create('A')
+		
+		var a = new A()
+		
+		t.instance(a.view, MVC.View)
+		t.instance(a.controller, MVC.Controller)
+		t.instance(a.model, MVC.Model)
+		t.notinstance(a.view, MVC.Model)
+		
+		t.instance(a.view, A.View)
+		t.instance(a.controller, A.Controller)
+		t.instance(a.model, A.Model)
+	})
+	
+	t.test('setup(): model & view & controller', function (t)
+	{
+		function A () { this.constructor = A }
+		MVC.setup(A, 'A')
+		
+		var a = new A()
+		t.eq(a.view, undefined, 'view')
+		t.eq(a.controller, undefined, 'controller')
+		t.eq(a.model, undefined, 'model')
+		
+		a.__mvc_interlink()
+		t.instance(a.view, MVC.View)
+		t.instance(a.controller, MVC.Controller)
+		t.instance(a.model, MVC.Model)
+		t.notinstance(a.view, MVC.Model)
+		
+		t.instance(a.view, A.View)
+		t.instance(a.controller, A.Controller)
+		t.instance(a.model, A.Model)
+	})
+	
+	t.test('inheritance', function (t)
+	{
+		var A = MVC.create('A')
+		
+		t.type(A, 'function')
+		t.instance(new A(), MVC)
+		
+		t.type(A.View, 'function')
+		t.instance(new A.View(), MVC.View)
+		
+		t.type(A.Controller, 'function')
+		t.instance(new A.Controller(), MVC.Controller)
+		
+		t.type(A.Model, 'function')
+		t.instance(new A.Model(), MVC.Model)
+	})
+	
+	t.test('even more inheritance', function (t)
+	{
+		var A = MVC.create('A')
+		var B = MVC.create('B', A)
+		
+		var b = new B()
+		
+		t.instance(b, MVC)
+		t.instance(b, A)
+		
+		t.instance(b.controller, MVC.Controller)
+		t.instance(b.controller, A.Controller)
+		
+		t.instance(b.view, MVC.View)
+		t.instance(b.view, A.View)
+		
+		t.instance(b.controller, MVC.Controller)
+		t.instance(b.controller, A.Controller)
+	})
+})
+</script>
+</body>
+</html>

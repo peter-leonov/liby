@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Spidermonkey JIT bug test</title>
+</head>
+<body>
+
+<script type="text/javascript">
+;(function(){
+function calculate (arr)
+{
+	var hash = {}
+	hash[0.1] = {}
+	
+	// this loop produce corrupted data that can be checked
+	for (var i = 0; i < arr.length; i++)
+		if (hash[arr[i]])
+			hash[arr[i]].arr = arr[i]
+	
+	return hash
+}
+
+// change 5 to 0.5 (int to float) and the bug is gone
+calculate([ 0.1, 5 ])
+var res = calculate([ 0.1, 0.1 ])
+
+var ok = true
+for (var k in res)
+	if (!res[k].arr)
+	{
+		ok = false
+		// document.write('<span style="color:red">failed</span>')
+		// throw 'failed'
+	}
+
+
+// semi-equal or much different
+alert(ok ? 'passed' : 'failed: jit fails on float point numbers')
+})();
+</script>
+</body>
+</html>

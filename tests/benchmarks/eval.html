@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Eval benchmark</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var small = 'if (!a) a = 321;',
+		medium = 'if(!a)a=321;while(a--){var b="abc".test(/zx(c?.*)?/i)+1+a*10+"asasas";if(a)break;else if(b)log(b);a++}'
+	
+	String.prototype.repeat = function (count)
+	{
+		var code = []
+		for (var i = 0; i < count; i++)
+			code[i] = this
+		return code
+	}
+	
+	var count = 10000
+	
+	
+	t.test('simple', function (t)
+	{
+		var code = ('1').repeat(count).join(';')
+		t.time('1+1+…+1')
+		eval('if (false) { ' + code + ' }')
+		t.timeEnd('1+1+…+1')
+		
+	})
+	
+	t.test('functions', function (t)
+	{
+		var code = ('function yyy () { }').repeat(count).join('\n')
+		t.time('empty functions')
+		eval('if (false) { ' + code + ' }')
+		t.timeEnd('empty functions')
+		
+		var code = small.repeat(count).join('\n')
+		t.time('small')
+		eval('if (false) { ' + code + ' }')
+		t.timeEnd('small')
+		
+		var code = medium.repeat(count).join('\n')
+		t.time('medium')
+		eval('if (false) { ' + code + ' }')
+		t.timeEnd('medium')
+		
+		var code = medium.repeat(count).join('\n')
+		t.time('medium in function')
+		eval('function xxx () { ' + code + ' }')
+		t.timeEnd('medium in function')
+	})
+	
+	t.test('comments', function (t)
+	{
+		var code = ('// var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
+		t.time('// comment')
+		eval('if (false) { \n' + code + '\n }')
+		t.timeEnd('// comment')
+		
+		var code = ('var code = []; for (var i = 0; i < count; i++) code[i] = str; return code.join("\\n")').repeat(count).join('\n')
+		t.time('/* comment */')
+		eval('if (false) { /*' + code + '*/ }')
+		t.timeEnd('/* comment */')
+	})
+})
+</script>
+</body>
+</html>

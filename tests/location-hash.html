@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for LocationHash</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/core/fixes/onhashchange.js"></script>
+	<script type="text/javascript" src="../src/modules/event-driven.js"></script>
+	<script type="text/javascript" src="../src/modules/location-hash.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	// enable intensive checking for 10 seconds
+	if (window.location.setHashchangeCheckInterval)
+	{
+		window.location.setHashchangeCheckInterval(1)
+		setTimeout(function () { window.location.setHashchangeCheckInterval() }, 10000)
+	}
+	
+	t.test('a.hash', function (t)
+	{
+		var a = document.createElement('a')
+		
+		// makes a.hash to work
+		a.href = 'abc'
+		
+		var leadingHash = /Opera/.test(Tests.ua) ? '#' : ''
+		
+		a.hash = leadingHash + '123'
+		t.eq(a.hash, '#123', 'get')
+		
+		var text = '#%20& '
+		window.location.hash = a.hash = leadingHash + encodeURIComponent(text)
+		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
+		
+		t.test('needs decode', function (t)
+		{
+			function needsDecode ()
+			{
+				var a = document.createElement('a')
+				a.href = 'abc'
+				a.hash = encodeURIComponent('&%')
+				return a.hash !== '#&%'
+			}
+			
+			t.eq(/Firefox/.test(Tests.ua), !needsDecode(), 'needs')
+		})
+	})
+	
+	
+	var lh = new LocationHash().bind(window)
+	
+	t.test('setting and getting', function (t)
+	{
+		lh.set('string')
+		t.eq(lh.get(), 'string', 'get')
+		t.eq(location.hash, '#string', 'location.hash')
+		
+		var text = '#%20& '
+		lh.set(text)
+		t.eq(lh.get(), text, 'get')
+		
+		var text = '# —   … ляляля 章亦春'
+		lh.set(text)
+		t.eq(lh.get(), text, 'get')
+		
+		lh.set(123)
+		t.eq(lh.get(), '123', 'get')
+	})
+	
+	t.test('external changing', function (t)
+	{
+		t.parallel(1)
+		
+		t.test('broken URI encoding', function (t)
+		{
+			var text = 'abc%def%ghi'
+			window.location.hash = ''
+			window.location.hash = text
+			if (window.location.hash == '')
+				return t.log('setting hash with broken escape sequences is ignored')
+			t.eq(lh.get(), text, 'get %')
+		})
+		
+		t.test('change event', function (t)
+		{
+			var text = 'abc'
+			
+			function onchange ()
+			{
+				lh.removeEventListener('change', onchange, false)
+				t.eq(lh.get(), text, 'get')
+				t.done()
+			}
+			
+			lh.addEventListener('change', onchange, false)
+			
+			setTimeout(function () { window.location.hash = text }, 0)
+			
+			t.wait(1000)
+		})
+		
+		t.test('no change event on set', function (t)
+		{
+			function onchange ()
+			{
+				lh.removeEventListener('change', onchange, false)
+				t.fail('change event')
+			}
+			
+			lh.addEventListener('change', onchange, false)
+			
+			setTimeout(function () { lh.set('123') }, 0)
+			
+			t.async(function () {}, 100)
+		})
+	})
+})
+</script>
+</body>
+</html>

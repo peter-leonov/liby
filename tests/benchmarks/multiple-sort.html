@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Multiple sort tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var messed =
+	[
+		{x: 2, y: 0, z: 0},
+		{x: 2, y: 0, z: 1},
+		{x: 2, y: 0, z: 2},
+		{x: 2, y: 1, z: 0},
+		{x: 2, y: 1, z: 1},
+		{x: 2, y: 1, z: 2},
+		{x: 2, y: 2, z: 0},
+		{x: 2, y: 2, z: 1},
+		{x: 2, y: 2, z: 2},
+		
+		{x: 0, y: 0, z: 0},
+		{x: 0, y: 0, z: 1},
+		{x: 0, y: 0, z: 2},
+		{x: 0, y: 1, z: 0},
+		{x: 0, y: 1, z: 1},
+		{x: 0, y: 1, z: 2},
+		{x: 0, y: 2, z: 0},
+		{x: 0, y: 2, z: 1},
+		{x: 0, y: 2, z: 2},
+		
+		{x: 1, y: 0, z: 0},
+		{x: 1, y: 0, z: 1},
+		{x: 1, y: 0, z: 2},
+		{x: 1, y: 1, z: 0},
+		{x: 1, y: 1, z: 1},
+		{x: 1, y: 1, z: 2},
+		{x: 1, y: 2, z: 0},
+		{x: 1, y: 2, z: 1},
+		{x: 1, y: 2, z: 2}
+	]
+	
+	var sorted =
+	[
+		{x: 0, y: 0, z: 0},
+		{x: 0, y: 0, z: 1},
+		{x: 0, y: 0, z: 2},
+		{x: 0, y: 1, z: 0},
+		{x: 0, y: 1, z: 1},
+		{x: 0, y: 1, z: 2},
+		{x: 0, y: 2, z: 0},
+		{x: 0, y: 2, z: 1},
+		{x: 0, y: 2, z: 2},
+		
+		{x: 1, y: 0, z: 0},
+		{x: 1, y: 0, z: 1},
+		{x: 1, y: 0, z: 2},
+		{x: 1, y: 1, z: 0},
+		{x: 1, y: 1, z: 1},
+		{x: 1, y: 1, z: 2},
+		{x: 1, y: 2, z: 0},
+		{x: 1, y: 2, z: 1},
+		{x: 1, y: 2, z: 2},
+		
+		{x: 2, y: 0, z: 0},
+		{x: 2, y: 0, z: 1},
+		{x: 2, y: 0, z: 2},
+		{x: 2, y: 1, z: 0},
+		{x: 2, y: 1, z: 1},
+		{x: 2, y: 1, z: 2},
+		{x: 2, y: 2, z: 0},
+		{x: 2, y: 2, z: 1},
+		{x: 2, y: 2, z: 2}
+	]
+	
+	var backup = messed.slice()
+	
+	function byX (a, b) { return a.x - b.x }
+	function byY (a, b) { return a.y - b.y }
+	function byZ (a, b) { return a.z - b.z }
+	function single (a, b) { return byX(a, b) || byY(a, b) || byZ(a, b) }
+	function combined (a, b) { return a.x - b.x || a.y - b.y || a.z - b.z }
+	
+	var temp = messed.slice(),
+		speed = t.speed(function () { temp.sort(single) }),
+		count = Math.round(speed / 5)
+	
+	t.log('runs ' + count + ' times')
+	
+	var m = messed.slice()
+	t.time('multiple')
+	for (var i = 0; i < count; i++)
+	{
+		m.sort(byZ)
+		m.sort(byY)
+		m.sort(byX)
+	}
+	var mtime = t.timeEnd('multiple')
+	t.like(m, sorted, 'multiple sorts as expected')
+	
+	
+	
+	var s = messed.slice()
+	t.time('single')
+	for (var i = 0; i < count; i++)
+	{
+		s.sort(single)
+	}
+	var stime = t.timeEnd('single')
+	t.like(s, sorted, 'single sorts as expected')
+	
+	
+	
+	var c = messed.slice()
+	t.time('combined')
+	for (var i = 0; i < count; i++)
+	{
+		c.sort(combined)
+	}
+	var ctime = t.timeEnd('combined')
+	t.like(c, sorted, 'combined sorts as expected')
+	
+	
+	t.like(s, m, 'single and multiple sorts acts the same')
+	t.like(s, c, 'single and combined sorts acts the same')
+	t.unlike(m, messed, 'doublecheck: multiple is not messed')
+	t.unlike(s, messed, 'doublecheck: single is not messed')
+	t.gt(mtime, stime, 'multiple takes more time then single')
+	t.gt(mtime, stime, 'single takes more time then combined')
+	
+	t.like(messed, backup, 'messed left untouched')
+	t.like(messed, backup, 'messed not equals to sorted')
+})
+</script>
+</body>
+</html>

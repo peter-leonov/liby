@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>interpolate tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="../src/modules/interpolate.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var ABC = {a:'A',b:'B',c:'C'},
+		DEF = {a:'D',b:'E',c:'F'},
+		XYZ = {a:'X',b:'Y',c:'Z'}
+	
+	t.eq('1${a}2${b}3${c}4'.interpolate(ABC), '1A2B3C4', 'order in 1${a}2${b}3${c}4 (ABC)')
+	t.eq('1${a}2${b}3${c}4'.interpolate(XYZ), '1X2Y3Z4', 'order in 1${a}2${b}3${c}4 (XYZ)')
+	t.eq('${a}1${b}2${c}3'.interpolate(ABC), 'A1B2C3', 'order in ${a}1${b}2${c}3')
+	t.eq('${a}1${b}2${c}'.interpolate(ABC), 'A1B2C', 'order in ${a}1${b}2${c}')
+	t.eq('${a}${a}1${b}${b}2${c}${c}'.interpolate(ABC), 'AA1BB2CC', 'order in ${a}${a}1${b}${b}2${c}${c}')
+	
+	t.eq('${a}'.interpolate(ABC), 'A', 'alone')
+	t.eq('${a}'.interpolate(DEF), 'D', 'twice')
+	t.eq('${a}'.interpolate(XYZ), 'X', 'tripple')
+	t.eq(''.interpolate(ABC), '', 'empty')
+	t.eq('no js'.interpolate(ABC), 'no js', 'no js')
+	t.eq('1${a}'.interpolate(ABC), '1A', 'at the end')
+	t.eq('${a}1'.interpolate(ABC), 'A1', 'at the begin')
+	t.eq('${a/*{"a{\\\'a}\\"}a"b}c*/} wor$ld ${n/*{{{"\'"}}}n\'n\'*/}'.interpolate({a:111,n:222}), '111 wor$ld 222', 'nested curly braces')
+	t.eq('${a} text ${a} ${a} text ${b} ${b}'.interpolate({a:2222, b: 333}), '2222 text 2222 2222 text 333 333', 'multiple enties')
+	t.eq('${a} text ${a} ${a} text ${b} ${b} text'.interpolate({a:2222, b: 333}), '2222 text 2222 2222 text 333 333 text', 'multiple enties II')
+	
+	// test for parseOutJS
+	var str = '"hello" \\${x} ${a{"a{\\\'a}\\"}a"b}c} wor$ld ${n{{{"\'"}}}n\'n\'}'
+	log('parseOutJS() for "' + str + '"')
+	var blocks = String.parseOutJS(str)
+	t.eq(blocks[0], '"hello" ${x} ', 'blocks[0]')
+	t.eq(blocks[1], 'a{"a{\'a}"}a"b}c', 'blocks[1]')
+	t.eq(blocks[2], ' wor$ld ', 'blocks[2]')
+	t.eq(blocks[3], 'n{{{"\'"}}}n\'n\'', 'blocks[3]')
+	t.eq(blocks[4], '', 'blocks[4]')
+	t.eq(blocks.length, 5, 'blocks.length === 5')
+	
+	var cache = String.prototype.interpolate.cache
+	t.eq(typeof cache, 'object', 'interpolate.cache is an object')
+	
+	
+	t.time('interpolate plain')
+	for (var i = 0; i < 10000; i++)
+		'text\\${a}'.interpolate(ABC)
+	var plainTime = t.timeEnd('interpolate plain')
+	
+	t.time('interpolate js')
+	for (var i = 0; i < 10000; i++)
+		'text${a}'.interpolate(ABC)
+	var jsTime = t.timeEnd('interpolate js')
+	t.ok(jsTime > plainTime, 'js > plain')
+})
+</script>
+</body>
+</html>

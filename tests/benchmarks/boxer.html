@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>benchmarks for Boxer</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../../src/modules/element.js"></script>
+	<script type="text/javascript" src="../../src/modules/boxer.js"></script>
+	
+	<style type="text/css">
+	.container { position: absolute; left: 0px; top: 0px; width: 10px; height: 10px; }
+	.container div { position: absolute; left: 10px; top: 10px; width: 10px; height: 10px; }
+	</style>
+</head>
+<body>
+
+<div id="holder"></div>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function $ (id) { return document.getElementById(id) }
+	
+	function bakeNodes (count)
+	{
+		var root = document.createElement('div')
+		root.className = 'container'
+		
+		var nodes = []
+		for (var i = 0; i < count; i++)
+			nodes[i] = root.appendChild(document.createElement('div'))
+		
+		return {root:root, nodes:nodes}
+	}
+	
+	
+	function job (t, count)
+	{
+		t.time('whole')
+		
+		var set = bakeNodes(count)
+		$('holder').empty()
+		$('holder').appendChild(set.root)
+		
+		t.time('nodesToBoxes()')
+		Boxer.nodesToBoxes(set.nodes, set.root)
+		t.timeEnd('nodesToBoxes()')
+		
+		
+		var set = bakeNodes(count)
+		$('holder').empty()
+		$('holder').appendChild(set.root)
+		
+		t.time('nodesToBoxes() with width and height')
+		Boxer.nodesToBoxes(set.nodes, set.root, 100, 100)
+		t.timeEnd('nodesToBoxes() with width and height')
+		
+		
+		var set = bakeNodes(count)
+		$('holder').empty()
+		$('holder').appendChild(set.root)
+		
+		t.time('sameNodesToBoxes()')
+		Boxer.sameNodesToBoxes(set.nodes, set.root)
+		t.timeEnd('sameNodesToBoxes()')
+		
+		return t.timeEnd('whole')
+	}
+	
+	var main = t, max = 1000
+	
+	t.test('100 nodes', function (t)
+	{
+		var time = job(t, 100)
+		
+		if (time > max)
+			return t.log('break testing on ' + time + 'ms')
+		
+		main.test('1000 nodes', function (t)
+		{
+			var time = job(t, 1000)
+			
+			if (time > max)
+				return t.log('break testing on ' + time + 'ms')
+			
+			main.test('10000 nodes', function (t)
+			{
+				time = job(t, 10000)
+			})
+		})
+	})
+})
+</script>
+</body>
+</html>

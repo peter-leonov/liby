@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>createDocumentFragment() appendChild() performance benchmark</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	<style>
+	#root-1, #root-2 { overflow: hidden; width: 250px; height: 250px; position: absolute; top: 0; background: #eee; }
+	#root-1 { left: 0px; }
+	#root-2 { left: 250px; }
+	#root-1 li, #root-2 li { width: 50px; height: 25px; float: left; }
+	</style>
+</head>
+<body>
+<ul id="root-1"></ul>
+<ul id="root-2"></ul>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function $ (id) { return document.getElementById(id) }
+	
+	t.parallel(1)
+	var count = 5000, wait = 3000
+	
+	t.test('direct', function (t)
+	{
+		var root = $('root-1')
+		t.lag('lag')
+		t.time('time')
+		for (var i = 0; i < count; i++)
+		{
+			var node = document.createElement('li')
+			node.appendChild(document.createTextNode(i))
+			root.appendChild(node)
+		}
+		t.timeEnd('time')
+		t.async(function () { t.lagEnd('lag') }, wait)
+	})
+	
+	t.test('via fragment', function (t)
+	{
+		var root = $('root-2')
+		t.lag('lag')
+		t.time('time')
+		var fragment = document.createDocumentFragment()
+		for (var i = 0; i < count; i++)
+		{
+			var node = document.createElement('li')
+			node.appendChild(document.createTextNode(i))
+			fragment.appendChild(node)
+		}
+		root.appendChild(fragment)
+		t.timeEnd('time')
+		t.async(function () { t.lagEnd('lag') }, wait)
+	})
+})
+</script>
+</body>
+</html>

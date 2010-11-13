@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Demo for HTMLInputElement selectStart/selectEnd</title>
+	
+	<!--[if lte IE 7]>
+	<script type="text/javascript" src="../../src/core/fixes/trident3.js"></script>
+	<script type="text/javascript" src="../../src/core/fixes/trident3-input-selection.js"></script>
+	<![endif]-->
+	<!--[if gte IE 8]>
+	<script type="text/javascript" src="../../src/core/fixes/trident4.js"></script>
+	<script type="text/javascript" src="../../src/core/fixes/trident4-input-selection.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="../../src/core/fixes/keydown-to-keypress.js"></script>
+	
+	<style type="text/css">
+	body { padding: 20px; }
+	#output, #input { font-size: 20px; padding: 0; margin: 0; }
+	#output { margin: 10px 0; border: 3px solid #fff; }
+	#selection { background-color: #8af; }
+	#output.empty #selection { background-color: #000; padding-left: 1px; zoom: 1; }
+	#output.empty #after { margin-left: -1px; }
+	</style>
+</head>
+<body>
+<div><input type="text" id="input" value="Viva the Web!"/></div>
+<div id="output"><span id="before"> </span><span id="selection"> </span><span id="after"> </span></div>
+<script type="text/javascript">
+function $ (id) { return document.getElementById(id) }
+
+function loaded (e)
+{
+	var input = $('input'),
+		output = $('output'),
+		before = $('before').firstChild,
+		selection = $('selection').firstChild,
+		after = $('after').firstChild
+	
+	function delay ()
+	{
+		setTimeout(function () { update(input) }, 0)
+	}
+	
+	function update (node)
+	{
+		var v = node.value
+		
+		before.nodeValue = v.substring(0, node.selectionStart)
+		
+		var s = selection.nodeValue = v.substring(node.selectionStart, node.selectionEnd)
+		output.className = s ? '' : 'empty'
+		
+		after.nodeValue = v.substring(node.selectionEnd, v.length)
+	}
+	
+	
+	input.addEventListener('keypress', delay, false)
+	input.addEventListener('focus', delay, false)
+	input.addEventListener('blur', delay, false)
+	input.addEventListener('mousedown', function () { delay(); document.addEventListener('mousemove', delay, false) }, false)
+	document.addEventListener('mouseup', function () { delay(); document.removeEventListener('mousemove', delay, false) }, false)
+	input.focus()
+	input.selectionStart = 3
+	input.selectionEnd = 10
+	update(input)
+}
+
+window.addEventListener('load', loaded, false)
+</script>
+</body>
+</html>

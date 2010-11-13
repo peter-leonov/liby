@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>How slow a check for emptyness can be</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script src="../../src/modules/json.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var hash = {}
+	
+	function equals (a, b)
+	{
+		for (var k in a)
+			if (!(k in b) || a[k] !== b[k])
+				return false
+		
+		for (var k in b)
+			if (!(k in a) || a[k] !== b[k])
+				return false
+		
+		return true
+	}
+	
+	function keys (s)
+	{
+		var r = []
+		for (var k in s)
+			r.push(k)
+		return r
+	}
+	
+	function isEmpty (s)
+	{
+		for (var k in s)
+			return false
+		return true
+	}
+	
+	t.ok(JSON.stringify(hash) === '{}', 'JSON')
+	t.ok(equals(hash, {}), 'equals')
+	t.ok(keys(hash).length === 0, 'keys.length')
+	t.ok(isEmpty(hash), 'isEmpty')
+	
+	var count = 100000
+	
+	t.time('JSON')
+	for (var i = 0; i < count; i++)
+		JSON.stringify(hash) === '{}'
+	t.timeEnd('JSON')
+	
+	t.time('equals')
+	for (var i = 0; i < count; i++)
+		equals(hash, {})
+	t.timeEnd('equals')
+	
+	t.time('keys.length')
+	for (var i = 0; i < count; i++)
+		keys(hash).length === 0
+	t.timeEnd('keys.length')
+	
+	t.time('isEmpty')
+	for (var i = 0; i < count; i++)
+		isEmpty(hash)
+	t.timeEnd('isEmpty')
+	
+	t.time('isEmpty inlined')
+	for (var i = 0; i < count; i++)
+	{
+		for (var k in hash)
+			false
+		true
+	}
+	t.timeEnd('isEmpty inlined')
+})
+</script>
+</body>
+</html>

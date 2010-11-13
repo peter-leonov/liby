@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tracker tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="../src/modules/tracker.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+// mock a little
+function Image ()
+{
+	Image.objects.push(this)
+}
+Image.objects = []
+
+Tests.test(function (t)
+{
+	var escape = window.encodeURIComponent || window.escape
+	
+	t.test('check for existence', function (t)
+	{
+		t.ok(Tracker, 'global Tracker object')
+	})
+	
+	t.test('track some data', function (t)
+	{
+		var category = 'Tests',
+			action = 'Tracker',
+			label = 'the tracker tracks a track!',
+			value = 555
+		
+		Tracker.track(category, action, label, value)
+		
+		var src = Image.objects[0].src
+		
+		t.gte(src.indexOf(Tracker.session), 0, 'session ID is presend')
+		
+		t.gte(src.indexOf(escape(category)), 0, 'category name')
+		t.gte(src.indexOf(escape(action)), 0, 'action name')
+		t.gte(src.indexOf(escape(label)), 0, 'label name')
+		t.gte(src.indexOf(escape(value)), 0, 'value name')
+	})
+})
+</script>
+</body>
+</html>

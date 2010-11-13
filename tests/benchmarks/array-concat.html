@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Array#concat performance tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var w = 1000, h = 200, array2d = [], array1d = []
+	for (var i = 0; i < h; i++)
+	{
+		var row = array2d[i] = []
+		for (var j = 0; j < w; j++)
+			array1d[i * w + j] = row[j] = i * j
+	}
+	
+	t.test('flatten', function (t)
+	{
+		var concat = Array.prototype.concat, stub = []
+		
+		var res = []
+		t.time('loop')
+		for (var i = 0; i < array2d.length; i++)
+			res = res.concat(array2d[i])
+		t.eq(res.toString(), array1d.toString(), 'concat() in loop  ok')
+		t.timeEnd('loop')
+		
+		t.time('apply')
+		var res = concat.apply(stub, array2d)
+		t.eq(res.toString(), array1d.toString(), 'concat.apply() ok')
+		t.timeEnd('apply')
+		
+		t.time('apply after loop')
+		var res = []
+		for (var i = 0; i < array2d.length; i++)
+			res[i] = array2d[i]
+		res = concat.apply(stub, res)
+		t.eq(res.toString(), array1d.toString(), 'concat.apply() ok')
+		t.timeEnd('apply after loop')
+	})
+	
+	t.test('source array checks', function (t)
+	{
+		t.eq(array2d[0][0], 0, 'properly filled')
+		t.eq(array2d[h - 1][w - 1], (h - 1) * (w - 1), 'properly filled')
+		t.eq(array2d[h - 1][w], undefined, 'properly filled')
+		t.eq(array2d[h], undefined, 'properly filled')
+	})
+})
+</script>
+</body>
+</html>

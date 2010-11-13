@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>ConsString versus Array#join()</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+// it's all about http://groups.google.com/group/v8-users/browse_thread/thread/fa6746b6fa2d4b2c#msg_13f5f3e44a1c3740
+Tests.test(function (t)
+{
+	// trying to fill the array with plain (non-cons) strings
+	function bake (arr, prefix, count)
+	{
+		t.time('bake')
+		// var code = []
+		// for (var i = 0; i < count; i++)
+		// 	code[i] = 'arr[' + i + '] = "' + prefix + i + '"'
+		// eval(code.join(';'))
+		var rex = /xxx/
+		for (var i = 0; i < count; i++)
+			arr[i] = prefix + i,
+			rex.test(arr[i])
+		t.timeEnd('bake')
+	}
+	
+	var count = 100000,
+		rex = /^\w/
+	
+	t.test('fair tests', function (t)
+	{
+		t.test('join()', function (t)
+		{
+			var src = [], prefix = 'testA'
+			bake(src, prefix, count)
+			
+			// given the worst case when we do not know
+			// the length of the result array
+			var joiner = []
+			
+			t.time('join()')
+			for (var i = 0; i < count; i++)
+				// we can't use the joiner[i] = …
+				// as far as we can't rely on the loop counter
+				joiner.push(src[i])
+			
+			var res = joiner.join('')
+			var test = rex.test(res)
+			t.timeEnd('join()')
+			
+			t.ok(test, 'regexp test')
+			t.eq(res, src.join(''), 'index of prefix')
+		})
+		
+		t.test('+=', function (t)
+		{
+			var src = [], prefix = 'testB'
+			bake(src, prefix, count)
+			
+			var joiner = ''
+			
+			t.time('+=')
+			for (var i = 0; i < count; i++)
+				joiner += src[i]
+			
+			var res = joiner // to be fair
+			var test = rex.test(res)
+			t.timeEnd('+=')
+			
+			t.ok(test, 'regexp test')
+			t.eq(res, src.join(''), 'index of prefix')
+		})
+	})
+	
+	
+	t.test('unfair', function (t)
+	{
+		t.test('[i] = without use', function (t)
+		{
+			var src = [], prefix = 'testA'
+			bake(src, prefix, count)
+			
+			// optimistic case
+			var joiner = new Array(count)
+			
+			t.time('join()')
+			for (var i = 0; i < count; i++)
+				joiner[i] = src[i] // there too
+			t.timeEnd('join()')
+		})
+		
+		t.test('+= without join', function (t)
+		{
+			var src = [], prefix = 'testB'
+			bake(src, prefix, count)
+			
+			var joiner = ''
+			
+			t.time('+=')
+			for (var i = 0; i < count; i++)
+				joiner += src[i]
+			t.timeEnd('+=')
+		})
+	})
+})
+</script>
+</body>
+</html>

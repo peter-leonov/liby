@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests just another inheritance implementation</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/modules/function-inherit.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('inherit', function (t)
+	{
+		function A () {}
+		A.prototype =
+		{
+			foo: function () { return 'A.foo' },
+			bar: function () { return 'A.bar' },
+			baz: function () { return 'A.baz' }
+		}
+		
+		
+		function B () {}
+		B.prototype = new A()
+		B.inherit
+		({
+			foo: function () { return this.aFoo() + ':B.foo' },
+			bar: function () { return this.aBar() + ':B.bar' }
+		}, 'a')
+		
+		var b = new B()
+		t.eq(b.foo(), 'A.foo:B.foo', 'inherited')
+		t.eq(b.bar(), 'A.bar:B.bar', 'inherited')
+		
+		
+		function C () {}
+		C.prototype = new B()
+		C.inherit
+		({
+			foo: function () { return this.bFoo() + ':C.foo' },
+			bar: function () { return this.bBar() + ':C.bar' }
+		}, 'b')
+		
+		var c = new C()
+		t.eq(c.foo(), 'A.foo:B.foo:C.foo', 'inherited')
+		t.eq(c.bar(), 'A.bar:B.bar:C.bar', 'inherited')
+	})
+	
+	t.test('inheritLive', function (t)
+	{
+		function A () {}
+		A.prototype =
+		{
+			foo: function () { return 'A.foo' },
+			bar: function () { return 'A.bar' },
+			baz: function () { return 'A.baz' }
+		}
+		
+		
+		function B () {}
+		B.prototype = new A()
+		B.inheritLive
+		({
+			foo: function () { return this.aFoo() + ':B.foo' },
+			bar: function () { return this.aBar() + ':B.bar' }
+		}, 'a')
+		
+		var b = new B()
+		t.eq(b.foo(), 'A.foo:B.foo', 'inherited')
+		t.eq(b.bar(), 'A.bar:B.bar', 'inherited')
+		
+		A.prototype.foo = function () { return 'A.foo2' }
+		t.eq(b.foo(), 'A.foo2:B.foo', 'inherited and changed')
+		
+		
+		function C () {}
+		C.prototype = new B()
+		C.inheritLive
+		({
+			bar: function () { return this.bBar() + ':C.bar' }
+		}, 'b')
+		
+		var c = new C()
+		t.eq(c.bar(), 'A.bar:B.bar:C.bar', 'tripple inherited')
+	})
+})
+</script>
+</body>
+</html>

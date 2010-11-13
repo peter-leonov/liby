@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>tests for Boxer</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/modules/element.js"></script>
+	<script type="text/javascript" src="../src/modules/boxer.js"></script>
+	
+	<style type="text/css">
+	#different-nodes { position: absolute; left: 10px; top: 20px; width: 100px; height: 100px; }
+	#different-nodes .a { position: absolute; left: 10px; top: 20px; width: 30px; height: 40px; }
+	#different-nodes .b { position: absolute; left: 50px; top: 60px; width: 70px; height: 80px; }
+	
+	#same-nodes { position: absolute; left: 20px; top: 30px; width: 100px; height: 100px; }
+	#same-nodes .a { position: absolute; left: 10px; top: 20px; width: 10px; height: 20px; }
+	#same-nodes .b { position: absolute; left: 30px; top: 40px; width: 12px; height: 23px; /* width and height will be ignored */ }
+	</style>
+</head>
+<body>
+
+<div id="different-nodes"><div class="a"></div><div class="b"></div></div>
+<div id="same-nodes"><div class="a"></div><div class="b"></div></div>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function $ (id) { return document.getElementById(id) }
+	
+	t.test('nodes without a root', function (t)
+	{
+		var node = $('different-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.nodesToBoxes(children)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.like([box.x, box.y, box.w, box.h], [10 + 10, 20 + 20, 30, 40], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.like([box.x, box.y, box.w, box.h], [50 + 10, 60 + 20, 70, 80], 'b box')
+	})
+	
+	t.test('nodes with different boundaries', function (t)
+	{
+		var node = $('different-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.nodesToBoxes(children, node)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.like([box.x, box.y, box.w, box.h], [10, 20, 30, 40], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.like([box.x, box.y, box.w, box.h], [50, 60, 70, 80], 'b box')
+	})
+	
+	t.test('different nodes with custom width and height', function (t)
+	{
+		var node = $('different-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.nodesToBoxes(children, node, 55, 66)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.like([box.x, box.y, box.w, box.h], [10, 20, 55, 66], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.like([box.x, box.y, box.w, box.h], [50, 60, 55, 66], 'b box')
+	})
+	
+	t.test('nodes with same boundaries', function (t)
+	{
+		var node = $('same-nodes'),
+			children = node.childNodes
+		var boxes = Boxer.sameNodesToBoxes(children, node)
+		
+		var box = boxes[0]
+		t.eq(box.node, children[0], 'a node')
+		t.like([box.x, box.y, box.w, box.h], [10, 20, 10, 20], 'a box')
+		
+		var box = boxes[1]
+		t.eq(box.node, children[1], 'b node')
+		t.like([box.x, box.y, box.w, box.h], [30, 40, 10, 20], 'b box')
+	})
+	
+	t.test('empty nodes array', function (t)
+	{
+		t.like(Boxer.nodesToBoxes([]), [], 'nodesToBoxes()')
+		t.like(Boxer.nodesToBoxes([], null, 100, 200), [], 'nodesToBoxesWH()')
+		t.like(Boxer.sameNodesToBoxes([]), [], 'sameNodesToBoxes()')
+	})
+})
+</script>
+</body>
+</html>

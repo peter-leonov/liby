@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Timers tests</title>
+	<script src="tests.common.js"></script>
+	
+	<script src="../src/modules/timers.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var oneGlobalTimer, setTimerCallsCount = 0
+	Timers.prototype.setTimer = function (f, d)
+	{
+		setTimerCallsCount++
+		window.clearTimeout(oneGlobalTimer)
+		var me = this
+		oneGlobalTimer = window.setTimeout(function () { f.call(me) }, d)
+	}
+	
+	t.parallel(1)
+	
+	t.test('same function', function (t)
+	{
+		var r = new Timers()
+		
+		var order = [], count = 3
+		function handler (num, d)
+		{
+			order.push(num)
+			t.log(num + ' has expired (' + d + ')')
+			if (--count == 0)
+			{
+				t.like(order, right)
+				t.done()
+			}
+		}
+		
+		function same (d) { handler(1, d) }
+		r.setTimeout(same, 0)
+		r.setTimeout(same, 0)
+		r.setTimeout(same, 0)
+		
+		var right = [1, 1, 1]
+		
+		t.wait(10000)
+	})
+	
+	t.test('clearTimeout', function (t)
+	{
+		var r = new Timers()
+		
+		var order = [], count = 3
+		function handler (num, d)
+		{
+			order.push(num)
+			t.log(num + ' has expired (' + d + ')')
+			if (--count == 0)
+			{
+				t.like(order, right)
+				t.done()
+			}
+		}
+		
+		r.setTimeout(function (d) { handler(1, d) }, 0)
+		
+		// check if only one of “second”s was cleared
+		function second (d) { handler(2, d) }
+		r.setTimeout(second, 0)
+		var n = r.setTimeout(second, 0)
+		r.clearTimeout(n)
+		// check double timeout clearing
+		r.clearTimeout(n)
+		
+		// many clearings
+		r.clearTimeout(r.setTimeout(function (e) { handler(55, d) }, 0))
+		r.clearTimeout(r.setTimeout(function (e) { handler(66, d) }, 0))
+		
+		// and a set after all that mess
+		r.setTimeout(function (d) { handler(3, d) }, 0)
+		
+		var right = [1, 2, 3]
+		
+		t.wait(10000)
+	})
+	
+	t.test('order', function (t)
+	{
+		var r = new Timers()
+		
+		var order = [], count = 9
+		function handler (num, d)
+		{
+			order.push(num)
+			t.log(num + ' has expired (' + d + ')')
+			if (--count == 0)
+			{
+				t.like(order, right)
+				t.lte(setTimerCallsCount, 9, 'setTimer() calls') // 13 calls are highly inefficient
+				t.done()
+			}
+		}
+		
+		r.setTimeout(function (d) { handler(1, d) }, 0)
+		r.setTimeout(function (d) { handler(2, d) }, 0)
+		r.setTimeout(function (d) { handler(3, d) }, 0)
+		r.setTimeout(function (d) { handler(4, d) }, 10)
+		r.setTimeout(function (d) { handler(5, d) }, 5)
+		r.setTimeout(function (d) { handler(6, d) }, 200)
+		r.setTimeout(function (d) { handler(7, d) }, 100)
+		r.setTimeout(function (d) { handler(8, d) }, 0)
+		r.setTimeout(function (d) { handler(9, d) }, 101)
+		
+		var right = [1, 2, 3, 8, 5, 4, 7, 9, 6]
+		
+		t.wait(10000)
+	})
+})
+</script>
+</body>
+</html>

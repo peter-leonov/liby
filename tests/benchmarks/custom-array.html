@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Custom array class tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function SuperArray () {}
+	SuperArray.prototype = new Array()
+	
+	t.test('push', function (t)
+	{
+		t.time('super.push')
+		var arr = new SuperArray()
+		for (var i = 0; i < 100000; i++)
+			arr.push(i)
+		t.timeEnd('super.push')
+		
+		t.time('simple.push')
+		var arr = new Array()
+		for (var i = 0; i < 100000; i++)
+			arr.push(i)
+		t.timeEnd('simple.push')
+		
+		t.time('native.push')
+		var arr = []
+		for (var i = 0; i < 100000; i++)
+			arr.push(i)
+		t.timeEnd('native.push')
+	})
+	
+	t.test('access', function (t)
+	{
+		t.time('super[]')
+		var arr = new SuperArray()
+		for (var i = 0; i < 100000; i++)
+			arr[i] = i
+		t.timeEnd('super[]')
+		
+		t.time('simple[]')
+		var arr = new Array()
+		for (var i = 0; i < 100000; i++)
+			arr[i] = i
+		t.timeEnd('simple[]')
+		
+		t.time('native[]')
+		var arr = []
+		for (var i = 0; i < 100000; i++)
+			arr[i] = i
+		t.timeEnd('native[]')
+	})
+	
+	t.test('sort', function (t)
+	{
+		t.expect(3)
+		var arr = new SuperArray()
+		for (var i = 100000; i > 100; i--)
+			arr[i] = -i
+		t.time('super.sort')
+		arr.sort()
+		t.timeEnd('super.sort')
+		t.ne(arr[0], -1000, 'super.sort does not sort')
+		
+		var arr = new Array()
+		for (var i = 100000; i > 100; i--)
+			arr[i] = -i
+		t.time('simple.sort')
+		arr.sort()
+		t.timeEnd('simple.sort')
+		t.eq(arr[0], -1000, 'simple.sort')
+		
+		var arr = []
+		for (var i = 100000; i > 100; i--)
+			arr[i] = -i
+		t.time('native.sort')
+		arr.sort()
+		t.timeEnd('native.sort')
+		t.eq(arr[0], -1000, 'native.sort')
+	})
+	
+})
+</script>
+</body>
+</html>

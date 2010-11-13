@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>On Ready tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/modules/cosy.js"></script>
+	<script type="text/javascript" src="../src/modules/onready.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var loadOrder = [], onloadTime, onreadyTime
+
+Tests.test(function (t)
+{
+	t.test('load order', function (t)
+	{
+		t.like(loadOrder, ['script1', 'script2', 'onready1', 'onready2', 'onload1', 'onload2'])
+	})
+	
+	t.test('onload vs. onready delay', function (t)
+	{
+		t.gt(onloadTime - onreadyTime, 250)
+	})
+})
+
+loadOrder.push('script1')
+
+document.write('<img src="http://imageshack.us/?ac=' + Math.random() + '"/>')
+
+$.onload(function () { loadOrder.push('onload1'); onloadTime = new Date() })
+$.onready(function () { loadOrder.push('onready1'); onreadyTime = new Date() })
+$.onload(function () { loadOrder.push('onload2') })
+$.onready(function () { loadOrder.push('onready2') })
+
+</script>
+
+<script type="text/javascript">
+loadOrder.push('script2')
+</script>
+
+</body>
+</html>

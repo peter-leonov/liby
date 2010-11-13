@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Request tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/modules/url-encode.js"></script>
+	<script type="text/javascript" src="../src/modules/request.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('sync GET', function (t)
+	{
+		t.expect(1)
+		function callback (e)
+		{
+			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+		}
+		Request.get('?', null, callback, true)
+	})
+	
+	t.test('async GET', function (t)
+	{
+		t.expect(1)
+		function callback (e)
+		{
+			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+			t.done()
+		}
+		Request.get('?', null, callback)
+		t.wait(1000)
+	})
+	
+})
+</script>
+</body>
+</html>

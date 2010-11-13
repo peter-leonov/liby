@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Event classes tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('deleted preventDefault()', function (t)
+	{
+		t.eq(typeof document.createEvent, 'function', 'document.createEvent is a function')
+		t.eq(typeof UIEvent.prototype.preventDefault, 'function')
+		delete UIEvent.prototype.preventDefault
+		t.eq(document.createEvent('Event').preventDefault, undefined, 'preventDefault must be undefined')
+	})
+	
+	t.test('event base classes', function (t)
+	{
+		t.ne(self.EventTarget, undefined, 'EventTarget defined')
+		t.ne(self.EventException, undefined, 'EventException defined')
+		t.ne(self.Event, undefined, 'Event defined')
+		t.ne(self.DocumentEvent, undefined, 'DocumentEvent defined')
+		t.ne(self.UIEvent, undefined, 'UIEvent defined')
+		t.ne(self.MouseEvent, undefined, 'MouseEvent defined')
+		t.ne(self.KeyboardEvent, undefined, 'KeyboardEvent defined')
+		t.ne(self.MutationEvent, undefined, 'MutationEvent defined')
+	})
+	
+	t.test('constructor', function (t)
+	{
+		t.eq(document.createEvent('Event').constructor, self.Event, 'Event.constructor')
+		t.eq(document.createEvent('UIEvent').constructor, self.UIEvent, 'UIEvent.constructor')
+		t.eq(document.createEvent('MouseEvent').constructor, self.MouseEvent, 'MouseEvent.constructor')
+		t.eq(document.createEvent('KeyboardEvent').constructor, self.KeyboardEvent, 'KeyboardEvent.constructor')
+		t.eq(document.createEvent('MutationEvent').constructor, self.MutationEvent, 'MutationEvent.constructor')
+	})
+	
+	t.test('Event.property', function (t)
+	{
+		Event.prototype.customProperty = 'works!'
+		t.eq(document.createEvent('Event').customProperty, 'works!', 'Event.customProperty')
+		t.eq(document.createEvent('UIEvent').customProperty, 'works!', 'UIEvent.customProperty')
+		t.eq(document.createEvent('MouseEvent').customProperty, 'works!', 'MouseEvent.customProperty')
+		t.eq(document.createEvent('KeyboardEvent').customProperty, 'works!', 'KeyboardEvent.customProperty')
+		t.eq(document.createEvent('MutationEvent').customProperty, 'works!', 'MutationEvent.customProperty')
+	})
+	
+	t.test('custom preventDefault()', function (t)
+	{
+		Event.prototype.preventDefault = function () { return 'works!' }
+		t.eq(document.createEvent('Event').preventDefault(), 'works!', 'Event.preventDefault()')
+		t.eq(document.createEvent('UIEvent').preventDefault(), 'works!', 'UIEvent.preventDefault()')
+		t.eq(document.createEvent('MouseEvent').preventDefault(), 'works!', 'MouseEvent.preventDefault()')
+		t.eq(document.createEvent('KeyboardEvent').preventDefault(), 'works!', 'KeyboardEvent.preventDefault()')
+		t.eq(document.createEvent('MutationEvent').preventDefault(), 'works!', 'MutationEvent.preventDefault()')
+	})
+})
+</script>
+</body>
+</html>

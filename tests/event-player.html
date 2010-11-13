@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Event player tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/modules/child-indexed-path.js"></script>
+	<script type="text/javascript" src="../src/modules/event-player.js"></script>
+	<!--
+	<script type="text/javascript" src="../src/modules/json.js"></script>
+	<script type="text/javascript" src="../src/modules/event-recorder.js"></script>
+	<script type="text/javascript" src="../src/widgets/recorder.js"></script>
+	-->
+	
+	<script type="text/javascript" src="event-player-script.json"></script>
+	
+	<style type="text/css" media="screen">
+		.box { position: absolute; z-index: 10; left: 75px; width: 75px; height: 50px; color: #fff; text-align: center; line-height: 50px; }
+		#mouse         { top: 100px;  background: #22a; }
+		#submit        { top: 150px; background: #2a2; }
+		#keyboard-box  { top: 200px; background: #2aa; }
+		#keyboard-box input  { width: 55px; }
+		
+		#recorder-cursor, .recorder-cursor
+		{
+			position: absolute; z-index: 65535; left: 0; top: -100px; width: 16px; height: 21px;
+			background: url(recorder-cursor.png); margin: -3px 0 0 -3px;
+		}
+	</style>
+</head>
+<body>
+
+<div id="recorder-cursor"></div>
+
+<div id="mouse" class="box">mouse</div>
+<form id="submit" class="box"><button type="submit">submit</button></form>
+<div id="keyboard-box" class="box"><input id="keyboard" type="text" value=""/></div>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('simple events', function (t)
+	{
+		function $ (id) { return document.getElementById(id) }
+		var time = 0
+		function bind (t, node, type, callback)
+		{
+			function done (e)
+			{
+				if (callback)
+					callback(e)
+				if (!t.finished)
+				{
+					t.ok(e.target === node, 'e.target')
+					t.done()
+				}
+				node.removeEventListener(type, done, false)
+			}
+			node.addEventListener(type, done, false)
+			
+			t.wait(10000 * ++time)
+		}
+		
+		function preventDefault (e)
+		{
+			e.preventDefault()
+		}
+		
+		t.test('mousemove', function (t)
+		{
+			bind(t, $('mouse'), 'mousemove')
+		})
+		
+		t.test('mousedown', function (t)
+		{
+			bind(t, $('mouse'), 'mousedown')
+		})
+		
+		t.test('mouseup', function (t)
+		{
+			bind(t, $('mouse'), 'mouseup')
+		})
+		
+		t.test('click', function (t)
+		{
+			bind(t, $('mouse'), 'click')
+		})
+		
+		t.test('submit', function (t)
+		{
+			bind(t, $('submit'), 'submit', preventDefault)
+		})
+		
+		var keyboard = $('keyboard')
+		keyboard.value = '0'
+		
+		t.test('keydown', function (t)
+		{
+			t.eq(keyboard.value, '0', 'before')
+			function check (e)
+			{
+				t.eq(e.target.value, '0', 'within')
+				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+			}
+			bind(t, keyboard, 'keydown', check)
+		})
+		
+		t.test('keypress', function (t)
+		{
+			t.eq(keyboard.value, '0', 'before')
+			function check (e)
+			{
+				t.eq(e.target.value, '0', 'within')
+				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+			}
+			bind(t, keyboard, 'keypress', check)
+		})
+		
+		t.test('keyup', function (t)
+		{
+			t.eq(keyboard.value, '0', 'before')
+			function check (e)
+			{
+				t.eq(e.target.value, '1', 'within')
+				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+			}
+			bind(t, keyboard, 'keyup', check)
+		})
+		
+		var player = new EventPlayer()
+		player.bind()
+		player.load(scrollerScript)
+		
+		var cursor = $('recorder-cursor')
+		player.onstep = function (n, a)
+		{
+			var p
+			if ((p = a.p))
+			{
+				var style = cursor.style
+				style.left = p[0] + 'px'
+				style.top = p[1] + 'px'
+			}
+		}
+		
+		player.play()
+		
+		// var recorder = new Recorder()
+		// recorder.bind()
+		// recorder.play(<!-- include virtual="event-player-script.json" -->)
+		// recorder.playBuffer()
+	})
+})
+</script>
+</body>
+</html>

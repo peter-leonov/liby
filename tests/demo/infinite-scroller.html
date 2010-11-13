@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<title>Infinite scroller tests</title>
+	<style>
+	#test-node-1 { position: absolute; left: 10; top: 100px; width: 600px; height: 250px; overflow: hidden; margin: 20px; background-color: #ccc; border: 5px solid #444; }
+	#test-node-1 li { display: inline; }
+	#test-node-1 .surface { width: 2200px; }
+	#test-node-1 .point { float: left; width: 360px; height: 100%; margin-right: 60px; }
+	#test-node-1 .point { color: #fff; font-size: 72px; text-align: center; text-decoration: none; line-height: 250px; }
+	#test-node-1 .p1 { background-color: #b40; }
+	#test-node-1 .p2 { background-color: #0a0; }
+	#test-node-1 .p3 { background-color: #40c; }
+	#test-node-1 .p4 { background-color: #b08; }
+	#test-node-1 .p5 { background-color: #fb0; }
+	#test-node-1 .tail { position: absolute; left: 2100px; top: 0; width: 600px; height: 100%; overflow: hidden; }
+	
+	#test-node-2 { position: absolute; left: 10; top: 400px; width: 600px; height: 250px; overflow: hidden; margin: 20px; background-color: #ccc; border: 5px solid #444; }
+	#test-node-2 li { display: inline; }
+	#test-node-2 .surface { width: 3000px; }
+	#test-node-2 .point { float: left; width: 600px; height: 100%; }
+	#test-node-2 .point { color: #fff; font-size: 72px; text-align: center; text-decoration: none; line-height: 250px; }
+	#test-node-2 .p1 { background-color: #b40; }
+	#test-node-2 .p2 { background-color: #0a0; }
+	#test-node-2 .p3 { background-color: #40c; }
+	#test-node-2 .p4 { background-color: #b08; }
+	#test-node-2 .p5 { background-color: #fb0; }
+	#test-node-2 .tail { position: absolute; left: 3000px; top: 0; width: 600px; height: 100%; overflow: hidden; }
+	
+	#recorder-cursor, .recorder-cursor
+	{
+		position: absolute; z-index: 65535; left: 0; top: -100px; width: 16px; height: 21px;
+		background: url(../recorder-cursor.png); margin: -3px 0 0 -3px;
+	}
+	</style>
+	
+	<!--[if lte IE 7]><script src="../../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script src="../../src/core/fixes/trident4.js"></script><![endif]-->
+	<script  src="../../src/core/prototype.js"></script>
+	
+	<script  src="../../src/modules/event-driven.js"></script>
+	<script  src="../../src/modules/global-timer.js"></script>
+	<script  src="../../src/modules/kinematics.js"></script>
+	<script  src="../../src/modules/moveable.js"></script>
+	<script  src="../../src/widgets/infinite-scroller.js"></script>
+	
+	<script  src="../../src/modules/child-indexed-path.js"></script>
+	<script  src="../../src/modules/event-player.js"></script>
+	<script  src="infinite-scroller-script.json"></script>
+	
+	<!--
+	<script src="../../src/modules/json.js"></script>
+	<script src="../../src/modules/event-recorder.js"></script>
+	<script src="../../src/widgets/recorder.js"></script>
+	-->
+</head>
+<body>
+
+
+<div id="test-node-1">
+<ul class="surface">
+	<li><a href="#1" class="point p1">1</a></li>
+	<li><a href="#2" class="point p2">2</a></li>
+	<li><a href="#3" class="point p3">3</a></li>
+	<li><a href="#4" class="point p4">4</a></li>
+	<li><a href="#5" class="point p5">5</a></li>
+</ul>
+<div class="tail">
+<ul class="surface">
+	<li><a href="#1" class="point p1">1</a></li>
+	<li><a href="#2" class="point p2">2</a></li>
+</ul>
+</div>
+</div>
+
+<div id="test-node-2">
+<ul class="surface">
+	<li><a href="#1" class="point p1">1</a></li>
+	<li><a href="#2" class="point p2">2</a></li>
+	<li><a href="#3" class="point p3">3</a></li>
+	<li><a href="#4" class="point p4">4</a></li>
+	<li><a href="#5" class="point p5">5</a></li>
+</ul>
+<div class="tail">
+<ul class="surface">
+	<li><a href="#1" class="point p1">1</a></li>
+</ul>
+</div>
+</div>
+
+<div id="recorder-cursor"></div>
+
+<script type="text/javascript">
+function onload ()
+{
+	var node = document.getElementById('test-node-1')
+	
+	var is = new InfiniteScroller().bind(node, undefined, 420)
+	new InfiniteScroller().bind(document.getElementById('test-node-2'))
+	
+	var player = new EventPlayer()
+	player.bind()
+	
+	var cursor = document.getElementById('recorder-cursor')
+	player.onstep = function (n, a)
+	{
+		var p
+		if ((p = a.p))
+		{
+			var style = cursor.style
+			style.left = p[0] + 'px'
+			style.top = p[1] + 'px'
+		}
+	}
+	
+	// scrollerScript lais in infinite-scroller-script.json
+	player.load(scrollerScript)
+	player.play()
+	
+	// new Recorder().bind()
+
+}
+</script>
+</body>
+</html>

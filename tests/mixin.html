@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Mixin tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('mixing', function (t)
+	{
+		var A = function () {}
+		A.prototype = {x: 'A', y: 'A', z: 'A'}
+		
+		var B = function () {}
+		B.prototype = new A()
+		B.prototype.y = 'B'
+		B.prototype.z = 'B'
+		
+		var C = function () {}
+		C.prototype = new B()
+		C.prototype.z = 'C'
+		
+		var c = new C()
+		t.like(c, {x: 'A', y: 'B', z: 'C'})
+		
+		var M = function () {}
+		M.prototype.x = 'M'
+		M.prototype.q = 'M'
+		M.prototype.y = 'M'
+		B.mixIn(M)
+		t.like(c, {x: 'M', y: 'M', z: 'C', q: 'M'})
+	})
+})
+</script>
+</body>
+</html>

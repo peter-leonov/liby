@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Visibility frame tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script src="../src/modules/gridder.js" type="text/javascript"></script>
+	<script src="../src/modules/visibility-frame.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var showBoxes, hideBoxes
+	
+	function onmove (show, hide)
+	{
+		showBoxes = show
+		hideBoxes = hide
+	}
+	
+	t.test('setBoxes()', function (t)
+	{
+		var frame = new VisibilityFrame()
+		frame.setFrame(200, 200)
+		frame.onmove = onmove
+		
+		frame.setBoxes([{x: 0, y: 0, w: 100, h: 100}])
+		frame.moveTo(0, 0)
+		t.eq(showBoxes.length, 1, 'show 1')
+		t.eq(hideBoxes.length, 0, 'hide 1')
+		
+		frame.setBoxes([{x: 0, y: 0, w: 100, h: 100}])
+		frame.moveTo(0, 0)
+		t.eq(showBoxes.length, 1, 'show 1')
+		t.eq(hideBoxes.length, 0, 'hide 1')
+	})
+	
+	
+	t.test('moveTo()', function (t)
+	{
+		var boxes = []
+		for (var i = 0; i < 25; i++)
+		{
+			boxes[i] =
+			{
+				x: i * 100,
+				y: i * 100,
+				w: 100,
+				h: 100
+			}
+		}
+		
+		var frame = new VisibilityFrame()
+		frame.setBoxes(boxes)
+		frame.setFrame(200, 200)
+		frame.onmove = onmove
+		
+		
+		t.log('moveTo(0, 0)')
+		frame.moveTo(0, 0)
+		t.eq(showBoxes.length, 2, 'show 2')
+		t.eq(hideBoxes.length, 0, 'hide 0')
+		
+		t.log('moveTo(0, 0)')
+		frame.moveTo(0, 0)
+		t.eq(showBoxes.length, 0, 'show 0')
+		t.eq(hideBoxes.length, 0, 'hide 0')
+		
+		t.log('moveTo(1, 1)')
+		frame.moveTo(1, 1)
+		t.eq(showBoxes.length, 1, 'show 1')
+		t.eq(hideBoxes.length, 0, 'hide 0')
+		
+		t.log('moveTo(2, 2)')
+		frame.moveTo(2, 2)
+		t.eq(showBoxes.length, 0, 'show 0')
+		t.eq(hideBoxes.length, 0, 'hide 0')
+		
+		t.log('moveTo(100, 100)')
+		frame.moveTo(100, 100)
+		t.eq(showBoxes.length, 0, 'show 0')
+		t.eq(hideBoxes.length, 1, 'hide 1')
+		
+		t.log('moveTo(200, 200)')
+		frame.moveTo(200, 200)
+		t.eq(showBoxes.length, 1, 'show 1')
+		t.eq(hideBoxes.length, 1, 'hide 1')
+		
+		t.log('moveTo(300, 300)')
+		frame.moveTo(300, 300)
+		t.eq(showBoxes.length, 1, 'show 1')
+		t.eq(hideBoxes.length, 1, 'hide 1')
+		
+		t.log('moveTo(850, 850)')
+		frame.moveTo(850, 850)
+		t.eq(showBoxes.length, 3, 'show 3')
+		t.eq(hideBoxes.length, 2, 'hide 2')
+		
+		t.log('moveTo(1850, 1850)')
+		frame.moveTo(1850, 1850)
+		t.eq(showBoxes.length, 3, 'show 3')
+		t.eq(hideBoxes.length, 3, 'hide 3')
+		
+		t.log('moveTo(20000, 2000)')
+		frame.moveTo(20000, 20000)
+		t.eq(showBoxes.length, 0, 'show 0')
+		t.eq(hideBoxes.length, 3, 'hide 2')
+	})
+})
+</script>
+</body>
+</html>

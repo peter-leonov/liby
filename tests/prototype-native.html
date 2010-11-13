@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for manipulations with a prototype</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('A', function (t)
+	{
+		function A () {}
+		A.prototype.a = 1
+		var a = new A()
+		
+		t.eq(a.a, 1, 'a.a')
+		
+		A.prototype = {a: 2}
+		t.eq(a.a, 1, 'a.a')
+		t.eq(new A().a, 2, 'a.a')
+	})
+	
+	t.test('A and B', function (t)
+	{
+		function A () {}
+		
+		function B () {}
+		B.prototype = new A()
+		
+		var b = new B()
+		
+		A.prototype.a = 1
+		t.eq(b.a, 1, 'b.a')
+		
+		A.prototype = {a: 2}
+		t.eq(b.a, 1, 'b.a')
+		t.eq(new B().a, 1, 'new B().a')
+	})
+	
+	t.test('instanceof', function (t)
+	{
+		function A () {}
+		
+		function B () {}
+		B.prototype = new A()
+		
+		var b = new B()
+		t.instance(b, B, 'plain')
+		t.instance(b, A, 'plain')
+		
+		A.prototype = {}
+		t.instance(b, B, 'replaced')
+		t.notinstance(b, A, 'replaced')
+	})
+	
+	t.test('constructor', function (t)
+	{
+		function A () {}
+		
+		var a = new A()
+		t.eq(a.constructor, A, 'a.constructor')
+		
+		A.prototype = {}
+		var a = new A()
+		t.ne(a.constructor, A, 'a.constructor')
+	})
+})
+</script>
+</body>
+</html>

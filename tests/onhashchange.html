@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>location.hash change event (hashchange) tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/core/fixes/onhashchange.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.parallel(1)
+	
+	t.test('signs of presence', function (t)
+	{
+		t.isin('onhashchange', window, 'window')
+	})
+	
+	t.test('dispath on location.hash = …', function (t)
+	{
+		function onhashchange (e)
+		{
+			window.removeEventListener('hashchange', onhashchange, false)
+			
+			t.eq(e.type, 'hashchange', 'event.type')
+			
+			t.done()
+		}
+		
+		window.addEventListener('hashchange', onhashchange, false)
+		
+		setTimeout(function () { window.location.hash = Math.longRandom() }, 0)
+		t.wait(1000)
+	})
+	
+	t.test('dispath on history.back()', function (t)
+	{
+		if (/Chrome [123456]\.|MSIE [67]\./.test(Tests.ua))
+			return t.warn('This browser (' + Tests.ua + ') does not take location.hash changes in history account.')
+		
+		// window.location.hash = Math.longRandom()
+		
+		function onhashchange (e)
+		{
+			window.removeEventListener('hashchange', onhashchange, false)
+			
+			t.eq(e.type, 'hashchange', 'event.type')
+			
+			t.done()
+		}
+		
+		function back (e)
+		{
+			window.addEventListener('hashchange', onhashchange, false)
+			history.back()
+		}
+		
+		setTimeout(back, 1)
+		t.wait(1000)
+	})
+	
+	t.test('dispath on history.back()', function (t)
+	{
+		if (window.location.setHashchangeCheckInterval)
+			window.location.setHashchangeCheckInterval(1)
+		
+		var count = 0
+		
+		function onhashchange () { count++ }
+		window.addEventListener('hashchange', onhashchange, false)
+		
+		window.location.hash = Math.longRandom()
+		
+		function check ()
+		{
+			t.eq(count, 1, 'fired once')
+			
+			if (window.location.setHashchangeCheckInterval)
+				window.location.setHashchangeCheckInterval()
+		}
+		
+		t.async(check, 500)
+	})
+})
+</script>
+</body>
+</html>

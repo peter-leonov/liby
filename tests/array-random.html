@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Array random elements retrieving tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script src="../src/core/prototype.js" type="text/javascript"></script>
+	<script src="../src/modules/array-randomize.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('edge cases', function (t)
+	{
+		var array = [1, 2, 3, 4, 5]
+		
+		t.like(array.random(0), [], 'zero')
+		t.eq(array.random(1).length, 1, 'one length')
+		t.type(array.random(1)[0], 'number', 'one value')
+		t.eq(array.random(array.length).length, array.length, 'full length')
+		t.eq(array.random(array.length + 1).length, array.length, 'greater then length')
+		t.like(array.random(-1), [], 'less then zero')
+		t.eq(array.random(2.5).length, 2, 'float point')
+	})
+	
+	function declension (arr, n, repeat)
+	{
+		var combos = {}
+		for (var i = 0; i < repeat; i++)
+		{
+			var key = arr.slice().random(n).join(', ')
+			if (key in combos)
+				combos[key]++
+			else
+				combos[key] = 1
+		}
+		
+		var count = Object.keysCount(combos),
+			mid = repeat / count
+		
+		var sum = 0
+		for (var k in combos)
+		{
+			var diff = combos[k] / mid - 1
+			sum += diff * diff
+		}
+		
+		return sum / count
+	}
+	
+	t.test('declensions', function (t)
+	{
+		var arr = [1, 2, 3, 4, 5], m = 0.1, count = 10000
+		
+		for (var i = 1; i <= arr.length; i++)
+		{
+			(function (i) { return function () { // lambda
+			
+			t.test('for ' + i, function (t)
+			{
+				var d = declension(arr, i, count)
+				t.log(d)
+				t.lt(d, m)
+			})
+			
+			} })(i)() // lambda
+		}
+	})
+})
+</script>
+</body>
+</html>

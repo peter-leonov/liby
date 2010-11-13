@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Base types tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('Array#sort()', function (t)
+	{
+		t.test('simple', function (t)
+		{
+			t.like(['b', 'a', 'c'].sort(), ['a', 'b', 'c'], 'array of strings')
+			t.like([1, 2, 11].sort(), [1, 11, 2], 'array of numbers')
+			t.like([1, '2', 'x', 11, 'b'].sort(), [1, 11, '2', 'b', 'x'], 'array of strings and numbers')
+			t.like([[2],[1],[1,2]].sort(), [[1],[1,2],[2]], 'array of arrays')
+		})
+		
+		t.test('unicode', function (t)
+		{
+			t.like(['б', 'и', 'я', 'а', 'е', 'в', 'й', 'ё'].sort(), ['а', 'б', 'в', 'е', 'и', 'й', 'я', 'ё'], 'unicode binary')
+			t.like(['б', 'и', 'я', 'а', 'е', 'в', 'й', 'ё'].sort(function (a, b) { return a.localeCompare(b) }), ['а', 'б', 'в', 'е', 'ё', 'и', 'й', 'я'], 'unicode localeCompare')
+		})
+		
+		t.test('complicated', function (t)
+		{
+			t.like(['a', 'c', 'b', 'n', 'm', 'd', 11, 9].sort(), [11, 9, 'a', 'b', 'c', 'd', 'm', 'n'])
+			t.like(['a', 'c', 'b', 'n', 'm', 'd'].sort(function (a, b) { return a > b ? 1 : -1 }), ['a', 'b', 'c', 'd', 'm', 'n'])
+		})
+		
+	})
+	
+	
+	t.test('Array#splice()', function (t)
+	{
+		var arr = [1,2,3]
+		
+		arr.splice(1, 1, 4)
+		t.eq(arr.length, 3)
+		t.eq(arr.join(','), '1,4,3')
+		
+		arr.splice(1, 1)
+		t.eq(arr.length, 2)
+		t.eq(arr.join(','), '1,3')
+		
+		arr.splice(1, 1, 5, 6, 7)
+		t.eq(arr.length, 4)
+		t.eq(arr.join(','), '1,5,6,7')
+	})
+	
+	
+	t.test('constructors', function (t)
+	{
+		t.eq((false).constructor, Boolean, 'Boolean')
+		t.eq((true).constructor, Boolean, 'Boolean')
+		
+		t.eq((1).constructor, Number, 'Number')
+		t.eq((1.0).constructor, Number, 'Number')
+		t.eq((1e-10).constructor, Number, 'Number')
+		
+		t.eq(('').constructor, String, 'String')
+		
+		t.eq((function () {}).constructor, Function, 'Function')
+		
+		t.eq(([]).constructor, Array, 'Array')
+		t.eq((new Array()).constructor, Array, 'Array')
+		
+		t.eq(({}).constructor, Object, 'Object')
+		t.eq((new Object()).constructor, Object, 'Object')
+		
+		t.eq((new Date()).constructor, Date, 'Date')
+		
+		t.eq((/abc/).constructor, RegExp, 'RegExp')
+		t.eq((new RegExp()).constructor, RegExp, 'RegExp')
+	})
+	
+	t.test('falses', function (t)
+	{
+		try
+		{
+			(null).constructor
+			t.fail('null has a constructor')
+		}
+		catch (ex) { t.pass(['null', ex.message]) }
+		
+		try
+		{
+			(undefined).constructor
+			t.fail('undefined has a constructor')
+		}
+		catch (ex) { t.pass(['undefined', ex.message]) }
+	})
+	
+	
+	t.test('prototypes', function (t)
+	{
+		Boolean.prototype.xxx1 = 123
+		t.eq((false).xxx1, 123, 'Boolean')
+		t.eq((true).xxx1, 123, 'Boolean')
+		delete Boolean.prototype.xxx1
+		t.eq((false).xxx1, undefined, 'Boolean deleted')
+		t.eq((true).xxx1, undefined, 'Boolean deleted')
+		
+		
+		Number.prototype.xxx2 = 123
+		t.eq((1).xxx2, 123, 'Number')
+		t.eq((1.0).xxx2, 123, 'Number')
+		t.eq((1e-10).xxx2, 123, 'Number')
+		delete Number.prototype.xxx2
+		t.eq((1).xxx2, undefined, 'Number')
+		t.eq((1.0).xxx2, undefined, 'Number')
+		t.eq((1e-10).xxx2, undefined, 'Number')
+		
+		String.prototype.xxx3 = 123
+		t.eq(('').xxx3, 123, 'String')
+		delete String.prototype.xxx3
+		t.eq(('').xxx3, undefined, 'String')
+		
+		Function.prototype.xxx4 = 123
+		t.eq((function () {}).xxx4, 123, 'Function')
+		delete Function.prototype.xxx4
+		t.no('xxx4' in (function () {}), 'Function')
+		
+		if (/Version\/[34]\..+Safari/.test(navigator.userAgent))
+			t.log('skipping test with delete Array.prototype.xxx')
+		else
+		{
+			Array.prototype.xxx5 = 123
+			t.eq(([]).xxx5, 123, 'Array')
+			t.eq((new Array()).xxx5, 123, 'Array')
+			delete Array.prototype.xxx5
+			t.no('xxx5' in ([]), 'Array')
+			t.no('xxx5' in (new Array()), 'Array')
+		}
+		
+		Object.prototype.xxx6 = 123
+		t.eq(({}).xxx6, 123, 'Object')
+		delete Object.prototype.xxx6
+		t.no('xxx6' in ({}), 'Object')
+		
+		Date.prototype.xxx7 = 123
+		t.eq((new Date()).xxx7, 123, 'Date')
+		delete Date.prototype.xxx7
+		t.eq((new Date()).xxx7, undefined, 'Date')
+		
+		RegExp.prototype.xxx8 = 123
+		t.eq((/abc/).xxx8, 123, 'RegExp')
+		t.eq((new RegExp()).xxx8, 123, 'RegExp')
+		delete RegExp.prototype.xxx8
+		t.no('xxx8' in (/abc/), 'RegExp')
+		t.no('xxx8' in (new RegExp()), 'RegExp')
+	})
+	
+	t.test('hasOwnProperty', function (t)
+	{
+		function A () { this.x = 1 }
+		A.prototype.y = 2
+		var a = new A()
+		
+		t.eq(a.x, 1)
+		t.eq(a.y, 2)
+		t.ok(a.hasOwnProperty('x'))
+		t.no(a.hasOwnProperty('y'))
+		delete a.x
+		t.no(a.hasOwnProperty('x'))
+		a.x = 1
+		t.ok(a.hasOwnProperty('x'))
+	})
+	
+	t.test('etc', function (t)
+	{
+		var prop
+		function A () { prop = this.prop }
+		A.prototype.prop = 123
+		new A()
+		t.eq(prop, 123, 'prototype applies before constructor')
+		t.ne((function () {}).prototype, (function () {}).prototype, 'different default prototypes')
+		
+		t.lt(('А').localeCompare('Б'), 0, 'А < Б')
+		t.lt(('АБ').localeCompare('Б'), 0, 'А < Б')
+	})
+	
+	t.test('constructor return', function (t)
+	{
+		function Shape ()
+		{
+			return {a:123}
+		}
+		
+		var shape = new Shape()
+		t.notinstance(shape, Shape)
+		t.like(shape, {a:123}, '{a:123} was not kicked off')
+		
+		function Circle ()
+		{
+			return 123
+		}
+		
+		var shape = new Circle()
+		t.instance(shape, Circle)
+		t.like(shape, {}, '123 was kicked off')
+	})
+	
+	t.test('exceptions', function (t)
+	{
+		function CustomError (message)
+		{
+			this.message = message
+		}
+		
+		var error
+		try
+		{
+			throw new CustomError(123)
+		}
+		catch (ex) { error = ex }
+		
+		t.instance(error, CustomError, 'throw new CustomError()')
+		t.eq(error.message, 123, 'CustomError.message')
+		
+		var error
+		try
+		{
+			throw {message:123}
+		}
+		catch (ex) { error = ex }
+		
+		t.eq(error.message, 123, 'throw {}')
+		
+		var error
+		try
+		{
+			throw 'message'
+		}
+		catch (ex) { error = ex }
+		
+		t.eq(error, 'message', 'throw "message"')
+		
+		t.eq(new Error('abc').message, 'abc', 'new Error("abc").message')
+	})
+})
+</script>
+</body>
+</html>

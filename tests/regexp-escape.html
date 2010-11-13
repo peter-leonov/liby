@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>RegExp.escape() tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="../src/modules/regexp-escape.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('simple', function (t)
+	{
+		t.eq(RegExp.escape('abcdefg'), 'abcdefg', 'simple chars')
+		t.eq(RegExp.escape('%#@!~<>/'), '%#@!~<>/', 'semi-special chars')
+		t.eq(RegExp.escape('\\.*+?$^|()[]{}'), '\\\\\\.\\*\\+\\?\\$\\^\\|\\(\\)\\[\\]\\{\\}', 'realy special chars')
+	})
+	
+	t.test('complicated', function (t)
+	{
+		var str = '$13';
+		/\d+/.test(str)
+		t.eq(RegExp.escape(str), '\\$13', 'lastIndex')
+		t.eq(RegExp.escape(str), '\\$13', 'lastIndex')
+		t.eq(RegExp.escape('$$$$$'), '\\$\\$\\$\\$\\$', 'many times')
+		
+		t.eq(RegExp.escape(123), '123', 'on number')
+		t.eq(RegExp.escape(null), 'null', 'on null')
+		
+		var escape = RegExp.escape
+		t.eq(escape('.'), '\\.', 'functional')
+	})
+})
+</script>
+</body>
+</html>

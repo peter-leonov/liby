@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Element#className manipulation tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script src="../src/core/prototype.js" type="text/javascript"></script>
+	<script src="../src/modules/element.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="test1"></div>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var test1 = document.getElementById('test1')
+	
+	t.test('addClassName()', function (t)
+	{
+		var methods = {}
+		methods.addClassName = test1.addClassName
+		methods.removeClassName = test1.removeClassName
+		methods.toggleClassName = test1.toggleClassName
+		
+		var fake = {className: undefined}
+		Object.add(fake, methods)
+		fake.addClassName('a')
+		t.eq(fake.className, 'a', 'undefined')
+		
+		var fake = {className: ''}
+		Object.add(fake, methods)
+		fake.addClassName('a')
+		t.eq(fake.className, 'a', '""')
+		
+		var fake = {className: '0'}
+		Object.add(fake, methods)
+		fake.addClassName('a')
+		t.eq(fake.className, '0 a', '"0"')
+		
+		var node = test1.cloneNode(true)
+		node.addClassName('a')
+		t.eq(node.className, 'a', '""')
+	})
+	
+	t.test('removeClassName()', function (t)
+	{
+		var methods = {}
+		methods.addClassName = test1.addClassName
+		methods.removeClassName = test1.removeClassName
+		methods.toggleClassName = test1.toggleClassName
+		
+		var fake = {className: undefined}
+		Object.add(fake, methods)
+		fake.removeClassName('a')
+		t.eq(fake.className, undefined, 'was undefined')
+		
+		var fake = {className: ''}
+		Object.add(fake, methods)
+		fake.removeClassName('a')
+		t.eq(fake.className, '', '""')
+		
+		var fake = {className: '0'}
+		Object.add(fake, methods)
+		fake.removeClassName('a')
+		t.eq(fake.className, '0', '"0"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a'
+		node.removeClassName('a')
+		t.eq(node.className, '', '"a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a a'
+		node.removeClassName('a')
+		t.eq(node.className, '', '"a a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a a a a a a a a a'
+		node.removeClassName('a')
+		t.eq(node.className, '', '"a a a a a a a a a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'b a'
+		node.removeClassName('a')
+		t.eq(node.className, 'b', '"b a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a b'
+		node.removeClassName('a')
+		t.eq(node.className, 'b', '"a b"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a b a b a a b b a'
+		node.removeClassName('a')
+		t.eq(node.className, 'b b b b', 'hard mix')
+		
+		var node = test1.cloneNode(true)
+		node.className = ' a '
+		node.removeClassName('a')
+		t.eq(node.className, '', '" a "')
+		
+		var node = test1.cloneNode(true)
+		node.className = ' a b '
+		node.removeClassName('a')
+		t.eq(node.className, 'b', '" a b "')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a a-b a'
+		node.removeClassName('a')
+		t.eq(node.className, 'a-b', '"a a-b a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a-b-a-b-a a'
+		node.removeClassName('a')
+		t.eq(node.className, 'a-b-a-b-a', '"a-b-a-b-a a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a-b-a-b-a'
+		node.removeClassName('a')
+		t.eq(node.className, 'a-b-a-b-a', '"a-b-a-b-a"')
+	})
+	
+	t.test('hasClassName()', function (t)
+	{
+		var methods = {}
+		methods.addClassName = test1.addClassName
+		methods.removeClassName = test1.removeClassName
+		methods.toggleClassName = test1.toggleClassName
+		methods.hasClassName = test1.hasClassName
+		
+		var fake = {className: undefined}
+		Object.add(fake, methods)
+		t.no(fake.hasClassName('a'), 'undefined')
+		
+		var fake = {className: ''}
+		Object.add(fake, methods)
+		t.no(fake.hasClassName('a'), '""')
+		
+		var fake = {className: '0'}
+		Object.add(fake, methods)
+		t.no(fake.hasClassName('a'), '"0"')
+		
+		var node = test1.cloneNode(true)
+		t.no(node.hasClassName('a'), 'untouched')
+		
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a'
+		t.ok(node.hasClassName('a'), '"a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a a'
+		t.ok(node.hasClassName('a'), '"a a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a a a a a a a a a'
+		t.ok(node.hasClassName('a'), '"a a a a a a a a a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'b a'
+		t.ok(node.hasClassName('a'), '"b a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'b a '
+		t.ok(node.hasClassName('a'), '"b a "')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'c b a'
+		t.ok(node.hasClassName('a'), '"c b a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a b'
+		t.ok(node.hasClassName('a'), '"a b"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a b a b a a b b a'
+		t.ok(node.hasClassName('a'), '"a b a b a a b b a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = ' a '
+		t.ok(node.hasClassName('a'), '" a "')
+		
+		var node = test1.cloneNode(true)
+		node.className = ' a b '
+		t.ok(node.hasClassName('a'), '" a b "')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a a-b a'
+		t.ok(node.hasClassName('a'), '"a a-b a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a-b-a-b-a a'
+		t.ok(node.hasClassName('a'), '"a-b-a-b-a a"')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'a-b-a-b-a'
+		t.no(node.hasClassName('a'), '"a-b-a-b-a"')
+	})
+	
+	t.test('toggleClassName()', function (t)
+	{
+		var node = test1.cloneNode(true)
+		node.className = ' x y y y x y y x '
+		node.toggleClassName('y')
+		t.eq(node.className, 'x x x', '" x y y y x y y x "')
+		
+		var node = test1.cloneNode(true)
+		node.className = 'x z'
+		node.toggleClassName('y')
+		t.eq(node.className, 'x z y', '"x z"')
+		
+		var node = test1.cloneNode(true)
+		node.toggleClassName('y')
+		t.eq(node.className, 'y', 'untouched')
+		
+		var node = test1.cloneNode(true)
+		node.toggleClassName('y', true)
+		t.eq(node.className, 'y', 'untouched true')
+		
+		var node = test1.cloneNode(true)
+		node.toggleClassName('y', false)
+		t.eq(node.className, '', 'untouched false')
+	})
+	
+	t.test('setClassName()', function (t)
+	{
+		var node = test1.cloneNode(true)
+		node.setClassName('y')
+		t.eq(node.className, 'y', '"y"')
+		
+		var node = test1.cloneNode(true)
+		node.setClassName('x y')
+		t.eq(node.className, 'x y', '"x y"')
+	})
+	
+	t.test('regexp cache', function (t)
+	{
+		var node = test1.cloneNode(true)
+		node.className = ' x y y y x y y x '
+		t.ok(node.hasClassName('y'), 'hasClassName(y)')
+		node.removeClassName('y')
+		t.eq(node.className, 'x x x', '"x"')
+	})
+})
+</script>
+</body>
+</html>

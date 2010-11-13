@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Private class variables tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	// first, the A
+	function A ()
+	{
+		// private variable priv
+		var priv
+		this.setPriv = function (val) { return priv = val }
+		this.getPriv = function () { return priv }
+	}
+	
+	// instantiating
+	var a1 = new A()
+	var a2 = new A()
+	
+	// setting
+	a1.setPriv('from a1')
+	a2.setPriv('from a2')
+	
+	// getting: all works well
+	t.eq(a1.getPriv(), 'from a1', 'direct var 1')
+	t.eq(a2.getPriv(), 'from a2', 'direct var 2')
+	
+	
+	// then a subclass had been exists
+	function B () { }
+	B.prototype = new A('from B')
+	
+	// instantiating
+	var b1 = new B()
+	var b2 = new B()
+	
+	// setting
+	b1.setPriv('from b1')
+	b2.setPriv('from b2')
+	
+	// getting: error b1 and b2 shares the same private variable priv from the B.prototype
+	t.eq(b1.getPriv(), 'from b2', 'subclass var 1 = var 2')
+	t.eq(b2.getPriv(), 'from b2', 'subclass var 2')
+	
+	
+	// all work will be perform in constructor,
+	// so we can't avoid an unnecessary calculations
+	function C ()
+	{
+		var variable1 = 123
+		this.method1 = function () { variable1 += 1 }
+		this.method2 = function () { variable1 += 2 }
+		this.method3 = function () { variable1 += 3 }
+		this.method4 = function () { variable1 += 4 }
+		this.method5 = function () { variable1 += 5 }
+		this.method6 = function () { variable1 += 6 }
+		this.method7 = function () { variable1 += 7 }
+		this.method8 = function () { variable1 += 8 }
+	}
+
+	// nithing will be done in constructor,
+	// this gives us a chance to gain a performance boost
+	function D () {}
+	D.prototype =
+	{
+		variable1: 123,
+		method1: function () { this.variable1 += 1 },
+		method2: function () { this.variable1 += 2 },
+		method3: function () { this.variable1 += 3 },
+		method4: function () { this.variable1 += 4 },
+		method5: function () { this.variable1 += 5 },
+		method6: function () { this.variable1 += 6 },
+		method7: function () { this.variable1 += 7 },
+		method8: function () { this.variable1 += 8 }
+	}
+	
+	var count = t.speed(function () { new C(); new D() }) / 5
+	
+	t.time('C')
+	for (var i = 0; i < count; i++)
+		var c = new C()
+	var ctime = t.timeEnd('C')
+	
+	t.time('D')
+	for (var i = 0; i < count; i++)
+		var d = new D()
+	var dtime = t.timeEnd('D')
+	
+	t.ok(ctime > dtime * 5, 'new C >> new D')
+	
+	
+	
+	var count = t.speed(function () { c.method8(); d.method8() }) / 5
+	
+	var c = new C()
+	t.time('C')
+	for (var i = 0; i < count; i++)
+		c.method8()
+	var ctime = t.timeEnd('C')
+	
+	var d = new D()
+	t.time('D')
+	for (var i = 0; i < count; i++)
+		d.method8()
+	var dtime = t.timeEnd('D')
+	
+	// semi-equal or much different
+	t.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() ~= || >> D#method8()')
+	
+	
+	
+	var count = t.speed(function () { d.variable1++ }) / 5
+	
+	var c = new C()
+	t.time('C')
+	for (var i = 0; i < count; i++)
+		c.method8()
+	var ctime = t.timeEnd('C')
+	
+	var d = new D()
+	t.time('D')
+	for (var i = 0; i < count; i++)
+		d.variable1 += 8
+	var dtime = t.timeEnd('D')
+	
+	// semi-equal or much different
+	t.ok((ctime / dtime < 2 || dtime / ctime < 2) || ctime > dtime * 10, 'C#method8() >> D#variable1')
+})
+</script>
+</body>
+</html>

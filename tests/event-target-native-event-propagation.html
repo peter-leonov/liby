@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Native event propagation tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	<script>window.hasNativeDOMEvents = !!window.addEventListener</script>
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+</head>
+<body>
+
+<form id="node-1"><input type="submit"/></form>
+<script id="node-2"></script>
+<input id="node-3"/>
+<input id="node-4"/>
+<input id="node-5"/>
+<div id="spacer" style="height:20000px"></div>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function $ (id) { return document.getElementById(id) }
+	
+	window.__tests_objectName = 'window'
+	document.__tests_objectName = 'document'
+	
+	var pn = {}
+	pn[Event.CAPTURING_PHASE] = 1
+	pn[Event.AT_TARGET] = 2
+	pn[Event.BUBBLING_PHASE] = 3
+	
+	function p (text, e) { return text + '-' + e.type + '-' + pn[e.eventPhase] + ':' + (e.target.__tests_objectName || e.target) }
+	
+	t.test('submit on form', function (t)
+	{
+		var node = $('node-1')
+		node.__tests_objectName = 'node'
+		
+		var fired = false
+		node.onsubmit = function (e) { fired = true; if (e) { e.preventDefault() } else {return false} }
+		
+		var order = []
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
+		document.addEventListener('submit', captures, true)
+		document.addEventListener('submit', bubbles, false)
+		
+		var button = node.firstChild
+		try
+		{
+			button.click()
+		}
+		catch (ex)
+		{
+			var e = document.createEvent('MouseEvent')
+			e.initEvent('click', true, true)
+			button.dispatchEvent(e)
+		}
+		
+		
+		t.like(order, ['captures-submit-1:node', 'bubbles-submit-3:node'], '“submit” captures and bubbles')
+		t.ok(fired, '“submit” was fired on the node itself')
+	})
+	
+	t.test('load on script', function (t)
+	{
+		var node = $('node-2')
+		node.__tests_objectName = 'node'
+		
+		var order = []
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
+		document.addEventListener('load', captures, true)
+		document.addEventListener('load', bubbles, false)
+		
+		var fired = false
+		function check ()
+		{
+			t.like(order, ['captures-load-1:node'], '“load” captures only')
+			t.ok(fired, '“load” was fired on the node itself')
+			
+			t.done()
+		}
+		
+		function fire () { fired = true; setTimeout(check, 10) }
+		if (node.attachEvent)
+			node.attachEvent('onreadystatechange', function () { if (node.readyState == 'loaded') fire() })
+		else
+			node.onload = fire
+		
+		node.src = 'require-file-1.js'
+		
+		t.wait(1000)
+	})
+	
+	t.test('keydown on input', function (t)
+	{
+		var node = $('node-3')
+		node.__tests_objectName = 'node'
+		
+		var order = []
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
+		document.addEventListener('keydown', captures, true)
+		document.addEventListener('keydown', bubbles, false)
+		
+		var fired = false
+		function fire () { fired = true }
+		node.onkeydown = fire
+		
+		if (!window.hasNativeDOMEvents)
+		{
+			node.fireEvent('onkeydown')
+		}
+		else
+		{
+			var e = document.createEvent('UIEvent')
+			e.initEvent('keydown', true, true)
+			node.dispatchEvent(e)
+		}
+		
+		t.like(order, ['captures-keydown-1:node', 'bubbles-keydown-3:node'], '“keydown” captures and bubbles')
+		t.ok(fired, '“keydown” was fired on the node itself')
+	})
+	
+	window.focus()
+	
+	
+	var focusDonor = $('node-5')
+	focusDonor.focus()
+	t.test('focus+blur on input', function (t)
+	{
+		var node = $('node-4')
+		node.__tests_objectName = 'node'
+		focusDonor.__tests_objectName = 'donor'
+		
+		var order = []
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
+		document.addEventListener('focus', captures, true)
+		document.addEventListener('focus', bubbles, false)
+		document.addEventListener('blur', captures, true)
+		document.addEventListener('blur', bubbles, false)
+		
+		var focused = false
+		node.onfocus = function () { focused = true }
+		
+		var blured = false
+		node.onblur = function () { blured = true }
+		
+		node.focus()
+		focusDonor.focus()
+		
+		t.async(function (t)
+		{
+			t.like(order, ['captures-blur-1:donor', 'captures-focus-1:node', 'captures-blur-1:node', 'captures-focus-1:donor'], '“focus+blur” captures only')
+			t.ok(focused, '“focus” was fired on the node itself')
+			t.ok(blured, '“blur” was fired on the node itself')
+		}, 10)
+	})
+	
+	t.test('scroll on window', function (t)
+	{
+		var node = window
+		node.scrollTo(0, 0)
+		
+		var order = []
+		function captures (e) { order.push(p('captures', e)) }
+		function bubbles (e) { order.push(p('bubbles', e)) }
+		
+		var fired = false
+		function fire () { fired = true }
+		node.onscroll = fire
+		
+		t.async(function (t)
+		{
+			node.addEventListener('scroll', captures, true)
+			node.addEventListener('scroll', bubbles, false)
+			
+			node.scrollTo(0, 1)
+			
+			t.async(function (t)
+			{
+				t.like(order, ['captures-scroll-1:document', 'bubbles-scroll-3:document'], '“scroll” captures and bubbles')
+				t.ok(fired, '“scroll” was fired on the node itself')
+				
+				// hide it here, otherwise scroll event called twice
+				node.scrollTo(0, 0)
+				$('spacer').style.display = 'none'
+			}, 0)
+		}, 100)
+		
+	})
+})
+</script>
+</body>
+</html>

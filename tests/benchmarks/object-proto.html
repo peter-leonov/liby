@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>object.__poto__ tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function A () {}
+	A.prototype = {xxx:777}
+	
+	var obj = {}
+	t.eq(obj.xxx, undefined, 'xxx is undefined')
+	
+	obj.__proto__ = A.prototype
+	t.eq(obj.xxx, 777, 'xxx is 777')
+	
+	function bakeObjects (count)
+	{
+		var res = []
+		for (var i = 0; i < count; i++)
+			res[i] = {a:1, b:'2', c:3.0, d:[], e:{}}
+		return res
+	}
+	
+	var hashes = bakeObjects(1)
+	
+	var count = Math.round(t.speed(function () { new A(); for (var k in hashes[0]) obj = hashes[0][k] }) / 20)
+	t.log(count)
+	
+	hashes = bakeObjects(count)
+	
+	t.time('new + for in')
+	for (var i = 0, il = hashes.length; i < il; i++)
+	{
+		var obj = new A(),
+			hash = hashes[i]
+		for (var k in hash)
+			obj[k] = hash[k]
+	}
+	t.timeEnd('new + for in')
+	
+	t.time('new + keys')
+	for (var i = 0, il = hashes.length; i < il; i++)
+	{
+		var obj = new A(),
+			hash = hashes[i]
+		
+		obj.a = hash.a
+		obj.b = hash.b
+		obj.c = hash.c
+		obj.d = hash.d
+		obj.e = hash.e
+	}
+	t.timeEnd('new + keys')
+	
+	t.time('new + data')
+	for (var i = 0, il = hashes.length; i < il; i++)
+	{
+		var obj = new A()
+		obj.data = hashes[i]
+	}
+	t.timeEnd('new + data')
+	
+	var proto = A.prototype
+	t.time('__proto__')
+	for (var i = 0, il = hashes.length; i < il; i++)
+	{
+		hashes[i].__proto__ = proto
+	}
+	t.timeEnd('__proto__')
+})
+</script>
+</body>
+</html>

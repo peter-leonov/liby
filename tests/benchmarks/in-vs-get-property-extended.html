@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Extended testing of the in operator performance</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('integer keys in array of …', function (t)
+	{
+		var count = 100000
+		
+		t.log(count + ' runs')
+		
+		function loop (t, count, arr)
+		{
+			var x
+			
+			// warm up
+			for (var i = 0; i < count; i++)
+				if (i in arr)
+					x = true
+			
+			t.time('in')
+			for (var i = 0; i < count; i++)
+				if (i in arr)
+					x = true
+			t.timeEnd('in')
+			
+			
+			// warm up
+			for (var i = 0; i < count; i++)
+				if (arr[i])
+					x = true
+			
+			t.time('arr[i]')
+			for (var i = 0; i < count; i++)
+				if (arr[i])
+					x = true
+			t.timeEnd('arr[i]')
+		}
+		
+		t.test('… arrays', function (t)
+		{
+			var arr = []
+			
+			for (var i = 0; i < count; i++)
+				arr[i] = [i]
+			
+			loop(t, count, arr)
+		})
+		
+		t.test('… hashes', function (t)
+		{
+			var arr = []
+			
+			for (var i = 0; i < count; i++)
+				arr[i] = {x: i}
+			
+			loop(t, count, arr)
+		})
+		
+		t.test('… strings', function (t)
+		{
+			var arr = []
+			
+			for (var i = 0; i < count; i++)
+				arr[i] = 'x' + i
+			
+			loop(t, count, arr)
+		})
+		
+		t.test('… numbers', function (t)
+		{
+			var arr = []
+			
+			for (var i = 0; i < count; i++)
+				arr[i] = i
+			
+			loop(t, count, arr)
+		})
+		
+		t.test('… booleans', function (t)
+		{
+			var arr = []
+			
+			for (var i = 0; i < count; i++)
+				arr[i] = true
+			
+			loop(t, count, arr)
+		})
+	})
+	
+	
+	t.test('string keys in hash of …', function (t)
+	{
+		var count = 100000
+		
+		t.log(count + ' runs')
+		
+		function loop (t, count, hash)
+		{
+			var x
+			
+			// warm up
+			for (var i = 0; i < count; i++)
+				if (('x' + i) in hash)
+					x = true
+			
+			t.time('in')
+			for (var i = 0; i < count; i++)
+				if (('x' + i) in hash)
+					x = true
+			t.timeEnd('in')
+			
+			
+			// warm up
+			for (var i = 0; i < count; i++)
+				if (hash['x' + i])
+					x = true
+			
+			t.time('hash[i]')
+			for (var i = 0; i < count; i++)
+				if (hash['x' + i])
+					x = true
+			t.timeEnd('hash[i]')
+		}
+		
+		t.test('… arrays', function (t)
+		{
+			var hash = {}
+			
+			for (var i = 0; i < count; i++)
+				hash['x' + i] = [i]
+			
+			loop(t, count, hash)
+		})
+		
+		t.test('… hashes', function (t)
+		{
+			var hash = {}
+			
+			for (var i = 0; i < count; i++)
+				hash['x' + i] = {x: i}
+			
+			loop(t, count, hash)
+		})
+		
+		t.test('… strings', function (t)
+		{
+			var hash = {}
+			
+			for (var i = 0; i < count; i++)
+				hash['x' + i] = 'x' + i
+			
+			loop(t, count, hash)
+		})
+		
+		t.test('… numbers', function (t)
+		{
+			var hash = {}
+			
+			for (var i = 0; i < count; i++)
+				hash['x' + i] = i
+			
+			loop(t, count, hash)
+		})
+		
+		t.test('… booleans', function (t)
+		{
+			var hash = {}
+			
+			for (var i = 0; i < count; i++)
+				hash['x' + i] = true
+			
+			loop(t, count, hash)
+		})
+	})
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for HTMLInputElement selectStart/selectEnd</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]>
+	<script type="text/javascript" src="../src/core/fixes/trident3.js"></script>
+	<script type="text/javascript" src="../src/core/fixes/trident3-input-selection.js"></script>
+	<![endif]-->
+	<!--[if gte IE 8]>
+	<script type="text/javascript" src="../src/core/fixes/trident4.js"></script>
+	<script type="text/javascript" src="../src/core/fixes/trident4-input-selection.js"></script>
+	<![endif]-->
+</head>
+<body>
+<input type="text" id="ie-actual-selection"/>
+<div>lalalala<input type="text" id="ie-selection-create-range"/>lololololo</div>
+<input type="text" id="test-1"/>
+<input type="text" id="test-2"/>
+<input type="text" id="test-3"/>
+<input type="text" id="test-4"/>
+<script type="text/javascript">
+function $ (id) { return document.getElementById(id) }
+
+var selection
+if (/MSIE [678]\./.test(navigator.userAgent))
+	selection = function (node) { return document.selection.createRange().text }
+else
+	selection = function (node) { return node.value.substring(node.selectionStart, node.selectionEnd) }
+
+Tests.test(function (t)
+{
+	if (/MSIE [678]\./.test(navigator.userAgent))
+	t.test('IE specific tests', function (t)
+	{
+		t.test('actual selection', function (t)
+		{
+			var node = $('ie-actual-selection')
+			
+			node.value = '1234567890'
+			
+			node.selectionStart = 2
+			node.selectionEnd = 4
+			t.eq(selection(node), '34', '2 – 4')
+			
+			node.selectionStart = 0
+			node.selectionEnd = 0
+			t.eq(selection(node), '', '0 – 0')
+			
+			node.selectionStart = 4
+			node.selectionEnd = 3
+			t.eq(selection(node), '', '4 – 3')
+			
+			node.selectionStart = node.selectionEnd = 0
+			node.selectionEnd = 5
+			node.selectionStart = 2
+			t.eq(selection(node), '345', '2 – 5')
+		})
+		
+		
+		t.test('actual selection', function (t)
+		{
+			var node = $('ie-selection-create-range')
+			
+			node.value = 'abcdefghij'
+			node.focus()
+			
+			var sel = document.selection.createRange().duplicate()
+			
+			sel.moveStart('character', -100000)
+			sel.moveEnd('character', 100000)
+			t.eq(sel.text, 'abcdefghij', '-100000 – +100000')
+			
+			sel.collapse()
+			sel.moveStart('character', 1)
+			sel.moveEnd('character', 3)
+			t.eq(sel.text, 'bcd', '1 – 4')
+		})
+	})
+	
+	
+	t.test('initial state', function (t)
+	{
+		var node = $('test-1')
+		
+		t.eq(node.selectionStart, 0, 'selectionStart')
+		t.eq(node.selectionEnd, 0, 'selectionEnd')
+	})
+	
+	t.test('selectionStart', function (t)
+	{
+		var node = $('test-2')
+		node.focus()
+		
+		node.value = ''
+		t.eq(node.selectionStart, 0, 'empty')
+		
+		node.value = 'test'
+		t.eq(node.selectionStart, 4, 'with "test" value')
+		
+		node.value = 'lalala'
+		t.eq(node.selectionStart, 6, 'with "lalala" value')
+		
+		node.value = 'test'
+		t.eq(node.selectionStart, 4, 'with "test" value again')
+		
+		node.value = ''
+		t.eq(node.selectionStart, 0, 'empty again')
+		
+		node.selectionStart = 3
+		t.eq(node.selectionStart, 0, 'set on empty')
+		
+		
+		node.value = 'lololo'
+		
+		node.selectionStart = 3
+		t.eq(node.selectionStart, 3, 'set on lengthy enough')
+		
+		node.selectionStart = 10
+		t.eq(node.selectionStart, 6, 'set on lengthy enough')
+		
+		node.selectionStart = -10
+		t.eq(node.selectionStart, 0, 'negative')
+		
+		node.selectionStart = 3.3
+		t.eq(node.selectionStart, 3, 'float')
+	})
+	
+	t.test('selectionEnd', function (t)
+	{
+		var node = $('test-3')
+		node.focus()
+		
+		node.value = ''
+		t.eq(node.selectionEnd, 0, 'empty')
+		
+		node.value = 'test'
+		t.eq(node.selectionEnd, 4, 'with "test" value')
+		
+		node.value = 'lalala'
+		t.eq(node.selectionEnd, 6, 'with "lalala" value')
+		
+		node.value = 'test'
+		t.eq(node.selectionEnd, 4, 'with "test" value again')
+		
+		node.value = ''
+		t.eq(node.selectionEnd, 0, 'empty again')
+		
+		node.selectionEnd = 3
+		t.eq(node.selectionEnd, 0, 'set on empty')
+		
+		
+		node.value = 'lololo'
+		
+		node.selectionStart = 0
+		node.selectionEnd = 3
+		t.eq(node.selectionEnd, 3, 'set on lengthy enough')
+		
+		node.selectionEnd = 10
+		t.eq(node.selectionEnd, 6, 'set on lengthy enough')
+		
+		node.selectionEnd = -10
+		t.eq(node.selectionEnd, 0, 'negative')
+		
+		node.selectionEnd = 3.3
+		t.eq(node.selectionEnd, 3, 'negative')
+	})
+	
+	t.test('selectionStart with selectionEnd', function (t)
+	{
+		var node = $('test-4')
+		
+		node.value = '123456'
+		
+		t.test('both at the begin', function (t)
+		{
+			node.selectionStart = 0
+			node.selectionEnd = 0
+			t.eq(node.selectionStart, 0, 'start')
+			t.eq(node.selectionEnd, 0, 'end')
+			t.eq(selection(node), '', 'selection 0 – 0')
+		})
+		
+		t.test('both at the end', function (t)
+		{
+			node.selectionStart = 6
+			node.selectionEnd = 6
+			t.eq(node.selectionStart, 6, 'start')
+			t.eq(node.selectionEnd, 6, 'end')
+			t.eq(selection(node), '', 'selection 6 – 6')
+		})
+		
+		t.test('mixed in order', function (t)
+		{
+			node.selectionStart = 3
+			node.selectionEnd = 4
+			t.eq(node.selectionStart, 3, 'start')
+			t.eq(node.selectionEnd, 4, 'end')
+			t.eq(selection(node), '4', 'selection 3 – 4')
+		})
+		
+		t.test('mixed in order (end)', function (t)
+		{
+			node.selectionStart = 0
+			node.selectionEnd = 4
+			node.selectionStart = 3
+			t.eq(node.selectionStart, 3, 'start')
+			t.eq(node.selectionEnd, 4, 'end')
+			t.eq(selection(node), '4', 'selection 3 – 4')
+		})
+		
+		t.test('mixed out of order (start)', function (t)
+		{
+			node.selectionStart = 0
+			node.selectionEnd = 3
+			node.selectionStart = 5
+			t.eq(node.selectionStart, 5, 'start')
+			t.eq(node.selectionEnd, 5, 'end')
+			t.eq(selection(node), '', 'selection 5 – 3')
+		})
+		
+		t.test('mixed out of order (end)', function (t)
+		{
+			node.selectionStart = 5
+			node.selectionEnd = 3
+			t.eq(node.selectionStart, 3, 'start')
+			t.eq(node.selectionEnd, 3, 'end')
+			t.eq(selection(node), '', 'selection 5 – 3')
+		})
+	})
+})
+</script>
+</body>
+</html>

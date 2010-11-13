@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Array randomization tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<script src="../src/core/prototype.js" type="text/javascript"></script>
+	<script src="../src/modules/array-randomize.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function factorial (n) { return n <= 1 ? 1 : n * factorial(n - 1) }
+	
+	t.test('distribution and combinations', function (t)
+	{
+		var arr = [1, 2, 3, 4, 5], combos = {}, count = 100000
+		for (var i = 0; i < count; i++)
+		{
+			var key = arr.slice().randomize().join(', ')
+			if (key in combos)
+				combos[key]++
+			else
+				combos[key] = 1
+		}
+		var total = factorial(arr.length)
+		
+		var normal = 0, rounded = (1 / total * 100 >> 0) / 100
+		for (var k in combos)
+			if ((combos[k] / count * 100) / 100 >= rounded)
+				normal++
+			else
+				t.fail(k)
+		
+		t.eq(Object.keys(combos).length, total, 'total')
+		t.eq(normal, total, 'normal')
+	})
+	
+	t.test('edge cases', function (t)
+	{
+		t.like([].randomize(), [], 'empty')
+		t.like([1].randomize(), [1], 'single')
+		t.like([1, 2].randomize().sort(), [1, 2], 'duo')
+		t.like([1, 2, "3", "abc", 4.0, [], {}].randomize().sort(), [1, 2, "3", "abc", 4.0, [], {}].sort(), 'different values')
+	})
+	
+})
+</script>
+</body>
+</html>

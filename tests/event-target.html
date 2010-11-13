@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Partial EventTarget tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+</head>
+<body>
+
+<div><button id="test-node-1">test node 1</button></div>
+<div><button id="test-node-2">test node 2</button></div>
+<div><script id="test-node-3"></script></div>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	function $ (id) { return document.getElementById(id) }
+	
+	function run (t, kind, type, node, conf)
+	{
+		if (!conf)
+			conf = {}
+		
+		var calls = 0, e, exception = null
+		function handler (e) { calls++ }
+		function handlerA (e) { calls++ }
+		function stopPropagation (e) { e.stopPropagation() }
+		
+		t.log('testing node "' + node.nodeName + '" with event type "' + type + '"')
+		t.eq(typeof node.addEventListener, 'function', 'node.addEventListener is a function')
+		node.addEventListener(type, handler, false)
+		t.eq(calls, 0, 'addEventListener does not call handler')
+		
+		e = document.createEvent(kind)
+		t.eq(typeof e, 'object', 'document.createEvent returns an object')
+		e.abcdef = 'abcdef'
+		t.eq(e.abcdef, 'abcdef', 'event object supports custom fields')
+		
+		t.eq(typeof e.initEvent, 'function', 'event.initEvent is a function')
+		e.initEvent(type, conf.bubbles, true)
+		t.eq(e.type, type, 'event.initEvent sets event type correctly')
+		
+		calls = 0
+		t.eq(typeof node.dispatchEvent, 'function', 'node.dispatchEvent is a function')
+		var res = node.dispatchEvent(e)
+		t.eq(calls, 1, 'dispatchEvent does call handler')
+		t.ok(res, 'dispatchEvent result')
+		
+		calls = 0
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.dispatchEvent(e)
+		t.eq(calls, 1, 'handler called ok twice')
+		
+		if (conf.document !== false)
+		{
+			calls = 0
+			e = document.createEvent(kind)
+			e.initEvent(type, conf.bubbles, true)
+			document.addEventListener(type, handler, false)
+			node.dispatchEvent(e)
+			document.removeEventListener(type, handler, false)
+			t.eq(calls, conf.bubbles ? 2 : 1, 'document handler called ok')
+		}
+		
+		calls = 0
+		node.removeEventListener(type, handler, false)
+		document.removeEventListener(type, handler, false)
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.dispatchEvent(e)
+		t.eq(calls, 0, 'removeEventListener works fine')
+		
+		var order = []
+		function handler1 () { order.push(1) }
+		function handler2 () { order.push(2) }
+		function handler3 () { order.push(3) }
+		function handler4 () { order.push(4) }
+		function handler5 () { order.push(5) }
+		function handler6 () { order.push(6) }
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.addEventListener(type, handler1, false)
+		node.addEventListener(type, handler2, false)
+		node.addEventListener(type, handler3, false)
+		node.dispatchEvent(e)
+		node.removeEventListener(type, handler1, false)
+		node.removeEventListener(type, handler2, false)
+		node.removeEventListener(type, handler3, false)
+		t.like(order, [1, 2, 3], 'multiple listeners work well')
+		
+		calls = 0
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.parentNode.addEventListener(type, handler, false)
+		node.addEventListener(type, handler, false)
+		node.addEventListener(type, stopPropagation, false)
+		node.addEventListener(type, handlerA, false)
+		node.dispatchEvent(e)
+		node.parentNode.removeEventListener(type, handler, false)
+		node.removeEventListener(type, handler, false)
+		node.removeEventListener(type, handlerA, false)
+		node.removeEventListener(type, stopPropagation, false)
+		t.eq(calls, 2, 'stopPropagation() works well')
+		
+		var order = []
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		document.addEventListener(type, handler1, true)
+		document.addEventListener(type, handler6, false)
+		node.parentNode.addEventListener(type, handler2, true)
+		node.parentNode.addEventListener(type, handler5, false)
+		node.addEventListener(type, handler3, true)
+		node.addEventListener(type, handler4, false)
+		node.dispatchEvent(e)
+		document.removeEventListener(type, handler1, true)
+		document.removeEventListener(type, handler6, false)
+		node.parentNode.removeEventListener(type, handler2, true)
+		node.parentNode.removeEventListener(type, handler5, false)
+		node.removeEventListener(type, handler3, true)
+		node.removeEventListener(type, handler4, false)
+		t.like(order, conf.bubbles ? [1,2,3,4,5,6] : [1,2,3,4], 'capturing and bubbling does all in proper order')
+		
+		var order = []
+		function handlerCapture () { order.push(1) }
+		function handlerBubble () { order.push(2) }
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.addEventListener(type, handlerCapture, true)
+		node.addEventListener(type, stopPropagation, true)
+		node.parentNode.addEventListener(type, handlerBubble, false)
+		node.dispatchEvent(e)
+		node.removeEventListener(type, handlerCapture, true)
+		node.removeEventListener(type, stopPropagation, true)
+		node.parentNode.removeEventListener(type, handlerBubble, false)
+		t.like(order, [1], 'stopPropagation() in node capture does not call parentNode bubble')
+		
+		var order = []
+		node.__tests_objectName = 'node'
+		node.parentNode.__tests_objectName = 'parentNode'
+		function handlerNode () { order.push(this.__tests_objectName) }
+		function handlerParentNode () { order.push(this.__tests_objectName) }
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.addEventListener(type, handlerNode, true)
+		node.parentNode.addEventListener(type, handlerParentNode, false)
+		node.dispatchEvent(e)
+		node.removeEventListener(type, handlerNode, true)
+		node.parentNode.removeEventListener(type, handlerParentNode, false)
+		t.like(order, conf.bubbles ? ['node', 'parentNode'] : ['node'], '“this” preserved')
+		
+		calls = 0
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		document.addEventListener(type, handler, true)
+		document.addEventListener(type, handler, false)
+		node.parentNode.addEventListener(type, handler, true)
+		node.parentNode.addEventListener(type, handler, false)
+		node.addEventListener(type, handler, true)
+		node.addEventListener(type, handler, false)
+		node.dispatchEvent(e)
+		document.removeEventListener(type, handler, true)
+		document.removeEventListener(type, handler, false)
+		node.parentNode.removeEventListener(type, handler, true)
+		node.parentNode.removeEventListener(type, handler, false)
+		node.removeEventListener(type, handler, true)
+		node.removeEventListener(type, handler, false)
+		t.eq(calls, conf.bubbles ? 6 : 4, 'capturing and bubbling works well with the same function')
+		
+		calls = 0
+		node.addEventListener(type, handler, false)
+		node.addEventListener(type, handler, false)
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.dispatchEvent(e)
+		t.eq(calls, 1, 'second addEventListener ignored')
+		
+		var order = []
+		node.addEventListener(type, function () { order.push('first') }, false)
+		node.addEventListener(type, function () { order.push('second') }, false)
+		node.addEventListener(type, function () { order.push('third') }, false)
+		node.addEventListener(type, function () { order.push('fourth') }, false)
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		node.dispatchEvent(e)
+		t.like(order, ['first', 'second', 'third', 'fourth'], 'call order preserved')
+		
+		var event1, event2, event3
+		function event1handler (e) { event1 = e; e.abc[0] = 0 }
+		function event2handler (e) { event2 = e; e.abc[1] = 1 }
+		function event3handler (e) { event3 = e; e.abc[2] = 2 }
+		node.addEventListener(type, event1handler, false)
+		node.addEventListener(type, event2handler, false)
+		node.addEventListener(type, event3handler, false)
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		e.abc = []
+		node.dispatchEvent(e)
+		node.removeEventListener(type, event1handler, false)
+		node.removeEventListener(type, event2handler, false)
+		node.removeEventListener(type, event3handler, false)
+		t.eq(event1, e, 'first listener got the same event object')
+		t.eq(event2, e, 'second listener got the same event object')
+		t.eq(event3, e, 'third listener got the same event object')
+		t.like(e.abc, [0, 1, 2], 'listeners can write custom fields')
+		
+		function prevent (e) { e.preventDefault() }
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		t.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
+		node.addEventListener(type, prevent, false)
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		t.eq(node.dispatchEvent(e), false, 'preventDefault() invoked')
+		node.removeEventListener(type, prevent, false)
+		e = document.createEvent(kind)
+		e.initEvent(type, conf.bubbles, true)
+		t.eq(node.dispatchEvent(e), true, 'preventDefault() not invoked')
+	}
+	
+	
+	t.test('Event: load on script', function (t)
+	{
+		run(t, 'Event', 'load', $('test-node-3'), {document: false, bubbles: false})
+	})
+	
+	t.test('Event: hide on node (bubbles)', function (t)
+	{
+		run(t, 'Event', 'hide', $('test-node-1'), {bubbles: true})
+	})
+	
+	t.test('Event: hide on node (does not bubble)', function (t)
+	{
+		run(t, 'Event', 'hide', $('test-node-1'), {bubbles: false})
+	})
+	
+	t.test('MouseEvent: click on node (bubbles)', function (t)
+	{
+		run(t, 'MouseEvent', 'click', $('test-node-2'), {bubbles: true})
+	})
+	
+	t.test('MouseEvent: click on node (does not bubble)', function (t)
+	{
+		run(t, 'MouseEvent', 'click', $('test-node-2'), {bubbles: false})
+	})
+})
+</script>
+</body>
+</html>

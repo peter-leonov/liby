@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Oops tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/fixes/onerror.js"></script>
+	<script type="text/javascript" src="../src/modules/oops.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var reports = []
+	window.Tracker = { track: function (c, a, l, v) { reports.push({category: c, action: a, label: l, value: v}) } }
+	
+	var evented = /Chrome\/[345]\.0|Version\/[34]\..+Safari/.test(navigator.userAgent)
+	
+	t.test('check for existence', function (t)
+	{
+		t.ok(Oops, 'global Oops object')
+	})
+	
+	t.test('simple exception handling', function (t)
+	{
+		t.expect(5 + (evented ? 1 : 0))
+		
+		function setTimeout ()
+		{
+			// Oops may had been disabled by other async tests
+			// so re-enabling it
+			Oops.enable()
+			
+			throw new Error('setTimeout')
+		}
+		window.setTimeout(setTimeout, 10)
+		
+		
+		function setInterval ()
+		{
+			Oops.enable()
+			
+			clearInterval(intervalTimer)
+			throw new Error('setInterval')
+		}
+		var intervalTimer = window.setInterval(setInterval, 10)
+		
+		function addEventListener (e)
+		{
+			Oops.enable()
+			
+			t.eq(e.type, 'load', 'event type')
+			throw new Error('addEventListener')
+		}
+		var node = document.body.appendChild(document.createElement('img'))
+		node.addEventListener('load', addEventListener, false)
+		node.src = 'recorder-cursor.png'
+		
+		function removeEventListener (e)
+		{
+			Oops.enable()
+			
+			throw new Error('removeEventListener')
+		}
+		var node = document.body.appendChild(document.createElement('img'))
+		node.addEventListener('load', removeEventListener, false)
+		node.removeEventListener('load', removeEventListener, false)
+		node.src = 'recorder-cursor.png'
+		
+		var script = document.body.appendChild(document.createElement('script'))
+		window.setTimeout(function () { script.src = 'non-existent.uri' }, 500)
+		
+		
+		function check ()
+		{
+			var all = []
+			for (var i = 0; i < reports.length; i++)
+				all[i] = reports[i].label
+			all = all.join('\n')
+			
+			t.gte(all.indexOf('setTimeout'), 0, 'setTimeout()')
+			t.gte(all.indexOf('setInterval'), 0, 'setInterval()')
+			t.gte(all.indexOf('addEventListener'), 0, 'addEventListener()')
+			t.eq(all.indexOf('removeEventListener'), -1, 'removeEventListener()')
+			if (evented)
+				t.gte(all.indexOf('unable to load'), 0, 'error loading script')
+			else
+				t.log('skipping script load error test')
+		}
+		t.async(check, 1500)
+	})
+	
+	t.test('log() and error()', function (t)
+	{
+		Oops.log('logging')
+		var report = reports[reports.length-1]
+		t.eq(report.category, 'Oops')
+		t.eq(report.action, 'log')
+		t.eq(report.label, 'logging')
+		
+		Oops.error('erroring')
+		var report = reports[reports.length-1]
+		t.eq(report.category, 'Oops')
+		t.eq(report.action, 'error')
+		t.eq(report.label, 'erroring')
+		
+		Oops.time('timing', 12345)
+		var report = reports[reports.length-1]
+		t.eq(report.category, 'Oops')
+		t.eq(report.action, 'time')
+		t.eq(report.label, 'timing')
+		t.eq(report.value, 12345)
+	})
+	
+	t.test('maybeEnable', function (t)
+	{
+		Oops.disable()
+		t.no(Oops.enabled, 'disabled')
+		
+		
+		t.log('clearing Oops cookie')
+		document.cookie = 'Oops=; expires=Sun, 28 Feb 2010 16:53:02 GMT'
+		
+		Oops.maybeEnable()
+		t.ok(Oops.enabled, 'Oops is enabled')
+		
+		Oops.disable()
+		t.no(Oops.enabled, 'disabled')
+		
+		
+		t.log('setting Oops=disabled cookie')
+		document.cookie = 'Oops=disabled'
+		
+		Oops.maybeEnable()
+		t.no(Oops.enabled, 'Oops is still disabled')
+		
+		t.log('force enable Oops')
+		Oops.enable()
+		t.ok(Oops.enabled, 'Oops is now enabled')
+		
+		
+		Oops.disable()
+		t.no(Oops.enabled, 'disabled')
+		
+		t.log('clearing Oops cookie')
+		document.cookie = 'Oops=; expires=Sun, 28 Feb 2010 16:53:02 GMT'
+	})
+})
+</script>
+</body>
+</html>
