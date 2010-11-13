@@ -7,14 +7,16 @@
 	<script src="tests.common.js" type="text/javascript"></script>
 	
 	<script type="text/javascript" src="../modules/tracker.js"></script>
-	
-	<!-- to get the tracker log file form server, not needed for tracker to work -->
-	<!--[if lte IE 7]><script type="text/javascript" src="../core/fixes/trident3.js"></script><![endif]-->
-	<script type="text/javascript" src="../modules/url-encode.js"></script>
-	<script type="text/javascript" src="../modules/request.js"></script>
 </head>
 <body>
 <script type="text/javascript">
+// mock a little
+function Image ()
+{
+	Image.objects.push(this)
+}
+Image.objects = []
+
 Tests.test(function (t)
 {
 	var escape = window.encodeURIComponent || window.escape
@@ -32,37 +34,15 @@ Tests.test(function (t)
 			value = 555
 		
 		Tracker.track(category, action, label, value)
-		t.expect(6)
-		function callback (e)
-		{
-			var text = this.responseText
-			
-			t.gte(text.indexOf(Tracker.session), 0, 'session ID is presend')
-			
-			var our, records = text.split(/\n/)
-			records.pop()
-			for (var i = 0; i < records.length; i++)
-				if (records[i].indexOf(Tracker.session) != -1)
-				{
-					t.log('our record is ' + i + 'th')
-					our = records[i]
-					break
-				}
-			
-			t.eq(records.length - 1, i, 'our record is the latest')
-			
-			t.gte(our.indexOf(escape(category)), 0, 'category name')
-			t.gte(our.indexOf(escape(action)), 0, 'action name')
-			t.gte(our.indexOf(escape(label)), 0, 'label name')
-			t.gte(our.indexOf(escape(value)), 0, 'value name')
-		}
 		
-		function check (e)
-		{
-			Request.get('/tracker.log', {ac: Math.random()}, callback, true)
-		}
+		var src = Image.objects[0].src
 		
-		t.async(check, 1000)
+		t.gte(src.indexOf(Tracker.session), 0, 'session ID is presend')
+		
+		t.gte(src.indexOf(escape(category)), 0, 'category name')
+		t.gte(src.indexOf(escape(action)), 0, 'action name')
+		t.gte(src.indexOf(escape(label)), 0, 'label name')
+		t.gte(src.indexOf(escape(value)), 0, 'value name')
 	})
 })
 </script>
