@@ -17,6 +17,8 @@
 	<script type="text/javascript" src="../widgets/recorder.js"></script>
 	-->
 	
+	<script type="text/javascript" src="event-player-script.json"></script>
+	
 	<style type="text/css" media="screen">
 		.box { position: absolute; z-index: 10; left: 75px; width: 75px; height: 50px; color: #fff; text-align: center; line-height: 50px; }
 		#mouse         { top: 100px;  background: #22a; }
@@ -132,7 +134,7 @@ Tests.test(function (t)
 		
 		var player = new EventPlayer()
 		player.bind()
-		player.load(<!--# include virtual="event-player-script.json" -->)
+		player.load(scrollerScript)
 		
 		var cursor = document.getElementById('recorder-cursor')
 		player.onstep = function (n, a)
