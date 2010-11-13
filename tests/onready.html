@@ -27,13 +27,13 @@ Tests.test(function (t)
 	
 	t.test('onload vs. onready delay', function (t)
 	{
-		t.gt(onloadTime - onreadyTime, 1000)
+		t.gt(onloadTime - onreadyTime, 250)
 	})
 })
 
 loadOrder.push('script1')
 
-document.write('<img src="recorder-cursor.png?slow=1&ac=' + Math.random() + '"/>')
+document.write('<img src="http://imageshack.us/?ac=' + Math.random() + '"/>')
 
 $.onload(function () { loadOrder.push('onload1'); onloadTime = new Date() })
 $.onready(function () { loadOrder.push('onready1'); onreadyTime = new Date() })
