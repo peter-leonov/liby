@@ -136,7 +136,7 @@ Tests.test(function (t)
 		player.bind()
 		player.load(scrollerScript)
 		
-		var cursor = document.getElementById('recorder-cursor')
+		var cursor = $('recorder-cursor')
 		player.onstep = function (n, a)
 		{
 			var p
