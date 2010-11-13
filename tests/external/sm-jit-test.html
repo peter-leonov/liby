@@ -4,43 +4,41 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width"/>
 	<title>Spidermonkey JIT bug test</title>
-	<script src="tests.common.js" type="text/javascript"></script>
 </head>
 <body>
 
 <script type="text/javascript">
-Tests.test(function (t)
+;(function(){
+function calculate (arr)
 {
-	function calculate (arr)
+	var hash = {}
+	hash[0.1] = {}
+	
+	// this loop produce corrupted data that can be checked
+	for (var i = 0; i < arr.length; i++)
+		if (hash[arr[i]])
+			hash[arr[i]].arr = arr[i]
+	
+	return hash
+}
+
+// change 5 to 0.5 (int to float) and the bug is gone
+calculate([ 0.1, 5 ])
+var res = calculate([ 0.1, 0.1 ])
+
+var ok = true
+for (var k in res)
+	if (!res[k].arr)
 	{
-		var hash = {}
-		hash[0.1] = {}
-		
-		// this loop produce corrupted data that can be checked
-		for (var i = 0; i < arr.length; i++)
-			if (hash[arr[i]])
-				hash[arr[i]].arr = arr[i]
-		
-		return hash
+		ok = false
+		// document.write('<span style="color:red">failed</span>')
+		// throw 'failed'
 	}
-	
-	// change 5 to 0.5 (int to float) and the bug is gone
-	calculate([ 0.1, 5 ])
-	var res = calculate([ 0.1, 0.1 ])
-	
-	var ok = true
-	for (var k in res)
-		if (!res[k].arr)
-		{
-			ok = false
-			// document.write('<span style="color:red">failed</span>')
-			// throw 'failed'
-		}
-	
-	
-	// semi-equal or much different
-	t.ok(ok, 'jit fails on float point numbers')
-})
+
+
+// semi-equal or much different
+alert(ok ? 'passed' : 'failed: jit fails on float point numbers')
+})();
 </script>
 </body>
 </html>
