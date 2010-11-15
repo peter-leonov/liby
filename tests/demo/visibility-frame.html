@@ -31,11 +31,14 @@
 		
 		#frame { position: absolute; z-index: 2; left: 0; top: 0; width: 400px; height: 300px; color: #444; border: 1px solid; cursor: move; font-size: 25px; line-height: 300px; text-align: center;  }
 		
-		#stat { position: absolute; z-index: 3; right: 25px; top: 25px; width: 220px; text-align: center;  background-color: #fff; overflow: hidden; }
+		#tipbox { position: absolute; z-index: 3; right: 10px; top: 10px; width: 190px; height: 40px; padding: 10px; overflow: hidden; border: 2px dashed #ccc; background-color: #fff; border-radius: 10px; }
 	</style>
 </head>
 <body>
-<div id="stat"> </div>
+<div id="tipbox">
+	<div id="stat"> </div>
+	<div><label><input id="transparency" type="checkbox" checked="checked"/> transparency</label></div>
+</div>
 <div id="boxes"></div>
 <div id="frame">dragg me</div>
 <script type="text/javascript">
