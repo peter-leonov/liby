@@ -1,7 +1,7 @@
-Programica.js has a number of external libraries built in it (Sizzle.js, Robert Penner's Easing Equations, JSLint and may be more).
+Liby.js has a number of external libraries built in it (Sizzle.js, Robert Penner's Easing Equations, JSLint and may be more).
 Every one of them may have its own license. See the appropriate file for the terms.
 
-Programica.js itself is released under three licenses: MIT, BSD, and GPL. You may pick the license that best suits your development needs. The text of all three licenses are provided below.
+Liby.js itself is released under three licenses: MIT, BSD, and GPL. You may pick the license that best suits your development needs. The text of all three licenses are provided below.
 
 MIT License
 ----
