@@ -11,7 +11,6 @@
 	<script src="../../src/modules/log.js" type="text/javascript"></script>
 	<script src="../../src/modules/cosy.js" type="text/javascript"></script>
 	<script src="../../src/modules/element.js" type="text/javascript"></script>
-	<script src="../../src/modules/url-encode.js" type="text/javascript"></script>
 	
 	<script src="../../src/modules/gridder.js" type="text/javascript"></script>
 	<script src="../../src/modules/visibility-frame.js" type="text/javascript"></script>
@@ -45,14 +44,6 @@
 $.onload(function ()
 {
 	var count = 25, transparent = true
-	
-	var options = UrlEncode.parse(window.location.hash.substr(1))
-	if ('count' in options)
-		count = options.count
-	if ('transparent' in options)
-		transparent = options.transparent !== 'false'
-	
-	
 	
 	var boxesRoot = $('boxes')
 	
