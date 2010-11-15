@@ -221,7 +221,7 @@ $.onload(function ()
 	function updateCount (count)
 	{
 		if (count < 0)
-			return
+			count = 0
 		
 		var boxes = setupBoxes(count)
 		frame.setBoxes(boxes)
