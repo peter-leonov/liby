@@ -145,6 +145,31 @@ $.onload(function ()
 		boxesRoot.toggleClassName('transparent', this.checked)
 	}
 	$('transparency').addEventListener('click', toggleTransparency, false)
+	
+	var addByKey = {38: 1, 40: -1, 33: 10, 34: -10}
+	function catchKeys (e)
+	{
+		if (addByKey[e.keyCode])
+		{
+			e.preventDefault()
+			e.stopPropagation()
+		}
+		
+		var input = this
+		setTimeout(function () { adjustCount.call(input, e) }, 1)
+	}
+	function adjustCount (e)
+	{
+		var count = +this.value
+		
+		if (isNaN(count))
+			return
+		
+		var add = addByKey[e.keyCode]
+		if (add)
+			this.value = count + add
+	}
+	$('count').addEventListener('keypress', catchKeys, false)
 })
 </script>
 </body>
