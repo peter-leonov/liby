@@ -37,14 +37,17 @@
 <body>
 <div id="tipbox">
 	<div id="stat"> </div>
-	<div><label><input id="transparency" type="checkbox" checked="checked"/> transparency</label></div>
+	<div><label><input id="transparency" type="checkbox" checked="checked"/> transp.</label> <label><input id="count" type="text" value="25"/> count</label></div>
 </div>
 <div id="boxes"></div>
 <div id="frame">dragg me</div>
 <script type="text/javascript">
 $.onload(function ()
 {
-	var count = 25, transparent = true
+	var count = +$('count').value, transparent = $('transparency').checked
+	
+	if (!count)
+		count = $('count').value = 25
 	
 	var boxesRoot = $('boxes')
 	
