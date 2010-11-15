@@ -4,6 +4,8 @@ var myName = 'VisibilityFrame'
 
 function Me ()
 {
+	this.x = 0
+	this.y = 0
 	this.gridder = new Gridder()
 	this.boxes = []
 	this.visible = {}
@@ -39,6 +41,9 @@ Me.prototype =
 	// much faster version
 	moveTo: function (x, y)
 	{
+		this.x = x
+		this.y = y
+		
 		var last = this.visible, current = {}, show = [], hide = []
 		
 		var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
