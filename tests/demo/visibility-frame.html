@@ -48,7 +48,7 @@ $.onload(function ()
 	var boxesRoot = $('boxes')
 	
 	if (transparent)
-		boxesRoot.className += ' transparent'
+		boxesRoot.addClassName('transparent')
 	
 	
 	var nodes = []
@@ -134,7 +134,7 @@ $.onload(function ()
 	m.addEventListener('movestart', movestart, false)
 	m.addEventListener('move', move, false)
 	
-	boxesRoot.className += ' wide'
+	boxesRoot.addClassName('wide')
 })
 </script>
 </body>
