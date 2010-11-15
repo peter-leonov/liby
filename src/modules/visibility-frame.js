@@ -22,6 +22,7 @@ Me.prototype =
 		this.visible = {}
 		
 		this.gridder.setBoxes(boxes)
+		this.update()
 	},
 	
 	setFrame: function (w, h, x, y)
@@ -66,6 +67,11 @@ Me.prototype =
 		this.visible = current
 		
 		this.onmove(show, hide, boxes)
+	},
+	
+	update: function ()
+	{
+		this.moveTo(this.x, this.y)
 	}
 	
 	// // slow version
