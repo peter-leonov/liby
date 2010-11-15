@@ -59,7 +59,7 @@ $.onload(function ()
 	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
 		mw = rw / 5, mh = rh / 5, min = 25,
 		random = Math.random,
-		nodes = [], boxes = [], lastCount = 0
+		boxes = [], lastCount = 0
 	function setupBoxes (count)
 	{
 		if (count < 0)
@@ -74,7 +74,7 @@ $.onload(function ()
 					x = (random() * (rw - w)) >> 0,
 					y = (random() * (rh - h)) >> 0
 				
-				var node = nodes[i] = document.createElement('div')
+				var node = document.createElement('div')
 				var s = node.style
 				s.left = x + 'px'
 				s.top = y + 'px'
@@ -93,15 +93,28 @@ $.onload(function ()
 			}
 			
 			for (var i = from; i < to; i++)
-				boxesRoot.appendChild(nodes[i])
+				boxesRoot.appendChild(boxes[i].node)
+		}
+		
+		function remove (from, to)
+		{
+			for (var i = to; i < from; i++)
+				boxesRoot.removeChild(boxes[i].node)
 		}
 		
 		if (lastCount == count)
-			return
+			return boxes
 		
 		if (lastCount < count)
 		{
 			extend(lastCount, count)
+			lastCount = count
+			return boxes.slice(0, count)
+		}
+		
+		if (lastCount > count)
+		{
+			remove(lastCount, count)
 			lastCount = count
 			return boxes.slice(0, count)
 		}
@@ -203,6 +216,9 @@ $.onload(function ()
 	
 	function updateCount (count)
 	{
+		if (count < 0)
+			return
+		
 		var boxes = setupBoxes(count)
 		frame.setBoxes(boxes)
 		frame.update()
