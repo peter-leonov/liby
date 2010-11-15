@@ -56,121 +56,145 @@ $.onload(function ()
 		boxesRoot.addClassName('transparent')
 	
 	
-	var nodes = []
-	
-	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
-		mw = rw / 5, mh = rh / 5, min = 25,
-		random = Math.random
-	for (var i = 0; i < count; i++)
+	function setupBoxes ()
 	{
-		var w = (random() * mw + min) >> 0,
-			h = (random() * mh + min) >> 0,
-			x = (random() * (rw - w)) >> 0,
-			y = (random() * (rh - h)) >> 0
+		var nodes = []
 		
-		var node = nodes[i] = document.createElement('div')
-		var s = node.style
-		s.left = x + 'px'
-		s.top = y + 'px'
-		s.width = w + 'px'
-		s.height = h + 'px'
-		s.backgroundColor = '#' + (Math.random() * 16777215 & 0xf8f8f8).toString(16)
-		
-		boxesRoot.appendChild(node)
-	}
-	
-	var boxes = []
-	for (var i = 0, il = nodes.length; i < il; i++)
-	{
-		var node = nodes[i]
-		
-		boxes[i] =
+		var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
+			mw = rw / 5, mh = rh / 5, min = 25,
+			random = Math.random
+		for (var i = 0; i < count; i++)
 		{
-			x: node.offsetLeft,
-			y: node.offsetTop,
-			w: node.offsetWidth,
-			h: node.offsetHeight,
-			node: node // custom fields are normal
+			var w = (random() * mw + min) >> 0,
+				h = (random() * mh + min) >> 0,
+				x = (random() * (rw - w)) >> 0,
+				y = (random() * (rh - h)) >> 0
+			
+			var node = nodes[i] = document.createElement('div')
+			var s = node.style
+			s.left = x + 'px'
+			s.top = y + 'px'
+			s.width = w + 'px'
+			s.height = h + 'px'
+			s.backgroundColor = '#' + (Math.random() * 16777215 & 0xf8f8f8).toString(16)
+			
+			boxesRoot.appendChild(node)
 		}
+		
+		var boxes = []
+		for (var i = 0, il = nodes.length; i < il; i++)
+		{
+			var node = nodes[i]
+			
+			boxes[i] =
+			{
+				x: node.offsetLeft,
+				y: node.offsetTop,
+				w: node.offsetWidth,
+				h: node.offsetHeight,
+				node: node // custom fields are normal
+			}
+		}
+		
+		return boxes
 	}
 	
-	
-	var frameNode = $('frame'),
-		statNode = $('stat').firstChild
-	
-	var frame = new VisibilityFrame()
-	frame.gridder.maxSteps = count * 10
-	frame.setBoxes(boxes)
-	frame.setFrame(frameNode.offsetWidth, frameNode.offsetHeight)
-	frame.onmove = function (show, hide)
+	function setupFrame (boxes)
 	{
-		var begin = new Date()
+		var frameNode = $('frame'),
+			statNode = $('stat').firstChild
 		
-		for (var i = 0; i < hide.length; i++)
-			hide[i].node.removeClassName('visible')
+		var frame = new VisibilityFrame()
+		frame.gridder.maxSteps = count * 10
+		frame.setBoxes(boxes)
+		frame.setFrame(frameNode.offsetWidth, frameNode.offsetHeight)
+		frame.onmove = function (show, hide)
+		{
+			var begin = new Date()
+			
+			for (var i = 0; i < hide.length; i++)
+				hide[i].node.removeClassName('visible')
+			
+			for (var i = 0; i < show.length; i++)
+				show[i].node.addClassName('visible')
+			
+			setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
+		}
+		frame.moveTo(frameNode.offsetLeft, frameNode.offsetTop)
 		
-		for (var i = 0; i < show.length; i++)
-			show[i].node.addClassName('visible')
-		
-		setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
+		return frame
 	}
-	frame.moveTo(frameNode.offsetLeft, frameNode.offsetTop)
 	
-	var m = new Moveable()
-	m.bind(frameNode)
-	
-	var frameX = 0, frameY = 0
-	function movestart (e)
+	function setupMovable (frame)
 	{
-		frameX = frameNode.offsetLeft
-		frameY = frameNode.offsetTop
-	}
-	
-	function move (e)
-	{
-		var x = frameX + e.data.dx,
-			y = frameY + e.data.dy
+		var frameNode = $('frame')
 		
-		frameNode.style.left = x + 'px'
-		frameNode.style.top = y + 'px'
-		frame.moveTo(x, y)
+		var m = new Moveable()
+		m.bind(frameNode)
+		
+		var frameX = 0, frameY = 0
+		function movestart (e)
+		{
+			frameX = frameNode.offsetLeft
+			frameY = frameNode.offsetTop
+		}
+		
+		function move (e)
+		{
+			var x = frameX + e.data.dx,
+				y = frameY + e.data.dy
+			
+			frameNode.style.left = x + 'px'
+			frameNode.style.top = y + 'px'
+			frame.moveTo(x, y)
+		}
+		
+		m.addEventListener('movestart', movestart, false)
+		m.addEventListener('move', move, false)
 	}
 	
-	m.addEventListener('movestart', movestart, false)
-	m.addEventListener('move', move, false)
+	function setupControl (e)
+	{
+		function toggleTransparency (e)
+		{
+			boxesRoot.toggleClassName('transparent', this.checked)
+		}
+		$('transparency').addEventListener('click', toggleTransparency, false)
+		
+		var addByKey = {38: 1, 40: -1, 33: 10, 34: -10}
+		function catchKeys (e)
+		{
+			if (addByKey[e.keyCode])
+			{
+				e.preventDefault()
+				e.stopPropagation()
+			}
+			
+			var input = this
+			setTimeout(function () { adjustCount.call(input, e) }, 1)
+		}
+		function adjustCount (e)
+		{
+			var count = +this.value
+			
+			if (isNaN(count))
+				return
+			
+			var add = addByKey[e.keyCode]
+			if (add)
+				this.value = count + add
+		}
+		$('count').addEventListener('keypress', catchKeys, false)
+	}
+	
+	
+	var boxes = setupBoxes()
+	var frame = setupFrame(boxes)
+	setupMovable(frame)
+	
+	setupControl()
 	
 	boxesRoot.addClassName('wide')
-	
-	function toggleTransparency (e)
-	{
-		boxesRoot.toggleClassName('transparent', this.checked)
-	}
-	$('transparency').addEventListener('click', toggleTransparency, false)
-	
-	var addByKey = {38: 1, 40: -1, 33: 10, 34: -10}
-	function catchKeys (e)
-	{
-		if (addByKey[e.keyCode])
-		{
-			e.preventDefault()
-			e.stopPropagation()
-		}
-		
-		var input = this
-		setTimeout(function () { adjustCount.call(input, e) }, 1)
-	}
-	function adjustCount (e)
-	{
-		var count = +this.value
-		
-		if (isNaN(count))
-			return
-		
-		var add = addByKey[e.keyCode]
-		if (add)
-			this.value = count + add
-	}
-	$('count').addEventListener('keypress', catchKeys, false)
 })
 </script>
 </body>
