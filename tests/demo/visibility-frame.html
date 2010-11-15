@@ -99,7 +99,11 @@ $.onload(function ()
 		function remove (from, to)
 		{
 			for (var i = to; i < from; i++)
-				boxesRoot.removeChild(boxes[i].node)
+			{
+				var node = boxes[i].node
+				boxesRoot.removeChild(node)
+				node.removeClassName('visible')
+			}
 		}
 		
 		if (lastCount == count)
