@@ -135,6 +135,12 @@ $.onload(function ()
 	m.addEventListener('move', move, false)
 	
 	boxesRoot.addClassName('wide')
+	
+	function toggleTransparency (e)
+	{
+		boxesRoot.toggleClassName('transparent', this.checked)
+	}
+	$('transparency').addEventListener('click', toggleTransparency, false)
 })
 </script>
 </body>
