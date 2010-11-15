@@ -56,12 +56,14 @@ $.onload(function ()
 		boxesRoot.addClassName('transparent')
 	
 	
-	function setupBoxes ()
+	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight
+	function setupBoxes (count)
 	{
+		boxesRoot.empty()
+		
 		var nodes = []
 		
-		var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
-			mw = rw / 5, mh = rh / 5, min = 25,
+		var mw = rw / 5, mh = rh / 5, min = 25,
 			random = Math.random
 		for (var i = 0; i < count; i++)
 		{
@@ -181,19 +183,28 @@ $.onload(function ()
 			
 			var add = addByKey[e.keyCode]
 			if (add)
-				this.value = count + add
+			{
+				count += add
+				this.value = count
+				updateCount(count)
+			}
+			
 		}
 		$('count').addEventListener('keypress', catchKeys, false)
 	}
 	
+	function updateCount (count)
+	{
+		var boxes = setupBoxes(count)
+		frame.setBoxes(boxes)
+		frame.update()
+	}
 	
 	var frame = setupFrame(boxes)
 	setupMovable(frame)
 	setupControl()
 	
-	var boxes = setupBoxes()
-	frame.setBoxes(boxes)
-	frame.update()
+	updateCount(count)
 	
 	boxesRoot.addClassName('wide')
 })
