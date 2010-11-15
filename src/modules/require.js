@@ -1,4 +1,4 @@
-// inspired by require.js (http://requirejs.org/) by James Burke (http://www.blogger.com/profile/00451746837849321739)
+// inspired by RequireJS (http://requirejs.org/) by James Burke (http://twitter.com/jrburke)
 ;(function(){
 
 var myName = 'require',
