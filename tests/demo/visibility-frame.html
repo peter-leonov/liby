@@ -45,9 +45,9 @@
 <script type="text/javascript">
 $.onload(function ()
 {
-	var count = +$('count').value, transparent = $('transparency').checked
+	var count = parseInt($('count').value), transparent = $('transparency').checked
 	
-	if (!count)
+	if (isNaN(count) || !count)
 		count = $('count').value = 25
 	
 	var boxesRoot = $('boxes')
@@ -201,7 +201,7 @@ $.onload(function ()
 		}
 		function adjustCount (e)
 		{
-			var count = +this.value
+			var count = parseInt(this.value || 0)
 			
 			if (isNaN(count))
 				return
