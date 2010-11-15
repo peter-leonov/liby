@@ -56,46 +56,54 @@ $.onload(function ()
 		boxesRoot.addClassName('transparent')
 	
 	
-	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight
+	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
+		mw = rw / 5, mh = rh / 5, min = 25,
+		random = Math.random,
+		nodes = [], boxes = [], lastCount = 0
 	function setupBoxes (count)
 	{
-		boxesRoot.empty()
+		if (count < 0)
+			return
 		
-		var nodes = []
-		
-		var mw = rw / 5, mh = rh / 5, min = 25,
-			random = Math.random
-		for (var i = 0; i < count; i++)
+		function extend (from, to)
 		{
-			var w = (random() * mw + min) >> 0,
-				h = (random() * mh + min) >> 0,
-				x = (random() * (rw - w)) >> 0,
-				y = (random() * (rh - h)) >> 0
+			for (var i = boxes.length; i < to; i++)
+			{
+				var w = (random() * mw + min) >> 0,
+					h = (random() * mh + min) >> 0,
+					x = (random() * (rw - w)) >> 0,
+					y = (random() * (rh - h)) >> 0
+				
+				var node = nodes[i] = document.createElement('div')
+				var s = node.style
+				s.left = x + 'px'
+				s.top = y + 'px'
+				s.width = w + 'px'
+				s.height = h + 'px'
+				s.backgroundColor = '#' + (Math.random() * 16777215 & 0xf8f8f8).toString(16)
+				
+				boxes[i] =
+				{
+					x: x,
+					y: y,
+					w: w,
+					h: h,
+					node: node // custom fields are normal
+				}
+			}
 			
-			var node = nodes[i] = document.createElement('div')
-			var s = node.style
-			s.left = x + 'px'
-			s.top = y + 'px'
-			s.width = w + 'px'
-			s.height = h + 'px'
-			s.backgroundColor = '#' + (Math.random() * 16777215 & 0xf8f8f8).toString(16)
-			
-			boxesRoot.appendChild(node)
+			for (var i = from; i < to; i++)
+				boxesRoot.appendChild(nodes[i])
 		}
 		
-		var boxes = []
-		for (var i = 0, il = nodes.length; i < il; i++)
+		if (lastCount == count)
+			return
+		
+		if (lastCount < count)
 		{
-			var node = nodes[i]
-			
-			boxes[i] =
-			{
-				x: node.offsetLeft,
-				y: node.offsetTop,
-				w: node.offsetWidth,
-				h: node.offsetHeight,
-				node: node // custom fields are normal
-			}
+			extend(lastCount, count)
+			lastCount = count
+			return boxes.slice(0, count)
 		}
 		
 		return boxes
