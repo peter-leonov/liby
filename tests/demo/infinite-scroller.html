@@ -93,7 +93,7 @@
 <div id="recorder-cursor"></div>
 
 <script type="text/javascript">
-function onload ()
+function start ()
 {
 	var node = document.getElementById('test-node-1')
 	
@@ -120,8 +120,8 @@ function onload ()
 	player.play()
 	
 	// new Recorder().bind()
-
 }
+window.addEventListener('load', start, false)
 </script>
 </body>
 </html>
