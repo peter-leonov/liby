@@ -25,14 +25,6 @@
 		#boxes { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
 		#boxes.wide { width: 10000px; height: 10000px; }
 		#boxes div { position: absolute; z-index: 1; left: 0; top: 0; background-color: #888; /*opacity: 0.25;*/ }
-		#boxes div.visible.color0 { background-color: #6d4; }
-		#boxes div.visible.color1 { background-color: #f64; }
-		#boxes div.visible.color2 { background-color: #64d; }
-		#boxes div.visible.color3 { background-color: #6ad; }
-		#boxes div.visible.color4 { background-color: #a6d; }
-		#boxes div.visible.color5 { background-color: #6da; }
-		#boxes div.visible.color6 { background-color: #d6a; }
-		#boxes div.visible.color7 { background-color: #d06; }
 		
 		#boxes.transparent div { opacity: 0.25; }
 		#boxes.transparent div.visible { opacity: 0.75; }
@@ -81,13 +73,12 @@ $.onload(function ()
 			y = (random() * (rh - h)) >> 0
 		
 		var node = nodes[i] = document.createElement('div')
-		node.className = 'color' + (i % 8)
-		
 		var s = node.style
 		s.left = x + 'px'
 		s.top = y + 'px'
 		s.width = w + 'px'
 		s.height = h + 'px'
+		s.backgroundColor = '#' + (Math.random() * 16777215 & 0xf8f8f8).toString(16)
 		
 		boxesRoot.appendChild(node)
 	}
