@@ -57,9 +57,6 @@ $.onload(function ()
 		boxesRoot.className += ' transparent'
 	
 	
-	var statNode = $('stat').firstChild
-	
-	
 	var nodes = []
 	
 	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
@@ -99,7 +96,8 @@ $.onload(function ()
 	}
 	
 	
-	var frameNode = $('frame')
+	var frameNode = $('frame'),
+		statNode = $('stat').firstChild
 	
 	var frame = new VisibilityFrame()
 	frame.gridder.maxSteps = count * 10
