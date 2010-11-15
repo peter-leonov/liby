@@ -4,7 +4,8 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<title>Infinite scroller tests</title>
 	<style>
-	#test-node-1 { position: absolute; left: 10; top: 100px; width: 600px; height: 250px; overflow: hidden; margin: 20px; background-color: #ccc; border: 5px solid #444; }
+	ul { margin: 0; }
+	#test-node-1 { position: absolute; left: 0; top: 25px; width: 600px; height: 250px; overflow: hidden; margin: 20px; background-color: #ccc; border: 5px solid #444; }
 	#test-node-1 li { display: inline; }
 	#test-node-1 .surface { width: 2200px; }
 	#test-node-1 .point { float: left; width: 360px; height: 100%; margin-right: 60px; }
@@ -16,7 +17,7 @@
 	#test-node-1 .p5 { background-color: #fb0; }
 	#test-node-1 .tail { position: absolute; left: 2100px; top: 0; width: 600px; height: 100%; overflow: hidden; }
 	
-	#test-node-2 { position: absolute; left: 10; top: 400px; width: 600px; height: 250px; overflow: hidden; margin: 20px; background-color: #ccc; border: 5px solid #444; }
+	#test-node-2 { position: absolute; left: 0; top: 320px; width: 600px; height: 250px; overflow: hidden; margin: 20px; background-color: #ccc; border: 5px solid #444; }
 	#test-node-2 li { display: inline; }
 	#test-node-2 .surface { width: 3000px; }
 	#test-node-2 .point { float: left; width: 600px; height: 100%; }
@@ -92,7 +93,7 @@
 <div id="recorder-cursor"></div>
 
 <script type="text/javascript">
-function onload ()
+function start ()
 {
 	var node = document.getElementById('test-node-1')
 	
@@ -119,8 +120,8 @@ function onload ()
 	player.play()
 	
 	// new Recorder().bind()
-
 }
+window.addEventListener('load', start, false)
 </script>
 </body>
 </html>

@@ -92,8 +92,8 @@ Tests.test(function (t)
 		
 		node.dispatchEvent(e)
 		
-		t.eq(order.length, 9, '8 total calls')
-		t.eq(order.join(','), '1,2,3,4,5,6,7,8,9', 'proper order')
+		t.eq(order.length, 9, '9 total calls')
+		t.eq(order.join(','), '9,1,2,3,4,5,6,7,8', 'proper order')
 	}
 	
 	t.test('calls order for native', function (t)

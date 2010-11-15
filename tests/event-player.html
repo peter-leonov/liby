@@ -54,11 +54,10 @@ Tests.test(function (t)
 			{
 				if (callback)
 					callback(e)
-				if (!t.finished)
-				{
-					t.ok(e.target === node, 'e.target')
-					t.done()
-				}
+				
+				t.ok(e.target === node, 'e.target')
+				t.done()
+				
 				node.removeEventListener(type, done, false)
 			}
 			node.addEventListener(type, done, false)

@@ -4,6 +4,8 @@ var myName = 'VisibilityFrame'
 
 function Me ()
 {
+	this.x = 0
+	this.y = 0
 	this.gridder = new Gridder()
 	this.boxes = []
 	this.visible = {}
@@ -20,6 +22,7 @@ Me.prototype =
 		this.visible = {}
 		
 		this.gridder.setBoxes(boxes)
+		this.update()
 	},
 	
 	setFrame: function (w, h, x, y)
@@ -39,6 +42,9 @@ Me.prototype =
 	// much faster version
 	moveTo: function (x, y)
 	{
+		this.x = x
+		this.y = y
+		
 		var last = this.visible, current = {}, show = [], hide = []
 		
 		var boxes = this.gridder.getBoxesPrecise(x, y, this.width, this.height)
@@ -61,6 +67,11 @@ Me.prototype =
 		this.visible = current
 		
 		this.onmove(show, hide, boxes)
+	},
+	
+	update: function ()
+	{
+		this.moveTo(this.x, this.y)
 	}
 	
 	// // slow version
