@@ -99,14 +99,13 @@ $.onload(function ()
 		return boxes
 	}
 	
-	function setupFrame (boxes)
+	function setupFrame ()
 	{
 		var frameNode = $('frame'),
 			statNode = $('stat').firstChild
 		
 		var frame = new VisibilityFrame()
 		frame.gridder.maxSteps = count * 10
-		frame.setBoxes(boxes)
 		frame.setFrame(frameNode.offsetWidth, frameNode.offsetHeight)
 		frame.onmove = function (show, hide)
 		{
@@ -188,11 +187,13 @@ $.onload(function ()
 	}
 	
 	
-	var boxes = setupBoxes()
 	var frame = setupFrame(boxes)
 	setupMovable(frame)
-	
 	setupControl()
+	
+	var boxes = setupBoxes()
+	frame.setBoxes(boxes)
+	frame.update()
 	
 	boxesRoot.addClassName('wide')
 })
