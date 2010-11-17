@@ -19,7 +19,7 @@ function Me (boxes, x, y)
 Me.prototype =
 {
 	stepX: 500, stepY: 500,
-	maxSteps: 1000,
+	maxSteps: 5000,
 	
 	reflow: function ()
 	{
