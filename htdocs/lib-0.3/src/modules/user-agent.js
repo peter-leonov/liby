@@ -36,6 +36,10 @@ var Me =
 		if (m)
 			return classes('firefox', m[1], m[2], m[3])
 		
+		var m = /Firefox\/(\d+)\.(\d+)/.exec(ua)
+		if (m)
+			return classes('firefox', m[1], m[2], 0)
+		
 		var m = /MSIE (\d+)\./.exec(ua)
 		if (m)
 			return ['msie', 'msie-' + m[1]]
