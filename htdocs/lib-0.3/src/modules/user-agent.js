@@ -48,6 +48,10 @@ var Me =
 		if (m)
 			return classes('safari', m[1], m[2], m[3])
 		
+		var m = /Version\/(\d+)\.(\d+) Safari\/\d+/.exec(ua)
+		if (m)
+			return classes('safari', m[1], m[2], 0)
+		
 		var m = /Chrome\/(\d+)\.(\d+)\.(\d+)/.exec(ua)
 		if (m)
 			return classes('chrome', m[1], m[2], m[3])
