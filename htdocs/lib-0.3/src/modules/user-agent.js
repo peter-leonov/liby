@@ -20,10 +20,6 @@ var Me =
 			return [n, n + '-' + a, n + '-' + a + '-' + b, n + '-' + a + '-' + b + '-' + c]
 		}
 		
-		var m = /Firefox\/(\d+)\.(\d+)\.(\d+)/.exec(ua)
-		if (m)
-			return classes('firefox', m[1], m[2], m[3])
-		
 		var m = /Opera\/\d+.+Version\/(\d+)\.(\d)(\d)/.exec(ua)
 		if (m)
 			return classes('opera', m[1], m[2], m[3])
@@ -35,6 +31,10 @@ var Me =
 		var m = /Opera (\d+)\.(\d)(\d)/.exec(ua)
 		if (m)
 			return classes('opera', m[1], m[2], m[3])
+		
+		var m = /Firefox\/(\d+)\.(\d+)\.(\d+)/.exec(ua)
+		if (m)
+			return classes('firefox', m[1], m[2], m[3])
 		
 		var m = /MSIE (\d+)\./.exec(ua)
 		if (m)
