@@ -60,6 +60,28 @@ Tests.test(function (t)
 			
 			t.eq(a.hash, '#' + text)
 		})
+		
+		t.test('encodeURI() is enough', function (t)
+		{
+			t.mayFail()
+			var text = '#%20& '
+			var a = document.createElement('a')
+			a.href = 'abc'
+			a.hash = '#' + encodeURI(text)
+			
+			t.eq(decodeURIComponent(a.hash), '#' + text)
+		})
+		
+		t.test('encodeURIComponent() works fine', function (t)
+		{
+			t.mayFail()
+			var text = '#%20& '
+			var a = document.createElement('a')
+			a.href = 'abc'
+			a.hash = '#' + encodeURIComponent(text)
+			
+			t.eq(decodeURIComponent(a.hash), '#' + text)
+		})
 	})
 	
 	
