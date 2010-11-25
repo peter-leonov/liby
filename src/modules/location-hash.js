@@ -44,7 +44,7 @@ Me.prototype =
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = '#' + encodeURI(text)
-			return a.hash === '#' + text
+			return decodeURIComponent(a.hash) === '#' + text
 		}
 		
 		if (encodeURIIsEnough())
