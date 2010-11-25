@@ -34,7 +34,7 @@ Tests.test(function (t)
 		// makes a.hash to work
 		a.href = 'abc'
 		
-		var leadingHash = /Opera/.test(Tests.ua) ? '#' : ''
+		var leadingHash = /opera/.test(ua) ? '#' : ''
 		
 		a.hash = leadingHash + '123'
 		t.eq(a.hash, '#123', 'get')
@@ -45,15 +45,28 @@ Tests.test(function (t)
 		
 		t.test('needs decode', function (t)
 		{
-			function decodesOnTheFly ()
-			{
-				var a = document.createElement('a')
-				a.href = 'abc'
-				a.hash = encodeURIComponent('&%')
-				return a.hash === '#&%'
-			}
+			var text = '&%'
+			var a = document.createElement('a')
+			a.href = 'abc'
+			a.hash = encodeURIComponent(text)
 			
-			t.eq(/Firefox/.test(Tests.ua), decodesOnTheFly(), 'needs')
+			if (/firefox/.test(ua))
+				t.eq(a.hash, '#' + text, 'no need')
+			else
+				t.eq(decodeURIComponent(a.hash), '#' + text, 'needs')
+		})
+		
+		t.test('needs encode', function (t)
+		{
+			var text = '&% #'
+			var a = document.createElement('a')
+			a.href = 'abc'
+			a.hash = text
+			
+			if (/safari/.test(ua))
+				t.ne(a.hash, '#' + text, 'needs')
+			else
+				t.eq(a.hash, '#' + text, 'no need')
 		})
 	})
 	
