@@ -62,7 +62,7 @@ Me.prototype =
 	set: function (v)
 	{
 		this.value = v
-		this.location.hash = this.encode(v)
+		this.location.hash = '#' + this.encode(v)
 	},
 	
 	_setUnencoded: function (v)
