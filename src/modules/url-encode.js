@@ -1,24 +1,23 @@
 ;(function(){
 
-var decode = decodeURIComponent,
-	encode = encodeURIComponent
-
-var myName = 'UrlEncode',
-	Me = self[myName] =
+var Me =
 {
+	decode: decodeURIComponent,
+	encode: encodeURIComponent,
 	paramDelimiter: '&',
 	
 	parse: function (string, forceArray)
 	{
+		var decode = this.decode
 		var res = {}
-	
+		
 		var parts = String(string).split(this.paramDelimiterRex || this.paramDelimiter)
 		for (var i = 0; i < parts.length; i++)
 		{
 			var pair = parts[i].split('='),
 				name = decode(pair[0]),
 				val = decode(pair[1] || '')
-		
+			
 			if (forceArray)
 			{
 				if (res[name])
@@ -39,13 +38,14 @@ var myName = 'UrlEncode',
 					res[name] = val
 			}
 		}
-	
+		
 		return res
 	},
 	
 	stringify: function (data)
 	{
-		var pd = this.paramDelimiter
+		var pd = this.paramDelimiter,
+			encode = this.encode
 		
 		if (!data)
 			return ''
@@ -90,5 +90,8 @@ var myName = 'UrlEncode',
 		}
 	}
 }
+
+Me.className = 'UrlEncode'
+self[Me.className] = Me
 
 })();
