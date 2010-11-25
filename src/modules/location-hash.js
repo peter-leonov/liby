@@ -11,8 +11,19 @@ Me.prototype =
 		if (!win)
 			win = window
 		
+		function decodesOnTheFly ()
+		{
+			var a = document.createElement('a')
+			a.href = 'abc'
+			a.hash = encodeURIComponent('&%')
+			return a.hash === '#&%'
+		}
+		
+		if (decodesOnTheFly())
+			Me.prototype.get = Me.prototype._getUndecoded
+		
 		var location = this.location = win.location
-		this.hash = location.hash
+		this.value = this.get()
 		
 		var me = this
 		function onhashchange (e) { me.onhashchange() }
@@ -23,54 +34,39 @@ Me.prototype =
 	
 	onhashchange: function (e)
 	{
-		var hash = this.location.hash
-		if (hash === this.hash)
+		var v = this.get()
+		if (v === this.value)
 			return
-		this.hash = hash
+		this.value = v
 		
 		this.dispatchEventData('change')
 	},
 	
 	set: function (v)
 	{
-		var location = this.location
-		location.hash = encodeURIComponent(v)
-		this.hash = location.hash
-	},
-	
-	setRaw: function (v)
-	{
-		var location = this.location
-		location.hash = v
-		this.hash = location.hash
+		this.value = v
+		this.location.hash = encodeURIComponent(v)
 	},
 	
 	get: function ()
 	{
-		var hash = this.location.hash.substr(1)
+		var v = this.location.hash.substr(1)
 		
-		var v
 		try
 		{
-			v = decodeURIComponent(hash)
+			return decodeURIComponent(v)
 		}
 		catch (ex)
 		{
-			v = decodeURIComponent(hash.replace(/%/g, '%25'))
+			return v
 		}
-		
-		return v
 	},
 	
-	getRaw: function ()
+	_getUndecoded: function ()
 	{
 		return this.location.hash.substr(1)
 	}
 }
-
-if (/Firefox\//.test(navigator.userAgent))
-	Me.prototype.get = Me.prototype.getRaw
-
 
 Me.mixIn(EventDriven)
 
