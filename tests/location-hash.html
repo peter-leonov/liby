@@ -42,15 +42,15 @@ Tests.test(function (t)
 		
 		t.test('needs decode', function (t)
 		{
-			function needsDecode ()
+			function decodesOnTheFly ()
 			{
 				var a = document.createElement('a')
 				a.href = 'abc'
 				a.hash = encodeURIComponent('&%')
-				return a.hash !== '#&%'
+				return a.hash === '#&%'
 			}
 			
-			t.eq(/Firefox/.test(Tests.ua), !needsDecode(), 'needs')
+			t.eq(/Firefox/.test(Tests.ua), decodesOnTheFly(), 'needs')
 		})
 	})
 	
