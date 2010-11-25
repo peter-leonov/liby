@@ -12,11 +12,14 @@
 	<script type="text/javascript" src="../src/core/fixes/onhashchange.js"></script>
 	<script type="text/javascript" src="../src/modules/event-driven.js"></script>
 	<script type="text/javascript" src="../src/modules/location-hash.js"></script>
+	<script type="text/javascript" src="../src/modules/user-agent.js"></script>
 </head>
 <body>
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	var ua = UserAgent.guessBrowser(navigator.userAgent).join(' ')
+	
 	// enable intensive checking for 10 seconds
 	if (window.location.setHashchangeCheckInterval)
 	{
