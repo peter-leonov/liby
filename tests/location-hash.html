@@ -43,30 +43,24 @@ Tests.test(function (t)
 		window.location.hash = a.hash = leadingHash + encodeURIComponent(text)
 		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
 		
-		t.test('needs decode', function (t)
+		t.test('decodes on the fly', function (t)
 		{
-			var text = '&%'
+			var text = '#%20& '
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = encodeURIComponent(text)
 			
-			if (/firefox/.test(ua))
-				t.eq(a.hash, '#' + text, 'no need')
-			else
-				t.eq(decodeURIComponent(a.hash), '#' + text, 'needs')
+			t.log(a.hash === '#' + text ? 'yes' : 'no')
 		})
 		
-		t.test('needs encode', function (t)
+		t.test('encodes on the fly', function (t)
 		{
-			var text = '&% #'
+			var text = '#%20& '
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = text
 			
-			if (/safari/.test(ua))
-				t.ne(a.hash, '#' + text, 'needs')
-			else
-				t.eq(a.hash, '#' + text, 'no need')
+			t.log(a.hash === '#' + text ? 'yes' : 'no')
 		})
 	})
 	
