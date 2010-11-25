@@ -29,6 +29,7 @@ var prototype =
 	log: function (m) { return this.parent.reporter.log(m) },
 	info: function (m) { return this.parent.reporter.info(m) },
 	warn: function (m) { return this.parent.reporter.warn(m) },
+	mayFail: function (v) { return this.parent.mayFail(v) },
 	parallel: function (v) { return this.parent.parallel = v },
 	
 	finished: function () { return this.parent.finished },
