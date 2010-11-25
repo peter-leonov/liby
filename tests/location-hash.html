@@ -41,22 +41,24 @@ Tests.test(function (t)
 		
 		t.test('decodes on the fly', function (t)
 		{
+			t.mayFail()
 			var text = '#%20& '
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = encodeURIComponent(text)
 			
-			t.log(a.hash === '#' + text ? 'yes' : 'no')
+			t.eq(a.hash, '#' + text)
 		})
 		
 		t.test('encodes on the fly', function (t)
 		{
+			t.mayFail()
 			var text = '#%20& '
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = text
 			
-			t.log(a.hash === '#' + text ? 'yes' : 'no')
+			t.eq(a.hash, '#' + text)
 		})
 	})
 	
