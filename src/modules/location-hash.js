@@ -39,6 +39,17 @@ Me.prototype =
 		if (encodesOnTheFly())
 			Me.prototype.set = Me.prototype._setUnencoded
 		
+		function encodeURIIsEnough ()
+		{
+			var a = document.createElement('a')
+			a.href = 'abc'
+			a.hash = '#' + encodeURI(text)
+			return a.hash === '#' + text
+		}
+		
+		if (encodeURIIsEnough())
+			Me.prototype.encode = encodeURI
+		
 		var location = this.location = win.location
 		this.value = this.get()
 		
