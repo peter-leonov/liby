@@ -11,12 +11,14 @@ Me.prototype =
 		if (!win)
 			win = window
 		
+		var text = '#%20& '
+		
 		function decodesOnTheFly ()
 		{
 			var a = document.createElement('a')
 			a.href = 'abc'
-			a.hash = encodeURIComponent('&%')
-			return a.hash === '#&%'
+			a.hash = encodeURIComponent(text)
+			return a.hash === '#' + text
 		}
 		
 		if (decodesOnTheFly())
