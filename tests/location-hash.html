@@ -39,10 +39,14 @@ Tests.test(function (t)
 		window.location.hash = encodeURIComponent(text)
 		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
 		
+		
+		
+		var text = '###%20& Петя … 章亦春 '
+		
 		t.test('decodes on the fly', function (t)
 		{
 			t.mayFail()
-			var text = '#%20& '
+			
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = encodeURIComponent(text)
@@ -53,7 +57,7 @@ Tests.test(function (t)
 		t.test('encodes on the fly', function (t)
 		{
 			t.mayFail()
-			var text = '#%20& '
+			
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = '#' + text
@@ -64,7 +68,7 @@ Tests.test(function (t)
 		t.test('encodeURI() is enough', function (t)
 		{
 			t.mayFail()
-			var text = '#%20& '
+			
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = '#' + encodeURI(text)
@@ -75,7 +79,7 @@ Tests.test(function (t)
 		t.test('encodeURIComponent() works fine', function (t)
 		{
 			t.mayFail()
-			var text = '#%20& '
+			
 			var a = document.createElement('a')
 			a.href = 'abc'
 			a.hash = '#' + encodeURIComponent(text)
