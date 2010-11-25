@@ -6,6 +6,9 @@ function Me () {}
 
 Me.prototype =
 {
+	encode: encodeURIComponent,
+	decode: decodeURIComponent,
+	
 	bind: function (win)
 	{
 		if (!win)
@@ -13,11 +16,12 @@ Me.prototype =
 		
 		var text = '#%20& '
 		
+		var encode = this.encode
 		function decodesOnTheFly ()
 		{
 			var a = document.createElement('a')
 			a.href = 'abc'
-			a.hash = encodeURIComponent(text)
+			a.hash = encode(text)
 			return a.hash === '#' + text
 		}
 		
@@ -58,7 +62,7 @@ Me.prototype =
 	set: function (v)
 	{
 		this.value = v
-		this.location.hash = encodeURIComponent(v)
+		this.location.hash = this.encode(v)
 	},
 	
 	_setUnencoded: function (v)
@@ -73,7 +77,7 @@ Me.prototype =
 		
 		try
 		{
-			return decodeURIComponent(v)
+			return this.decode(v)
 		}
 		catch (ex)
 		{
