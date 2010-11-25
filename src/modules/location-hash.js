@@ -24,6 +24,17 @@ Me.prototype =
 		if (decodesOnTheFly())
 			Me.prototype.get = Me.prototype._getUndecoded
 		
+		function encodesOnTheFly ()
+		{
+			var a = document.createElement('a')
+			a.href = 'abc'
+			a.hash = text
+			return a.hash === '#' + text
+		}
+		
+		if (encodesOnTheFly())
+			Me.prototype.set = Me.prototype._setUnencoded
+		
 		var location = this.location = win.location
 		this.value = this.get()
 		
@@ -48,6 +59,12 @@ Me.prototype =
 	{
 		this.value = v
 		this.location.hash = encodeURIComponent(v)
+	},
+	
+	_setUnencoded: function (v)
+	{
+		this.value = v
+		this.location.hash = v
 	},
 	
 	get: function ()
