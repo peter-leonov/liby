@@ -12,14 +12,11 @@
 	<script type="text/javascript" src="../src/core/fixes/onhashchange.js"></script>
 	<script type="text/javascript" src="../src/modules/event-driven.js"></script>
 	<script type="text/javascript" src="../src/modules/location-hash.js"></script>
-	<script type="text/javascript" src="../src/modules/user-agent.js"></script>
 </head>
 <body>
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	var ua = UserAgent.guessBrowser(navigator.userAgent).join(' ')
-	
 	// enable intensive checking for 10 seconds
 	if (window.location.setHashchangeCheckInterval)
 	{
@@ -34,13 +31,12 @@ Tests.test(function (t)
 		// makes a.hash to work
 		a.href = 'abc'
 		
-		var leadingHash = /opera/.test(ua) ? '#' : ''
-		
-		a.hash = leadingHash + '123'
+		a.hash = '#123'
 		t.eq(a.hash, '#123', 'get')
 		
 		var text = '#%20& '
-		window.location.hash = a.hash = leadingHash + encodeURIComponent(text)
+		a.hash = encodeURIComponent(text)
+		window.location.hash = encodeURIComponent(text)
 		t.eq(window.location.hash, a.hash, 'a.hash and location.hash')
 		
 		t.test('decodes on the fly', function (t)
