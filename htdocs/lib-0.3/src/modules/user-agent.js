@@ -66,7 +66,7 @@ var Me =
 	
 	setupDocumentElementClassNames: function (ua)
 	{
-		document.documentElement.addClassName(this.getClassNames(ua || navigator.userAgent).join(' '))
+		document.documentElement.addClassNames(this.getClassNames(ua || navigator.userAgent))
 	}
 }
 
