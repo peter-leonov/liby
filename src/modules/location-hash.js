@@ -4,6 +4,8 @@ var myName = 'LocationHash'
 
 function Me () {}
 
+function dontTouch (v) { return v }
+
 Me.prototype =
 {
 	encode: encodeURIComponent,
@@ -26,18 +28,7 @@ Me.prototype =
 		}
 		
 		if (decodesOnTheFly())
-			Me.prototype.get = Me.prototype._getUndecoded
-		
-		function encodesOnTheFly ()
-		{
-			var a = document.createElement('a')
-			a.href = 'abc'
-			a.hash = text
-			return a.hash === '#' + text
-		}
-		
-		if (encodesOnTheFly())
-			Me.prototype.set = Me.prototype._setUnencoded
+			Me.prototype.decode = dontTouch
 		
 		function encodeURIIsEnough ()
 		{
@@ -76,12 +67,6 @@ Me.prototype =
 		this.location.hash = '#' + this.encode(v)
 	},
 	
-	_setUnencoded: function (v)
-	{
-		this.value = v
-		this.location.hash = v
-	},
-	
 	get: function ()
 	{
 		var v = this.location.hash.substr(1)
@@ -94,11 +79,6 @@ Me.prototype =
 		{
 			return v
 		}
-	},
-	
-	_getUndecoded: function ()
-	{
-		return this.location.hash.substr(1)
 	}
 }
 
