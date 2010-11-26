@@ -16,14 +16,12 @@ Me.prototype =
 		if (!win)
 			win = window
 		
-		var text = '#%20& юникод … +& '
-		
 		function decodesOnTheFly ()
 		{
 			var a = document.createElement('a')
 			a.href = 'abc'
-			a.hash = encodeURIComponent(text)
-			return a.hash === '#' + text
+			a.hash = encodeURIComponent('%26')
+			return a.hash === '#%26'
 		}
 		
 		if (decodesOnTheFly())
