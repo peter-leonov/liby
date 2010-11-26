@@ -61,7 +61,7 @@ var Me =
 	
 	getClassNames: function (ua)
 	{
-		return guessOS(ua).concat(guessBrowser(ua))
+		return this.guessOS(ua).concat(this.guessBrowser(ua))
 	},
 	
 	setupDocumentElementClassNames: function (ua)
