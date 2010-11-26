@@ -8,7 +8,7 @@ function dontTouch (v) { return v }
 
 Me.prototype =
 {
-	encode: encodeURIComponent,
+	encode: encodeURI,
 	decode: decodeURIComponent,
 	
 	bind: function (win)
@@ -18,28 +18,16 @@ Me.prototype =
 		
 		var text = '#%20& юникод … +& '
 		
-		var encode = this.encode
 		function decodesOnTheFly ()
 		{
 			var a = document.createElement('a')
 			a.href = 'abc'
-			a.hash = encode(text)
+			a.hash = encodeURIComponent(text)
 			return a.hash === '#' + text
 		}
 		
 		if (decodesOnTheFly())
 			Me.prototype.decode = dontTouch
-		
-		function encodeURIIsEnough ()
-		{
-			var a = document.createElement('a')
-			a.href = 'abc'
-			a.hash = '#' + encodeURI(text)
-			return decodeURIComponent(a.hash) === '#' + text
-		}
-		
-		if (encodeURIIsEnough())
-			Me.prototype.encode = encodeURI
 		
 		var location = this.location = win.location
 		this.value = this.get()
