@@ -23,6 +23,16 @@ Object.add
 			return cn
 		},
 		
+		addClassNames: function (cns)
+		{
+			var className = this.className
+			if (!className)
+				this.className = cns.join(' ')
+			else
+				this.className = className + ' ' + cns.join(' ')
+			return cns
+		},
+		
 		removeClassName: function (cn)
 		{
 			var className = this.className
