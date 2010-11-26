@@ -16,7 +16,7 @@ Me.prototype =
 		if (!win)
 			win = window
 		
-		var text = '###%20& юникод … +& '
+		var text = '#%20& юникод … +& '
 		
 		var encode = this.encode
 		function decodesOnTheFly ()
