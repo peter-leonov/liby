@@ -116,7 +116,7 @@ Tests.test(function (t)
 		t.test('broken URI encoding', function (t)
 		{
 			var text = 'abc%def%ghi'
-			window.location.hash = ''
+			window.location.hash = '#'
 			window.location.hash = text
 			if (window.location.hash == '')
 				return t.log('setting hash with broken escape sequences is ignored')
