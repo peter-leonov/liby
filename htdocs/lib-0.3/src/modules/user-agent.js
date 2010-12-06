@@ -4,12 +4,10 @@ var Me =
 {
 	guessOS: function (ua)
 	{
-		var m = /Windows/.exec(ua)
-		if (m)
+		if (/Windows/.test(ua))
 			return ['win']
 		
-		var m = /Macintosh|Mac OS/.exec(ua)
-		if (m)
+		if (/Macintosh|Mac OS/.test(ua))
 			return ['mac']
 	},
 	
