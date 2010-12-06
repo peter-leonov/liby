@@ -10,6 +10,9 @@ var Me =
 		if (/Macintosh|Mac OS/.test(ua))
 			return ['mac']
 		
+		if (/Linux/.test(ua))
+			return ['linux']
+		
 		return []
 	},
 	
