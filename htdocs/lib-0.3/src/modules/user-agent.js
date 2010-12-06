@@ -9,6 +9,8 @@ var Me =
 		
 		if (/Macintosh|Mac OS/.test(ua))
 			return ['mac']
+		
+		return []
 	},
 	
 	guessBrowser: function (ua)
