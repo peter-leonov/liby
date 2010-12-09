@@ -4,8 +4,6 @@
 
 function log (str) { try { console.log('Oops: ' + str) } catch (ex) {} }
 
-var myName = 'Oops'
-
 var Me =
 {
 	enabled: false,
@@ -99,7 +97,7 @@ var Me =
 	}
 }
 
-self.className = Me
-self[myName] = Me
+Me.className = 'Oops'
+self[Me.className] = Me
 
 })();
