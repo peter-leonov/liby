@@ -16,6 +16,7 @@ var Me =
 	{
 		try
 		{
+			// forward masking mode with return
 			return Me.onerror.apply(Me, arguments)
 		}
 		catch (ex) { log('error on error reporting') }
@@ -38,6 +39,7 @@ var Me =
 			this.report('error', message + ' at ' + uri + ':' + line)
 		}
 		
+		// prevent error message from appearing in the browser console
 		return this.masking
 	},
 	
