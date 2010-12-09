@@ -10,16 +10,20 @@ var Me =
 		try
 		{
 			window._gaq.push(['_trackEvent', category, action, label, value])
-			
 			return true
 		}
 		catch (ex)
 		{
-			this.log('could not report a track')
+			try
+			{
+				console.log(this.className + ': could not report a track')
+			}
+			catch (ex)
+			{
+				
+			}
 		}
-	},
-	
-	log: function (str) { try { console.log(this.className + ': ' + str) } catch (ex) {} }
+	}
 }
 
 Me.className = 'Tracker'
