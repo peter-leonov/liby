@@ -1,5 +1,7 @@
 ;(function(){
 
+function log (str) { try { console.log(Me.className + ': ' + str) } catch (ex) {} }
+
 if (!window._gaq)
 	window._gaq = []
 
@@ -18,14 +20,8 @@ var Me =
 		}
 		catch (ex)
 		{
-			try // to warn the developer
-			{
-				console.log(this.className + ': could not report a track')
-			}
-			catch (ex)
-			{
-				// nothing to do
-			}
+			// to warn the developer
+			log('could not report a track')
 		}
 	}
 }
