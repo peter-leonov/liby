@@ -3,9 +3,6 @@
 if (!window._gaq)
 	window._gaq = []
 
-
-var myName = 'Tracker'
-
 var Me =
 {
 	track: function (category, action, label, value)
@@ -22,10 +19,10 @@ var Me =
 		}
 	},
 	
-	log: function (str) { try { console.log(myName + ': ' + str) } catch (ex) {} }
+	log: function (str) { try { console.log(this.className + ': ' + str) } catch (ex) {} }
 }
 
-self.className = Me
-self[myName] = Me
+Me.className = 'Tracker'
+self[Me.className] = Me
 
 })();
