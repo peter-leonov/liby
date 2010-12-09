@@ -1,5 +1,7 @@
 ;(function(){
 
+// Don't cache _gaq array as it'll be replaced with
+// another object on GA load.
 if (!window._gaq)
 	window._gaq = []
 
