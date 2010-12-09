@@ -7,25 +7,31 @@ if (!window._gaq)
 
 var Me =
 {
+	setAccount: function (a) { this.account = a },
+	
 	load: function ()
 	{
+		if (this.loaded)
+			return
+		this.loaded = true
+		
+		// must be called before any other event tracking
+		window._gaq.push(['_setAccount', this.account])
+		window._gaq.push(['_trackPageview'])
+		
 		// untouched inclusion snippet
 		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	},
 	
-	_push: function (a)
-	{
-		window._gaq.push(a)
-	},
-	
 	push: function (a)
 	{
 		this.load()
-		this.push = this._push
-		this.push(a)
-	}
+		window._gaq.push(a)
+	},
+	
+	trackPageview: function () { this.load() }
 }
 
 Me.className = 'GoogleAnalytics'
