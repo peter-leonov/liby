@@ -19,7 +19,7 @@ var Me =
 			// forward masking mode with return
 			return Me.onerror.apply(Me, arguments)
 		}
-		catch (ex) { log('error on error reporting') }
+		catch (ex) { log('error on reporting') }
 	},
 	
 	onerror: function (message, uri, line)
@@ -51,7 +51,7 @@ var Me =
 		}
 		catch (ex)
 		{
-			log('could not report')
+			log('could not report an error')
 		}
 		
 		return true
