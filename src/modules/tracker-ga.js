@@ -15,6 +15,7 @@ var Me =
 	{
 		try // to track an event
 		{
+			log(category + '-' + action + ': ' + label + ' (' + value + ')')
 			window._gaq.push(['_trackEvent', category, action, label, value])
 			return true
 		}
