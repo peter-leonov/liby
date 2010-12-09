@@ -33,7 +33,7 @@ var Me =
 		{
 			// cutting out current page uri prefix
 			if (typeof uri == 'string')
-				uri = uri.replace('^' + location.protocol + '//' + location.hostname, '')
+				uri = uri.replace(location.protocol + '//' + location.hostname, '')
 			
 			this.report('error', message + ' at ' + uri + ':' + line)
 		}
