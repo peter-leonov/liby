@@ -76,7 +76,7 @@ body{font: 12px Arial,sans-serif;}
 #tests-output .skip { color: #555; }
 
 
-/*<!--#if expr="$HTTP_USER_AGENT = /MSIE 6/" -->*/
+/*<!--# if expr="$HTTP_USER_AGENT = /MSIE 6/" -->*/
 #tests-output
 {
 	position: absolute;
