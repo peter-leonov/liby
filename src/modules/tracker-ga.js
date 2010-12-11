@@ -12,6 +12,12 @@ var Me =
 	{
 		try // to track an event
 		{
+			// prepare types
+			category = String(category)
+			action = String(action)
+			label = String(label)
+			value = +value || 0
+			
 			log(category + '-' + action + ': ' + label + ' (' + value + ')')
 			GoogleAnalytics.push(['_trackEvent', category, action, label, value])
 			return true
