@@ -125,6 +125,8 @@ Tests.test(function (t)
 		t.log('clearing Oops cookie')
 		document.cookie = 'Oops=; expires=Sun, 28 Feb 2010 16:53:02 GMT'
 		
+		t.ok(!/Oops=/.test(document.cookie), 'Oops cookie cleared')
+		return
 		Oops.maybeEnable()
 		t.ok(Oops.enabled, 'Oops is enabled')
 		
