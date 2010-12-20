@@ -22,20 +22,18 @@ var Me =
 	
 	onerror: function (message, uri, line)
 	{
-		if (typeof message == 'object')
+		if (message && message.target)
 		{
-			// an event was caught
-			if (message.target)
-				this.report('warning', 'unable to load "' + message.target.src + '"')
+			uri = message.target.src
+			message = 'Error loading script'
+			line = 1
 		}
-		else
-		{
-			// cutting out current page uri prefix
-			if (typeof uri == 'string')
-				uri = uri.replace(location.protocol + '//' + location.hostname, '')
-			
-			this.report('error', message + ' at ' + uri + ':' + line)
-		}
+		
+		// cutting out current page uri prefix
+		if (typeof uri == 'string')
+			uri = uri.replace(location.protocol + '//' + location.hostname, '')
+		
+		this.report('error', message + ' at ' + uri + ':' + line)
 		
 		// prevent error message from appearing in the browser console
 		return this.masking
