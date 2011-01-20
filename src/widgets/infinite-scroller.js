@@ -90,6 +90,7 @@ Me.prototype =
 	{
 		this.space.stop()
 		this.startX = this.globalX
+		this.nodes.root.addClassName('grabbing')
 	},
 	
 	onmoveabout: function ()
@@ -108,6 +109,8 @@ Me.prototype =
 	
 	onmoveend: function (e)
 	{
+		this.nodes.root.removeClassName('grabbing')
+		
 		var ms = e.data.movements.reverse()
 		
 		if (ms[3]) // got at least five movements
