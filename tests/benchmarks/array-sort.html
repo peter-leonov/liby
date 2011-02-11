@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Array#sort() tests</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	var uniqness = 25
+	
+	var uniqs = []
+	for (var i = 0; i < uniqness; i++)
+		uniqs[i] = i.toString(uniqness)
+	
+	var unsorted = []
+	for (var i = 0; i < 1000; i++)
+	{
+		// get a unique part
+		var u = uniqs[i % uniqness]
+		
+		// make new string to avoid same string comparision optiomizations
+		var string = u + '-string'
+		
+		// bake cons string if needed
+		string.indexOf('-')
+		
+		unsorted[i] = string
+	}
+	
+	var sorted = unsorted.slice()
+	sorted.sort(function (a, b) { return a == b ? 0 : a < b ? -1 : 1 })
+	
+	
+	
+	var a = unsorted.slice()
+	a.sort(function (a, b) { if (a == b) return 0 })
+	t.like(a, sorted, 'sort checking for equality only')
+	
+	
+	var weights = []
+	for (var i = 0; i < uniqs.length; i++)
+		weights[uniqs[i] + '-string'] = i
+	
+	var a = unsorted.slice()
+	a.sort(function (a, b) { return weights[a] - weights[b] })
+	t.like(a, sorted, 'sort using pre-calculated weights')
+	
+	
+	var order = []
+	for (var i = 0; i < uniqs.length; i++)
+		order[i] = uniqs[i] + '-string'
+	
+	var a = unsorted.slice()
+	a.sort(function (a, b) { return order.indexOf(a) - order.indexOf(b) })
+	t.like(a, sorted, 'sort using indexOf()')
+})
+</script>
+</body>
+</html>
