@@ -16,6 +16,8 @@ Me.prototype =
 		if (!win)
 			win = window
 		
+		this.window = win
+		
 		function decodesOnTheFly ()
 		{
 			var a = document.createElement('a')
@@ -27,7 +29,6 @@ Me.prototype =
 		if (decodesOnTheFly())
 			Me.prototype.decode = dontTouch
 		
-		var location = this.location = win.location
 		this.value = this.get()
 		
 		var me = this
@@ -50,12 +51,12 @@ Me.prototype =
 	set: function (v)
 	{
 		this.value = v
-		this.location.hash = '#' + this.encode(v)
+		this.window.location.hash = '#' + this.encode(v)
 	},
 	
 	get: function ()
 	{
-		var v = this.location.hash.substr(1)
+		var v = this.window.location.hash.substr(1)
 		
 		try
 		{
