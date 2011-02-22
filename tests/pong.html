@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Pressing “Back” button</title>
+</head>
+<body>
+<script type="text/javascript">
+;(function(){
+
+var min = 250
+
+var wait = parseInt(location.hash.substr(1))
+wait = isNaN(wait) ? min : wait < min ? min : wait
+
+setTimeout(function () { window.history.back() }, wait)
+})();
+</script>
+</body>
+</html>
