@@ -171,8 +171,8 @@ Tests.test(function (t)
 		
 		function check ()
 		{
-			t.ok(win == window)
-			t.ok(loc == window.location)
+			t.eq(win, window)
+			t.eq(loc, window.location)
 		}
 		
 		t.async(check, 500)
