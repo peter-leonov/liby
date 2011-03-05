@@ -14,23 +14,6 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.test('script onload', function (t)
-	{
-		t.expect(1)
-		var script = document.getElementsByTagName('head')[0].appendChild(document.createElement('script'))
-		script.addEventListener('load', onload, false)
-		script.src = 'require-file-1.js?ac=' + Math.random()
-		t.time('load')
-		function onload (e)
-		{
-			t.timeEnd('load')
-			t.ok(window.veryGlobalVaiable, 'global variable set')
-			t.done()
-		}
-		
-		t.wait(10000)
-	})
-	
 	t.test('require()', function (t)
 	{
 		t.parallel(1)
