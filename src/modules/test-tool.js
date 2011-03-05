@@ -215,8 +215,12 @@ var prototype =
 		
 		this.fail(new Label('no exception was thrown'), d)
 	},
-	noexception: function (f, d)
+	noexception: function (f, c, d)
 	{
+		if (typeof c !== 'function')
+			d = c,
+			c = null
+		
 		try
 		{
 			f(this)
@@ -224,6 +228,8 @@ var prototype =
 		catch (ex)
 		{
 			this.fail([new Label('exception was thrown:'), ex], d)
+			if (c)
+				c(this, ex)
 			return
 		}
 		
