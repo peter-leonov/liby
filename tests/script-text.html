@@ -46,6 +46,39 @@ Tests.test(function (t)
 		document.body.appendChild(script)
 		t.ne(window.globalVariable, 3, 'after removeChild()')
 	})
+	
+	t.test('tags limit', function (t)
+	{
+		var enough = 250,
+			nodes = []
+		
+		window.globalVariable = 0
+		
+		var stop = false
+		for (var i = 0; i < enough; i++)
+		{
+			t.noexception(function (t)
+			{
+				var script = document.createElement('script')
+				document.body.appendChild(script)
+				script.text = 'window.globalVariable = ' + i
+				t.eq(window.globalVariable, i, 'tag no. ' + i)
+				
+				nodes[i] = script
+			},
+			function (t, ex)
+			{
+				stop = true
+			})
+			
+			// ugly labeled namespaced bug
+			if (stop)
+				break
+		}
+		
+		t.eq(enough, i, i + ' tags is enough')
+	})
+	
 })
 </script>
 </body>
