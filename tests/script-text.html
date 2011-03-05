@@ -14,6 +14,16 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	t.test('simple case', function (t)
+	{
+		var script = document.createElement('script')
+		document.body.appendChild(script)
+		
+		window.globalVariable = 0
+		script.text = 'window.globalVariable = 1'
+		t.eq(window.globalVariable, 1, 'variable set')
+	})
+	
 	t.test('tag reusing', function (t)
 	{
 		t.mayFail()
