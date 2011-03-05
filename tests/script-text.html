@@ -16,6 +16,8 @@ Tests.test(function (t)
 {
 	t.test('tag reusing', function (t)
 	{
+		t.mayFail()
+		
 		var script = document.createElement('script')
 		
 		window.globalVariable = 0
