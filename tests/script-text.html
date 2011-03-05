@@ -14,10 +14,12 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	var head = document.getElementsByTagName('head')[0]
+	
 	t.test('simple case', function (t)
 	{
 		var script = document.createElement('script')
-		document.body.appendChild(script)
+		head.appendChild(script)
 		
 		window.globalVariable = 0
 		script.text = 'window.globalVariable = 1'
@@ -35,15 +37,15 @@ Tests.test(function (t)
 		script.text = 'window.globalVariable = 1'
 		t.no(window.globalVariable, 'before appendChild()')
 		
-		document.body.appendChild(script)
+		head.appendChild(script)
 		t.eq(window.globalVariable, 1, 'after appendChild()')
 		
 		script.text = 'window.globalVariable = 2'
 		t.ne(window.globalVariable, 2, 'second assignment')
 		
 		script.text = 'window.globalVariable = 3'
-		document.body.removeChild(script)
-		document.body.appendChild(script)
+		head.removeChild(script)
+		head.appendChild(script)
 		t.ne(window.globalVariable, 3, 'after removeChild()')
 	})
 	
@@ -60,7 +62,7 @@ Tests.test(function (t)
 			t.noexception(function (t)
 			{
 				var script = document.createElement('script')
-				document.body.appendChild(script)
+				head.appendChild(script)
 				script.text = 'window.globalVariable = ' + i
 				t.eq(window.globalVariable, i, 'tag no. ' + i)
 				
