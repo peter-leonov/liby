@@ -23,9 +23,20 @@ Tests.test(function (t)
 	
 	t.test('simple', function (t)
 	{
-		t.ok(Storage.bind(), 'bind()')
+		if (!t.ok(Storage.bind(), 'bind()'))
+		{
+			t.log('no need for further testing')
+		}
 		
-		Storage.ready(function (e) { t.done() })
+		function ready ()
+		{
+			Storage.set('a', 1)
+			t.eq(Storage.get('a'), 1, 'get')
+			
+			t.done()
+		}
+		
+		Storage.ready(t.wrap(ready))
 		
 		t.wait(10000)
 	})
