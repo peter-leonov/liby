@@ -15,8 +15,11 @@ Tests.test(function (t)
 {
 	t.test('prerequisites', function (t)
 	{
-		t.ok(window.localStorage, 'window.localStorage')
-		t.ok(window.globalStorage, 'window.globalStorage')
+		t.mayFail()
+		
+		t.ok(window.localStorage, 'localStorage')
+		t.ok(window.globalStorage, 'globalStorage')
+		t.ok(document.body.addBehavior, 'addBehavior')
 	})
 })
 </script>
