@@ -393,18 +393,6 @@ Me.prototype =
 					break
 				}
 				
-				if (val === window)
-				{
-					res = 'window'
-					break
-				}
-				
-				if (val === document)
-				{
-					res = 'document'
-					break
-				}
-				
 				if (val.constructor === Date)
 				{
 					res = val.toString() + ' (' + (+val) + ')'
@@ -422,6 +410,15 @@ Me.prototype =
 					res = val.message + ' at ' + (val.fileName || val.sourceURL) + ':' + (val.line || val.lineNumber)
 					break
 				}
+				
+				// try to catch other “special” objects
+				var s = '' + val
+				if (s != '[object]')
+				{
+					res = s
+					break
+				}
+				
 				
 				// remember complex objects
 				var seen = this.seen,
