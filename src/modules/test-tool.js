@@ -415,6 +415,16 @@ Me.prototype =
 				var s = '' + val
 				if (s != '[object Object]')
 				{
+					if (s == '[object]')
+					{
+						var nodeName = val.nodeName
+						if (nodeName)
+						{
+							res = '[object ' + nodeName + ']'
+							break
+						}
+					}
+					
 					res = s
 					break
 				}
