@@ -73,7 +73,7 @@ var Me =
 	ready: function (f)
 	{
 		setTimeout(f, 0)
-	},
+	}
 }
 
 Papa.addBackend(Me)
