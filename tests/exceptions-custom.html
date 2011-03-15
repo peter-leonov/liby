@@ -10,7 +10,33 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	var list =
+	[
+		{name: 'number', value: 123},
+		{name: 'plain object', value: {}},
+		{name: 'array', value: [1,2,3]},
+		{name: 'error', value: new Error('message')},
+		{name: 'class', value: new function () { this.message = 42 }},
+		{name: 'node', value: document.body}
+	]
 	
+	function run (item)
+	{
+		t.test(item.name, function (t)
+		{
+			t.exception(function (t)
+			{
+				throw item.value
+			},
+			function (t, ex)
+			{
+				t.eq(ex, item.value, 'value')
+			})
+		})
+	}
+	
+	for (var i = 0; i < list.length; i++)
+		run(list[i])
 })
 </script>
 </body>
