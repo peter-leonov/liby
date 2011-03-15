@@ -37,73 +37,73 @@ var prototype =
 	ok: function (v, d)
 	{
 		if (v)
-			this.pass([v, new Label('is true')], d)
+			return this.pass([v, new Label('is true')], d)
 		else
-			this.fail([v, new Label('is not true')], d)
+			return this.fail([v, new Label('is not true')], d)
 	},
 	
 	no: function (v, d)
 	{
 		if (!v)
-			this.pass([v, new Label('is false')], d)
+			return this.pass([v, new Label('is false')], d)
 		else
-			this.fail([v, new Label('is not false')], d)
+			return this.fail([v, new Label('is not false')], d)
 	},
 	
 	eq: function (a, b, d)
 	{
 		if (a === b)
-			this.pass([a, new Label('===', 'label middle'), b], d)
+			return this.pass([a, new Label('===', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('!==', 'label middle'), b], d)
+			return this.fail([a, new Label('!==', 'label middle'), b], d)
 	},
 	
 	ne: function (a, b, d)
 	{
 		if (a !== b)
-			this.pass([a, new Label('!==', 'label middle'), b], d)
+			return this.pass([a, new Label('!==', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('===', 'label middle'), b], d)
+			return this.fail([a, new Label('===', 'label middle'), b], d)
 	},
 	
 	peq: function (a, b, p, d)
 	{
 		if (Math.abs(a - b) <= p)
-			this.pass([a, new Label('≈', 'label middle'), b], d)
+			return this.pass([a, new Label('≈', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('!≈', 'label middle'), b], d)
+			return this.fail([a, new Label('!≈', 'label middle'), b], d)
 	},
 	
 	match: function (a, b, d)
 	{
 		if (b.test(a))
-			this.pass([a, new Label('matches', 'label middle'), b], d)
+			return this.pass([a, new Label('matches', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('does not match', 'label middle'), b], d)
+			return this.fail([a, new Label('does not match', 'label middle'), b], d)
 	},
 	
 	ina: function (a, b, d)
 	{
 		if (indexOf(b, a) != -1)
-			this.pass([a, new Label('in', 'label middle'), b], d)
+			return this.pass([a, new Label('in', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('is not in', 'label middle'), b], d)
+			return this.fail([a, new Label('is not in', 'label middle'), b], d)
 	},
 	
 	isin: function (a, b, d)
 	{
 		if (a in b)
-			this.pass([a, new Label('is in', 'label middle'), b], d)
+			return this.pass([a, new Label('is in', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('is not in', 'label middle'), b], d)
+			return this.fail([a, new Label('is not in', 'label middle'), b], d)
 	},
 	
 	isntin: function (a, b, d)
 	{
 		if (!(a in b))
-			this.pass([a, new Label('is not in', 'label middle'), b], d)
+			return this.pass([a, new Label('is not in', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('is in', 'label middle'), b], d)
+			return this.fail([a, new Label('is in', 'label middle'), b], d)
 	},
 	
 	like: function (a, b, d)
@@ -116,9 +116,9 @@ var prototype =
 		catch (ex) {}
 		
 		if (same)
-			this.pass([a, new Label('is like', 'label middle'), b], d)
+			return this.pass([a, new Label('is like', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('is unlike', 'label middle'), b], d)
+			return this.fail([a, new Label('is unlike', 'label middle'), b], d)
 	},
 	
 	unlike: function (a, b, d)
@@ -131,68 +131,68 @@ var prototype =
 		catch (ex) {}
 		
 		if (!same)
-			this.pass([a, new Label('is unlike', 'label middle'), b], d)
+			return this.pass([a, new Label('is unlike', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('is like', 'label middle'), b], d)
+			return this.fail([a, new Label('is like', 'label middle'), b], d)
 	},
 	
 	lt: function (a, b, d)
 	{
 		if (a < b)
-			this.pass([a, new Label('<', 'label middle'), b], d)
+			return this.pass([a, new Label('<', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('>=', 'label middle'), b], d)
+			return this.fail([a, new Label('>=', 'label middle'), b], d)
 	},
 	lte: function (a, b, d)
 	{
 		if (a <= b)
-			this.pass([a, new Label('<=', 'label middle'), b], d)
+			return this.pass([a, new Label('<=', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('>', 'label middle'), b], d)
+			return this.fail([a, new Label('>', 'label middle'), b], d)
 	},
 	gte: function (a, b, d)
 	{
 		if (a >= b)
-			this.pass([a, new Label('>=', 'label middle'), b], d)
+			return this.pass([a, new Label('>=', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('<', 'label middle'), b], d)
+			return this.fail([a, new Label('<', 'label middle'), b], d)
 	},
 	gt: function (a, b, d)
 	{
 		if (a > b)
-			this.pass([a, new Label('>', 'label middle'), b], d)
+			return this.pass([a, new Label('>', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('<=', 'label middle'), b], d)
+			return this.fail([a, new Label('<=', 'label middle'), b], d)
 	},
 	
 	instance: function (a, b, d)
 	{
 		if (a instanceof b)
-			this.pass([a, new Label('is an instance of', 'label middle'), b], d)
+			return this.pass([a, new Label('is an instance of', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('is not an instance of', 'label middle'), b], d)
+			return this.fail([a, new Label('is not an instance of', 'label middle'), b], d)
 	},
 	notinstance: function (a, b, d)
 	{
 		if (!(a instanceof b))
-			this.pass([a, new Label('is not instanceof', 'label middle'), b], d)
+			return this.pass([a, new Label('is not instanceof', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('instanceof', 'label middle'), b], d)
+			return this.fail([a, new Label('instanceof', 'label middle'), b], d)
 	},
 	
 	type: function (a, b, d)
 	{
 		if (typeof a === b)
-			this.pass([a, new Label('typeof', 'label middle'), b], d)
+			return this.pass([a, new Label('typeof', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('is not typeof', 'label middle'), b], d)
+			return this.fail([a, new Label('is not typeof', 'label middle'), b], d)
 	},
 	nottype: function (a, b, d)
 	{
 		if (!(typeof a === b))
-			this.pass([a, new Label('is not typeof', 'label middle'), b], d)
+			return this.pass([a, new Label('is not typeof', 'label middle'), b], d)
 		else
-			this.fail([a, new Label('typeof', 'label middle'), b], d)
+			return this.fail([a, new Label('typeof', 'label middle'), b], d)
 	},
 	
 	exception: function (f, c, d)
@@ -210,10 +210,10 @@ var prototype =
 			this.pass([new Label('exception was thrown:'), ex], d)
 			if (c)
 				c(this, ex)
-			return
+			return true
 		}
 		
-		this.fail(new Label('no exception was thrown'), d)
+		return this.fail(new Label('no exception was thrown'), d)
 	},
 	noexception: function (f, c, d)
 	{
@@ -230,10 +230,10 @@ var prototype =
 			this.fail([new Label('exception was thrown:'), ex], d)
 			if (c)
 				c(this, ex)
-			return
+			return true
 		}
 		
-		this.pass(new Label('no exception was thrown'), d)
+		return this.pass(new Label('no exception was thrown'), d)
 	},
 	
 	_times: {},

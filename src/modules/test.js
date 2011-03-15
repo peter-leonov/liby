@@ -196,6 +196,8 @@ var sup = Super.prototype,
 		this.results.push({status: 'passed', message: m, description: d})
 		if (m || d)
 			this.reporter.pass(m, d)
+		
+		return true
 	},
 	
 	fail: function (m, d)
@@ -203,6 +205,8 @@ var sup = Super.prototype,
 		this.results.push({status: 'failed', message: m, description: d})
 		if (m || d)
 			this.reporter[this.conf.mayFail ? 'warn' : 'fail'](m, d)
+		
+		return false
 	},
 	
 	setStatus: function (s)
