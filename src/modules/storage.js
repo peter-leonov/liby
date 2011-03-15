@@ -60,4 +60,28 @@ Papa = Me
 
 })();
 
+
+;(function(){
+
+var Me =
+{
+	bind: function ()
+	{
+		return this.data = window.localStorage || window.globalStorage[location.hostname]
+	},
+	
+	ready: function (f)
+	{
+		setTimeout(f, 0)
+	},
+}
+
+Papa.addBackend(Me)
+
+Me.className = 'Web'
+Papa[Me.className] = Me
+
+})();
+
+
 })();
