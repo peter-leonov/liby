@@ -413,7 +413,7 @@ Me.prototype =
 				
 				// try to catch other “special” objects
 				var s = '' + val
-				if (s != '[object]')
+				if (s != '[object Object]')
 				{
 					res = s
 					break
