@@ -47,11 +47,11 @@ var sup = Super.prototype,
 		this.supercall('start', [delay])
 	},
 	
-	exec: function (f)
+	exec: function (f, args)
 	{
 		try
 		{
-			f(this.tool)
+			f.apply(null, args)
 		}
 		catch (ex)
 		{
@@ -61,7 +61,7 @@ var sup = Super.prototype,
 	
 	job: function ()
 	{
-		this.exec(this.callback)
+		this.exec(this.callback, [this.tool])
 	},
 	
 	oncomplete: function ()

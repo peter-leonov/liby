@@ -245,6 +245,19 @@ Tests.test(function (t)
 		t.async(job)
 		t.async(job)
 	})
+	
+	t.test('wrap', function (t)
+	{
+		var res
+		t.wrap(function (a, b, c) { res = [a, b, c] })(1, 2, 3)
+		t.like(res, [1 ,2 ,3], 'arguments')
+	})
+	
+	t.test('wrap exception', function (t)
+	{
+		t.failing(true)
+		t.wrap(function () { xxx() })(1, 2, 3)
+	})
 })
 </script>
 </body>

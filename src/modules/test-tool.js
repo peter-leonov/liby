@@ -236,6 +236,12 @@ var prototype =
 		return this.pass(new Label('no exception was thrown'), d)
 	},
 	
+	wrap: function (f)
+	{
+		var test = this.parent
+		return function () { return test.exec(f, arguments) }
+	},
+	
 	_times: {},
 	time: function (name)
 	{
