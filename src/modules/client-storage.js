@@ -191,4 +191,110 @@ Papa.addBackend(Me)
 })();
 
 
+;(function(){
+
+function Me ()
+{
+	Papa.call(this)
+}
+
+Me.prototype = new Papa()
+
+Me.methods =
+{
+	init: function ()
+	{
+		var node = document.body
+		
+		if (!node.addBehavior)
+			return
+		node.addBehavior("#default#userData")
+		
+		if (!node.XMLDocument)
+			return
+		
+		this.node = node
+		this.load()
+		
+		return this.data = node.XMLDocument.documentElement
+	},
+	
+	load: function ()
+	{
+		this.node.load('client-storage')
+	},
+	
+	save: function ()
+	{
+		this.node.save('client-storage')
+	},
+	
+	get: function (k)
+	{
+		return this.data.getAttribute(k)
+	},
+	
+	set: function (k, v)
+	{
+		this.data.setAttribute(k, v)
+		this.save()
+		return v
+	},
+	
+	remove: function (k)
+	{
+		var data = this.data
+		
+		var v = data.getAttribute(k)
+		data.removeAttribute(k)
+		this.save()
+		return v
+	},
+	
+	length: function ()
+	{
+		return this.data.attributes.length
+	},
+	
+	keys: function ()
+	{
+		var keys = []
+		
+		var attributes = this.data.attributes
+		for (var i = 0, il = attributes.length; i < il; i++)
+			keys[i] = attributes[i].name
+		
+		return keys
+	},
+	
+	clear: function (k)
+	{
+		var keys = []
+		
+		var data = this.data, attributes = data.attributes
+		for (var i = 0, il = attributes.length; i < il; i++)
+		{
+			// get the first key at every iteration
+			var name = attributes[0].name
+			keys[i] = name
+			
+			data.removeAttribute(name)
+		}
+		
+		this.save()
+		
+		return keys
+	}
+}
+
+Object.extend(Me.prototype, Me.methods)
+
+Me.className = 'UserData'
+Papa[Me.className] = Me
+
+Papa.addBackend(Me)
+
+})();
+
+
 })();
