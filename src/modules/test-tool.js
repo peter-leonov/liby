@@ -417,25 +417,6 @@ Me.prototype =
 					break
 				}
 				
-				// try to catch other “special” objects
-				var s = '' + val
-				if (s != '[object Object]')
-				{
-					if (s == '[object]')
-					{
-						var nodeName = val.nodeName
-						if (nodeName)
-						{
-							res = '[object ' + nodeName + ']'
-							break
-						}
-					}
-					
-					res = s
-					break
-				}
-				
-				
 				// remember complex objects
 				var seen = this.seen,
 					maxElements = this.maxElements,
@@ -464,6 +445,24 @@ Me.prototype =
 						elements.push(this.walk(val[i]))
 					}
 					res = (this.level > 1 ? sep : '') + ind + '[' + sep + ind + this.indc + elements.join(',' + sep + ind + this.indc) + sep + ind + ']'
+					break
+				}
+				
+				// try to catch other “special” objects
+				var s = '' + val
+				if (s != '[object Object]')
+				{
+					if (s == '[object]')
+					{
+						var nodeName = val.nodeName
+						if (nodeName)
+						{
+							res = '[object ' + nodeName + ']'
+							break
+						}
+					}
+					
+					res = s
 					break
 				}
 				
