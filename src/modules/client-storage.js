@@ -4,30 +4,18 @@ var Papa
 
 ;(function(){
 
-var Me =
+function Me ()
 {
-	backends: [],
-	addBackend: function (o)
-	{
-		this.backends.push(o)
-	},
-	
-	guess: function ()
-	{
-		// try to bind one backend by one
-		for (var i = 0; i < this.backends.length; i++)
-		{
-			var backend = new this.backends[i]
-			if (backend.bind())
-				return this.backend = backend
-		}
-	},
-	
-	state: 'init',
-	listeners: [],
+	this.state = 'init'
+	this.listeners = []
+}
+
+Me.prototype =
+{
 	ready: function (f)
 	{
 		var state = this.state
+		
 		if (state == 'ready')
 		{
 			setTimeout(f, 0)
@@ -37,11 +25,14 @@ var Me =
 		this.listeners.push(f)
 		
 		if (state == 'init')
-		{
-			var me = this
-			this.backend.ready(function () { me.onready() })
-		}
+			this.bind()
 	},
+	
+	bind: function (e)
+	{
+		this.onready()
+	},
+	
 	onready: function ()
 	{
 		this.state = 'ready'
@@ -51,15 +42,30 @@ var Me =
 			setTimeout(listeners[i], 0)
 		
 		this.listeners.length = 0
+	}
+}
+
+Me.staticMethods =
+{
+	backends: [],
+	addBackend: function (o)
+	{
+		this.backends.push(o)
 	},
 	
-	get: function (k) { return this.backend.get(k) },
-	set: function (k, v) { return this.backend.set(k, v) },
-	remove: function (k) { return this.backend.remove(k) },
-	length: function () { return this.backend.length() },
-	keys: function () { return this.backend.keys() },
-	clear: function () { return this.backend.clear() }
+	guess: function ()
+	{
+		// try to init one backend by one
+		for (var i = 0; i < this.backends.length; i++)
+		{
+			var backend = new this.backends[i]
+			if (backend.init())
+				return this.backend = backend
+		}
+	}
 }
+
+Object.extend(Me, Me.staticMethods)
 
 Me.className = 'ClientStorage'
 self[Me.className] = Me
@@ -70,18 +76,18 @@ Papa = Me
 
 ;(function(){
 
-function Me () {}
-
-Me.prototype =
+function Me ()
 {
-	bind: function ()
+	Papa.call(this)
+}
+
+Me.prototype = new Papa()
+
+Me.methods =
+{
+	init: function ()
 	{
 		return this.data = window.localStorage
-	},
-	
-	ready: function (f)
-	{
-		setTimeout(f, 0)
 	},
 	
 	get: function (k)
@@ -130,6 +136,8 @@ Me.prototype =
 		return keys
 	}
 }
+
+Object.extend(Me.prototype, Me.methods)
 
 Papa.addBackend(Me)
 
@@ -141,18 +149,18 @@ Papa[Me.className] = Me
 
 ;(function(){
 
-function Me () {}
-
-Me.prototype =
+function Me ()
 {
-	bind: function ()
+	Papa.call(this)
+}
+
+Me.prototype = new Papa()
+
+Me.methods =
+{
+	init: function ()
 	{
 		return this.data = window.globalStorage[location.hostname]
-	},
-	
-	ready: function (f)
-	{
-		setTimeout(f, 0)
 	},
 	
 	get: function (k)
@@ -201,6 +209,8 @@ Me.prototype =
 		return keys
 	}
 }
+
+Object.extend(Me.prototype, Me.methods)
 
 Papa.addBackend(Me)
 
