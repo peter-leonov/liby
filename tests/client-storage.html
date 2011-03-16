@@ -68,7 +68,10 @@ Tests.test(function (t)
 					t.like(storage.keys().sort(), [], 'keys after clear')
 					
 					
-					
+					storage.set(1, 'a')
+					t.eq(storage.get(1), 'a', 'special case name "1"')
+					storage.set({}, 'a')
+					t.eq(storage.get({}), 'a', 'special case name "{}"')
 					storage.set('contentEditable', 'a')
 					t.eq(storage.get('contentEditable'), 'a', 'special case name "contentEditable"')
 					storage.set('parentNode', 'a')
