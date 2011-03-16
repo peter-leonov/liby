@@ -59,9 +59,13 @@ Tests.test(function (t)
 			t.like(storage.length(), 0, 'length after clear')
 			t.like(storage.keys().sort(), [], 'keys after clear')
 			
-			t.done()
+			function afterReady ()
+			{
+				t.pass('ready() works after onready')
+				t.done()
+			}
+			storage.ready(t.wrap(afterReady))
 		}
-		
 		storage.ready(t.wrap(ready))
 		
 		t.wait(10000)
