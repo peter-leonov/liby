@@ -30,8 +30,31 @@ Tests.test(function (t)
 		
 		function ready ()
 		{
-			Storage.set('a', 1)
-			t.eq(Storage.get('a'), 1, 'get')
+			Storage.clear()
+			
+			t.eq(Storage.set('a', 1), 1, 'set a')
+			t.eq(Storage.set('b', 2), 2, 'set b')
+			t.eq(Storage.set('c', 3), 3, 'set c')
+			
+			t.eq(Storage.get('a'), '1', 'get a')
+			t.eq(Storage.get('b'), '2', 'get b')
+			t.eq(Storage.get('c'), '3', 'get c')
+			t.eq(Storage.get('d'), undefined, 'get d')
+			
+			t.like(Storage.length(), 3, 'length')
+			t.like(Storage.keys().sort(), ['a', 'b', 'c'], 'keys')
+			
+			t.eq(Storage.remove('b'), '2', 'remove b')
+			t.eq(Storage.get('b'), undefined, 'get b after remove')
+			t.like(Storage.length(), 2, 'length after remove')
+			t.like(Storage.keys().sort(), ['a', 'c'], 'keys after remove')
+			
+			t.like(Storage.clear().sort(), ['a', 'c'], 'clear')
+			t.eq(Storage.get('a'), undefined, 'get a after clear')
+			t.eq(Storage.get('b'), undefined, 'get b after clear')
+			t.eq(Storage.get('c'), undefined, 'get c after clear')
+			t.like(Storage.length(), 0, 'length after clear')
+			t.like(Storage.keys().sort(), [], 'keys after clear')
 			
 			t.done()
 		}
