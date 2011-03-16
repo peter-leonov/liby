@@ -51,7 +51,14 @@ var Me =
 			setTimeout(listeners[i], 0)
 		
 		this.listeners.length = 0
-	}
+	},
+	
+	get: function (k) { return this.backend.get(k) },
+	set: function (k, v) { return this.backend.set(k, v) },
+	remove: function (k) { return this.backend.remove(k) },
+	length: function () { return this.backend.length() },
+	keys: function () { return this.backend.keys() },
+	clear: function () { return this.backend.clear() }
 }
 
 Me.className = 'Storage'
@@ -73,6 +80,49 @@ var Me =
 	ready: function (f)
 	{
 		setTimeout(f, 0)
+	},
+	
+	get: function (k)
+	{
+		return this.data[k]
+	},
+	set: function (k, v)
+	{
+		return this.data[k] = v
+	},
+	remove: function (k)
+	{
+		var data = this.data
+		
+		var v = data[k]
+		delete data[k]
+		return v
+	},
+	length: function ()
+	{
+		var l = 0
+		for (var k in this.data)
+			l++
+		return l
+	},
+	keys: function ()
+	{
+		var keys = []
+		for (var k in this.data)
+			keys.push(k)
+		return keys
+	},
+	clear: function ()
+	{
+		var data = this.data
+		
+		var keys = []
+		for (var k in data)
+		{
+			keys.push(k)
+			delete data[k]
+		}
+		return keys
 	}
 }
 
