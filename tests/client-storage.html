@@ -35,57 +35,83 @@ Tests.test(function (t)
 				return
 			}
 			
-			function ready ()
+			t.test('data', function (t)
 			{
-				t.eq(storage.get('persist'), '777', 'get x (persistent!)')
-				
-				storage.clear()
-				
-				t.eq(storage.set('a', 1), 1, 'set a')
-				t.eq(storage.set('b', 2), 2, 'set b')
-				t.eq(storage.set('c', 3), 3, 'set c')
-				
-				t.eq(storage.get('a'), '1', 'get a')
-				t.eq(storage.get('b'), '2', 'get b')
-				t.eq(storage.get('c'), '3', 'get c')
-				t.eq(storage.get('d'), null, 'get d')
-				
-				t.like(storage.length(), 3, 'length')
-				t.like(storage.keys().sort(), ['a', 'b', 'c'], 'keys')
-				
-				t.eq(storage.remove('b'), '2', 'remove b')
-				t.eq(storage.get('b'), null, 'get b after remove')
-				t.like(storage.length(), 2, 'length after remove')
-				t.like(storage.keys().sort(), ['a', 'c'], 'keys after remove')
-				
-				t.eq(storage.remove('b'), null, 'remove b after remove')
-				
-				t.like(storage.clear().sort(), ['a', 'c'], 'clear')
-				t.eq(storage.get('a'), null, 'get a after clear')
-				t.eq(storage.get('b'), null, 'get b after clear')
-				t.eq(storage.get('c'), null, 'get c after clear')
-				t.like(storage.length(), 0, 'length after clear')
-				t.like(storage.keys().sort(), [], 'keys after clear')
-				
-				storage.set('persist', 777)
-				
-				storage.set('contentEditable', 'a')
-				t.eq(storage.get('contentEditable'), 'a', 'special case name "contentEditable"')
-				storage.set('parentNode', 'a')
-				t.eq(storage.get('parentNode'), 'a', 'special case name "parentNode"')
-				storage.set('bottomMargin', 'a')
-				t.eq(storage.get('bottomMargin'), 'a', 'special case name "bottomMargin"')
-				
-				function afterReady ()
+				function ready ()
 				{
-					t.pass('ready() works after onready')
+					storage.clear()
+					
+					t.eq(storage.set('a', 1), 1, 'set a')
+					t.eq(storage.set('b', 2), 2, 'set b')
+					t.eq(storage.set('c', 3), 3, 'set c')
+					
+					t.eq(storage.get('a'), '1', 'get a')
+					t.eq(storage.get('b'), '2', 'get b')
+					t.eq(storage.get('c'), '3', 'get c')
+					t.eq(storage.get('d'), null, 'get d')
+					
+					t.like(storage.length(), 3, 'length')
+					t.like(storage.keys().sort(), ['a', 'b', 'c'], 'keys')
+					
+					t.eq(storage.remove('b'), '2', 'remove b')
+					t.eq(storage.get('b'), null, 'get b after remove')
+					t.like(storage.length(), 2, 'length after remove')
+					t.like(storage.keys().sort(), ['a', 'c'], 'keys after remove')
+					
+					t.eq(storage.remove('b'), null, 'remove b after remove')
+					
+					t.like(storage.clear().sort(), ['a', 'c'], 'clear')
+					t.eq(storage.get('a'), null, 'get a after clear')
+					t.eq(storage.get('b'), null, 'get b after clear')
+					t.eq(storage.get('c'), null, 'get c after clear')
+					t.like(storage.length(), 0, 'length after clear')
+					t.like(storage.keys().sort(), [], 'keys after clear')
+					
+					
+					
+					storage.set('contentEditable', 'a')
+					t.eq(storage.get('contentEditable'), 'a', 'special case name "contentEditable"')
+					storage.set('parentNode', 'a')
+					t.eq(storage.get('parentNode'), 'a', 'special case name "parentNode"')
+					storage.set('bottomMargin', 'a')
+					t.eq(storage.get('bottomMargin'), 'a', 'special case name "bottomMargin"')
+					
 					t.done()
 				}
-				storage.ready(t.wrap(afterReady))
-			}
-			storage.ready(t.wrap(ready))
+				storage.ready(t.wrap(ready))
+				
+				t.wait(10000)
+			})
 			
-			t.wait(10000)
+			t.test('persistency', function (t)
+			{
+				function ready ()
+				{
+					t.eq(storage.get('persist'), '777', 'get x (persistent!)')
+					storage.set('persist', 777)
+					
+					t.done()
+				}
+				
+				storage.ready(t.wrap(ready))
+				t.wait(10000)
+			})
+			
+			t.test('ready', function (t)
+			{
+				function ready ()
+				{
+					function afterReady ()
+					{
+						t.pass('ready() works after onready')
+						t.done()
+					}
+					storage.ready(t.wrap(afterReady))
+				}
+				
+				storage.ready(t.wrap(ready))
+				t.wait(10000)
+			})
 		})
 	}
 	
