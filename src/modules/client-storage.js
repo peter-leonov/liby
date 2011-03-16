@@ -17,7 +17,7 @@ var Me =
 		// try to bind one backend by one
 		for (var i = 0; i < this.backends.length; i++)
 		{
-			var backend = this.backends[i]
+			var backend = new this.backends[i]
 			if (backend.bind())
 				return this.backend = backend
 		}
@@ -70,7 +70,9 @@ Papa = Me
 
 ;(function(){
 
-var Me =
+function Me () {}
+
+Me.prototype =
 {
 	bind: function ()
 	{
@@ -139,7 +141,9 @@ Papa[Me.className] = Me
 
 ;(function(){
 
-var Me =
+function Me () {}
+
+Me.prototype =
 {
 	bind: function ()
 	{
