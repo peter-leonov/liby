@@ -74,7 +74,7 @@ var Me =
 {
 	bind: function ()
 	{
-		return this.data = window.localStorage// || window.globalStorage[location.hostname]
+		return this.data = window.localStorage
 	},
 	
 	ready: function (f)
@@ -131,7 +131,76 @@ var Me =
 
 Papa.addBackend(Me)
 
-Me.className = 'Web'
+Me.className = 'LocalStorage'
+Papa[Me.className] = Me
+
+})();
+
+
+;(function(){
+
+var Me =
+{
+	bind: function ()
+	{
+		return this.data = window.globalStorage[location.hostname]
+	},
+	
+	ready: function (f)
+	{
+		setTimeout(f, 0)
+	},
+	
+	get: function (k)
+	{
+		return this.data.getItem(k)
+	},
+	set: function (k, v)
+	{
+		this.data.setItem(k, v)
+		return v
+	},
+	remove: function (k)
+	{
+		var data = this.data
+		
+		var v = data.getItem(k)
+		data.removeItem(k)
+		return v
+	},
+	length: function ()
+	{
+		return this.data.length
+	},
+	keys: function ()
+	{
+		var data = this.data
+		
+		var keys = []
+		for (var i = 0, il = data.length; i < il; i++)
+			keys[i] = data.key(i)
+		
+		return keys
+	},
+	clear: function ()
+	{
+		var data = this.data
+		
+		var keys = []
+		for (var i = 0, il = data.length; i < il; i++)
+		{
+			// get the first key at every iteration
+			var k = data.key(0)
+			keys[i] = k
+			delete data[k]
+		}
+		return keys
+	}
+}
+
+Papa.addBackend(Me)
+
+Me.className = 'GlobalStorage'
 Papa[Me.className] = Me
 
 })();
