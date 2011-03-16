@@ -160,7 +160,8 @@ Me.methods =
 {
 	init: function ()
 	{
-		return this.data = window.globalStorage[location.hostname]
+		var data = window.globalStorage
+		return this.data = data && data[location.hostname]
 	},
 	
 	get: function (k)
