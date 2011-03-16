@@ -69,6 +69,13 @@ Tests.test(function (t)
 				
 				storage.set('persist', 777)
 				
+				storage.set('contentEditable', 'a')
+				t.eq(storage.get('contentEditable'), 'a', 'special case name "contentEditable"')
+				storage.set('parentNode', 'a')
+				t.eq(storage.get('parentNode'), 'a', 'special case name "parentNode"')
+				storage.set('bottomMargin', 'a')
+				t.eq(storage.get('bottomMargin'), 'a', 'special case name "bottomMargin"')
+				
 				function afterReady ()
 				{
 					t.pass('ready() works after onready')
