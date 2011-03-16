@@ -28,41 +28,41 @@ Tests.test(function (t)
 		t.test(S.className, function (t)
 		{
 			var storage = new S()
-		
+			
 			if (!storage.init())
 			{
 				t.log('not supported')
 				return
 			}
-		
+			
 			function ready ()
 			{
 				storage.clear()
-			
+				
 				t.eq(storage.set('a', 1), 1, 'set a')
 				t.eq(storage.set('b', 2), 2, 'set b')
 				t.eq(storage.set('c', 3), 3, 'set c')
-			
+				
 				t.eq(storage.get('a'), '1', 'get a')
 				t.eq(storage.get('b'), '2', 'get b')
 				t.eq(storage.get('c'), '3', 'get c')
 				t.eq(storage.get('d'), null, 'get d')
-			
+				
 				t.like(storage.length(), 3, 'length')
 				t.like(storage.keys().sort(), ['a', 'b', 'c'], 'keys')
-			
+				
 				t.eq(storage.remove('b'), '2', 'remove b')
 				t.eq(storage.get('b'), null, 'get b after remove')
 				t.like(storage.length(), 2, 'length after remove')
 				t.like(storage.keys().sort(), ['a', 'c'], 'keys after remove')
-			
+				
 				t.like(storage.clear().sort(), ['a', 'c'], 'clear')
 				t.eq(storage.get('a'), null, 'get a after clear')
 				t.eq(storage.get('b'), null, 'get b after clear')
 				t.eq(storage.get('c'), null, 'get c after clear')
 				t.like(storage.length(), 0, 'length after clear')
 				t.like(storage.keys().sort(), [], 'keys after clear')
-			
+				
 				function afterReady ()
 				{
 					t.pass('ready() works after onready')
@@ -71,7 +71,7 @@ Tests.test(function (t)
 				storage.ready(t.wrap(afterReady))
 			}
 			storage.ready(t.wrap(ready))
-		
+			
 			t.wait(10000)
 		})
 	}
