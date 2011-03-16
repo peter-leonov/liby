@@ -154,7 +154,7 @@ function Me ()
 	Papa.call(this)
 }
 
-Me.prototype = new Papa()
+Me.prototype = new Papa.LocalStorage()
 
 Me.methods =
 {
@@ -168,11 +168,6 @@ Me.methods =
 		var v = this.data.getItem(k)
 		return v === null ? null : v.value
 	},
-	set: function (k, v)
-	{
-		this.data.setItem(k, v)
-		return v
-	},
 	remove: function (k)
 	{
 		var data = this.data
@@ -182,34 +177,6 @@ Me.methods =
 			v = v.value
 		data.removeItem(k)
 		return v
-	},
-	length: function ()
-	{
-		return this.data.length
-	},
-	keys: function ()
-	{
-		var data = this.data
-		
-		var keys = []
-		for (var i = 0, il = data.length; i < il; i++)
-			keys[i] = data.key(i)
-		
-		return keys
-	},
-	clear: function ()
-	{
-		var data = this.data
-		
-		var keys = []
-		for (var i = 0, il = data.length; i < il; i++)
-		{
-			// get the first key at every iteration
-			var k = data.key(0)
-			keys[i] = k
-			delete data[k]
-		}
-		return keys
 	}
 }
 
