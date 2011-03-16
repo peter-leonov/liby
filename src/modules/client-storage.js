@@ -139,10 +139,10 @@ Me.methods =
 
 Object.extend(Me.prototype, Me.methods)
 
-Papa.addBackend(Me)
-
 Me.className = 'LocalStorage'
 Papa[Me.className] = Me
+
+Papa.addBackend(Me)
 
 })();
 
@@ -183,10 +183,10 @@ Me.methods =
 
 Object.extend(Me.prototype, Me.methods)
 
-Papa.addBackend(Me)
-
 Me.className = 'GlobalStorage'
 Papa[Me.className] = Me
+
+Papa.addBackend(Me)
 
 })();
 
