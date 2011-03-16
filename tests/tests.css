@@ -72,7 +72,7 @@ body{font: 12px Arial,sans-serif;}
 #tests-output .info { color: #06d; list-style: none; }
 #tests-output .pass { color: #082; }
 #tests-output .fail { color: #d40; }
-#tests-output .warning { color: #e80; }
+#tests-output .warn { color: #e80; }
 #tests-output .skip { color: #555; }
 
 
