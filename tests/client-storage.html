@@ -58,6 +58,8 @@ Tests.test(function (t)
 				t.like(storage.length(), 2, 'length after remove')
 				t.like(storage.keys().sort(), ['a', 'c'], 'keys after remove')
 				
+				t.eq(storage.remove('b'), null, 'remove b after remove')
+				
 				t.like(storage.clear().sort(), ['a', 'c'], 'clear')
 				t.eq(storage.get('a'), null, 'get a after clear')
 				t.eq(storage.get('b'), null, 'get b after clear')
