@@ -165,7 +165,8 @@ Me.methods =
 	
 	get: function (k)
 	{
-		return this.data.getItem(k)
+		var v = this.data.getItem(k)
+		return v === null ? null : v.value
 	},
 	set: function (k, v)
 	{
@@ -177,6 +178,8 @@ Me.methods =
 		var data = this.data
 		
 		var v = data.getItem(k)
+		if (v !== null)
+			v = v.value
 		data.removeItem(k)
 		return v
 	},
