@@ -61,7 +61,7 @@ var Me =
 	clear: function () { return this.backend.clear() }
 }
 
-Me.className = 'Storage'
+Me.className = 'ClientStorage'
 self[Me.className] = Me
 Papa = Me
 
