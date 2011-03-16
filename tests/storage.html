@@ -12,8 +12,6 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	var S = ClientStorage
-	
 	t.test('prerequisites', function (t)
 	{
 		t.mayFail()
@@ -23,47 +21,55 @@ Tests.test(function (t)
 		t.ok(document.body.addBehavior, 'addBehavior')
 	})
 	
-	t.test('simple', function (t)
+	
+	var storage = ClientStorage.guess()
+	
+	if (!t.ok(storage, 'ClientStorage.guess()'))
 	{
-		if (!t.ok(S.bind(), 'bind()'))
-		{
-			t.log('no need for further testing')
-		}
-		
+		t.log('no need for further testing')
+	}
+	
+	function run (t)
+	{
 		function ready ()
 		{
-			S.clear()
+			storage.clear()
 			
-			t.eq(S.set('a', 1), 1, 'set a')
-			t.eq(S.set('b', 2), 2, 'set b')
-			t.eq(S.set('c', 3), 3, 'set c')
+			t.eq(storage.set('a', 1), 1, 'set a')
+			t.eq(storage.set('b', 2), 2, 'set b')
+			t.eq(storage.set('c', 3), 3, 'set c')
 			
-			t.eq(S.get('a'), '1', 'get a')
-			t.eq(S.get('b'), '2', 'get b')
-			t.eq(S.get('c'), '3', 'get c')
-			t.eq(S.get('d'), null, 'get d')
+			t.eq(storage.get('a'), '1', 'get a')
+			t.eq(storage.get('b'), '2', 'get b')
+			t.eq(storage.get('c'), '3', 'get c')
+			t.eq(storage.get('d'), null, 'get d')
 			
-			t.like(S.length(), 3, 'length')
-			t.like(S.keys().sort(), ['a', 'b', 'c'], 'keys')
+			t.like(storage.length(), 3, 'length')
+			t.like(storage.keys().sort(), ['a', 'b', 'c'], 'keys')
 			
-			t.eq(S.remove('b'), '2', 'remove b')
-			t.eq(S.get('b'), null, 'get b after remove')
-			t.like(S.length(), 2, 'length after remove')
-			t.like(S.keys().sort(), ['a', 'c'], 'keys after remove')
+			t.eq(storage.remove('b'), '2', 'remove b')
+			t.eq(storage.get('b'), null, 'get b after remove')
+			t.like(storage.length(), 2, 'length after remove')
+			t.like(storage.keys().sort(), ['a', 'c'], 'keys after remove')
 			
-			t.like(S.clear().sort(), ['a', 'c'], 'clear')
-			t.eq(S.get('a'), null, 'get a after clear')
-			t.eq(S.get('b'), null, 'get b after clear')
-			t.eq(S.get('c'), null, 'get c after clear')
-			t.like(S.length(), 0, 'length after clear')
-			t.like(S.keys().sort(), [], 'keys after clear')
+			t.like(storage.clear().sort(), ['a', 'c'], 'clear')
+			t.eq(storage.get('a'), null, 'get a after clear')
+			t.eq(storage.get('b'), null, 'get b after clear')
+			t.eq(storage.get('c'), null, 'get c after clear')
+			t.like(storage.length(), 0, 'length after clear')
+			t.like(storage.keys().sort(), [], 'keys after clear')
 			
 			t.done()
 		}
 		
-		S.ready(t.wrap(ready))
+		storage.ready(t.wrap(ready))
 		
 		t.wait(10000)
+	}
+	
+	t.test('simple', function (t)
+	{
+		run(t)
 	})
 	
 })

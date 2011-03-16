@@ -12,7 +12,7 @@ var Me =
 		this.backends.push(o)
 	},
 	
-	bind: function ()
+	guess: function ()
 	{
 		// try to bind one backend by one
 		for (var i = 0; i < this.backends.length; i++)
