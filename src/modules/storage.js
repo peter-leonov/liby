@@ -74,7 +74,7 @@ var Me =
 {
 	bind: function ()
 	{
-		return this.data = window.localStorage || window.globalStorage[location.hostname]
+		return this.data = window.localStorage// || window.globalStorage[location.hostname]
 	},
 	
 	ready: function (f)
@@ -84,32 +84,33 @@ var Me =
 	
 	get: function (k)
 	{
-		return this.data[k]
+		return this.data.getItem(k)
 	},
 	set: function (k, v)
 	{
-		return this.data[k] = v
+		this.data.setItem(k, v)
+		return v
 	},
 	remove: function (k)
 	{
 		var data = this.data
 		
-		var v = data[k]
-		delete data[k]
+		var v = data.getItem(k)
+		data.removeItem(k)
 		return v
 	},
 	length: function ()
 	{
-		var l = 0
-		for (var k in this.data)
-			l++
-		return l
+		return this.data.length
 	},
 	keys: function ()
 	{
+		var data = this.data
+		
 		var keys = []
-		for (var k in this.data)
-			keys.push(k)
+		for (var i = 0, il = data.length; i < il; i++)
+			keys[i] = data.key(i)
+		
 		return keys
 	},
 	clear: function ()
@@ -117,9 +118,11 @@ var Me =
 		var data = this.data
 		
 		var keys = []
-		for (var k in data)
+		for (var i = 0, il = data.length; i < il; i++)
 		{
-			keys.push(k)
+			// get the first key at every iteration
+			var k = data.key(0)
+			keys[i] = k
 			delete data[k]
 		}
 		return keys
