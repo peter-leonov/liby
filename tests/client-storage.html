@@ -37,6 +37,8 @@ Tests.test(function (t)
 			
 			function ready ()
 			{
+				t.eq(storage.get('persist'), '777', 'get x (persistent!)')
+				
 				storage.clear()
 				
 				t.eq(storage.set('a', 1), 1, 'set a')
@@ -62,6 +64,8 @@ Tests.test(function (t)
 				t.eq(storage.get('c'), null, 'get c after clear')
 				t.like(storage.length(), 0, 'length after clear')
 				t.like(storage.keys().sort(), [], 'keys after clear')
+				
+				storage.set('persist', 777)
 				
 				function afterReady ()
 				{
