@@ -17,6 +17,7 @@ var backend = parts[0],
 	value = parts[2]
 
 var s = new ClientStorage[backend]
+s.init()
 s.ready(function () { s.set(key, value) })
 
 })();
