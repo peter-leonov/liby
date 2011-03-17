@@ -60,7 +60,7 @@ Me.staticMethods =
 		{
 			var backend = new this.backends[i]
 			if (backend.init())
-				return this.backend = backend
+				return backend
 		}
 	}
 }
