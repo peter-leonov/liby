@@ -76,7 +76,7 @@ Tests.test(function (t)
 				t.wait(10000)
 			})
 			
-			t.test('non-standard keys', function (t)
+			t.test('non-standard keys and values', function (t)
 			{
 				function ready ()
 				{
@@ -94,10 +94,12 @@ Tests.test(function (t)
 					for (var i = 0, il = keys.length; i < il; i++)
 					{
 						var key = keys[i]
-						keys[i] = '' + key
 						
-						storage.set(key, 'a')
-						t.eq(storage.get(key), 'a', key)
+						var sKey = '' + key
+						storage.set(key, key)
+						t.eq(storage.get(key), sKey, key)
+						
+						keys[i] = sKey
 					}
 					
 					t.like(storage.keys().sort(), keys.sort(), 'keys')
