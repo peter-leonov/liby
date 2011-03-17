@@ -128,16 +128,8 @@ Me.methods =
 	},
 	clear: function ()
 	{
-		var data = this.data
-		
-		var keys = []
-		for (var i = 0, il = data.length; i < il; i++)
-		{
-			// get the first key at every iteration
-			var k = data.key(0)
-			keys[i] = k
-			delete data[k]
-		}
+		var keys = this.keys()
+		this.data.clear()
 		return keys
 	}
 }
@@ -185,6 +177,20 @@ Me.methods =
 			v = v.value
 		data.removeItem(k)
 		return v
+	},
+	clear: function ()
+	{
+		var data = this.data
+		
+		var keys = []
+		for (var i = 0, il = data.length; i < il; i++)
+		{
+			// get the first key at every iteration
+			var k = data.key(0)
+			keys[i] = k.substr(1)
+			data.removeItem(k)
+		}
+		return keys
 	}
 }
 
