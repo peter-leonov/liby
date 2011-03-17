@@ -253,12 +253,12 @@ Me.methods =
 	
 	encode: function (k)
 	{
-		return 'x' + k
+		return ('x' + k).replace(/\W/g, function (m) { return '-' + m.charCodeAt(0) + '-' })
 	},
 	
 	decode: function (k)
 	{
-		return k.substr(1)
+		return k.substr(1).replace(/-(\d+)-/g, function (m, a) { return String.fromCharCode(a) })
 	},
 	
 	get: function (k)
