@@ -224,7 +224,7 @@ Me.methods =
 	{
 		var iframe = document.createElement('iframe')
 		document.getElementsByTagName('head')[0].appendChild(iframe)
-		iframe.src = '/js/common/proxy.html'
+		iframe.src = '/favicon.ico'
 		
 		var me = this
 		iframe.onreadystatechange = function ()
@@ -232,7 +232,8 @@ Me.methods =
 			if (iframe.readyState != 'complete')
 				return
 			
-			me.node = iframe.contentWindow.document.getElementById('storageElement')
+			me.node = iframe.contentWindow.document.body
+			me.node.addBehavior("#default#userData")
 			
 			me.onready()
 		}
