@@ -92,15 +92,20 @@ Me.methods =
 	
 	get: function (k)
 	{
+		// https://bugs.webkit.org/show_bug.cgi?id=30996
+		// to not to interfere with data method names
+		k = 'x' + k
 		return this.data.getItem(k)
 	},
 	set: function (k, v)
 	{
+		k = 'x' + k
 		this.data.setItem(k, v)
 		return v
 	},
 	remove: function (k)
 	{
+		k = 'x' + k
 		var data = this.data
 		
 		var v = data.getItem(k)
@@ -117,7 +122,7 @@ Me.methods =
 		
 		var keys = []
 		for (var i = 0, il = data.length; i < il; i++)
-			keys[i] = data.key(i)
+			keys[i] = data.key(i).substr(1)
 		
 		return keys
 	},
@@ -166,11 +171,13 @@ Me.methods =
 	
 	get: function (k)
 	{
+		k = 'x' + k
 		var v = this.data.getItem(k)
 		return v === null ? null : v.value
 	},
 	remove: function (k)
 	{
+		k = 'x' + k
 		var data = this.data
 		
 		var v = data.getItem(k)
