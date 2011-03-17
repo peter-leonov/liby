@@ -217,18 +217,25 @@ Me.methods =
 {
 	init: function ()
 	{
-		var node = document.createElement('span')
-		node.id = 'userData'
-		document.getElementsByTagName('head')[0].appendChild(node)
+		return !!document.body.addBehavior
+	},
+	
+	bind: function ()
+	{
+		var iframe = document.createElement('iframe')
+		document.getElementsByTagName('head')[0].appendChild(iframe)
+		iframe.src = '/js/common/proxy.html'
 		
-		if (!node.addBehavior)
-			return
-		node.addBehavior("#default#userData")
-		
-		if (!node.XMLDocument)
-			return
-		
-		return this.node = node
+		var me = this
+		iframe.onreadystatechange = function ()
+		{
+			if (iframe.readyState != 'complete')
+				return
+			
+			me.node = iframe.contentWindow.document.getElementById('storageElement')
+			
+			me.onready()
+		}
 	},
 	
 	load: function ()
