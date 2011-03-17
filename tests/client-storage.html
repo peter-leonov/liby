@@ -27,6 +27,8 @@ Tests.test(function (t)
 	{
 		t.test(S.className, function (t)
 		{
+			t.parallel(1)
+			
 			var storage = new S()
 			
 			if (!storage.init())
@@ -90,10 +92,28 @@ Tests.test(function (t)
 			{
 				function ready ()
 				{
-					t.eq(storage.get('persist'), '777', 'get x (persistent!)')
-					storage.set('persist', 777)
+					storage.remove('persist')
+					t.eq(storage.get('persist'), null, 'get empty persistent key')
 					
-					t.done()
+					var iframe = document.createElement('iframe')
+					document.body.appendChild(iframe)
+					
+					var prefix = /^(.+\/)/.exec(window.location.href)[0]
+					iframe.src = prefix + 'client-storage-helper.html?' + S.className + ':persist:777'
+					
+					function check ()
+					{
+						t.eq(storage.get('persist'), '777', 'get persistent key')
+						
+						t.done()
+					}
+					
+					var timer = setTimeout(check, 1000)
+					iframe.onload = function ()
+					{
+						clearTimeout(timer)
+						setTimeout(check, 100)
+					}
 				}
 				
 				storage.ready(t.wrap(ready))
