@@ -116,6 +116,11 @@ Tests.test(function (t)
 						
 						setTimeout(check, 100)
 					}
+					
+					iframe.onload = function ()
+					{
+						setTimeout(check, 100)
+					}
 				}
 				
 				storage.ready(t.wrap(ready))
