@@ -217,7 +217,9 @@ Me.methods =
 {
 	init: function ()
 	{
-		var node = document.body
+		var node = document.createElement('span')
+		node.id = 'userData'
+		document.getElementsByTagName('head')[0].appendChild(node)
 		
 		if (!node.addBehavior)
 			return
