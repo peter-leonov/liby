@@ -251,21 +251,31 @@ Me.methods =
 		this.node.save('client-storage')
 	},
 	
+	encode: function (k)
+	{
+		return 'x' + k
+	},
+	
+	decode: function (k)
+	{
+		return k.substr(1)
+	},
+	
 	get: function (k)
 	{
-		return this.load().getAttribute('x' + k)
+		return this.load().getAttribute(this.encode(k))
 	},
 	
 	set: function (k, v)
 	{
-		this.load().setAttribute('x' + k, v)
+		this.load().setAttribute(this.encode(k), v)
 		this.save()
 		return v
 	},
 	
 	remove: function (k)
 	{
-		k = 'x' + k
+		k = this.encode(k)
 		var data = this.load()
 		
 		var v = data.getAttribute(k)
@@ -285,7 +295,7 @@ Me.methods =
 		
 		var attributes = this.load().attributes
 		for (var i = 0, il = attributes.length; i < il; i++)
-			keys[i] = attributes[i].name.substr(1)
+			keys[i] = this.decode(attributes[i].name)
 		
 		return keys
 	},
@@ -299,7 +309,7 @@ Me.methods =
 		{
 			// get the first key at every iteration
 			var name = attributes[0].name
-			keys[i] = name.substr(1)
+			keys[i] = this.decode(name)
 			
 			data.removeAttribute(name)
 		}
