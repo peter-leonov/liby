@@ -93,18 +93,18 @@ Tests.test(function (t)
 			{
 				function ready ()
 				{
-					storage.remove('persist')
-					t.eq(storage.get('persist'), null, 'get empty persistent key')
+					t.eq(storage.set('persistent', 'old'), 'old', 'set persistent key')
+					t.eq(storage.get('persistent'), 'old', 'get persistent key')
 					
 					var iframe = document.createElement('iframe')
 					document.body.appendChild(iframe)
 					
 					var prefix = /^(.+\/)/.exec(window.location.href)[0]
-					iframe.src = prefix + 'client-storage-helper.html?' + S.className + ':persist:777'
+					iframe.src = prefix + 'client-storage-helper.html?' + S.className + ':persistent:new'
 					
 					function check ()
 					{
-						t.eq(storage.get('persist'), '777', 'get persistent key')
+						t.eq(storage.get('persistent'), 'new', 'get persistent key')
 						
 						t.done()
 					}
