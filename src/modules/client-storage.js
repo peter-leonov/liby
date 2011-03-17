@@ -101,7 +101,7 @@ Me.methods =
 	set: function (k, v)
 	{
 		k = 'x' + k
-		this.data.setItem(k, v)
+		this.data.setItem(k, '' + v)
 		return v
 	},
 	
