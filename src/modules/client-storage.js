@@ -268,7 +268,7 @@ Me.methods =
 	
 	set: function (k, v)
 	{
-		this.load().setAttribute(this.encode(k), v)
+		this.load().setAttribute(this.encode(k), '' + v)
 		this.save()
 		return v
 	},
