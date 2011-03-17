@@ -79,6 +79,7 @@ Papa = Me
 function Me ()
 {
 	Papa.call(this)
+	this.constructor = Me
 }
 
 Me.prototype = new Papa()
@@ -154,6 +155,7 @@ Papa.addBackend(Me)
 function Me ()
 {
 	Papa.call(this)
+	this.constructor = Me
 }
 
 Me.prototype = new Papa.LocalStorage()
@@ -216,6 +218,7 @@ Papa.addBackend(Me)
 function Me ()
 {
 	Papa.call(this)
+	this.constructor = Me
 }
 
 Me.prototype = new Papa()
