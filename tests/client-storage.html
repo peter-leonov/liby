@@ -69,25 +69,46 @@ Tests.test(function (t)
 					t.like(storage.length(), 0, 'length after clear')
 					t.like(storage.keys().sort(), [], 'keys after clear')
 					
-					
-					storage.set(1, 'a')
-					t.eq(storage.get(1), 'a', 'special case name "1"')
-					storage.set('key', 'a')
-					t.eq(storage.get('key'), 'a', 'special case name "key"')
-					storage.set('contentEditable', 'a')
-					t.eq(storage.get('contentEditable'), 'a', 'special case name "contentEditable"')
-					storage.set('parentNode', 'a')
-					t.eq(storage.get('parentNode'), 'a', 'special case name "parentNode"')
-					storage.set('bottomMargin', 'a')
-					t.eq(storage.get('bottomMargin'), 'a', 'special case name "bottomMargin"')
-					t.like(storage.keys().sort(), ['1', 'key', 'contentEditable', 'parentNode', 'bottomMargin'].sort(), 'keys')
-					
 					t.done()
 				}
 				storage.ready(t.wrap(ready))
 				
 				t.wait(10000)
 			})
+			
+			t.test('non-standard keys', function (t)
+			{
+				function ready ()
+				{
+					storage.clear()
+					
+					var keys =
+					[
+						null, undefined, false, true, 1, 4.5,
+						new Date(), [], {}, window,
+						'key', 'removeItem', 'contentEditable', 'parentNode', 'bottomMargin',
+						'\\', 'aa aa', 'xx:yuyu',
+						'Юникод', 'Unicode的'
+					]
+					
+					for (var i = 0, il = keys.length; i < il; i++)
+					{
+						var key = keys[i]
+						keys[i] = '' + key
+						
+						storage.set(key, 'a')
+						t.eq(storage.get(key), 'a', key)
+					}
+					
+					t.like(storage.keys().sort(), keys.sort(), 'keys')
+					
+					t.done()
+				}
+				
+				storage.ready(t.wrap(ready))
+				t.wait(10000)
+			})
+			
 			
 			t.test('persistency', function (t)
 			{
