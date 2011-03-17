@@ -100,7 +100,7 @@ Tests.test(function (t)
 					document.body.appendChild(iframe)
 					
 					var prefix = /^(.+\/)/.exec(window.location.href)[0]
-					iframe.src = prefix + 'client-storage-helper.html?' + S.className + ':persistent:new'
+					iframe.src = prefix + 'client-storage/client-storage-helper.html?' + S.className + ':persistent:new'
 					
 					function check ()
 					{
