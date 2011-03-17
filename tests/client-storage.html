@@ -109,10 +109,11 @@ Tests.test(function (t)
 						t.done()
 					}
 					
-					var timer = setTimeout(check, 1000)
-					iframe.onload = function ()
+					iframe.onreadystatechange = function ()
 					{
-						clearTimeout(timer)
+						if (iframe.readyState != 'complete')
+							return
+						
 						setTimeout(check, 100)
 					}
 				}
