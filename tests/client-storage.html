@@ -22,6 +22,12 @@ Tests.test(function (t)
 		t.ok(document.body.addBehavior, 'addBehavior')
 	})
 	
+	t.test('any support', function (t)
+	{
+		var storage = ClientStorage.guess()
+		t.ok(storage && storage.constructor.className, 'guess()')
+	})
+	
 	
 	function run (t, S)
 	{
