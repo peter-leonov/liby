@@ -97,12 +97,14 @@ Me.methods =
 		k = 'x' + k
 		return this.data.getItem(k)
 	},
+	
 	set: function (k, v)
 	{
 		k = 'x' + k
 		this.data.setItem(k, v)
 		return v
 	},
+	
 	remove: function (k)
 	{
 		k = 'x' + k
@@ -112,10 +114,12 @@ Me.methods =
 		data.removeItem(k)
 		return v
 	},
+	
 	length: function ()
 	{
 		return this.data.length
 	},
+	
 	keys: function ()
 	{
 		var data = this.data
@@ -126,6 +130,7 @@ Me.methods =
 		
 		return keys
 	},
+	
 	clear: function ()
 	{
 		var keys = this.keys()
@@ -167,6 +172,7 @@ Me.methods =
 		var v = this.data.getItem(k)
 		return v === null ? null : v.value
 	},
+	
 	remove: function (k)
 	{
 		k = 'x' + k
@@ -178,6 +184,7 @@ Me.methods =
 		data.removeItem(k)
 		return v
 	},
+	
 	clear: function ()
 	{
 		var data = this.data
