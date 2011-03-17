@@ -226,15 +226,14 @@ Me.methods =
 		if (!node.XMLDocument)
 			return
 		
-		this.node = node
-		this.load()
-		
-		return this.data = node.XMLDocument.documentElement
+		return this.node = node
 	},
 	
 	load: function ()
 	{
-		this.node.load('client-storage')
+		var node = this.node
+		node.load('client-storage')
+		return node.XMLDocument.documentElement
 	},
 	
 	save: function ()
@@ -244,12 +243,12 @@ Me.methods =
 	
 	get: function (k)
 	{
-		return this.data.getAttribute('x' + k)
+		return this.load().getAttribute('x' + k)
 	},
 	
 	set: function (k, v)
 	{
-		this.data.setAttribute('x' + k, v)
+		this.load().setAttribute('x' + k, v)
 		this.save()
 		return v
 	},
@@ -257,7 +256,7 @@ Me.methods =
 	remove: function (k)
 	{
 		k = 'x' + k
-		var data = this.data
+		var data = this.load()
 		
 		var v = data.getAttribute(k)
 		data.removeAttribute(k)
@@ -267,14 +266,14 @@ Me.methods =
 	
 	length: function ()
 	{
-		return this.data.attributes.length
+		return this.load().attributes.length
 	},
 	
 	keys: function ()
 	{
 		var keys = []
 		
-		var attributes = this.data.attributes
+		var attributes = this.load().attributes
 		for (var i = 0, il = attributes.length; i < il; i++)
 			keys[i] = attributes[i].name.substr(1)
 		
@@ -285,7 +284,7 @@ Me.methods =
 	{
 		var keys = []
 		
-		var data = this.data, attributes = data.attributes
+		var data = this.load(), attributes = data.attributes
 		for (var i = 0, il = attributes.length; i < il; i++)
 		{
 			// get the first key at every iteration
