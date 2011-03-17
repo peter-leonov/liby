@@ -244,18 +244,19 @@ Me.methods =
 	
 	get: function (k)
 	{
-		return this.data.getAttribute(k)
+		return this.data.getAttribute('x' + k)
 	},
 	
 	set: function (k, v)
 	{
-		this.data.setAttribute(k, v)
+		this.data.setAttribute('x' + k, v)
 		this.save()
 		return v
 	},
 	
 	remove: function (k)
 	{
+		k = 'x' + k
 		var data = this.data
 		
 		var v = data.getAttribute(k)
@@ -275,7 +276,7 @@ Me.methods =
 		
 		var attributes = this.data.attributes
 		for (var i = 0, il = attributes.length; i < il; i++)
-			keys[i] = attributes[i].name
+			keys[i] = attributes[i].name.substr(1)
 		
 		return keys
 	},
@@ -289,7 +290,7 @@ Me.methods =
 		{
 			// get the first key at every iteration
 			var name = attributes[0].name
-			keys[i] = name
+			keys[i] = name.substr(1)
 			
 			data.removeAttribute(name)
 		}
