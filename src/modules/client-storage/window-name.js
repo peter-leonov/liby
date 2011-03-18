@@ -19,33 +19,34 @@ Me.methods =
 	
 	get: function (k)
 	{
-		return this.data.get(k)
+		var v = this.data.get(k)
+		return v === undefined ? null : v
 	},
 	
 	set: function (k, v)
 	{
-		this.data.set(k, v)
-		return v
+		return this.data.set(k, v)
 	},
 	
 	remove: function (k)
 	{
-		return this.data.get(k)
+		var v = this.data.remove(k)
+		return v === undefined ? null : v
 	},
 	
 	length: function ()
 	{
-		return this.data.length
+		return this.data.length()
 	},
 	
 	keys: function ()
 	{
-		return []
+		return this.data.keys()
 	},
 	
 	clear: function ()
 	{
-		return []
+		return this.data.clear()
 	}
 }
 

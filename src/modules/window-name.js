@@ -2,21 +2,65 @@
 
 var Me =
 {
-	get: function (key)
+	load: function ()
 	{
-		var hash = UrlEncode.parse(decodeURIComponent(window.name))
-		return hash ? hash[key] : undefined
+		return UrlEncode.parse(decodeURIComponent(window.name))
 	},
 	
-	set: function (key, val)
+	save: function (hash)
 	{
-		var hash = UrlEncode.parse(decodeURIComponent(window.name)) || {}
-		hash[key] = val
 		window.name = encodeURIComponent(UrlEncode.stringify(hash))
-		return val
 	},
 	
-	clear: function () { window.name = "" }
+	get: function (k)
+	{
+		var hash = this.load()
+		return hash ? hash[k] : undefined
+	},
+	
+	set: function (k, v)
+	{
+		var hash = this.load()
+		hash[k] = v
+		this.save(hash)
+		return v
+	},
+	
+	remove: function (k)
+	{
+		var hash = this.load()
+		var v = hash[k]
+		delete hash[k]
+		this.save(hash)
+		return v
+	},
+	
+	length: function (k)
+	{
+		var hash = this.load()
+		
+		var l = 0
+		for (var k in hash)
+			l++
+		
+		return l
+	},
+	
+	keys: function (k)
+	{
+		var hash = this.load()
+		
+		var keys = []
+		for (var k in hash)
+			keys.push(k)
+		
+		return keys
+	},
+	
+	clear: function ()
+	{
+		window.name = ''
+	}
 }
 
 Me.className = 'WindowName'
