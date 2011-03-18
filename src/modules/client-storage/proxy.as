@@ -9,21 +9,27 @@ public class proxy extends Sprite
 {
 	public function proxy ()
 	{
-		var so = SharedObject.getLocal('client-storage')
+		function getSO ()
+		{
+			return SharedObject.getLocal('client-storage')
+		}
 		
 		function getItem (k)
 		{
+			var so = getSO()
 			return so.data[k]
 		}
 		
 		function setItem (k, v)
 		{
+			var so = getSO()
 			so.data[k] = v
 			so.flush()
 		}
 		
 		function removeItem (k)
 		{
+			var so = getSO()
 			delete so.data[k]
 			so.flush()
 		}
@@ -35,6 +41,7 @@ public class proxy extends Sprite
 		
 		function keys ()
 		{
+			var so = getSO()
 			var keys = []
 			for (var k in so.data)
 				keys.push(k)
@@ -43,7 +50,7 @@ public class proxy extends Sprite
 		
 		function clear ()
 		{
-			so.clear()
+			getSO().clear()
 		}
 		
 		ExternalInterface.addCallback('getItem', getItem)
