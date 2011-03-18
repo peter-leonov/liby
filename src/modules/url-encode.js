@@ -11,7 +11,7 @@ var Me =
 		var decode = this.decode
 		var res = {}
 		
-		var parts = String(string).split(this.paramDelimiterRex || this.paramDelimiter)
+		var parts = String(string).split(this.paramDelimiter)
 		for (var i = 0; i < parts.length; i++)
 		{
 			var pair = parts[i].split('='),
