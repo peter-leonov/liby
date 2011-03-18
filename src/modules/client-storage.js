@@ -361,7 +361,7 @@ Me.methods =
 {
 	init: function ()
 	{
-		return true
+		return navigator.plugins && navigator.plugins['Shockwave Flash']
 	},
 	
 	proxySrc: '/lib-0.3/modules/client-storage/proxy.swf',
