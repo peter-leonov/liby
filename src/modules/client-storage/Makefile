@@ -1,2 +1,2 @@
 proxy.swf: proxy.as
-	mxmlc proxy.as
+	mxmlc -load-config+=config.xml proxy.as
