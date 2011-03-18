@@ -233,6 +233,8 @@ function Me ()
 
 Me.prototype = new Papa()
 
+var counter = 0
+
 Me.methods =
 {
 	init: function ()
@@ -246,7 +248,7 @@ Me.methods =
 	{
 		var iframe = document.createElement('iframe')
 		document.getElementsByTagName('head')[0].appendChild(iframe)
-		iframe.id = 'client-storage'
+		iframe.id = 'client-storage-' + ++counter
 		iframe.src = this.proxySrc
 		
 		var me = this
@@ -353,6 +355,8 @@ function Me ()
 
 Me.prototype = new Papa()
 
+var counter = 0
+
 Me.methods =
 {
 	init: function ()
@@ -365,13 +369,15 @@ Me.methods =
 	bind: function ()
 	{
 		var div = document.createElement('div')
-		div.innerHTML = '<object id="client-storage" name="client-storage" data="' + this.proxySrc + '"></object>'
+		var id = 'client-storage-' + ++counter
+		div.innerHTML = '<object class="client-storage" id="' + id + '" name="' + id + '" data="' + this.proxySrc + '"></object>'
 		var movie = div.firstChild
 		document.body.appendChild(movie)
 		
 		var me = this
 		movie.onready = function ()
 		{
+			// alert(1)
 			me.data = movie
 			me.onready()
 		}
