@@ -8,7 +8,14 @@
 
 <script>
 var movie = document.getElementById('movie1')
-movie.onready = function () { alert(this.id + ' is ready!') }
+movie.onready = function ()
+{
+	console.log(this.setItem('a', '555'))
+	console.log(this.setItem('b', '666'))
+	console.log(this.keys())
+	console.log(this.clear())
+	console.log(this.keys())
+}
 </script>
 
 </body>
