@@ -246,7 +246,7 @@ Me.methods =
 	{
 		var iframe = document.createElement('iframe')
 		document.getElementsByTagName('head')[0].appendChild(iframe)
-		iframe.id = 'client-storage-by-userData'
+		iframe.id = 'client-storage'
 		iframe.src = this.proxySrc
 		
 		var me = this
