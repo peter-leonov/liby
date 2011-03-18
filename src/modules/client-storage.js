@@ -377,7 +377,6 @@ Me.methods =
 		var me = this
 		movie.onready = function ()
 		{
-			// alert(1)
 			me.data = movie
 			me.onready()
 		}
