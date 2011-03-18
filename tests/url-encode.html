@@ -14,8 +14,8 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
-	t.eq(typeof self.encodeURIComponent, 'function', 'encodeURIComponent is a function')
-	t.eq(typeof self.decodeURIComponent, 'function', 'decodeURIComponent is a function')
+	t.type(self.encodeURIComponent, 'function', 'encodeURIComponent')
+	t.type(self.decodeURIComponent, 'function', 'decodeURIComponent')
 	t.eq(encodeURIComponent('abcxyz+x x123890x-x=x&x;x(x)x.x'), 'abcxyz%2Bx%20x123890x-x%3Dx%26x%3Bx(x)x.x', 'encodeURIComponent(...)')
 	t.eq(decodeURIComponent('abcxyz%2Bx%20x123890x-x%3Dx%26x%3Bx(x)x.x'), 'abcxyz+x x123890x-x=x&x;x(x)x.x', 'decodeURIComponent(...)')
 	
