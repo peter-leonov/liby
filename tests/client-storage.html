@@ -77,7 +77,7 @@ Tests.test(function (t)
 					
 					t.eq(storage.remove('b'), null, 'remove b after remove')
 					
-					t.like(storage.clear().sort(), ['a', 'c'], 'clear')
+					storage.clear()
 					t.eq(storage.get('a'), null, 'get a after clear')
 					t.eq(storage.get('b'), null, 'get b after clear')
 					t.eq(storage.get('c'), null, 'get c after clear')
