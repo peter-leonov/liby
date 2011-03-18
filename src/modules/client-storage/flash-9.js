@@ -19,7 +19,7 @@ Me.methods =
 		return navigator.plugins && navigator.plugins['Shockwave Flash']
 	},
 	
-	proxySrc: '/lib-0.3/modules/client-storage/proxy.swf',
+	proxySrc: '/lib-0.3/modules/client-storage/flash-9/proxy.swf',
 	
 	bind: function ()
 	{
