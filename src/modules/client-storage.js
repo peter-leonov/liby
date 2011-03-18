@@ -343,4 +343,88 @@ Papa.addBackend(Me)
 })();
 
 
+;(function(){
+
+function Me ()
+{
+	Papa.call(this)
+	this.constructor = Me
+}
+
+Me.prototype = new Papa()
+
+Me.methods =
+{
+	init: function ()
+	{
+		return true
+	},
+	
+	proxySrc: '/lib-0.3/modules/client-storage/proxy.swf',
+	
+	bind: function ()
+	{
+		var movie = document.createElement('object')
+		document.body.appendChild(movie)
+		movie.id = movie.name = 'client-storage-by-userData'
+		movie.data = this.proxySrc
+		
+		var me = this
+		movie.onready = function ()
+		{
+			me.data = movie
+			me.onready()
+		}
+	},
+	
+	get: function (k)
+	{
+		var v = this.data.getItem(this.encode(k))
+		return v === undefined ? null : this.decode(v)
+	},
+	
+	set: function (k, v)
+	{
+		this.data.setItem(this.encode(k), this.encode(v))
+		return v
+	},
+	
+	remove: function (k)
+	{
+		var v = this.get(k)
+		this.data.removeItem(this.encode(k))
+		return v
+	},
+	
+	length: function ()
+	{
+		return this.data.length()
+	},
+	
+	keys: function ()
+	{
+		var keys = this.data.keys()
+		for (var i = 0, il = keys.length; i < il; i++)
+			keys[i] = this.decode(keys[i])
+		return keys
+	},
+	
+	clear: function (k)
+	{
+		var keys = this.keys()
+		this.data.clear()
+		return keys
+	}
+}
+
+Object.extend(Me.prototype, Me.methods)
+
+Me.className = 'Flash9'
+Papa[Me.className] = Me
+
+Papa.addBackend(Me)
+
+})();
+
+
 })();
