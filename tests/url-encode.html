@@ -27,7 +27,7 @@ Tests.test(function (t)
 	t.log('stringify hash')
 	t.eq(UrlEncode.stringify({a:1, b:2, c:3}), 'a=1;b=2;c=3', '{a:1, b:2, c:3}')
 	t.eq(UrlEncode.stringify({a:1, b:2, c:[3,4]}), 'a=1;b=2;c=3;c=4', '{a:1, b:2, c:[3,4]}')
-	t.eq(UrlEncode.stringify({a:{b:2}}), 'a=%5Bobject%5D', '{a:{b:2}}')
+	t.eq(UrlEncode.stringify({a:{b:2}}), 'a=%5Bobject%20Object%5D', '{a:{b:2}}')
 	t.eq(UrlEncode.stringify({а:'б'}), '%D0%B0=%D0%B1', '{а:"б"}')
 	
 	t.log('parse array')

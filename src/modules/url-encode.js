@@ -55,7 +55,7 @@ var Me =
 	
 	stringify: function (data)
 	{
-		var encode = this.encode,
+		var encode = this.encode, A = Array,
 			pairs = []
 		
 		for (var k in data)
@@ -64,23 +64,17 @@ var Me =
 			k = encode(k)
 			if (v == undefined || v == null)
 			{
-				pairs.push(k + "=" + v)
+				pairs.push(k + '=' + v)
 			}
 			else
 			{
-				switch (v.constructor)
+				if (v.constructor == A)
 				{
-					case Array:
-						for (var j = 0, jl = v.length; j < jl; j++)
-							pairs.push(k + "=" + encode(v[j]))
-						break
-					case Object:
-						pairs.push(k + "=" + encode('[object]'))
-						break
-					default:
-						pairs.push(k + "=" + encode(v))
-						break
+					for (var i = 0, il = v.length; i < il; i++)
+						pairs.push(k + '=' + encode(v[i]))
 				}
+				else
+					pairs.push(k + '=' + encode(v))
 			}
 		}
 		
