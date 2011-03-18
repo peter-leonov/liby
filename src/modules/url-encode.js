@@ -37,9 +37,10 @@ var Me =
 			}
 			else
 			{
-				if (res[k])
+				var a = res[k]
+				if (a)
 				{
-					if (typeof res[k] == 'array')
+					if (typeof res[k] == 'object')
 						res[k].push(v)
 					else
 						res[k] = [res[k], v]
