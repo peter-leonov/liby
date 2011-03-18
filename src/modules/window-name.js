@@ -15,13 +15,13 @@ var Me =
 	get: function (k)
 	{
 		var hash = this.load()
-		return hash ? hash[k] : undefined
+		return hash ? hash['x' + k] : undefined
 	},
 	
 	set: function (k, v)
 	{
 		var hash = this.load()
-		hash[k] = v
+		hash['x' + k] = v
 		this.save(hash)
 		return v
 	},
@@ -29,8 +29,8 @@ var Me =
 	remove: function (k)
 	{
 		var hash = this.load()
-		var v = hash[k]
-		delete hash[k]
+		var v = hash['x' + k]
+		delete hash['x' + k]
 		this.save(hash)
 		return v
 	},
@@ -52,7 +52,7 @@ var Me =
 		
 		var keys = []
 		for (var k in hash)
-			keys.push(k)
+			keys.push(k.substr(1))
 		
 		return keys
 	},
