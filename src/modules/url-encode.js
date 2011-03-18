@@ -74,11 +74,11 @@ var Me =
 			
 			case Object:
 				var arr = []
-				for (var i in data)
-					if (i !== undefined && i != '')
+				for (var k in data)
+					if (k !== undefined && k != '')
 					{
-						var v = data[i]
-						var enci = encode(i)
+						var v = data[k]
+						var enci = encode(k)
 						if (v !== undefined && v !== null)
 							switch (v.constructor)
 							{
