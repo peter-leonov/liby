@@ -143,12 +143,12 @@ Tests.test(function (t)
 						if (iframe.readyState != 'complete')
 							return
 						
-						setTimeout(check, 100)
+						setTimeout(check, 500)
 					}
 					
 					iframe.onload = function ()
 					{
-						setTimeout(check, 100)
+						setTimeout(check, 500)
 					}
 				}
 				
