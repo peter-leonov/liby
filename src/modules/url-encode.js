@@ -59,7 +59,7 @@ var Me =
 			encode = this.encode
 		
 		if (!data)
-			return ''
+			return '' + data
 		
 		if (typeof data.toUrlEncode == 'function')
 			return data.toUrlEncode()
@@ -75,25 +75,30 @@ var Me =
 			case Object:
 				var pairs = []
 				for (var k in data)
-					if (k !== undefined && k != '')
+				{
+					var v = data[k]
+					var enck = encode(k)
+					if (v == undefined || v == null)
 					{
-						var v = data[k]
-						var enci = encode(k)
-						if (v !== undefined && v !== null)
-							switch (v.constructor)
-							{
-								case Array:
-									for (var j = 0, jl = v.length; j < jl; j++)
-										pairs.push(enci + "=" + encode(v[j]))
-									break
-								case Object:
-									pairs.push(enci + "=" + encode('[object]'))
-									break
-								default:
-									pairs.push(enci + "=" + encode(v))
-									break
-							}
+						pairs.push(enck + "=" + v)
 					}
+					else
+					{
+						switch (v.constructor)
+						{
+							case Array:
+								for (var j = 0, jl = v.length; j < jl; j++)
+									pairs.push(enck + "=" + encode(v[j]))
+								break
+							case Object:
+								pairs.push(enck + "=" + encode('[object]'))
+								break
+							default:
+								pairs.push(enck + "=" + encode(v))
+								break
+						}
+					}
+				}
 				return pairs.join(pd)
 			
 			default:
