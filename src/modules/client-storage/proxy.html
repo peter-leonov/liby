@@ -2,19 +2,17 @@
 <html lang="en">
 <body>
 
-<object id="movie1" name="movie1" data="proxy.swf" type="application/x-shockwave-flash">
-	<param name="movie" value="proxy.swf"/>
-</object>
+<object id="movie1" name="movie1" data="proxy.swf"></object>
 
 <script>
 var movie = document.getElementById('movie1')
 movie.onready = function ()
 {
-	console.log(this.setItem('a', '555'))
-	console.log(this.setItem('b', '666'))
-	console.log(this.keys())
-	console.log(this.clear())
-	console.log(this.keys())
+	this.setItem('a', '555')
+	this.setItem('b', '666')
+	alert(this.keys())
+	this.clear()
+	alert(this.keys())
 }
 </script>
 
