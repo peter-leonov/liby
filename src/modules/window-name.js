@@ -21,7 +21,7 @@ var Me =
 	set: function (k, v)
 	{
 		var hash = this.load()
-		hash['x' + k] = v
+		hash['x' + k] = '' + v
 		this.save(hash)
 		return v
 	},
