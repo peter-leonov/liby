@@ -96,7 +96,7 @@ function parse (text)
 		replace(/(?:^|:|,)(?:\s*\[)+/g, '')))
 	{
 		try { return eval('(' + text + ')') }
-		catch(ex) { log(ex); parse.lastError = ex; return null }
+		catch(ex) { parse.lastError = ex; return null }
 	}
 	
 	throw new SyntaxError(myName + '.parse');
