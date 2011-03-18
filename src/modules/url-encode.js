@@ -61,21 +61,15 @@ var Me =
 		for (var k in data)
 		{
 			var v = data[k]
+			
 			k = encode(k)
-			if (v == undefined || v == null)
+			if (v && v.constructor == A)
 			{
-				pairs.push(k + '=' + v)
+				for (var i = 0, il = v.length; i < il; i++)
+					pairs.push(k + '=' + encode(v[i]))
 			}
 			else
-			{
-				if (v.constructor == A)
-				{
-					for (var i = 0, il = v.length; i < il; i++)
-						pairs.push(k + '=' + encode(v[i]))
-				}
-				else
-					pairs.push(k + '=' + encode(v))
-			}
+				pairs.push(k + '=' + encode(v))
 		}
 		
 		return pairs.join(this.paramDelimiter)
