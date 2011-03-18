@@ -14,6 +14,8 @@
 <script type="text/javascript">
 Tests.test(function (t)
 {
+	var u
+	
 	t.type(self.encodeURIComponent, 'function', 'encodeURIComponent')
 	t.type(self.decodeURIComponent, 'function', 'decodeURIComponent')
 	t.eq(encodeURIComponent('abcxyz+x x123890x-x=x&x;x(x)x.x'), 'abcxyz%2Bx%20x123890x-x%3Dx%26x%3Bx(x)x.x', 'encodeURIComponent(...)')
@@ -24,14 +26,11 @@ Tests.test(function (t)
 	
 	UrlEncode.paramDelimiter = ';'
 	
-	t.log('stringify hash')
 	t.eq(UrlEncode.stringify({a:1, b:2, c:3}), 'a=1;b=2;c=3', '{a:1, b:2, c:3}')
 	t.eq(UrlEncode.stringify({a:1, b:2, c:[3,4]}), 'a=1;b=2;c=3;c=4', '{a:1, b:2, c:[3,4]}')
 	t.eq(UrlEncode.stringify({a:{b:2}}), 'a=%5Bobject%20Object%5D', '{a:{b:2}}')
 	t.eq(UrlEncode.stringify({а:'б'}), '%D0%B0=%D0%B1', '{а:"б"}')
 	
-	t.log('parse array')
-	var u
 	UrlEncode.paramDelimiter = '&'
 	t.like(UrlEncode.parse('123&456&789'), {'123':u, '456':u, '789':u}, '[123, 456, 789] with pd="&"')
 	UrlEncode.paramDelimiter = ';'
@@ -40,7 +39,6 @@ Tests.test(function (t)
 	t.like(UrlEncode.parse('0;;undefined;null;false;true'), {'0':u, 'undefined':u, 'null':u, 'false':u, 'true':u}, '["0", "", "undefined", "null", "false", "true"]')
 	t.like(UrlEncode.parse('%D0%B0;%D0%B1;%D0%B2'), {'а':u, 'б':u, 'в':u}, '["а", "б", "в"]')
 	
-	t.log('parse hash')
 	t.like(UrlEncode.parse('a=1;b=2;c=3'), {a:'1', b:'2', c:'3'}, '{a:1, b:2, c:3}')
 	t.like(UrlEncode.parse('a=1;b=2;c=3;c=4;c=5;c=6'), {a:'1', b:'2', c:['3','4', '5', '6']}, 'a=1;b=2;c=3;c=4')
 	t.like(UrlEncode.parse('a=1;b=2;c=3;c=4;c=5;c=6', true), {a:['1'], b:['2'], c:['3','4', '5', '6']}, 'a=1;b=2;c=3;c=4')
@@ -49,6 +47,7 @@ Tests.test(function (t)
 	
 	t.like(UrlEncode.parse(''), {}, 'empty string')
 	t.like(UrlEncode.parse('='), {'':''}, '=')
+	t.like(UrlEncode.stringify({'':''}), '=', '{"":""}')
 	t.like(UrlEncode.parse('=123'), {'':'123'}, '=')
 	t.like(UrlEncode.parse('aaa'), {aaa:undefined}, 'aaa')
 })
