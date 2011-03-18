@@ -42,6 +42,16 @@ Me.prototype =
 			setTimeout(listeners[i], 0)
 		
 		this.listeners.length = 0
+	},
+	
+	encode: function (k)
+	{
+		return ('x' + k).replace(/\W/g, function (m) { return '-' + m.charCodeAt(0) + '-' })
+	},
+	
+	decode: function (k)
+	{
+		return k.substr(1).replace(/-(\d+)-/g, function (m, a) { return String.fromCharCode(a) })
 	}
 }
 
@@ -262,16 +272,6 @@ Me.methods =
 	save: function ()
 	{
 		this.node.save('client-storage')
-	},
-	
-	encode: function (k)
-	{
-		return ('x' + k).replace(/\W/g, function (m) { return '-' + m.charCodeAt(0) + '-' })
-	},
-	
-	decode: function (k)
-	{
-		return k.substr(1).replace(/-(\d+)-/g, function (m, a) { return String.fromCharCode(a) })
 	},
 	
 	get: function (k)
