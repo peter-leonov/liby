@@ -2,7 +2,15 @@
 <html lang="en">
 <body>
 
-<embed src="proxy.swf"/>
+<object id="movie1" data="proxy.swf" type="application/x-shockwave-flash">
+	<param name="movie" value="proxy.swf"/>
+	<param name="flashvars" value="id=movie1"/>
+</object>
+
+<script>
+var movie = document.getElementById('movie1')
+movie.onready = function () { alert(this.id + ' is ready!') }
+</script>
 
 </body>
 </html>

@@ -5,7 +5,7 @@ import flash.external.ExternalInterface;
 
 public class proxy extends Sprite {
 	public function proxy () {
-		ExternalInterface.call('alert', 123)
+		ExternalInterface.call('document.getElementById("' + this.loaderInfo.parameters.id + '").onready')
 	}
 }
 
