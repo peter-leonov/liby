@@ -55,55 +55,36 @@ var Me =
 	
 	stringify: function (data)
 	{
-		var pd = this.paramDelimiter,
-			encode = this.encode
+		var encode = this.encode,
+			pairs = []
 		
-		if (!data)
-			return '' + data
-		
-		if (typeof data.toUrlEncode == 'function')
-			return data.toUrlEncode()
-		
-		switch (data.constructor)
+		for (var k in data)
 		{
-			case Array:
-				var pairs = []
-				for (var j = 0, jl = data.length; j < jl; j++)
-					pairs.push(encode(data[j]))
-				return pairs.join(pd)
-			
-			case Object:
-				var pairs = []
-				for (var k in data)
+			var v = data[k]
+			k = encode(k)
+			if (v == undefined || v == null)
+			{
+				pairs.push(k + "=" + v)
+			}
+			else
+			{
+				switch (v.constructor)
 				{
-					var v = data[k]
-					var enck = encode(k)
-					if (v == undefined || v == null)
-					{
-						pairs.push(enck + "=" + v)
-					}
-					else
-					{
-						switch (v.constructor)
-						{
-							case Array:
-								for (var j = 0, jl = v.length; j < jl; j++)
-									pairs.push(enck + "=" + encode(v[j]))
-								break
-							case Object:
-								pairs.push(enck + "=" + encode('[object]'))
-								break
-							default:
-								pairs.push(enck + "=" + encode(v))
-								break
-						}
-					}
+					case Array:
+						for (var j = 0, jl = v.length; j < jl; j++)
+							pairs.push(k + "=" + encode(v[j]))
+						break
+					case Object:
+						pairs.push(k + "=" + encode('[object]'))
+						break
+					default:
+						pairs.push(k + "=" + encode(v))
+						break
 				}
-				return pairs.join(pd)
-			
-			default:
-				return encode(data)
+			}
 		}
+		
+		return pairs.join(this.paramDelimiter)
 	}
 }
 
