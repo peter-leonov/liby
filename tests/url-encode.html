@@ -44,19 +44,25 @@ Tests.test(function (t)
 	t.eq(UrlEncode.stringify({а:'б'}), '%D0%B0=%D0%B1', '{а:"б"}')
 	
 	t.log('parse array')
+	var u
 	UrlEncode.paramDelimiter = '&'
-	t.like(UrlEncode.parse('123&456&789'), {'123':'', '456':'', '789':''}, '[123, 456, 789] with pd="&"')
+	t.like(UrlEncode.parse('123&456&789'), {'123':u, '456':u, '789':u}, '[123, 456, 789] with pd="&"')
 	UrlEncode.paramDelimiter = ';'
-	t.like(UrlEncode.parse('123;456;789'), {'123':'', '456':'', '789':''}, '[123, 456, 789] with pd=";"')
-	t.like(UrlEncode.parse('abc;def;ghi'), {'abc':'', 'def':'', 'ghi':''}, '["abc", "def", "ghi"]')
-	t.like(UrlEncode.parse('0;;undefined;null;false;true'), {'0':'', '':'', 'undefined':'', 'null':'', 'false':'', 'true':''}, '["0", "", "undefined", "null", "false", "true"]')
-	t.like(UrlEncode.parse('%D0%B0;%D0%B1;%D0%B2'), {'а':'', 'б':'', 'в':''}, '["а", "б", "в"]')
+	t.like(UrlEncode.parse('123;456;789'), {'123':u, '456':u, '789':u}, '[123, 456, 789] with pd=";"')
+	t.like(UrlEncode.parse('abc;def;ghi'), {'abc':u, 'def':u, 'ghi':u}, '["abc", "def", "ghi"]')
+	t.like(UrlEncode.parse('0;;undefined;null;false;true'), {'0':u, 'undefined':u, 'null':u, 'false':u, 'true':u}, '["0", "", "undefined", "null", "false", "true"]')
+	t.like(UrlEncode.parse('%D0%B0;%D0%B1;%D0%B2'), {'а':u, 'б':u, 'в':u}, '["а", "б", "в"]')
 	
 	t.log('parse hash')
 	t.like(UrlEncode.parse('a=1;b=2;c=3'), {a:'1', b:'2', c:'3'}, '{a:1, b:2, c:3}')
 	t.like(UrlEncode.parse('a=1;b=2;c=3;c=4'), {a:'1', b:'2', c:['3','4']}, 'a=1;b=2;c=3;c=4')
 	t.like(UrlEncode.parse('a=%5Bobject%5D'), {a:'[object]'}, 'a=%5Bobject%5D')
 	t.like(UrlEncode.parse('%D0%B0=%D0%B1'), {а:'б'}, '%D0%B0=%D0%B1')
+	
+	t.like(UrlEncode.parse(''), {}, 'empty string')
+	t.like(UrlEncode.parse('='), {'':''}, '=')
+	t.like(UrlEncode.parse('=123'), {'':'123'}, '=')
+	t.like(UrlEncode.parse('aaa'), {aaa:undefined}, 'aaa')
 })
 </script>
 </body>

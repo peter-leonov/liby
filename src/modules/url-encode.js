@@ -15,8 +15,18 @@ var Me =
 		for (var i = 0; i < parts.length; i++)
 		{
 			var pair = parts[i].split('='),
-				k = decode(pair[0]),
-				v = decode(pair[1] || '')
+				k = pair[0],
+				v = pair[1]
+			
+			if (v === undefined)
+			{
+				if (k == '')
+					continue
+			}
+			else
+				v = decode(v)
+			
+			k = decode(k)
 			
 			if (forceArray)
 			{
