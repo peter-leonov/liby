@@ -364,10 +364,10 @@ Me.methods =
 	
 	bind: function ()
 	{
-		var movie = document.createElement('object')
+		var div = document.createElement('div')
+		div.innerHTML = '<object id="client-storage" name="client-storage" data="' + this.proxySrc + '"></object>'
+		var movie = div.firstChild
 		document.body.appendChild(movie)
-		movie.id = movie.name = 'client-storage-by-userData'
-		movie.data = this.proxySrc
 		
 		var me = this
 		movie.onready = function ()
