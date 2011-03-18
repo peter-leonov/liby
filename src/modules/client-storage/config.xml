@@ -1,4 +1,7 @@
 <flex-config>
 <target-player>9.0.0</target-player>
 <static-link-runtime-shared-libraries>true</static-link-runtime-shared-libraries>
+<compiler>
+	<show-actionscript-warnings>false</show-actionscript-warnings>
+</compiler>
 </flex-config>
