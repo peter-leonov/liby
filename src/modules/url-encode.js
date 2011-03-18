@@ -15,27 +15,27 @@ var Me =
 		for (var i = 0; i < parts.length; i++)
 		{
 			var pair = parts[i].split('='),
-				name = decode(pair[0]),
-				val = decode(pair[1] || '')
+				k = decode(pair[0]),
+				v = decode(pair[1] || '')
 			
 			if (forceArray)
 			{
-				if (res[name])
-					res[name].push(val)
+				if (res[k])
+					res[k].push(v)
 				else
-					res[name] = [val]
+					res[k] = [v]
 			}
 			else
 			{
-				if (res[name])
+				if (res[k])
 				{
-					if (typeof res[name] == 'array')
-						res[name].push(val)
+					if (typeof res[k] == 'array')
+						res[k].push(v)
 					else
-						res[name] = [res[name], val]
+						res[k] = [res[k], v]
 				}
 				else
-					res[name] = val
+					res[k] = v
 			}
 		}
 		
@@ -66,20 +66,20 @@ var Me =
 				for (var i in data)
 					if (i !== undefined && i != '')
 					{
-						var val = data[i]
+						var v = data[i]
 						var enci = encode(i)
-						if (val !== undefined && val !== null)
-							switch (val.constructor)
+						if (v !== undefined && v !== null)
+							switch (v.constructor)
 							{
 								case Array:
-									for (var j = 0, jl = val.length; j < jl; j++)
-										arr.push(enci + "=" + encode(val[j]))
+									for (var j = 0, jl = v.length; j < jl; j++)
+										arr.push(enci + "=" + encode(v[j]))
 									break
 								case Object:
 									arr.push(enci + "=" + encode('[object]'))
 									break
 								default:
-									arr.push(enci + "=" + encode(val))
+									arr.push(enci + "=" + encode(v))
 									break
 							}
 					}
