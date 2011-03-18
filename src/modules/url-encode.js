@@ -67,13 +67,13 @@ var Me =
 		switch (data.constructor)
 		{
 			case Array:
-				var arr = []
+				var pairs = []
 				for (var j = 0, jl = data.length; j < jl; j++)
-					arr.push(encode(data[j]))
-				return arr.join(pd)
+					pairs.push(encode(data[j]))
+				return pairs.join(pd)
 			
 			case Object:
-				var arr = []
+				var pairs = []
 				for (var k in data)
 					if (k !== undefined && k != '')
 					{
@@ -84,17 +84,17 @@ var Me =
 							{
 								case Array:
 									for (var j = 0, jl = v.length; j < jl; j++)
-										arr.push(enci + "=" + encode(v[j]))
+										pairs.push(enci + "=" + encode(v[j]))
 									break
 								case Object:
-									arr.push(enci + "=" + encode('[object]'))
+									pairs.push(enci + "=" + encode('[object]'))
 									break
 								default:
-									arr.push(enci + "=" + encode(v))
+									pairs.push(enci + "=" + encode(v))
 									break
 							}
 					}
-				return arr.join(pd)
+				return pairs.join(pd)
 			
 			default:
 				return encode(data)
