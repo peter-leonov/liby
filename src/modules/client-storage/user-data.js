@@ -94,21 +94,12 @@ Me.methods =
 	
 	clear: function (k)
 	{
-		var keys = []
-		
 		var data = this.load(), attributes = data.attributes
 		for (var i = 0, il = attributes.length; i < il; i++)
-		{
 			// get the first key at every iteration
-			var name = attributes[0].name
-			keys[i] = this.decode(name)
-			
-			data.removeAttribute(name)
-		}
+			data.removeAttribute(attributes[0].name)
 		
 		this.save()
-		
-		return keys
 	}
 }
 

@@ -71,9 +71,7 @@ Me.methods =
 	
 	clear: function (k)
 	{
-		var keys = this.keys()
 		this.data.clear()
-		return keys
 	}
 }
 

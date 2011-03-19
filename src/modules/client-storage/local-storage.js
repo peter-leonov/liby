@@ -60,9 +60,7 @@ Me.methods =
 	
 	clear: function ()
 	{
-		var keys = this.keys()
 		this.data.clear()
-		return keys
 	}
 }
 
