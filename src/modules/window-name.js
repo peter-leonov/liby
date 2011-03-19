@@ -2,20 +2,20 @@
 
 var Me =
 {
-	top: function ()
+	init: function ()
 	{
 		for (var w = window; w.parent != w; w = w.parent);
-		return w
+		this.window = w
 	},
 	
 	load: function ()
 	{
-		return UrlEncode.parse(decodeURIComponent(this.top().name))
+		return UrlEncode.parse(decodeURIComponent(this.window.name))
 	},
 	
 	save: function (hash)
 	{
-		this.top().name = encodeURIComponent(UrlEncode.stringify(hash))
+		this.window.name = encodeURIComponent(UrlEncode.stringify(hash))
 	},
 	
 	get: function (k)

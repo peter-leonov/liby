@@ -14,7 +14,12 @@ Me.methods =
 {
 	init: function ()
 	{
-		return this.data = window.WindowName
+		var WN = window.WindowName
+		if (WN)
+		{
+			WN.init()
+			return this.data = window.WindowName
+		}
 	},
 	
 	get: function (k)
