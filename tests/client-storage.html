@@ -37,6 +37,7 @@ Tests.test(function (t)
 		t.ok(storage && storage.constructor.className, 'guess()')
 	})
 	
+	var iframeCounter = 0
 	
 	function run (t, S)
 	{
@@ -134,12 +135,14 @@ Tests.test(function (t)
 					t.eq(storage.set('persistent', 'old'), 'old', 'set persistent key')
 					t.eq(storage.get('persistent'), 'old', 'get persistent key')
 					
+					var id = 'helper-' + ++iframeCounter
 					var iframe = document.createElement('iframe')
+					iframe.id = id
 					iframe.className = 'storage-helper'
 					document.body.appendChild(iframe)
 					
 					var prefix = /^(.+\/)/.exec(window.location.href)[0]
-					iframe.src = prefix + 'client-storage/client-storage-helper.html?' + S.className + ':persistent:new'
+					iframe.src = prefix + 'client-storage/client-storage-helper.html?' + S.className + ':persistent:new:' + id
 					
 					function check ()
 					{
@@ -148,18 +151,7 @@ Tests.test(function (t)
 						t.done()
 					}
 					
-					iframe.onreadystatechange = function ()
-					{
-						if (iframe.readyState != 'complete')
-							return
-						
-						setTimeout(check, 500)
-					}
-					
-					iframe.onload = function ()
-					{
-						setTimeout(check, 500)
-					}
+					iframe.onready = t.wrap(check)
 				}
 				
 				storage.ready(t.wrap(ready))

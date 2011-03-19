@@ -23,11 +23,18 @@
 var parts = location.search.substr(1).split(':')
 var backend = parts[0],
 	key = parts[1],
-	value = parts[2]
+	value = parts[2],
+	id = parts[3]
 
 var s = new ClientStorage[backend]
 s.init()
-s.ready(function () { s.set(key, value) })
+
+function ready ()
+{
+	s.set(key, value)
+	window.parent.document.getElementById(id).onready()
+}
+s.ready(ready)
 
 })();
 
