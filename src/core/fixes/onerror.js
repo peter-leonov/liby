@@ -1,4 +1,4 @@
-if (/Opera\/(9|10)\.|Chrome\/[345]\.0|Version\/[34]\..+Safari/.test(navigator.userAgent))
+if (/Opera\/9\.[0123456]|Opera\/.+Version\/1[01]\.|Chrome\/[123456789]\.|Version\/[345]\..+Safari/.test(navigator.userAgent))
 (function(){
 
 // warn a developer
