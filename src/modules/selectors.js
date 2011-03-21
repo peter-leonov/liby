@@ -1,11 +1,9 @@
 <!--#include virtual="sizzle.js" -->
 
-window.$$ = function (query, scream)
+window.$$ = function ()
 {
-	var res = Sizzle(query)
-	if (!res.length && scream !== false)
-		throw new Error('empty result for query "' + query + '"')
-	return res
+	var res = Sizzle.apply(window, arguments)
+	return res.length ? res : null
 }
 
 // Element.prototype.getElementsByClassName=function(c){return $$('.'+c, this)}
