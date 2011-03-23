@@ -137,7 +137,7 @@ function interpolate ()
 		try { return f.apply(this, arguments) }
 		catch (ex)
 		{
-			log('Error while executing string: "' + this + '"')
+			ex.message += ', while executing string: "' + this + '"'
 			throw ex
 		}
 	}

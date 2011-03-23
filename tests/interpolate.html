@@ -58,6 +58,16 @@ Tests.test(function (t)
 		'text${a}'.interpolate(ABC)
 	var jsTime = t.timeEnd('interpolate js')
 	t.ok(jsTime > plainTime, 'js > plain')
+	
+	t.exception(function (t)
+	{
+		'${x}'.interpolate({})
+	},
+	function (t, ex)
+	{
+		t.match(ex.message, /while executing string/, 'tell the')
+	})
+	
 })
 </script>
 </body>
