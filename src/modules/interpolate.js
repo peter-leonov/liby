@@ -126,7 +126,9 @@ function compile (str, hash)
 var cache = {}
 function interpolate ()
 {
-	var f = this in cache ? cache[this] : (cache[this] = compile(this))
+	var f = cache[this]
+	if (!f)
+		f = cache[this] = compile(this)
 	
 	if (typeof f === 'string')
 		return f
