@@ -304,13 +304,13 @@ var prototype =
 		var count = 1
 		do
 		{
-			count *= 5
+			count *= 2
 			var begin = new Date()
 			for (var i = 0; i < count; i++)
 				f()
 			var diff = new Date() - begin
 		}
-		while (diff < 25)
+		while (diff < 100)
 		
 		var speed = count * 1000 / diff
 		return speed
