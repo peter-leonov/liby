@@ -30,11 +30,11 @@ Me.prototype =
 			
 			function wait ()
 			{
-				if (!self.google)
+				if (!window.google)
 					return
 				
 				clearInterval(timer)
-				me.apiLoaderLoaded(self.google)
+				me.apiLoaderLoaded()
 			}
 			
 			var timer = setInterval(wait, 250)
@@ -48,11 +48,10 @@ Me.prototype =
 		return this
 	},
 	
-	apiLoaderLoaded: function (google)
+	apiLoaderLoaded: function ()
 	{
 		this.state = 'ready'
-		this.google = google
-		this.apiLoaded({name: 'loader'}, this.google['loader'])
+		this.apiLoaded({name: 'loader'}, window.google['loader'])
 		
 		this.fireAll()
 	},
@@ -80,12 +79,12 @@ Me.prototype =
 			callback: callback
 		}
 		
-		this.google.load(api.name, api.version, opts)
+		window.google.load(api.name, api.version, opts)
 	},
 	
 	apiLoaded: function (api)
 	{
-		this.dispatchEvent({type: api.name, api: this.google[api.name]})
+		this.dispatchEvent({type: api.name, api: window.google[api.name]})
 	}
 }
 
