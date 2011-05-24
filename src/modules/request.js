@@ -1,7 +1,7 @@
 ;(function(){
 
 var myName = 'Request',
-	XHR = XMLHttpRequest, urlEncode = UrlEncode.stringify,
+	XHR = XMLHttpRequest,
 	types = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
 function onreadystatechange ()
@@ -30,7 +30,7 @@ var Me = self[myName] =
 		if (!sync)
 			r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
 		r.callback = callback
-		r.send(typeof params == 'string' ? params : urlEncode(params))
+		r.send(typeof params == 'string' ? params : UrlEncode.stringify(params))
 		if (sync)
 			onreadystatechange.call(r)
 		
@@ -42,7 +42,7 @@ var Me = self[myName] =
 		var r = new XHR()
 		
 		if (params)
-			url += (url.indexOf('?') != -1 ? UrlEncode.paramDelimiter : '?') + urlEncode(params)
+			url += (url.indexOf('?') != -1 ? UrlEncode.paramDelimiter : '?') + UrlEncode.stringify(params)
 		
 		r.open('GET', url, !sync)
 		if (!sync)
