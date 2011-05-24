@@ -8,7 +8,7 @@ var Me =
 	
 	parse: function (string, forceArray)
 	{
-		var decode = this.decode
+		var decode = Me.decode
 		var res = {}
 		
 		var parts = String(string).split(this.paramDelimiter)
@@ -55,7 +55,7 @@ var Me =
 	
 	stringify: function (data)
 	{
-		var encode = this.encode, A = Array,
+		var encode = Me.encode, A = Array,
 			pairs = []
 		
 		for (var k in data)
