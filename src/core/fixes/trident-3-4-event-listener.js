@@ -331,19 +331,30 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 
 win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindCatcher = function (type)
 {
-	var node = this
-	function catcher ()
+	var c = this.__pmc__catcher
+	if (!c)
 	{
-		if (event.__pmc_dispatched)
-			return
-		event.__pmc_dispatched = true
+		var node = this
+		function catcher ()
+		{
+			if (event.__pmc_dispatched)
+				return
+			event.__pmc_dispatched = true
+			
+			var w = getEventWrapper(event)
+			
+			node.__pmc_dispatchEvent(w)
+		}
 		
-		var w = getEventWrapper(event)
-		
-		node.__pmc_dispatchEvent(w)
+		c = this.__pmc__catcher = catcher
 	}
 	
-	this.attachEvent('on' + type, catcher)
+	var key = '__pmc_catcher_bind:' + type
+	if (!c[key])
+	{
+		this.attachEvent('on' + type, c)
+		c[key] = true
+	}
 	return catcher
 }
 
