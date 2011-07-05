@@ -18,7 +18,7 @@ Tests.test(function (t)
 	t.test('sync GET', function (t)
 	{
 		t.expect(1)
-		function callback (e)
+		function callback ()
 		{
 			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
 		}
@@ -28,7 +28,7 @@ Tests.test(function (t)
 	t.test('async GET', function (t)
 	{
 		t.expect(1)
-		function callback (e)
+		function callback ()
 		{
 			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
 			t.done()

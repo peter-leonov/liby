@@ -7,8 +7,11 @@ var myName = 'Request',
 function onreadystatechange ()
 {
 	if (this.readyState == 4)
+	{
+		this.statusType = types[Math.floor(this.status / 100)]
 		if (this.callback)
-			this.callback({type: types[Math.floor(this.status / 100)]})
+			this.callback()
+	}
 }
 
 XHR.UNSENT = 0
