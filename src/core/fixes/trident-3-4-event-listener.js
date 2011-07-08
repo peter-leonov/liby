@@ -202,16 +202,16 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		
 		for (var j = 0, jl = listeners.length; j < jl; j++)
 		{
-			try
-			{
+			// try
+			// {
 				listeners[j].call(branch[i], w)
-			}
-			catch (ex)
-			{
-				// this trick is useful to report errors from all listeners
-				// 1000 delay helps to avoid sensitive lag when error reporting is on
-				setTimeout(function () { throw ex }, 1000)
-			}
+			// }
+			// catch (ex)
+			// {
+			// 	// this trick is useful to report errors from all listeners
+			// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
+			// 	setTimeout(function () { throw ex }, 1000)
+			// }
 		}
 		
 		if (w.__propagationStopped)
@@ -233,16 +233,16 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		
 			for (var j = 0, jl = listeners.length; j < jl; j++)
 			{
-				try
-				{
+				// try
+				// {
 					listeners[j].call(head, w)
-				}
-				catch (ex)
-				{
-					// this trick is useful to report errors from all listeners
-					// 1000 delay helps to avoid sensitive lag when error reporting is on
-					setTimeout(function () { throw ex }, 1000)
-				}
+				// }
+				// catch (ex)
+				// {
+				// 	// this trick is useful to report errors from all listeners
+				// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
+				// 	setTimeout(function () { throw ex }, 1000)
+				// }
 			}
 		}
 	
@@ -257,16 +257,16 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		
 			for (var j = 0, jl = listeners.length; j < jl; j++)
 			{
-				try
-				{
+				// try
+				// {
 					listeners[j].call(head, w)
-				}
-				catch (ex)
-				{
-					// this trick is useful to report errors from all listeners
-					// 1000 delay helps to avoid sensitive lag when error reporting is on
-					setTimeout(function () { throw ex }, 1000)
-				}
+				// }
+				// catch (ex)
+				// {
+				// 	// this trick is useful to report errors from all listeners
+				// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
+				// 	setTimeout(function () { throw ex }, 1000)
+				// }
 			}
 		}
 	}
@@ -292,16 +292,16 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		
 		for (var j = 0, jl = listeners.length; j < jl; j++)
 		{
-			try
-			{
+			// try
+			// {
 				listeners[j].call(branch[i], w)
-			}
-			catch (ex)
-			{
-				// this trick is useful to report errors from all listeners
-				// 1000 delay helps to avoid sensitive lag when error reporting is on
-				setTimeout(function () { throw ex }, 1000)
-			}
+			// }
+			// catch (ex)
+			// {
+			// 	// this trick is useful to report errors from all listeners
+			// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
+			// 	setTimeout(function () { throw ex }, 1000)
+			// }
 		}
 		
 		if (w.__propagationStopped)
