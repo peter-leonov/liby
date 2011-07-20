@@ -12,8 +12,8 @@
 	<script type="text/javascript" src="../src/core/prototype.js"></script>
 </head>
 <body>
-<blablabla id="blablabla1"></blablabla>
-<blablabla id="blablabla2"></blablabla>
+<blablabla class="blablabla-class" id="blablabla1"></blablabla>
+<blablabla class="blablabla-class" id="blablabla2"></blablabla>
 <ololo id="ololo1"></ololo>
 <ololo id="ololo2"></ololo>
 <div class="iii" id="iii1">
@@ -60,6 +60,8 @@ Tests.test(function (t)
 		
 		t.like(toArray(document.querySelectorAll('blablabla')), [$('blablabla1'), $('blablabla2')], 'blablabla')
 		t.like(toArray(document.querySelectorAll('ololo')), [$('ololo1'), $('ololo2')], 'ololo')
+		
+		t.like(toArray(document.querySelectorAll('.blablabla-class')), [$('blablabla1'), $('blablabla2')], '.blablabla')
 	})
 })
 </script>
