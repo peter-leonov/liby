@@ -12,13 +12,30 @@
 	<script type="text/javascript" src="../src/core/prototype.js"></script>
 </head>
 <body>
+<blablabla id="blablabla1"></blablabla>
+<blablabla id="blablabla2"></blablabla>
+<ololo id="ololo1"></ololo>
+<ololo id="ololo2"></ololo>
 <script type="text/javascript">
+function $ (id) { return document.getElementById(id) }
+function toArray (list) { var arr = []; for (var i = 0, il = list.length; i < il; i++) arr[i] = list[i]; return arr }
 Tests.test(function (t)
 {
 	t.test('plain checks', function (t)
 	{
 		t.ok(document.querySelectorAll, 'document.querySelectorAll')
 		t.ok(document.querySelector, 'document.querySelector')
+	})
+	
+	t.test('unknown tags', function (t)
+	{
+		t.eq(document.querySelector('blablabla'), $('blablabla1'), 'blablabla')
+		t.eq(document.querySelector('#blablabla1'), $('blablabla1'), '#blablabla1')
+		t.eq(document.querySelector('ololo'), $('ololo1'), 'ololo')
+		t.eq(document.querySelector('#ololo1'), $('ololo1'), '#ololo1')
+		
+		t.like(toArray(document.querySelectorAll('blablabla')), [$('blablabla1'), $('blablabla2')], 'blablabla')
+		t.like(toArray(document.querySelectorAll('ololo')), [$('ololo1'), $('ololo2')], 'ololo')
 	})
 })
 </script>
