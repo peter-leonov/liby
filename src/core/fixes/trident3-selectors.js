@@ -7,19 +7,34 @@ if (document.querySelectorAll)
 
 var style = document.createStyleSheet()
 
+window.__liby__selector_nodes = []
+var count = 0
+
 function find (query)
 {
-	window.__liby__selector_nodes = []
+	count++
 	
-	style.addRule(query, '-liby-selector:expression(window.__liby__selector_nodes.push(this))', 0)
+	var result = window.__liby__selector_nodes[count] = []
+	style.addRule(query, '-liby-selector-' + count + ':expression(window.__liby__selector_nodes[' + count + '].push(this))', 0)
+	
 	window.scrollBy(0, 0)
-	// get rid of the dirty expression ;)
-	style.removeRule(0)
+	window.__liby__selector_nodes[count].length = 0
+	window.scrollBy(0, 0)
+	// window.__liby__selector_nodes = []
+	// style.removeRule(0)
 	
-	return window.__liby__selector_nodes
+	return result
+}
+
+function findRelative (query, root)
+{
+	return find(query)
 }
 
 document.querySelectorAll = function (query) { return find(query) }
 document.querySelector = function (query) { return find(query)[0] || null }
+
+Element.prototype.querySelectorAll = function (query) { return findRelative(query, this) }
+Element.prototype.querySelector = function (query) { return findRelative(query, this)[0] || null }
 
 })();
