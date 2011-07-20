@@ -22,8 +22,13 @@
 	<i id="i2"></i>
 	<i id="i3"></i>
 	<i id="i4"></i>
+	<b id="b1"></b>
+	<b id="b2"></b>
+	<b id="b3"></b>
+	<b id="b4"></b>
 </div>
-<i id="i5"></i>
+<i id="i5"></b>
+<b id="b5"></b>
 <script type="text/javascript">
 function $ (id) { return document.getElementById(id) }
 function toArray (list) { var arr = []; for (var i = 0, il = list.length; i < il; i++) arr[i] = list[i]; return arr }
@@ -37,10 +42,14 @@ Tests.test(function (t)
 	
 	t.test('absolute', function (t)
 	{
-		t.like(toArray(document.querySelectorAll('body i')), [$('i1'), $('i2'), $('i3'), $('i4'), $('i5')], 'i')
+		t.like(toArray(document.querySelectorAll('body i')), [$('i1'), $('i2'), $('i3'), $('i4'), $('i5')], 'body i')
+		t.like(toArray(document.querySelectorAll('body b')), [$('b1'), $('b2'), $('b3'), $('b4'), $('b5')], 'body b')
 		t.like(toArray(document.querySelectorAll('i')), [$('i1'), $('i2'), $('i3'), $('i4'), $('i5')], 'i')
+		t.like(toArray(document.querySelectorAll('b')), [$('b1'), $('b2'), $('b3'), $('b4'), $('b5')], 'b')
 		t.like(toArray(document.querySelectorAll('div.iii i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'div.iii i')
+		t.like(toArray(document.querySelectorAll('div.iii b')), [$('b1'), $('b2'), $('b3'), $('b4')], 'div.iii b')
 		t.like(toArray(document.querySelectorAll('#iii1 i')), [$('i1'), $('i2'), $('i3'), $('i4')], '#iii1 i')
+		t.like(toArray(document.querySelectorAll('#iii1 b')), [$('b1'), $('b2'), $('b3'), $('b4')], '#iii1 b')
 	})
 	
 	t.test('relative', function (t)
