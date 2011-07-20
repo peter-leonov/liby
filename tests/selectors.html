@@ -16,6 +16,13 @@
 <blablabla id="blablabla2"></blablabla>
 <ololo id="ololo1"></ololo>
 <ololo id="ololo2"></ololo>
+<div class="iii" id="iii1">
+	<i id="i1"></i>
+	<i id="i2"></i>
+	<i id="i3"></i>
+	<i id="i4"></i>
+</div>
+<i id="i5"></i>
 <script type="text/javascript">
 function $ (id) { return document.getElementById(id) }
 function toArray (list) { var arr = []; for (var i = 0, il = list.length; i < il; i++) arr[i] = list[i]; return arr }
@@ -25,6 +32,23 @@ Tests.test(function (t)
 	{
 		t.ok(document.querySelectorAll, 'document.querySelectorAll')
 		t.ok(document.querySelector, 'document.querySelector')
+	})
+	
+	t.test('absolute', function (t)
+	{
+		t.like(toArray(document.querySelectorAll('body i')), [$('i1'), $('i2'), $('i3'), $('i4'), $('i5')], 'i')
+		t.like(toArray(document.querySelectorAll('i')), [$('i1'), $('i2'), $('i3'), $('i4'), $('i5')], 'i')
+		t.like(toArray(document.querySelectorAll('div.iii i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'div.iii i')
+		t.like(toArray(document.querySelectorAll('#iii1 i')), [$('i1'), $('i2'), $('i3'), $('i4')], '#iii1 i')
+	})
+	
+	t.test('relative', function (t)
+	{
+		var node = $('iii1')
+		t.like(toArray(node.querySelectorAll('body i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'i')
+		t.like(toArray(node.querySelectorAll('i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'i')
+		t.like(toArray(node.querySelectorAll('div.iii i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'div.iii i')
+		t.like(toArray(node.querySelectorAll('#iii1 i')), [$('i1'), $('i2'), $('i3'), $('i4')], '#iii1 i')
 	})
 	
 	t.test('unknown tags', function (t)
