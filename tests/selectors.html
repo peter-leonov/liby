@@ -75,7 +75,7 @@ Tests.test(function (t)
 		t.like(toArray(document.querySelectorAll('.blablabla-class')), [$('blablabla1'), $('blablabla2')], '.blablabla')
 	})
 	
-	t.test('many times', function (t)
+	t.test('many times for one', function (t)
 	{
 		t.test('body', function (t)
 		{
@@ -92,6 +92,27 @@ Tests.test(function (t)
 			t.time('time')
 			for (var i = 0; i < 100; i++)
 				t.eq(document.querySelector('#body1'), node, i)
+			t.timeEnd('time')
+		})
+	})
+	
+	t.test('many times for all', function (t)
+	{
+		t.test('body', function (t)
+		{
+			var node = $('body1')
+			t.time('time')
+			for (var i = 0; i < 100; i++)
+				t.eq(document.querySelectorAll('body')[0], node, i)
+			t.timeEnd('time')
+		})
+		
+		t.test('#body1', function (t)
+		{
+			var node = $('body1')
+			t.time('time')
+			for (var i = 0; i < 100; i++)
+				t.eq(document.querySelectorAll('#body1')[0], node, i)
 			t.timeEnd('time')
 		})
 	})
