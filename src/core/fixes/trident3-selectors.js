@@ -12,7 +12,7 @@ node.name = 'liby selectors engine ;)'
 head.appendChild(node)
 var sheet = node.styleSheet
 
-function find (query, root)
+function findAll (query, root)
 {
 	sheet.addRule(query, 'bottom:-31337pt !important', 0)
 	
@@ -30,10 +30,31 @@ function find (query, root)
 	return result
 }
 
-document.querySelectorAll = function (query) { return find(query, document) }
-document.querySelector = function (query) { return find(query, document)[0] || null }
+function find (query, root)
+{
+	sheet.addRule(query, 'bottom:-31337pt !important', 0)
+	
+	var all = root.all
+	var result = null
+	for (var i = 0, il = all.length; i < il; i++)
+	{
+		var node = all[i]
+		if (node.currentStyle.bottom == '-31337pt')
+		{
+			result = node
+			break
+		}
+	}
+	
+	sheet.removeRule(0)
+	
+	return result
+}
 
-Element.prototype.querySelectorAll = function (query) { return find(query, this) }
-Element.prototype.querySelector = function (query) { return find(query, this)[0] || null }
+document.querySelectorAll = function (query) { return findAll(query, document) }
+document.querySelector = function (query) { return find(query, document) }
+
+Element.prototype.querySelectorAll = function (query) { return findAll(query, this) }
+Element.prototype.querySelector = function (query) { return find(query, this) }
 
 })();
