@@ -5,14 +5,16 @@
 if (document.querySelectorAll)
 	return
 
-var style = document.createStyleSheet()
-
 window.__liby__selector_nodes = []
 var count = 0
 
 function find (query)
 {
 	count++
+	
+	var node = document.createElement('style')
+	document.documentElement.firstChild.appendChild(node)
+	var style = node.styleSheet
 	
 	style.addRule(query, '-liby-selector-' + count + ':expression(window.__liby__selector_nodes[' + count + '].push(this))', 0)
 	
@@ -24,6 +26,8 @@ function find (query)
 	
 	window.__liby__selector_nodes[count] = []
 	style.removeRule(0)
+	
+	document.documentElement.firstChild.removeChild(node)
 	
 	// alert(style.rules.length)
 	
