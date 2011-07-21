@@ -12,11 +12,11 @@ node.name = 'liby selectors engine ;)'
 head.appendChild(node)
 var sheet = node.styleSheet
 
-sheet.addRule('*', 'scrollbar-base-color:transparent', 0)
+sheet.addRule('*', 'scrollbar-arrow-color:transparent', 0)
 
 function find (query)
 {
-	sheet.addRule(query, 'scrollbar-base-color:#123456', 1)
+	sheet.addRule(query, 'scrollbar-arrow-color:#123456', 1)
 	window.scrollBy(0, 0)
 	
 	var all = document.all
@@ -24,7 +24,7 @@ function find (query)
 	for (var i = 0, il = all.length; i < il; i++)
 	{
 		var node = all[i]
-		if (node.currentStyle.scrollbarBaseColor == '#123456')
+		if (node.currentStyle.scrollbarArrowColor == '#123456')
 			result.push(node)
 	}
 	
