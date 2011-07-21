@@ -17,7 +17,6 @@ sheet.addRule('*', 'scrollbar-arrow-color:#000', 0)
 function find (query, root)
 {
 	sheet.addRule(query, 'scrollbar-arrow-color:#123456', 1)
-	window.scrollBy(0, 0)
 	
 	var all = root.all
 	var result = []
