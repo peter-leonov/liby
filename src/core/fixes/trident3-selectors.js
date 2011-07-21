@@ -12,7 +12,7 @@ node.name = 'liby selectors engine ;)'
 head.appendChild(node)
 var sheet = node.styleSheet
 
-sheet.addRule('*', 'scrollbar-arrow-color:transparent', 0)
+sheet.addRule('*', 'scrollbar-arrow-color:#000', 0)
 
 function find (query)
 {
