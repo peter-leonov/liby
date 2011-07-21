@@ -12,22 +12,20 @@ node.name = 'liby selectors engine ;)'
 head.appendChild(node)
 var sheet = node.styleSheet
 
-sheet.addRule('*', 'scrollbar-arrow-color:#000', 0)
-
 function find (query, root)
 {
-	sheet.addRule(query, 'scrollbar-arrow-color:#123456', 1)
+	sheet.addRule(query, 'bottom:-31337pt !important', 0)
 	
 	var all = root.all
 	var result = []
 	for (var i = 0, il = all.length; i < il; i++)
 	{
 		var node = all[i]
-		if (node.currentStyle.scrollbarArrowColor == '#123456')
+		if (node.currentStyle.bottom == '-31337pt')
 			result.push(node)
 	}
 	
-	sheet.removeRule(1)
+	sheet.removeRule(0)
 	
 	return result
 }
