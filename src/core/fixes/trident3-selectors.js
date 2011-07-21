@@ -5,31 +5,39 @@
 if (document.querySelectorAll)
 	return
 
-window.__liby__selector_nodes = []
-var count = 0
+var head = document.getElementsByTagName('head')[0]
 
+var node, sheet
+function bakeSheet ()
+{
+	if (node)
+		head.removeChild(node)
+	
+	node = document.createElement('style')
+	head.appendChild(node)
+	sheet = node.styleSheet
+}
+
+var buffer = window.__liby__selector_buffer = []
+
+var count = 0
 function find (query)
 {
-	count++
+	if (count++ % 50 == 0)
+		bakeSheet()
 	
-	var node = document.createElement('style')
-	document.documentElement.firstChild.appendChild(node)
-	var style = node.styleSheet
+	sheet.addRule(query, '-liby-selector-' + count + ':expression(window.__liby__selector_buffer[' + count + '].push(this))', 0)
 	
-	style.addRule(query, '-liby-selector-' + count + ':expression(window.__liby__selector_nodes[' + count + '].push(this))', 0)
-	
-	window.__liby__selector_nodes[count] = []
+	buffer[count] = []
 	window.scrollBy(0, 0)
 	
-	var result = window.__liby__selector_nodes[count] = []
+	var result = buffer[count] = []
 	window.scrollBy(0, 0)
 	
-	window.__liby__selector_nodes[count] = []
-	style.removeRule(0)
+	buffer[count] = []
+	sheet.removeRule(0)
 	
-	document.documentElement.firstChild.removeChild(node)
-	
-	// alert(style.rules.length)
+	// alert(sheet.rules.length)
 	
 	return result
 }
