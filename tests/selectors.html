@@ -77,8 +77,10 @@ Tests.test(function (t)
 	
 	t.test('many times', function (t)
 	{
+		t.time('time')
 		for (var i = 0; i < 100; i++)
 			t.eq(document.querySelector('body'), $('body1'), i)
+		t.timeEnd('time')
 	})
 	
 })
