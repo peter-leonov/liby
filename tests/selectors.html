@@ -12,7 +12,7 @@
 	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
 	<script type="text/javascript" src="../src/core/prototype.js"></script>
 </head>
-<body>
+<body id="body1">
 <blablabla class="blablabla-class" id="blablabla1"></blablabla>
 <blablabla class="blablabla-class" id="blablabla2"></blablabla>
 <ololo id="ololo1"></ololo>
@@ -73,6 +73,13 @@ Tests.test(function (t)
 		
 		t.like(toArray(document.querySelectorAll('.blablabla-class')), [$('blablabla1'), $('blablabla2')], '.blablabla')
 	})
+	
+	t.test('many times', function (t)
+	{
+		for (var i = 0; i < 100; i++)
+			t.eq(document.querySelector('body'), $('body1'), i)
+	})
+	
 })
 </script>
 </body>
