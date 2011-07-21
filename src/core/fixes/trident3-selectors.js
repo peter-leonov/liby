@@ -14,14 +14,18 @@ function find (query)
 {
 	count++
 	
-	var result = window.__liby__selector_nodes[count] = []
 	style.addRule(query, '-liby-selector-' + count + ':expression(window.__liby__selector_nodes[' + count + '].push(this))', 0)
 	
+	window.__liby__selector_nodes[count] = []
 	window.scrollBy(0, 0)
-	window.__liby__selector_nodes[count].length = 0
+	
+	var result = window.__liby__selector_nodes[count] = []
 	window.scrollBy(0, 0)
-	// window.__liby__selector_nodes = []
-	// style.removeRule(0)
+	
+	window.__liby__selector_nodes[count] = []
+	style.removeRule(0)
+	
+	// alert(style.rules.length)
 	
 	return result
 }
