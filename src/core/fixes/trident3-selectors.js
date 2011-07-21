@@ -7,37 +7,28 @@ if (document.querySelectorAll)
 
 var head = document.getElementsByTagName('head')[0]
 
-var node, sheet
-function bakeSheet ()
-{
-	if (node)
-		head.removeChild(node)
-	
-	node = document.createElement('style')
-	head.appendChild(node)
-	sheet = node.styleSheet
-}
+var node = document.createElement('style')
+node.name = 'liby selectors engine ;)'
+head.appendChild(node)
+var sheet = node.styleSheet
 
-var buffer = window.__liby__selector_buffer = []
+sheet.addRule('*', 'scrollbar-base-color:transparent', 0)
 
-var count = 0
 function find (query)
 {
-	if (count++ % 50 == 0)
-		bakeSheet()
-	
-	sheet.addRule(query, '-liby-selector-' + count + ':expression(window.__liby__selector_buffer[' + count + '].push(this))', 0)
-	
-	buffer[count] = []
+	sheet.addRule(query, 'scrollbar-base-color:#123456', 1)
 	window.scrollBy(0, 0)
 	
-	var result = buffer[count] = []
-	window.scrollBy(0, 0)
+	var all = document.all
+	var result = []
+	for (var i = 0, il = all.length; i < il; i++)
+	{
+		var node = all[i]
+		if (node.currentStyle.scrollbarBaseColor == '#123456')
+			result.push(node)
+	}
 	
-	buffer[count] = []
-	sheet.removeRule(0)
-	
-	// alert(sheet.rules.length)
+	sheet.removeRule(1)
 	
 	return result
 }
