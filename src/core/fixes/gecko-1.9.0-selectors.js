@@ -1,5 +1,8 @@
 (function(){
 
+if (!/Firefox\/[23]\.0\./.test(window.navigator.userAgent))
+	return
+
 if (document.querySelectorAll)
 	return
 
