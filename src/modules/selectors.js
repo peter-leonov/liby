@@ -1,5 +1,5 @@
-function $$ (query, root) { return (root || document).querySelectorAll(query) }
-function $  (query, root) { return (root || document).querySelector('#' + query) }
+function $$ (query) { return document.querySelectorAll(query) }
+function $  (query) { return document.querySelector('#' + query) }
 
 if (!document.getElementsByClassName)
 {
