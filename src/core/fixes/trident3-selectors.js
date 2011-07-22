@@ -5,18 +5,13 @@
 if (document.querySelectorAll)
 	return
 
-var head = document.getElementsByTagName('head')[0]
+var sheet = document.createStyleSheet('style')
 
-var node = document.createElement('style')
-node.name = 'liby selectors engine ;)'
-head.appendChild(node)
-var sheet = node.styleSheet
-
-function findAll (query, root)
+function querySelectorAll (query)
 {
 	sheet.addRule(query, 'bottom:-31337pt !important', 0)
 	
-	var all = root.all
+	var all = this.all
 	var result = []
 	for (var i = 0, il = all.length; i < il; i++)
 	{
@@ -30,11 +25,11 @@ function findAll (query, root)
 	return result
 }
 
-function find (query, root)
+function querySelector (query)
 {
 	sheet.addRule(query, 'bottom:-31337pt !important', 0)
 	
-	var all = root.all
+	var all = this.all
 	var result = null
 	for (var i = 0, il = all.length; i < il; i++)
 	{
@@ -51,10 +46,7 @@ function find (query, root)
 	return result
 }
 
-document.querySelectorAll = function (query) { return findAll(query, document) }
-document.querySelector = function (query) { return find(query, document) }
-
-Element.prototype.querySelectorAll = function (query) { return findAll(query, this) }
-Element.prototype.querySelector = function (query) { return find(query, this) }
+document.querySelectorAll = Element.prototype.querySelectorAll = querySelectorAll
+document.querySelector = Element.prototype.querySelector = querySelector
 
 })();

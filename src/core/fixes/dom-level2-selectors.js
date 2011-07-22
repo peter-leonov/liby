@@ -10,11 +10,11 @@ node.name = 'liby selectors engine ;)'
 head.appendChild(node)
 var sheet = node.sheet
 
-function findAll (query, root)
+function querySelectorAll (query)
 {
 	sheet.insertRule(query + ' { bottom:-31337px !important }', 0)
 	
-	var all = root.getElementsByTagName('*')
+	var all = this.getElementsByTagName('*')
 	var result = []
 	for (var i = 0, il = all.length; i < il; i++)
 	{
@@ -28,11 +28,11 @@ function findAll (query, root)
 	return result
 }
 
-function find (query, root)
+function querySelector (query)
 {
 	sheet.insertRule(query + ' { bottom:-31337px !important }', 0)
 	
-	var all = root.getElementsByTagName('*')
+	var all = this.getElementsByTagName('*')
 	var result = null
 	for (var i = 0, il = all.length; i < il; i++)
 	{
@@ -49,10 +49,7 @@ function find (query, root)
 	return result
 }
 
-document.querySelectorAll = function (query) { return findAll(query, document) }
-document.querySelector = function (query) { return find(query, document) }
-
-Element.prototype.querySelectorAll = function (query) { return findAll(query, this) }
-Element.prototype.querySelector = function (query) { return find(query, this) }
+document.querySelectorAll = Element.prototype.querySelectorAll = querySelectorAll
+document.querySelector = Element.prototype.querySelector = querySelector
 
 })();
