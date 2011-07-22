@@ -1,25 +1,10 @@
-<!--#include virtual="sizzle.js" -->
-
-window.$$ = function ()
-{
-	var res = Sizzle.apply(window, arguments)
-	return res.length ? res : null
-}
-
-// Element.prototype.getElementsByClassName=function(c){return $$('.'+c, this)}
+function $$ (query, root) { return (root || document).querySelectorAll(query) }
+function $  (query, root) { return (root || document).querySelector('#' + query) }
 
 if (!document.getElementsByClassName)
 {
-	Element.prototype.getElementsByClassName = document.getElementsByClassName = function (className, tagName)
+	Element.prototype.getElementsByClassName = document.getElementsByClassName = function (className)
 	{
-		var children = this.getElementsByTagName(tagName || '*'),
-			rex = new RegExp("(?:\\s+|^)" + className + "(?:\\s+|$)")
-		
-		var res = []
-		for (var l = 0, i = 0, il = children.length; i < il; i++)
-			if (rex.test(children[i].className))
-				res[l++] = children[i]
-		
-		return res
+		return this.querySelectorAll('.' + className)
 	}
 }

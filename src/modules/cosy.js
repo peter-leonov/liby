@@ -1,5 +1,3 @@
-function $ (id) { return document.getElementById(id) }
-
 $.onload = function (fn) { return self.addEventListener('load', fn, false) }
 $.include = function (src)
 {
