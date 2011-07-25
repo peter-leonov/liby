@@ -12,14 +12,14 @@ var sheet = node.sheet
 
 function querySelectorAll (query)
 {
-	sheet.insertRule(query + ' { -moz-column-gap:31337px !important }', 0)
+	sheet.insertRule(query + ' { margin-left:-31337px !important }', 0)
 	
 	var all = this.getElementsByTagName('*')
 	var result = []
 	for (var i = 0, il = all.length; i < il; i++)
 	{
 		var node = all[i]
-		if (window.getComputedStyle(node, null).MozColumnGap == '31337px')
+		if (window.getComputedStyle(node, null).marginLeft == '-31337px')
 			result.push(node)
 	}
 	
@@ -30,14 +30,14 @@ function querySelectorAll (query)
 
 function querySelector (query)
 {
-	sheet.insertRule(query + ' { bottom:-31337px !important }', 0)
+	sheet.insertRule(query + ' { margin-left:-31337px !important }', 0)
 	
 	var all = this.getElementsByTagName('*')
 	var result = null
 	for (var i = 0, il = all.length; i < il; i++)
 	{
 		var node = all[i]
-		if (window.getComputedStyle(node, null).bottom == '-31337px')
+		if (window.getComputedStyle(node, null).marginLeft == '-31337px')
 		{
 			result = node
 			break
