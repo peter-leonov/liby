@@ -1,5 +1,15 @@
-function $$ (query) { return document.querySelectorAll(query) }
-function $  (query) { return document.querySelector('#' + query) }
+;(function(){
+
+function list2array (list)
+{
+	var arr = []
+	for (var i = 0, il = list.length; i < il; i++)
+		arr[i] = list[i]
+	return arr
+}
+
+window.$$ = function (query, root) { return list2array((root || document).querySelectorAll(query)) }
+window.$ = function (id) { return document.getElementById(id) }
 
 if (!document.getElementsByClassName)
 {
@@ -8,3 +18,5 @@ if (!document.getElementsByClassName)
 		return this.querySelectorAll('.' + className)
 	}
 }
+
+})();
