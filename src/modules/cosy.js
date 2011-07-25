@@ -1,5 +1,5 @@
 $.onload = function (fn) { return self.addEventListener('load', fn, false) }
-$.include = function (src)
+$.load = function (src)
 {
 	var me = arguments.callee
 	var cache = me.cache || (me.cache = {}) 

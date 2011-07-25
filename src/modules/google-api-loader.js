@@ -26,7 +26,7 @@ Me.prototype =
 			if (!this.keys)
 				throw new Error(myName + ': keys is undefined')
 			
-			this.node = $.include('http://www.google.com/jsapi?key=' + this.keys[this.host])
+			this.node = $.load('http://www.google.com/jsapi?key=' + this.keys[this.host])
 			
 			function wait ()
 			{
