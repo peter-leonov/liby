@@ -14,15 +14,45 @@ canvas { border: 2px solid #ccc; }
 <script>
 ;(function(){
 
-var canvas = document.getElementById('canvas')
+function shape (cx, points)
+{
+	cx.beginPath()
+	var start = points[0]
+	cx.moveTo(start[0], start[1])
+	for (var i = 1, il = points.length; i < il; i++)
+	{
+		var point = points[i]
+		cx.lineTo(point[0], point[1])
+	}
+	
+	cx.closePath()
+	cx.stroke()
+}
 
-var cx = canvas.getContext('2d')
-cx.beginPath()
-cx.moveTo(75,50)
-cx.lineTo(100,75)
-cx.lineTo(100,25)
-cx.stroke()
+var cx = document.getElementById('canvas').getContext('2d')
 
+var a =
+[
+[50, 50],
+[200, 200],
+[50, 350]
+]
+
+var b =
+[
+[100, 150],
+[300, 200],
+[100, 250]
+]
+
+cx.lineWidth = 2
+cx.lineJoin = 'round'
+
+cx.strokeStyle = '#4a4'
+shape(cx, a)
+
+cx.strokeStyle = '#44a'
+shape(cx, b)
 
 })();
 
