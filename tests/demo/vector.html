@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width"/>
+<title>Visibility frame demo</title>
+<script src="../../src/modules/vector.js"></script>
+<style type="text/css">
+canvas { border: 2px solid #ccc; }
+</style>
+</head>
+<body>
+<canvas id="canvas" width="600" height="400"></canvas>
+<script>
+;(function(){
+
+var canvas = document.getElementById('canvas')
+
+var cx = canvas.getContext('2d')
+cx.beginPath()
+cx.moveTo(75,50)
+cx.lineTo(100,75)
+cx.lineTo(100,25)
+cx.stroke()
+
+
+})();
+
+</script>
+</body>
+</html>
