@@ -1,6 +1,6 @@
 // based on json2 (http://www.JSON.org/json2.js)
-// WARNING: this is not JSON library, it is not secure, it is for internal use only
-// if you do not understand the difference please use original json2.js library
+// WARNING: this is not a JSON library, this module is not secure, this module is for internal use only
+// if you do not understand the difference please use the original json2.js library
 
 ;(function ()
 {
