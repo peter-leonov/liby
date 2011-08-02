@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Sign check benchmark</title>
+	<script src="tests.common.js" type="text/javascript"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+Tests.test(function (t)
+{
+	t.test('float', function (t)
+	{
+		;(function(){
+		
+		var a = -12.3456, b = 90.65432, r = true
+		t.time('multiply')
+		for (var i = 0; i < 1000000; i++)
+			r = a * b >= 0
+		t.timeEnd('multiply')
+		
+		})();
+		
+		
+		
+		;(function(){
+		
+		var a = -12.3456, b = 90.65432, r = true
+		t.time('==')
+		for (var i = 0; i < 1000000; i++)
+			r = a < 0 == b < 0
+		t.timeEnd('==')
+		
+		})();
+	})
+	
+	t.test('int', function (t)
+	{
+		;(function(){
+		
+		var a = -12, b = 90, r = true
+		t.time('multiply')
+		for (var i = 0; i < 1000000; i++)
+			r = a * b >= 0
+		t.timeEnd('multiply')
+		
+		})();
+		
+		
+		
+		;(function(){
+		
+		var a = -12, b = 90, r = true
+		t.time('==')
+		for (var i = 0; i < 1000000; i++)
+			r = a < 0 == b < 0
+		t.timeEnd('==')
+		
+		})();
+	})
+})
+</script>
+</body>
+</html>
