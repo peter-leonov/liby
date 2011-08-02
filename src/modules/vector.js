@@ -28,7 +28,7 @@ var Me =
 		return [s1[0] + u * (e1[0] - s1[0]), s1[1] + u * (e1[1] - s1[1])]
 	},
 	
-	isPointInPoly: function (poly, point)
+	isPointInShape: function (shape, point)
 	{
 		// great thank you to _winnie (Пушыстый) http://users.livejournal.com/_winnie/237888.html
 		
@@ -36,13 +36,13 @@ var Me =
 		
 		var intersections = 0
 		
-		var prevNum = poly.length - 1,
-			prevUnder = poly[prevNum][1] < py
+		var prevNum = shape.length - 1,
+			prevUnder = shape[prevNum][1] < py
 		
-		for (var i = 0, il = poly.length; i < il; i++)
+		for (var i = 0, il = shape.length; i < il; i++)
 		{
-			var cur = poly[i],
-				prev = poly[prevNum]
+			var cur = shape[i],
+				prev = shape[prevNum]
 			
 			var curUnder = cur[1] < py
 			
@@ -87,14 +87,14 @@ var Me =
 		for (var i = 0, il = a.length; i < il; i++)
 		{
 			var point = a[i]
-			if (this.isPointInPoly(b, point))
+			if (this.isPointInShape(b, point))
 				points.push(point)
 		}
 		
 		for (var i = 0, il = b.length; i < il; i++)
 		{
 			var point = b[i]
-			if (this.isPointInPoly(a, point))
+			if (this.isPointInShape(a, point))
 				points.push(point)
 		}
 		
