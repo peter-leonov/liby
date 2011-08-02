@@ -72,6 +72,26 @@ var Me =
 		return intersections & 1
 	},
 	
+	intersectShapeWithSegment: function (shape, s, e)
+	{
+		var points = []
+		
+		var prevNum = shape.length - 1
+		for (var i = 0, il = shape.length; i < il; i++)
+		{
+			var cur = shape[i],
+				prev = shape[prevNum]
+			
+			var point = this.intersectSegments(prev, cur, s, e)
+			if (point)
+				points.push(point)
+			
+			prevNum = i
+		}
+		
+		return points
+	},
+	
 	intersectShapes: function (a, b)
 	{
 		var points = []
