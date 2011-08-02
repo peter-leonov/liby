@@ -28,9 +28,54 @@ var Me =
 		return [s1[0] + u * (e1[0] - s1[0]), s1[1] + u * (e1[1] - s1[1])]
 	},
 	
+	isPointInPoly: function (poly, point)
+	{
+		// great thank you to _winnie (Пушыстый) http://users.livejournal.com/_winnie/237888.html
+		
+		var px = point[0], py = point[1]
+		
+		var intersections = 0
+		
+		var prevNum = poly.length - 1,
+			prevUnder = poly[prevNum][1] < py
+		
+		for (var i = 0, il = poly.length; i < il; i++)
+		{
+			var cur = poly[i],
+				prev = poly[prevNum]
+			
+			var curUnder = cur[1] < py
+			
+			var ax = prev[0] - px
+			var ay = prev[1] - py
+			
+			var bx = cur[0] - px
+			var by = cur[1] - py
+			
+			var t = ax * (by - ay) - ay * (bx - ax)
+			
+			if (curUnder && !prevUnder)
+			{
+				if (t > 0)
+					intersections++
+			}
+			else if (!curUnder && prevUnder)
+			{
+				if (t < 0)
+					intersections++
+			}
+			
+			prevNum = i
+			prevUnder = curUnder
+		}
+		
+		return intersections & 1
+	},
+	
 	intersectShapes: function (a, b)
 	{
 		var points = []
+		
 		for (var i = 0, il = a.length - 1; i < il; i++)
 			for (var j = 0, jl = b.length - 1; j < jl; j++)
 			{
@@ -38,6 +83,21 @@ var Me =
 				if (point)
 					points.push(point)
 			}
+		
+		for (var i = 0, il = a.length; i < il; i++)
+		{
+			var point = a[i]
+			if (this.isPointInPoly(b, point))
+				points.push(point)
+		}
+		
+		for (var i = 0, il = b.length; i < il; i++)
+		{
+			var point = b[i]
+			if (this.isPointInPoly(a, point))
+				points.push(point)
+		}
+		
 		return points
 	}
 }
