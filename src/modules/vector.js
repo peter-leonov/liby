@@ -2,7 +2,44 @@
 
 var Me =
 {
+	intersectSegments: function (s1, e1, s2, e2)
+	{
+		// great thank you to _winnie (Пушыстый) http://users.livejournal.com/_winnie/152327.html
+		
+		var a1 = s1[1] - e1[1]
+		var b1 = e1[0] - s1[0]
+		var d1 = s1[0] * e1[1] - e1[0] * s1[1]
+		
+		var a2 = s2[1] - e2[1]
+		var b2 = e2[0] - s2[0]
+		var d2 = s2[0] * e2[1] - e2[0] * s2[1]
+		
+		var l1s = a2 * s1[0] + b2 * s1[1] + d2
+		var l1e = a2 * e1[0] + b2 * e1[1] + d2
+		
+		var l2s = a1 * s2[0] + b1 * s2[1] + d1
+		var l2e = a1 * e2[0] + b1 * e2[1] + d1
+		
+		if (l1s * l1e >= 0 || l2s * l2e >= 0)
+			return false
+		
+		var u = l1s / (l1s - l1e)
+		
+		return [s1[0] + u * (e1[0] - s1[0]), s1[1] + u * (e1[1] - s1[1])]
+	},
 	
+	intersectShapes: function (a, b)
+	{
+		var points = []
+		for (var i = 0, il = a.length - 1; i < il; i++)
+			for (var j = 0, jl = b.length - 1; j < jl; j++)
+			{
+				var point = this.intersectSegments(a[i], a[i+1], b[i], b[i+1])
+				if (point)
+					points.push(point)
+			}
+		return points
+	}
 }
 
 Me.className = 'Vector'
