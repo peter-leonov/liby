@@ -96,13 +96,20 @@ var Me =
 	{
 		var points = []
 		
-		for (var i = 0, il = a.length - 1; i < il; i++)
-			for (var j = 0, jl = b.length - 1; j < jl; j++)
+		var prevA = a.length - 1
+		for (var i = 0, il = a.length; i < il; i++)
+		{
+			var prevB = b.length - 1
+			for (var j = 0, jl = b.length; j < jl; j++)
 			{
-				var point = this.intersectSegments(a[i], a[i+1], b[i], b[i+1])
+				var point = this.intersectSegments(a[prevA], a[i], b[prevB], b[j])
 				if (point)
 					points.push(point)
+				
+				prevB = j
 			}
+			prevA = i
+		}
 		
 		for (var i = 0, il = a.length; i < il; i++)
 		{
