@@ -56,7 +56,7 @@ var Me =
 			
 			if (curUnder && !prevUnder)
 			{
-				if (t > 0)
+				if (t >= 0)
 					intersections++
 			}
 			else if (!curUnder && prevUnder)
