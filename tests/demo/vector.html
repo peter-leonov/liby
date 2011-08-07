@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width"/>
-<title>Visibility frame demo</title>
+<title>Geometry demo</title>
 <script src="../../src/modules/vector.js"></script>
 <style type="text/css">
 canvas { border: 2px solid #ccc; }
@@ -53,9 +53,9 @@ var a =
 
 var b =
 [
-[100, 150],
+[75, 150],
 [300, 200],
-[100, 250]
+[75, 250]
 ]
 
 cx.lineWidth = 2
@@ -68,8 +68,8 @@ cx.strokeStyle = '#44a'
 shape(cx, b)
 
 var c = Vector.intersectShapes(a, b)
-cx.strokeStyle = '#fa4'
-shape(cx, c)
+// cx.strokeStyle = '#fa4'
+// shape(cx, c)
 cx.fillStyle = '#f80'
 points(cx, c)
 
