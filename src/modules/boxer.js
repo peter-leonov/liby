@@ -16,13 +16,16 @@ var Me =
 			var node = nodes[i],
 				parent = node.offsetParent
 			
+			if (!parent)
+				continue
+			
 			if (parent != lastParent)
 			{
 				lastParent = parent
 				position = parent.offsetPosition(root)
 			}
 			
-			var box = boxes[i] =
+			var box =
 			{
 				x: node.offsetLeft + position.left,
 				y: node.offsetTop + position.top,
@@ -39,6 +42,8 @@ var Me =
 				box.w = node.offsetWidth
 				box.h = node.offsetHeight
 			}
+			
+			boxes.push(box)
 		}
 		
 		return boxes
