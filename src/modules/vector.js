@@ -4,7 +4,7 @@ var Me =
 {
 	intersectSegments: function (s1, e1, s2, e2)
 	{
-		// great thank you to _winnie (Пушыстый) http://users.livejournal.com/_winnie/152327.html
+		// great thank you to Ivan Yanikov, dobrokot 'at' gmail.com
 		
 		var a1 = s1[1] - e1[1]
 		var b1 = e1[0] - s1[0]
@@ -30,7 +30,7 @@ var Me =
 	
 	isPointInShape: function (shape, point)
 	{
-		// great thank you to _winnie (Пушыстый) http://users.livejournal.com/_winnie/237888.html
+		// great thank you to Ivan Yanikov, dobrokot 'at' gmail.com
 		
 		var px = point[0], py = point[1]
 		
