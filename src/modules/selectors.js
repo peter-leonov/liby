@@ -8,7 +8,13 @@ function list2array (list)
 	return arr
 }
 
-window.$$ = function (query, root) { return list2array((root || document).querySelectorAll(query)) }
+window.$$ = function (query, root)
+{
+	var list = (root || document).querySelectorAll(query)
+	// if (list.length == 0)
+	// 	alert('empty $$("' + query + '")')
+	return list2array(list)
+}
 window.$ = function (id) { return document.getElementById(id) }
 
 if (!document.getElementsByClassName)
