@@ -11,7 +11,7 @@ function list2array (list)
 window.$$ = function (query, root)
 {
 	var list = (root || document).querySelectorAll(query)
-	// if (list.length == 0)
+	// if (!list || list.length == 0)
 	// 	alert('empty $$("' + query + '")')
 	return list2array(list)
 }
