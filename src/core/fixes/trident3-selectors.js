@@ -9,7 +9,12 @@ var sheet = document.createStyleSheet('style')
 
 function querySelectorAll (query)
 {
-	sheet.addRule(query, 'bottom:-31337pt !important', 0)
+	var queries = query.split(/\s*,\s*/)
+	for (var i = 0, il = queries.length; i < il; i++)
+	{
+		var q = queries[i]
+		sheet.addRule(q, 'bottom:-31337pt !important', i)
+	}
 	
 	var all = this.all
 	var result = []
@@ -20,14 +25,20 @@ function querySelectorAll (query)
 			result.push(node)
 	}
 	
-	sheet.removeRule(0)
+	for (var i = 0, il = queries.length; i < il; i++)
+		sheet.removeRule(0)
 	
 	return result
 }
 
 function querySelector (query)
 {
-	sheet.addRule(query, 'bottom:-31337pt !important', 0)
+	var queries = query.split(/\s*,\s*/)
+	for (var i = 0, il = queries.length; i < il; i++)
+	{
+		var q = queries[i]
+		sheet.addRule(q, 'bottom:-31337pt !important', i)
+	}
 	
 	var all = this.all
 	var result = null
@@ -41,7 +52,8 @@ function querySelector (query)
 		}
 	}
 	
-	sheet.removeRule(0)
+	for (var i = 0, il = queries.length; i < il; i++)
+		sheet.removeRule(0)
 	
 	return result
 }

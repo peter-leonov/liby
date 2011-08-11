@@ -63,6 +63,12 @@ Tests.test(function (t)
 		t.like(toArray(node.querySelectorAll('#iii1 i')), [$('i1'), $('i2'), $('i3'), $('i4')], '#iii1 i')
 	})
 	
+	t.test('comma-separated', function (t)
+	{
+		var node = $('iii1')
+		t.like(toArray(node.querySelectorAll('body i, body b')), [$('i1'), $('i2'), $('i3'), $('i4'), $('b1'), $('b2'), $('b3'), $('b4')], 'i')
+	})
+	
 	t.test('unknown tags', function (t)
 	{
 		t.eq(document.querySelector('blablabla'), $('blablabla1'), 'blablabla')
