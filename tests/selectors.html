@@ -31,6 +31,11 @@
 </div>
 <i id="i5"></i>
 <b id="b5"></b>
+<div id="node2" style="display: none">
+	<p>
+		<dl id="dl1"></dl>
+	</p>
+</div>
 <script type="text/javascript">
 function $ (id) { return document.getElementById(id) }
 function toArray (list) { var arr = []; for (var i = 0, il = list.length; i < il; i++) arr[i] = list[i]; return arr }
@@ -61,6 +66,12 @@ Tests.test(function (t)
 		t.like(toArray(node.querySelectorAll('i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'i')
 		t.like(toArray(node.querySelectorAll('div.iii i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'div.iii i')
 		t.like(toArray(node.querySelectorAll('#iii1 i')), [$('i1'), $('i2'), $('i3'), $('i4')], '#iii1 i')
+	})
+	
+	t.test('display: none', function (t)
+	{
+		var node = $('node2')
+		t.like(toArray(node.querySelectorAll('body dl')), [$('dl1')], 'dl')
 	})
 	
 	t.test('comma-separated', function (t)
