@@ -48,6 +48,9 @@ function str (value)
 		case 'null':
 			return String_constructor(value)
 		
+		case 'undefined':
+			return 'null'
+		
 		// Objects
 		case 'object':
 			// Null
