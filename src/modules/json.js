@@ -93,16 +93,17 @@ function str (value)
 function parse (text)
 {
 	parse.lastError = null
-	if (/^[\],:{}\s]*$/.
-		test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
-		replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-		replace(/(?:^|:|,)(?:\s*\[)+/g, '')))
+	var harmful = text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
+					  .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+					  .replace(/(?:^|:|,)(?:\s*\[)+/g, '')
+					  .replace(/[\],:{}\s]+/g, '')
+	
+	if (harmful == '')
 	{
-		try { return eval('(' + text + ')') }
-		catch(ex) { parse.lastError = ex; return null }
+		return eval('(' + text + ')')
 	}
 	
-	throw new SyntaxError(myName + '.parse');
+	throw new SyntaxError('harmful JSON: "' + harmful + '"')
 }
 
 Me.stringify = str
