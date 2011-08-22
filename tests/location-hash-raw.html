@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for location.hash</title>
+	<script src="tests.common.js"></script>
+</head>
+<body>
+<a id="link1" href="#Ё ?"></a>
+<script>
+function $ (id) { return document.getElementById(id) }
+Tests.test(function (t)
+{
+	var l = window.location
+	
+	t.test('hash of only "#" masks "#" char', function (t)
+	{
+		l.hash = '#1231234'
+		t.eq(l.hash, '#1231234', 'non-empty hash')
+		
+		l.hash = '#'
+		t.eq(l.hash, '', 'empty hash')
+	})
+	
+	t.test('empty hash masks "#" char', function (t)
+	{
+		l.hash = '#1231234'
+		t.eq(l.hash, '#1231234', 'non-empty hash')
+		
+		l.hash = ''
+		t.eq(l.hash, '', 'empty hash')
+	})
+	
+	t.test('setting without leading "#"', function (t)
+	{
+		l.hash = 'abc'
+		t.eq(l.hash, '#abc', 'string')
+		
+		l.hash = ''
+		t.eq(l.hash, '', 'empty')
+	})
+	
+	t.test('setting "#"', function (t)
+	{
+		l.hash = '#'
+		t.eq(l.hash, '', 'empty')
+		
+		l.hash = '%23'
+		t.eq(l.hash, '#%23', 'escaped')
+	})
+	
+	t.test('“special” characters', function (t)
+	{
+		l.hash = '#1 2 3'
+		t.eq(l.hash, '#1 2 3', 'plain spaces')
+		
+		l.hash = '#x  '
+		t.eq(l.hash, '#x  ', 'trailing spaces')
+		
+		l.hash = '#Пётр'
+		t.eq(l.hash, '#Пётр', 'unicode')
+		
+		l.hash = '#%3C%3F%3E'
+		t.eq(l.hash, '#%3C%3F%3E', 'escape sequences')
+		
+		l.hash = '#%'
+		t.eq(l.hash, '#%', 'percent sign')
+		
+		l.hash = '#1\x002'
+		t.eq(l.hash, '#1\x002', 'binary zero')
+		
+		l.hash = '#1\t2\n3'
+		t.eq(l.hash, '#1\t2\n3', 'unprintable chars')
+		
+		l.hash = '#1?2'
+		t.eq(l.hash, '#1?2', 'question sign')
+		
+		l.hash = '#,.:\\/#!\'"@%^&*(){}[]+-=`~'
+		t.eq(l.hash, '#,.:\\/#!\'"@%^&*(){}[]+-=`~', 'other punctuation')
+	})
+	
+	t.test('a href', function (t)
+	{
+		var node = $('link1')
+		
+		var e = document.createEvent('Event')
+		e.initEvent('click', false, false)
+		node.dispatchEvent(e)
+		
+		t.eq(l.hash, '#Ё ?', 'other punctuation')
+		
+	})
+	
+	l.hash = ''
+})
+</script>
+</body>
+</html>
