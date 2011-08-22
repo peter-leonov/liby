@@ -152,32 +152,6 @@ Tests.test(function (t)
 			t.async(function () {}, 100)
 		})
 	})
-	
-	t.test('location', function (t)
-	{
-		if (!/Version\/\S+ Safari\/\S+/.test(navigator.userAgent))
-		{
-			t.log('this test works properly in Safari only')
-			return
-		}
-		
-		// https://bugs.webkit.org/show_bug.cgi?id=54960
-		
-		t.mayFail()
-		
-		location.href = 'pong.html'
-		var win = window,
-			loc = window.location
-		
-		function check ()
-		{
-			t.eq(win, window)
-			t.eq(loc, window.location)
-		}
-		
-		t.async(check, 500)
-	})
-	
 })
 </script>
 </body>
