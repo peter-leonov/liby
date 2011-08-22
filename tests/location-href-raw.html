@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for location.hash</title>
+	<script src="tests.common.js"></script>
+</head>
+<body>
+<a id="link1" href="#Ё ?"></a>
+<script>
+function $ (id) { return document.getElementById(id) }
+Tests.test(function (t)
+{
+	var l = window.location
+	
+	function href ()
+	{
+		var m = /#.*$/.exec(l.href)
+		return m ? m[0] : '#'
+	}
+	
+	t.test('href of only "#" preserves "#" char', function (t)
+	{
+		l.href = '#1231234'
+		t.eq(href(), '#1231234', 'non-empty hash')
+		
+		l.href = '#'
+		t.eq(href(), '#', 'hash sign preserves')
+	})
+	
+	t.test('setting "#"', function (t)
+	{
+		l.href = '#'
+		t.eq(href(), '#', 'hash sign present')
+	})
+	
+	t.test('“special” characters', function (t)
+	{
+		l.href = '#1 2 3'
+		t.eq(href(), '#1 2 3', 'plain spaces')
+		
+		l.href = '#x  '
+		t.eq(href(), '#x  ', 'trailing spaces')
+		
+		l.href = '#Пётр'
+		t.eq(href(), '#Пётр', 'unicode')
+		
+		l.href = '#%3C%3F%3E'
+		t.eq(href(), '#%3C%3F%3E', 'escape sequences')
+		
+		l.href = '#%'
+		t.eq(href(), '#%', 'percent sign')
+		
+		l.href = '#1\x002'
+		t.eq(href(), '#1\x002', 'binary zero')
+		
+		l.href = '#1\t2\n3'
+		t.eq(href(), '#1\t2\n3', 'unprintable chars')
+		
+		l.href = '#1?2'
+		t.eq(href(), '#1?2', 'question sign')
+		
+		l.href = '#,.:\\/#!\'"@%^&*(){}[]+-=`~'
+		t.eq(href(), '#,.:\\/#!\'"@%^&*(){}[]+-=`~', 'other punctuation')
+	})
+	
+	// clean up hash
+	t.async(function (t) { l.hash = '' }, 100)
+})
+</script>
+</body>
+</html>
