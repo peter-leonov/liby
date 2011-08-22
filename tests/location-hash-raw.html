@@ -80,19 +80,8 @@ Tests.test(function (t)
 		t.eq(l.hash, '#,.:\\/#!\'"@%^&*(){}[]+-=`~', 'other punctuation')
 	})
 	
-	t.test('a href', function (t)
-	{
-		var node = $('link1')
-		
-		var e = document.createEvent('Event')
-		e.initEvent('click', false, false)
-		node.dispatchEvent(e)
-		
-		t.eq(l.hash, '#Ё ?', 'other punctuation')
-		
-	})
-	
-	l.hash = ''
+	// clean up hash
+	t.async(function (t) { l.hash = '' }, 100)
 })
 </script>
 </body>
