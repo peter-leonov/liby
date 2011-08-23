@@ -4,12 +4,11 @@ if (!('onhashchange' in window) && !/Opera\/.+ Version\/1\d\.[6789]/.test(naviga
 // mark browser as supporting one
 window.onhashchange = null
 
-var location = window.location
-
-var lastHash = location.hash
+var lastHash = window.location.hash
 function check ()
 {
-	var hash = location.hash
+	var hash = window.location.hash
+	
 	
 	if (hash === lastHash)
 		return
