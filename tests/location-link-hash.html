@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for link hash encoding</title>
+	<script src="tests.common.js"></script>
+	
+	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if gte IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script type="text/javascript" src="../src/core/prototype.js"></script>
+	<script type="text/javascript" src="../src/core/fixes/onhashchange.js"></script>
+	
+	<style>
+	#box { position: absolute; top: 75px; left: 25px; z-index: 200; font-size: 15px; }
+	</style>
+</head>
+<body>
+<ul id="box">
+<li><a id="link1" href="#1 2 3">#1 2 3</a></li>
+<li><a id="link2" href="#x  ">#x  </a></li>
+<li><a id="link3" href="#Пётр">#Пётр</a></li>
+<li><a id="link3.1" href="#%D0%9F%D1%91%D1%82%D1%80">#%D0%9F%D1%91%D1%82%D1%80</a></li>
+<li><a id="link4" href="#%3C%3F%3E">#%3C%3F%3E</a></li>
+<li><a id="link5" href="#%">#%</a></li>
+<li><a id="link6" href="#1?2">#1?2</a></li>
+<li><a id="link7" href="#,.:\/#!'&quote;@%^&*(){}[]+-=`~">#,.:\/#!'&quote;@%^&*(){}[]+-=`~</a></li>
+</ul>
+<script>
+function $ (id) { return document.getElementById(id) }
+Tests.test(function (t)
+{
+	var l = window.location
+	
+	function check ()
+	{
+		alert(l.hash)
+	}
+	
+	window.addEventListener('hashchange', check, false)
+})
+</script>
+</body>
+</html>
