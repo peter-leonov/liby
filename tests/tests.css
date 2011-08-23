@@ -26,7 +26,7 @@ body{font: 12px Arial,sans-serif;}
 	background-color: #fff;
 }
 
-#tests-output.done { z-index: 65535; }
+#tests-output.done { z-index: 100; }
 
 #tests-output > .test > .head,
 #tests-output > .test > .summary { background-color: #888; color: #fff; }
