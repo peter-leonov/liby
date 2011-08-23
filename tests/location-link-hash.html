@@ -34,7 +34,7 @@ Tests.test(function (t)
 	
 	function check ()
 	{
-		alert(l.hash)
+		alert(l.hash + '\n' + /#.*$/.exec(l.href))
 	}
 	
 	window.addEventListener('hashchange', check, false)
