@@ -29,8 +29,6 @@ Me.prototype =
 		if (decodesOnTheFly())
 			Me.prototype.decode = dontTouch
 		
-		this.value = this.get()
-		
 		var me = this
 		function onhashchange (e) { me.onhashchange() }
 		win.addEventListener('hashchange', onhashchange, false)
@@ -41,17 +39,19 @@ Me.prototype =
 	onhashchange: function (e)
 	{
 		var v = this.get()
-		if (v === this.value)
+		if (this.manual)
+		{
+			this.manual = false
 			return
-		this.value = v
+		}
 		
 		this.dispatchEventData('change')
 	},
 	
 	set: function (v)
 	{
-		this.value = v
 		this.window.location.hash = '#' + this.encode(v)
+		this.manual = true
 	},
 	
 	get: function ()
