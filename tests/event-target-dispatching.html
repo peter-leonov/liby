@@ -14,6 +14,7 @@
 <div><div id="test-node-1">test node 1</div></div>
 
 <script type="text/javascript">
+Tests.ignoreGlobals(['__tests_objectName'])
 Tests.test(function (t)
 {
 	function $ (id) { return document.getElementById(id) }

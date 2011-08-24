@@ -12,6 +12,7 @@
 </head>
 <body>
 <script type="text/javascript">
+Tests.ignoreGlobals(["veryGlobalCounter", "veryGlobalCounter3", "veryGlobalCounter2"])
 Tests.test(function (t)
 {
 	t.test('require()', function (t)
