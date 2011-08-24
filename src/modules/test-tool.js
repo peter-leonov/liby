@@ -26,9 +26,9 @@ var proxyList = ['wait', 'done', 'test', 'async', 'expect', 'failing', 'mayFail'
 
 var prototype =
 {
-	log: function (m) { return this.parent.reporter.log(m) },
-	info: function (m) { return this.parent.reporter.info(m) },
-	warn: function (m) { return this.parent.reporter.warn(m) },
+	log: function (m, d) { return this.parent.reporter.log(m, d) },
+	info: function (m, d) { return this.parent.reporter.info(m, d) },
+	warn: function (m, d) { return this.parent.reporter.warn(m, d) },
 	mayFail: function (v) { return this.parent.mayFail(v) },
 	parallel: function (v) { return this.parent.parallel = v },
 	
