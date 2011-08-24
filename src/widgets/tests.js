@@ -11,6 +11,56 @@ function N (tag, cn, text)
 	return node
 }
 
+function Object_diff (a, b) // Object.diff copy-n-paste
+{
+	var add = {}, change = {}, remove = {}, total = 0
+	
+	if (a !== b)
+	{
+		for (var k in b)
+			if (k in a)
+			{
+				if (a[k] !== b[k])
+				{
+					change[k] = b[k]
+					total++
+				}
+			}
+			else
+			{
+				add[k] = b[k]
+				total++
+			}
+		
+		for (var k in a)
+			if (!(k in b))
+			{
+				remove[k] = a[k]
+				total++
+			}
+	}
+	
+	return {add: add, change: change, remove: remove, total: total}
+}
+
+function Object_copy (o) // Object.copy copy-n-paste
+{
+	var d = {}
+	for (var k in s)
+		d[k] = s[k]
+	return d
+}
+
+function Object_keys (s) // Object.keys copy-n-paste
+{
+	var r = []
+	for (var k in s)
+		r.push(k)
+	return r
+}
+
+
+
 var myName = 'Tests', Me =
 {
 	maxLabelLength: 100,
@@ -25,7 +75,27 @@ var myName = 'Tests', Me =
 	},
 	onload: function () { Me.load() },
 	
-	oncomplete: function () {},
+	drawWindowDiff: function ()
+	{
+		var old = this.windowSnapshot
+		var now = Object_copy(window)
+		
+		var diff = Object_diff(old, now)
+		
+		var tool = this.mainTest.tool
+		
+		var add = Object_keys(diff.add)
+		if (add.length)
+			tool.fail([add], 'global variables added')
+		
+		var rem = Object_keys(diff.remove)
+		if (rem.length)
+			tool.fail([rem], 'global variables removed')
+		
+		var cng = Object_keys(diff.change)
+		if (cng.length)
+			tool.warn([cng], 'global variables altered')
+	},
 	
 	test: function (f)
 	{
@@ -40,6 +110,8 @@ var myName = 'Tests', Me =
 	{
 		try { var title = doc.getElementsByTagName('title')[0].firstChild.nodeValue }
 		catch (ex) { title = 'main' }
+		
+		this.windowSnapshot = Object_copy(window)
 		
 		var test = this.mainTest = new Test(this, title, null, this.callback)
 		test.holder = window
@@ -57,6 +129,11 @@ var myName = 'Tests', Me =
 	{
 		this.nodes.main.className += 'done'
 		this.oncomplete()
+	},
+	
+	oncomplete: function ()
+	{
+		this.drawWindowDiff()
 	},
 	
 	// ignore raw sigchilds
