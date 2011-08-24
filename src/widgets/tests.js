@@ -86,12 +86,32 @@ var myName = 'Tests', Me =
 		var old = this.windowSnapshot
 		var now = Object_copy(window)
 		
-		var ignore = this.ignoredGlobals
+		var ignore = this.ignoredGlobals, ignoreByRegexp = []
 		for (var i = 0, il = ignore.length; i < il; i++)
 		{
 			var k = ignore[i]
+			
+			if (k.constructor == RegExp)
+			{
+				ignoreByRegexp.push(k)
+				continue
+			}
+			
 			delete old[k]
 			delete now[k]
+		}
+		
+		for (var i = 0, il = ignoreByRegexp.length; i < il; i++)
+		{
+			var rex = ignoreByRegexp[i]
+			
+			for (var k in old)
+				if (rex.test(k))
+					delete old[k]
+			
+			for (var k in now)
+				if (rex.test(k))
+					delete now[k]
 		}
 		
 		var diff = Object_diff(old, now)
@@ -105,6 +125,10 @@ var myName = 'Tests', Me =
 		var rem = Object_keys(diff.remove)
 		if (rem.length)
 			tool.fail([rem], 'global variables removed')
+		
+		// ignore some built-in changes
+		delete diff.change['event']
+		delete diff.change['scrollMaxY']
 		
 		var cng = Object_keys(diff.change)
 		if (cng.length)
