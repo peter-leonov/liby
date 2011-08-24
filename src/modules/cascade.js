@@ -34,6 +34,7 @@ Me.prototype =
 	spawnable: true,
 	holder: null,
 	oncomplete: function () {},
+	onbeforecomplete: function () {},
 	
 	doJob: function ()
 	{
@@ -88,6 +89,9 @@ Me.prototype =
 		for (var i = 0; i < children.length; i++)
 			if (children[i].state != 'completed')
 				return
+		
+		// no new children may have been added here
+		this.onbeforecomplete()
 		
 		// finaly complete ourselfs
 		this.completed()

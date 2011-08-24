@@ -129,6 +129,8 @@ var myName = 'Tests', Me =
 		
 		var test = this.mainTest = new Test(this, title, null, this.callback)
 		test.holder = window
+		var me = this
+		test.onbeforecomplete = function () { me.onbeforecomplete() }
 		
 		var reporter = test.reporter = new Reporter(test.holder, test)
 		this.nodes.main.appendChild(reporter.nodes.main)
@@ -145,10 +147,12 @@ var myName = 'Tests', Me =
 		this.oncomplete()
 	},
 	
-	oncomplete: function ()
+	onbeforecomplete: function ()
 	{
 		this.drawWindowDiff()
 	},
+	
+	oncomplete: function () {},
 	
 	// ignore raw sigchilds
 	sigchild: function () {}
