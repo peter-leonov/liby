@@ -127,8 +127,11 @@ var myName = 'Tests', Me =
 			tool.fail([rem], 'global variables removed')
 		
 		// ignore some built-in changes
-		delete diff.change['event']
-		delete diff.change['scrollMaxY']
+		delete diff.change.length
+		delete diff.change.event
+		delete diff.change.scrollMaxY
+		delete diff.change.scrollY
+		delete diff.change.pageYOffset
 		
 		var cng = Object_keys(diff.change)
 		if (cng.length)
