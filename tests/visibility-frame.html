@@ -29,13 +29,8 @@ Tests.test(function (t)
 		
 		frame.setBoxes([{x: 0, y: 0, w: 100, h: 100}])
 		frame.moveTo(0, 0)
-		t.eq(showBoxes.length, 1, 'show 1')
-		t.eq(hideBoxes.length, 0, 'hide 1')
-		
-		frame.setBoxes([{x: 0, y: 0, w: 100, h: 100}])
-		frame.moveTo(0, 0)
-		t.eq(showBoxes.length, 1, 'show 1')
-		t.eq(hideBoxes.length, 0, 'hide 1')
+		t.eq(showBoxes.length, 0, 'show 0')
+		t.eq(hideBoxes.length, 0, 'hide 0')
 	})
 	
 	
