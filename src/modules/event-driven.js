@@ -23,7 +23,7 @@ Me.prototype =
 	
 	removeEventListener: function (type, listener, capture)
 	{
-		var handlers, harr, i
+		var handlers, harr, i, len
 		if (handlers = this[handlersProp])
 			if ((harr = handlers[type]))
 			{

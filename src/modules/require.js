@@ -36,7 +36,7 @@ function Me (name, f)
 			run(state.callbacks)
 		}
 		
-		script = state.node = Me.rootNode.appendChild(document.createElement('script'))
+		var script = state.node = Me.rootNode.appendChild(document.createElement('script'))
 		script.addEventListener('load', onload, false)
 		script.src = src
 	}
