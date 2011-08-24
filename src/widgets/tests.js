@@ -64,6 +64,7 @@ function Object_keys (s) // Object.keys copy-n-paste
 var myName = 'Tests', Me =
 {
 	maxLabelLength: 100,
+	ignoredGlobals: [],
 	nodes: {},
 	load: function ()
 	{
@@ -75,10 +76,23 @@ var myName = 'Tests', Me =
 	},
 	onload: function () { Me.load() },
 	
+	ignoreGlobals: function (ary)
+	{
+		this.ignoredGlobals = this.ignoredGlobals.concat(ary)
+	},
+	
 	drawWindowDiff: function ()
 	{
 		var old = this.windowSnapshot
 		var now = Object_copy(window)
+		
+		var ignore = this.ignoredGlobals
+		for (var i = 0, il = ignore.length; i < il; i++)
+		{
+			var k = ignore[i]
+			delete old[k]
+			delete now[k]
+		}
 		
 		var diff = Object_diff(old, now)
 		
