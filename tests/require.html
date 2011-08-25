@@ -108,6 +108,31 @@ Tests.test(function (t)
 		t.wait(5000)
 	})
 	
+	t.test('require.data()', function (t)
+	{
+		var order = []
+		function loaded (data)
+		{
+			order.push(data)
+			if (order.length == 4)
+			{
+				t.like(order, [5, 5, 5, 5], 'data')
+				t.done()
+			}
+		}
+		
+		function first (data)
+		{
+			order.push(data)
+			require('require-file-5.js', loaded)
+			require('require-file-5.js', loaded)
+			require('require-file-5.js', loaded)
+		}
+		
+		require('require-file-5.js', first)
+		
+		t.wait(5000)
+	})
 	
 	var count = 64
 	t.test('check unlimited count of require() calls', function (t)
