@@ -64,7 +64,7 @@ function Object_keys (s) // Object.keys copy-n-paste
 var myName = 'Tests', Me =
 {
 	maxLabelLength: 100,
-	ignoredGlobals: [],
+	ignoredGlobals: ['sessionStorage', 'localStorage'],
 	nodes: {},
 	load: function ()
 	{
