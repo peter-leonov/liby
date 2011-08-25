@@ -1,1 +1,1 @@
-window.veryGlobalCounter++
+window.veryGlobalCounter2++

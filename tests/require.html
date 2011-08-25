@@ -12,14 +12,14 @@
 </head>
 <body>
 <script type="text/javascript">
-Tests.ignoreGlobals(["veryGlobalCounter", "veryGlobalCounter3", "veryGlobalCounter2"])
+Tests.ignoreGlobals(["veryGlobalCounter1", "veryGlobalCounter3", "veryGlobalCounter2"])
 Tests.test(function (t)
 {
 	t.test('require()', function (t)
 	{
 		t.parallel(1)
 		
-		window.veryGlobalCounter = 0
+		window.veryGlobalCounter1 = 0
 		var called = {}
 		
 		function test (t, num)
@@ -28,13 +28,13 @@ Tests.test(function (t)
 			
 			function onload (e)
 			{
-				t.eq(window.veryGlobalCounter, num)
+				t.eq(window.veryGlobalCounter1, num)
 				t.no(called[num], 'already called')
 				called[num] = true
 				setTimeout(function () { t.done() }, 250)
 			}
 			
-			require('require-file-2.js?ac=' + Math.random(), onload)
+			require('require-file-1.js?ac=' + Math.random(), onload)
 			
 			t.wait(10000)
 		}
@@ -59,7 +59,7 @@ Tests.test(function (t)
 	{
 		t.expect(3)
 		
-		var src = 'require-file-4.js?slow=1&ac=' + Math.random()
+		var src = 'require-file-3.js?slow=1&ac=' + Math.random()
 		
 		window.veryGlobalCounter3 = 0
 		var order = []
@@ -102,7 +102,7 @@ Tests.test(function (t)
 		}
 		
 		for (var i = 0; i < count; i++)
-			require('require-file-3.js?ac=' + Math.random(), onload)
+			require('require-file-2.js?ac=' + Math.random(), onload)
 		
 		t.wait(30000)
 	})
