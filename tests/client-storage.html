@@ -20,7 +20,7 @@
 </head>
 <body>
 <script type="text/javascript">
-Tests.ignoreGlobals([/^__flash_/, 'name'])
+Tests.ignoreGlobals([/^__flash_/, /^client-storage-/, /^helper-/, 'name'])
 Tests.test(function (t)
 {
 	t.test('prerequisites', function (t)
