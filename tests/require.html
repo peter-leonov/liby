@@ -84,6 +84,30 @@ Tests.test(function (t)
 		t.wait(60000)
 	})
 	
+	t.test('asynchronization', function (t)
+	{
+		var count = 0
+		function loaded ()
+		{
+			if (++count == 3)
+				t.done()
+		}
+		
+		function first ()
+		{
+			count = 0
+			require('require-file-4.js', loaded)
+			count = 0
+			require('require-file-4.js', loaded)
+			count = 0
+			require('require-file-4.js', loaded)
+		}
+		
+		require('require-file-4.js', first)
+		
+		t.wait(5000)
+	})
+	
 	
 	var count = 64
 	t.test('check unlimited count of require() calls', function (t)
