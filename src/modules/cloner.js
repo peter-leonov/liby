@@ -8,6 +8,8 @@ function Me ()
 	this.constructor = Me
 }
 
+var O = Object
+
 Me.prototype =
 {
 	bind: function (root, nodes)
@@ -27,18 +29,48 @@ Me.prototype =
 	
 	getPaths: function (root, nodes)
 	{
-		var paths = {}
-		for (var k in nodes)
-			paths[k] = root.childIndexedPath(nodes[k])
-		return paths
+		function walk (hash)
+		{
+			var paths = {}
+			for (var k in hash)
+			{
+				var v = hash[k]
+				
+				if (v.constructor == O)
+				{
+					paths[k] = walk(v)
+					continue
+				}
+				
+				paths[k] = root.childIndexedPath(v)
+			}
+			return paths
+		}
+		
+		return walk(nodes)
 	},
 	
 	getNodes: function (root, paths)
 	{
-		var nodes = {}
-		for (var k in paths)
-			nodes[k] = root.getChildByIndexedPath(paths[k])
-		return nodes
+		function walk (hash)
+		{
+			var nodes = {}
+			for (var k in hash)
+			{
+				var v = hash[k]
+				
+				if (v.constructor == O)
+				{
+					nodes[k] = walk(v)
+					continue
+				}
+				
+				nodes[k] = root.getChildByIndexedPath(v)
+			}
+			return nodes
+		}
+		
+		return walk(paths)
 	},
 	
 	create: function ()
