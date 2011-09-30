@@ -17,3 +17,8 @@ String.prototype.plural = Number.prototype.plural = function (a, b, c)
 	
 	return c
 }
+
+String.prototype.pluralA = Number.prototype.pluralA = function (ary)
+{
+	return this.plural(ary[0], ary[1], ary[2])
+}
