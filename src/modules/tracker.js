@@ -31,10 +31,29 @@ var Me =
 		}
 	},
 	
-	send: function (data)
+	path: function (path)
+	{
+		try
+		{
+			var q =
+				'vr=' + escape(this.version) +
+				'&s=' + escape(this.session) +
+				'&p=' + escape(path)
+			
+			this.send(q)
+			
+			return true
+		}
+		catch (ex)
+		{
+			this.log('could not report a path')
+		}
+	},
+	
+	send: function (q)
 	{
 		var r = new Image(1, 1)
-		r.src = this.reportPath + '?' + data
+		r.src = this.reportPath + '?' + q
 	},
 	
 	log: function (str) { try { console.log(myName + ': ' + str) } catch (ex) {} }
