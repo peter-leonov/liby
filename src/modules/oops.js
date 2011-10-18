@@ -42,7 +42,7 @@ var Me =
 	{
 		try // to fully describe an error
 		{
-			Tracker.track('Oops', type, message, this.total++)
+			Tracker.event('Oops', type, message, this.total++)
 		}
 		catch (ex)
 		{
@@ -80,17 +80,17 @@ var Me =
 	
 	log: function (message)
 	{
-		Tracker.track('Oops', 'log', message)
+		Tracker.event('Oops', 'log', message)
 	},
 	
 	error: function (message)
 	{
-		Tracker.track('Oops', 'error', message)
+		Tracker.event('Oops', 'error', message)
 	},
 	
 	time: function (message, time)
 	{
-		Tracker.track('Oops', 'time', message, time)
+		Tracker.event('Oops', 'time', message, time)
 	}
 }
 
