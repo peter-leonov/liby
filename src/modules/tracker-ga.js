@@ -27,6 +27,24 @@ var Me =
 			// to warn the developer
 			log('could not report an event')
 		}
+	},
+	
+	path: function (path)
+	{
+		try // to track an event
+		{
+			// prepare types
+			path = String(path)
+			
+			log('path' + ': ' + path)
+			GoogleAnalytics.push(['_trackPageview', path])
+			return true
+		}
+		catch (ex)
+		{
+			// to warn the developer
+			log('could not report a path')
+		}
 	}
 }
 
