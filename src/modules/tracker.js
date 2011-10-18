@@ -9,7 +9,7 @@ var Me =
 	reportPath: '/tracker/report',
 	session: +new Date() + '-' + Math.round(Math.random() * 1E+17),
 	
-	track: function (category, action, label, value)
+	event: function (category, action, label, value)
 	{
 		try
 		{
@@ -27,7 +27,7 @@ var Me =
 		}
 		catch (ex)
 		{
-			this.log('could not report a track')
+			this.log('could not report an event')
 		}
 	},
 	

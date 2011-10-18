@@ -8,7 +8,7 @@ function log (str) { try { console.log(Me.className + ': ' + str) } catch (ex) {
 
 var Me =
 {
-	track: function (category, action, label, value)
+	event: function (category, action, label, value)
 	{
 		try // to track an event
 		{
@@ -25,7 +25,7 @@ var Me =
 		catch (ex)
 		{
 			// to warn the developer
-			log('could not report a track')
+			log('could not report an event')
 		}
 	}
 }

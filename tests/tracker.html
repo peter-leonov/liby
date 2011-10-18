@@ -33,7 +33,7 @@ Tests.test(function (t)
 			label = 'the tracker tracks a track!',
 			value = 555
 		
-		Tracker.track(category, action, label, value)
+		Tracker.event(category, action, label, value)
 		
 		var src = Image.objects[0].src
 		
