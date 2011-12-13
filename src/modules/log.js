@@ -4,17 +4,13 @@ var s = self
 
 if (!s.log)
 {
-	// Firebug
-	if (s.console && s.console.firebug)
-		s.log = console.log
+	// console object present
+	if (s.console)
+		s.log = function () { s.console.log.apply(s.console, arguments) }
 	
 	// Opera
 	else if (s.opera && s.opera.postError)
 		s.log = function () { return s.opera.postError(arguments) }
-	
-	// other consoles
-	else if (s.console && s.console.log)
-		s.log = function () { return s.console.log(Array.prototype.slice.call(arguments).join(', ')) }
 	
 	// none
 	else
