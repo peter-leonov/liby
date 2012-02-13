@@ -53,21 +53,21 @@ Tests.test(function (t)
 	
 	t.test('declensions', function (t)
 	{
-		var arr = [1, 2, 3, 4, 5], m = 0.1, count = 10000
+		var arr = [1, 2, 3, 4, 5], m = 0.1
 		
-		for (var i = 1; i <= arr.length; i++)
+		function run (i)
 		{
-			(function (i) { return function () { // lambda
-			
 			t.test('for ' + i, function (t)
 			{
-				var d = declension(arr, i, count)
+				var d = declension(arr, i, 10000)
 				t.log(d)
 				t.lt(d, m)
 			})
-			
-			} })(i)() // lambda
 		}
+		
+		for (var i = 1; i <= arr.length; i++)
+			run(i)
+
 	})
 })
 </script>
