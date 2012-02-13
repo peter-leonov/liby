@@ -52,7 +52,7 @@ Tests.test(function (t)
 		t.like([].randomize(), [], 'empty')
 		t.like([1].randomize(), [1], 'single')
 		t.like([1, 2].randomize().sort(), [1, 2], 'duo')
-		t.like([1, 2, "3", "abc", 4.0, [], {}].randomize().sort(), [1, 2, "3", "abc", 4.0, [], {}].sort(), 'different values')
+		t.like([1, 2, "3", "abc", 4.0, [], {}].randomize().sort(), [1, 2, "3", "abc", 4.0, [], {}].sort(), 'preserve structures')
 	})
 	
 })
