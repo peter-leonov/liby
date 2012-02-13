@@ -31,7 +31,7 @@ Tests.test(function (t)
 		var combos = {}
 		for (var i = 0; i < repeat; i++)
 		{
-			var key = arr.slice().random(n).join(', ')
+			var key = arr.random(n).join(',')
 			if (key in combos)
 				combos[key]++
 			else
