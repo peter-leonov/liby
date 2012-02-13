@@ -17,23 +17,28 @@ Array.prototype.randomize = function ()
 
 Array.prototype.random = function (n)
 {
-	var len = this.length
+	if (n <= 0)
+		return []
+	
+	var copy = this.slice()
+	
+	var len = copy.length
 	
 	if (n > len)
 		n = len
 	
-	if (n > 1)
+	var res = []
+	
+	for (var i = 0; i < n; i++)
 	{
-		var copy = this.slice()
-		copy.randomize()
-		return n === len ? copy : copy.slice(0, n)
+		var r = (random() * len) >> 0
+		
+		res[i] = copy[r]
+		len--
+		copy[r] = copy[len]
 	}
 	
-	if (n === 1)
-		return [this[(random() * len) >> 0]]
-	
-	// n <= 0
-	return []
+	return res
 }
 
 })();
