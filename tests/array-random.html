@@ -23,7 +23,7 @@ Tests.test(function (t)
 		t.eq(array.random(array.length).length, array.length, 'full length')
 		t.eq(array.random(array.length + 1).length, array.length, 'greater then length')
 		t.like(array.random(-1), [], 'less then zero')
-		t.eq(array.random(2.5).length, 2, 'float point')
+		t.eq(array.random(2.5).length, 3, 'float point')
 	})
 	
 	function declension (arr, n, repeat)
