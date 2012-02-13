@@ -43,7 +43,7 @@ function Object_diff (a, b) // Object.diff copy-n-paste
 	return {add: add, change: change, remove: remove, total: total}
 }
 
-function Object_copy (o) // Object.copy copy-n-paste
+function Object_copy (s) // Object.copy copy-n-paste
 {
 	var d = {}
 	for (var k in s)
@@ -283,18 +283,26 @@ Reporter.prototype =
 Reporter.className = 'Reporter'
 
 
+;(function(){
+
 var s = self
-if (!self.log)
+
+if (!s.log)
 {
-	if (s.console && s.console.firebug)
-		s.log = console.log
+	// console object present
+	if (s.console)
+		s.log = function () { s.console.log.apply(s.console, arguments) }
+	
+	// Opera
 	else if (s.opera && s.opera.postError)
 		s.log = function () { return s.opera.postError(arguments) }
-	else if (s.console && s.console.log)
-		s.log = function () { return s.console.log(Array.prototype.slice.call(arguments).join(', ')) }
+	
+	// none
 	else
 		s.log = function () {}
 }
+
+})();
 
 var m, ua = navigator.userAgent
 
