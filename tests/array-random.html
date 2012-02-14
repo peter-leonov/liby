@@ -26,13 +26,15 @@ Tests.test(function (t)
 		t.eq(array.random(2.5).length, 3, 'float point')
 	})
 	
-	function declension (arr, n, repeat)
+	function declension (arr, n)
 	{
+		var repeat = 50000 * n * n
+		
 		var combos = {}
 		for (var i = 0; i < repeat; i++)
 		{
 			var key = arr.random(n).join(',')
-			if (key in combos)
+			if (combos[key])
 				combos[key]++
 			else
 				combos[key] = 1
@@ -53,13 +55,13 @@ Tests.test(function (t)
 	
 	t.test('declensions', function (t)
 	{
-		var arr = [1, 2, 3, 4, 5], m = 0.1
+		var arr = [1, 2, 3, 4, 5, 6, 7], m = 0.01
 		
 		function run (i)
 		{
 			t.test('for ' + i, function (t)
 			{
-				var d = declension(arr, i, 10000)
+				var d = declension(arr, i)
 				t.log(d)
 				t.lt(d, m)
 			})
@@ -67,7 +69,6 @@ Tests.test(function (t)
 		
 		for (var i = 1; i <= arr.length; i++)
 			run(i)
-
 	})
 })
 </script>
