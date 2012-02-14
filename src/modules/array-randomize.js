@@ -20,12 +20,16 @@ Array.prototype.random = function (n)
 	if (n <= 0)
 		return []
 	
-	var len = this.length
-	
 	if (n == 1)
-		return [this[(random() * len) >> 0]]
+		return [this[(random() * this.length) >> 0]]
 	
-	var copy = this.slice()
+	// n > 1
+	return this.slice().fetchRandom(n)
+}
+
+Array.prototype.fetchRandom = function (n)
+{
+	var len = this.length
 	
 	if (n > len)
 		n = len
@@ -36,10 +40,12 @@ Array.prototype.random = function (n)
 	{
 		var r = (random() * len) >> 0
 		
-		res[i] = copy[r]
+		res[i] = this[r]
 		len--
-		copy[r] = copy[len]
+		this[r] = this[len]
 	}
+	
+	this.length = len
 	
 	return res
 }
