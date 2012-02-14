@@ -20,9 +20,12 @@ Array.prototype.random = function (n)
 	if (n <= 0)
 		return []
 	
-	var copy = this.slice()
+	var len = this.length
 	
-	var len = copy.length
+	if (n == 1)
+		return [this[(random() * len) >> 0]]
+	
+	var copy = this.slice()
 	
 	if (n > len)
 		n = len
