@@ -55,7 +55,7 @@ Tests.test(function (t)
 	
 	t.test('declensions', function (t)
 	{
-		var arr = [1, 2, 3, 4, 5, 6, 7], m = 0.01
+		var arr = [1, 2, 3, 4, 5, 6, 7]
 		
 		function run (i)
 		{
@@ -63,7 +63,7 @@ Tests.test(function (t)
 			{
 				var d = declension(arr, i)
 				t.log(d)
-				t.lt(d, m)
+				t.lt(d, 0.01)
 			})
 		}
 		
