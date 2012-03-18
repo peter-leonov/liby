@@ -1,6 +1,6 @@
 ;(function(){
 
-function script (src) { document.write('<script src="' + src + '" type="text/javascript"></script>') }
+function script (src) { document.write('<script src="' + src + '"></script>') }
 function style (src) { document.write('<link rel="stylesheet" href="' + src + '"/>') }
 
 script('../src/modules/cascade.js')

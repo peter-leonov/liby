@@ -3,13 +3,13 @@
 <head>
 	<meta name="viewport" content="width=device-width"/>
 	<title>Form tests</title>
-	<script src="tests.common.js" type="text/javascript"></script>
+	<script src="tests.common.js"></script>
 	
-	<!--[if lte IE 7]><script type="text/javascript" src="../src/core/fixes/trident3.js"></script><![endif]-->
-	<!--[if IE 8]><script type="text/javascript" src="../src/core/fixes/trident4.js"></script><![endif]-->
-	<script type="text/javascript" src="../src/modules/selectors.js"></script>
-	<script type="text/javascript" src="../src/modules/cosy.js"></script>
-	<script type="text/javascript" src="../src/modules/form-helper.js"></script>
+	<!--[if lte IE 7]><script src="../src/core/fixes/trident3.js"></script><![endif]-->
+	<!--[if IE 8]><script src="../src/core/fixes/trident4.js"></script><![endif]-->
+	<script src="../src/modules/selectors.js"></script>
+	<script src="../src/modules/cosy.js"></script>
+	<script src="../src/modules/form-helper.js"></script>
 </head>
 <body>
 
@@ -68,7 +68,7 @@
 	<input type="text" name="unvalued"/>
 </form>
 
-<script type="text/javascript">
+<script>
 Tests.test(function (t)
 {
 	var toHash = FormHelper.toHash
