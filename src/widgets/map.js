@@ -4,10 +4,20 @@ var Papa
 
 ;(function(){
 
-var myName = 'Map',
-	Me = Papa = MVC.create(myName)
+function Me ()
+{
+	var m = this.model = new Me.Model(),
+		v = this.view = new Me.View(),
+		c = this.controller = new Me.Controller()
+	
+	m.view = v
+	v.controller = c
+	c.model = m
+	
+	m.parent = v.parent = c.parent = this
+}
 
-var myProto = 
+Me.prototype = 
 {
 	bind: function (nodes)
 	{
@@ -20,10 +30,11 @@ var myProto =
 	apiLoaded: function () { this.dispatchEvent('ready') }
 }
 
-Object.extend(Me.prototype, myProto)
 Me.mixIn(EventDriven)
 
-self[myName] = Me
+Me.className = 'Map'
+self[Me.className] = Papa = Me
+
 
 })();
 
@@ -38,18 +49,16 @@ Papa.Overlay = Me
 
 ;(function(){
 
-var Me = Papa.View
-
 eval(NodesShortcut.include())
 
-var myProto =
+function Me ()
 {
-	initialize: function ()
-	{
-		this.nodes = {}
-		this.visibleMarkers = {}
-	},
-	
+	this.nodes = {}
+	this.visibleMarkers = {}
+}
+
+Me.prototype =
+{
 	bind: function (nodes)
 	{
 		this.nodes = nodes
@@ -183,16 +192,16 @@ var myProto =
 	}
 }
 
-Object.extend(Me.prototype, myProto)
+Papa.View = Me
 
 })();
 
 
 ;(function(){
 
-var Me = Papa.Controller
+function Me () {}
 
-var myProto = 
+Me.prototype = 
 {
 	moved: function (center, zoom, sw, ne)
 	{
@@ -202,23 +211,21 @@ var myProto =
 	apiLoaded: function () { this.model.apiLoaded(); this.parent.apiLoaded() }
 }
 
-Object.extend(Me.prototype, myProto)
+Papa.Controller = Me
 
 })();
 
 
 ;(function(){
 
-var Me = Papa.Model
-
-var myProto =
+function Me ()
 {
-	initialize: function ()
-	{
-		this.points = []
-		this.count = 0
-	},
-	
+	this.points = []
+	this.count = 0
+}
+
+Me.prototype =
+{
 	apiLoaded: function ()
 	{
 		this.view.setCenter(this.center, this.zoom)
@@ -251,7 +258,7 @@ var myProto =
 	}
 }
 
-Object.extend(Me.prototype, myProto)
+Papa.Model = Me
 
 })();
 
