@@ -2,23 +2,27 @@
 
 var s = self
 
-if (!s.log)
+if (s.log)
+	return
+
+if (s.console && s.console.log) // native console.log() present
 {
-	// console object present
-	if (s.console && s.console.log)
+	if (s.console.log.apply)
 	{
-		if (s.console.log.apply)
-			s.log = function () { s.console.log.apply(s.console, arguments) }
-		else
-			s.log = s.console.log
+		s.log = function () { s.console.log.apply(s.console, arguments) }
 	}
-	// Opera
-	else if (s.opera && s.opera.postError)
-		s.log = function () { return s.opera.postError(arguments) }
-	
-	// none
 	else
-		s.log = function () {}
+	{
+		s.log = s.console.log
+	}
+}
+else if (s.opera && s.opera.postError) // Opera < 10.5
+{
+	s.log = function () { return s.opera.postError(arguments) }
+}
+else // none
+{
+	s.log = function () {}
 }
 
 })();
