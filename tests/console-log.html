@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for console.log()</title>
+	<script src="tests.common.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	t.test('present', function (t)
+	{
+		t.ok(window.console, 'console')
+		t.ok(window.console.log, 'console.log')
+		t.type(window.console.log, 'function')
+	})
+	
+	
+	t.test('call', function (t)
+	{
+		t.noexception(function (t)
+		{
+			console.log()
+		},
+		'console.log()')
+		
+		t.noexception(function (t)
+		{
+			var log = console.log
+			log.apply(console)
+		},
+		'log.apply(console)')
+		
+		t.noexception(function (t)
+		{
+			var log = console.log
+			log()
+		},
+		'log()')
+	})
+	
+	
+	
+	t.test('data', function (t)
+	{
+		t.noexception(function (t)
+		{
+			console.log(1, 2, 3)
+		},
+		'1, 2, 3')
+		
+		t.noexception(function (t)
+		{
+			console.log([1, 2, 3])
+		},
+		'[1, 2, 3]')
+		
+		t.noexception(function (t)
+		{
+			var a = [], b = []
+			a[0] = b
+			b[0] = a
+			
+			console.log(a)
+		},
+		'a -> b -> a')
+	})
+	
+	
+})
+</script>
+</body>
+</html>
