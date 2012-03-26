@@ -14,6 +14,14 @@ if (s.console && s.console.log) // native console.log() present
 	else
 	{
 		s.log = s.console.log
+		try
+		{
+			s.log('test call to log()')
+		}
+		catch (ex)
+		{
+			s.log = function () { s.console.log(arguments) }
+		}
 	}
 }
 else if (s.opera && s.opera.postError) // Opera < 10.5
