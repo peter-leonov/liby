@@ -1,21 +1,15 @@
 ;(function(){
 
-var myName = 'Cookie', day = 864e5, doc = document,
+var myName = 'Cookie', doc = document,
 	// encode = encodeURIComponent, decode = decodeURIComponent
 	encode = escape, decode = unescape
 
 if (!self[myName]) self[myName] =
 {
-	days: 30,
 	path: '/',
-	set: function (name, value, days, path)
+	set: function (name, value, expires, path)
 	{
-		var d = new Date()
-		days = days || this.days
-		path = path || this.path
-		
-		d.setTime(d.getTime() + day * days)
-		doc.cookie = encode(name) + '=' + encode(value) + '; expires=' + d.toGMTString() + '; path=' + path
+		doc.cookie = encode(name) + '=' + encode(value) + '; expires=' + new Date(expires).toGMTString() + '; path=' + path
 		return value
 	},
 	
