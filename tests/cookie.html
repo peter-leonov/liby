@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>tests for Cookie</title>
+	<script src="tests.common.js"></script>
+	
+	<script src="../src/core/prototype.js"></script>
+	<script src="../src/modules/cookie.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	t.test('single name', function (t)
+	{
+		Cookie.erase('single-name')
+		Cookie.set('single-name')
+		t.eq(Cookie.get('single-name'), 'undefined', '"undefined"')
+	})
+	
+	t.test('name and value', function (t)
+	{
+		Cookie.erase('name-value')
+		Cookie.set('name-value', 'asdf123')
+		t.eq(Cookie.get('name-value'), 'asdf123', '"asdf123"')
+	})
+})
+</script>
+</body>
+</html>
