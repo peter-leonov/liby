@@ -8,5 +8,7 @@ D.hour = 36e5
 D.day = 864e5
 D.year = 365 * 864e5
 
+if (!D.now)
+	D.now = function () { return +new D() }
 
 })();
