@@ -42,6 +42,11 @@ Tests.test(function (t)
 		t.like(new Date(2 * 60 * 60 * 1000 + 3000).diff('-2h'), new Date(3000), '-2h')
 	})
 	
+	t.test('Date.diff()', function (t)
+	{
+		t.like(Date.diff('1s'), new Date().diff('1s'), '1s')
+	})
+	
 })
 </script>
 </body>

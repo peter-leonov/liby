@@ -42,7 +42,7 @@ D.prototype.diff = function (str)
 
 D.diff = function (str)
 {
-	new D().diff(str)
+	return new D().diff(str)
 }
 
 })();
