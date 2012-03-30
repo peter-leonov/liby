@@ -12,6 +12,16 @@
 Tests.test(function (t)
 {
 	t.eq(Date.now(), +new Date(), 'Date.now()')
+	
+	t.test('Date.parseDiff()', function (t)
+	{
+		t.like(Date.parseDiff('-35.8m'), ['-', 35.8, 'minute'], '-35.8m')
+		t.like(Date.parseDiff('7777.0s'), ['+', 7777, 'second'], '7777.0s')
+		t.like(Date.parseDiff('+80.001h'), ['+', 80.001, 'hour'], '+80.001h')
+		t.like(Date.parseDiff('4d'), ['+', 4, 'day'], '4d')
+		t.like(Date.parseDiff('asdf'), null, 'asdf')
+	})
+	
 })
 </script>
 </body>
