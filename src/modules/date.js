@@ -40,5 +40,9 @@ D.prototype.diff = function (str)
 	return new Date(+this + D.computeDiff(D.parseDiff(str)))
 }
 
+D.diff = function (str)
+{
+	new D().diff(str)
+}
 
 })();
