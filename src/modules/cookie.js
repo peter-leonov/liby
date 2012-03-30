@@ -35,6 +35,20 @@ if (!self[myName]) self[myName] =
 		return keys
 	},
 	
+	toHash: function ()
+	{
+		var hash = {}
+		
+		var keys = this.keys()
+		for (var i = 0, il = keys.length; i < il; i++)
+		{
+			var k = keys[i]
+			hash[k] = this.get(k)
+		}
+		
+		return hash
+	},
+	
 	clear: function ()
 	{
 		var keys = this.keys()
