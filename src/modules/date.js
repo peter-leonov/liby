@@ -16,7 +16,8 @@ var map =
 	s: 'second',
 	m: 'minute',
 	h: 'hour',
-	d: 'day'
+	d: 'day',
+	y: 'year'
 }
 
 D.parseDiff = function (str)
