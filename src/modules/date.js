@@ -28,4 +28,10 @@ D.parseDiff = function (str)
 	return [m[1] || '+', +m[2], map[m[3]]]
 }
 
+D.computeDiff = function (diff)
+{
+	var s = Math.round(diff[1] * D[diff[2]])
+	return diff[0] == '-' ? -s : s
+}
+
 })();

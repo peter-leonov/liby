@@ -22,6 +22,13 @@ Tests.test(function (t)
 		t.like(Date.parseDiff('asdf'), null, 'asdf')
 	})
 	
+	t.test('Date.computeDiff()', function (t)
+	{
+		t.like(Date.computeDiff(['-', 35.8, 'minute']), -35.8 * 60 * 1000, '-35.8m')
+		t.like(Date.computeDiff(['+', 7777, 'second']), 7777 * 1000, '7777s')
+		t.like(Date.computeDiff(['+', 80.001, 'hour']), Math.round(80.001 * 60 * 60 * 1000), '80.001h')
+		t.like(Date.computeDiff(['+', 4, 'day']), 4 * 24 * 60 * 60 * 1000, '4d')
+	})
 })
 </script>
 </body>
