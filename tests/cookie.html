@@ -25,6 +25,14 @@ Tests.test(function (t)
 		Cookie.set('name-value', 'asdf123')
 		t.eq(Cookie.get('name-value'), 'asdf123', '"asdf123"')
 	})
+	
+	t.test('erase', function (t)
+	{
+		Cookie.set('erase-one', 'asdf123')
+		t.eq(Cookie.get('erase-one'), 'asdf123', '"asdf123"')
+		Cookie.erase('erase-one')
+		t.eq(Cookie.get('erase-one'), null, '"asdf123"')
+	})
 })
 </script>
 </body>

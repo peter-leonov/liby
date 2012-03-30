@@ -31,7 +31,7 @@ if (!self[myName]) self[myName] =
 	erase: function (name)
 	{
 		var cookie = this.get(name) || true
-		this.set(name, '', -1)
+		this.set(name, '', 0)
 		return cookie
 	},
 	
