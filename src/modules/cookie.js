@@ -1,12 +1,10 @@
 ;(function(){
 
-var myName = 'Cookie', doc = document,
+var encode = escape, decode = unescape
 	// encode = encodeURIComponent, decode = decodeURIComponent
-	encode = escape, decode = unescape
 
-if (!self[myName]) self[myName] =
+var Me =
 {
-	path: '/',
 	set: function (name, value, expires, path)
 	{
 		var cookie = encode(name) + '=' + encode(value)
@@ -17,14 +15,14 @@ if (!self[myName]) self[myName] =
 		if (path !== undefined)
 			cookie += '; path=' + path
 		
-		doc.cookie = cookie
+		document.cookie = cookie
 		
 		return value
 	},
 	
 	get: function (name)
 	{
-		var value, cookie = new RegExp('(^|;)\\s*' + encode(name) + '=([^;\\s]*)').exec(doc.cookie)
+		var value, cookie = new RegExp('(^|;)\\s*' + encode(name) + '=([^;\\s]*)').exec(document.cookie)
 		return cookie ? decode(cookie[2]) : null
 	},
 	
@@ -38,7 +36,7 @@ if (!self[myName]) self[myName] =
 	keys: function ()
 	{
 		var cookie, keys = [], rex = new RegExp('(?:^|;)\\s*([^=]+)=[^;\\s]*', 'g')
-		while (cookie = rex.exec(doc.cookie))
+		while (cookie = rex.exec(document.cookie))
 			keys.push(cookie[1])
 		
 		return keys
@@ -65,5 +63,8 @@ if (!self[myName]) self[myName] =
 			this.erase(keys[i])
 	}
 }
+
+Me.className = 'Cookie'
+self[Me.className] = Me
 
 })();
