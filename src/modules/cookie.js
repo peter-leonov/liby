@@ -9,7 +9,16 @@ if (!self[myName]) self[myName] =
 	path: '/',
 	set: function (name, value, expires, path)
 	{
-		doc.cookie = encode(name) + '=' + encode(value) + '; expires=' + new Date(expires).toGMTString() + '; path=' + path
+		var cookie = encode(name) + '=' + encode(value)
+		
+		if (expires !== undefined)
+			cookie += '; expires=' + new Date(expires).toGMTString()
+		
+		if (path !== undefined)
+			cookie += '; path=' + path
+		
+		doc.cookie = cookie
+		
 		return value
 	},
 	
