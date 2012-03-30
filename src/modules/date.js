@@ -21,11 +21,11 @@ var map =
 
 D.parseDiff = function (str)
 {
-	var m = /^([+-])?(\d+(?:\.\d+)?)([smhdy])$/.exec(str)
+	var m = /^([+-])?(\d+(?:\.\d+)?)([smhdy])?$/.exec(str)
 	if (!m)
 		return null
 	
-	return [m[1] || '+', +m[2], map[m[3]]]
+	return [m[1] || '+', +m[2], map[m[3] || 's']]
 }
 
 D.computeDiff = function (diff)
