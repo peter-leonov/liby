@@ -1,4 +1,5 @@
 $.onload = function (fn) { return self.addEventListener('load', fn, false) }
+$.onready = function (f) { document.addEventListener('DOMContentLoaded', f, false) }
 $.load = function (src)
 {
 	var me = arguments.callee
