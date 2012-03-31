@@ -1,16 +1,12 @@
 (function(){
 
-var doc = document
-
-// based on jQuery onready for IE
-// based on the trick by Diego Perini (http://javascript.nwbox.com/IEContentLoaded/)
-function checkready ()
+var fired
+function fireDCL ()
 {
-	try { doc.documentElement.doScroll('left') }
-	catch (ex) { return }
-	
-	// run once
-	clearInterval(checkready.interval)
+	// one more frontier
+	if (fired)
+		return
+	fired = true
 	
 	// Events must be fixed at this point to preserve handlers call order.
 	// Element prototype and other fixes have subscribed erlier.
@@ -18,6 +14,19 @@ function checkready ()
 	e.initEvent('DOMContentLoaded', false, false)
 	document.dispatchEvent(e)
 }
-checkready.interval = setInterval(checkready, 100)
+
+// based on jQuery onready for IE
+// based on the trick by Diego Perini (http://javascript.nwbox.com/IEContentLoaded/)
+function checkready ()
+{
+	try { document.documentElement.doScroll('left') }
+	catch (ex) { return }
+	
+	// run once
+	clearInterval(interval)
+	
+	fireDCL()
+}
+var interval = setInterval(checkready, 100)
 
 })();
