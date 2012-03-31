@@ -29,4 +29,7 @@ function checkready ()
 }
 var interval = setInterval(checkready, 100)
 
+// safe fallback
+window.addEventListener('load', fireDCL, false)
+
 })();
