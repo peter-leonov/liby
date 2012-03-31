@@ -34,14 +34,6 @@ function fixNode (node)
 		hook(node)
 }
 
-function fixAll ()
-{
-	if (fixAll.__pmc__called)
-		return
-	fixAll.__pmc__called = true
-	
-	fixNodes(doc.all)
-}
 
 doc.__pmc__createElement = doc.createElement
 doc.createElement = function (type)
@@ -52,8 +44,7 @@ doc.createElement = function (type)
 }
 
 // events must be fixed at this point to preserve handlers call order
-doc.addEventListener('ready', fixAll)
-win.addEventListener('load', fixAll)
+document.addEventListener('DOMContentLoaded', function () { fixNodes(doc.all) })
 document.__pmc__fixNodes = fixNodes
 
 })();

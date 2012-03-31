@@ -44,7 +44,7 @@ doc.createElement = function (type)
 }
 
 // events must be fixed at this point to preserve handlers call order
-win.addEventListener('load', function () { fixNodes(doc.all) })
+document.addEventListener('DOMContentLoaded', function () { fixNodes(doc.all) })
 document.__pmc__fixNodes = fixNodes
 
 })();
