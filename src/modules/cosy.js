@@ -1,4 +1,4 @@
-$.onload = function (fn) { return self.addEventListener('load', fn, false) }
+$.onload = function (f) { return window.addEventListener('load', f, false) }
 $.onready = function (f) { document.addEventListener('DOMContentLoaded', f, false) }
 $.load = function (src)
 {
