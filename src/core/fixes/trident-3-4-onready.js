@@ -6,7 +6,7 @@ var doc = document
 // based on the trick by Diego Perini (http://javascript.nwbox.com/IEContentLoaded/)
 function checkready ()
 {
-	try { doc.documentElement.doScroll("left") }
+	try { doc.documentElement.doScroll('left') }
 	catch (ex) { return }
 	
 	// run once
