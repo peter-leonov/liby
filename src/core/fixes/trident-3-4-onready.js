@@ -12,14 +12,11 @@ function checkready ()
 	// run once
 	clearInterval(checkready.interval)
 	
-	// IE 8 gain native support for Element.prototype
-	// so __pmc__fixNodes is no more needed
-	if (doc.__pmc__fixNodes)
-		// IE 6 and 7
-		doc.__pmc__fixNodes(doc.all)
-	
-	if (self.$ && self.$.onready)
-		self.$.onready.run()
+	// Events must be fixed at this point to preserve handlers call order.
+	// Element prototype and other fixes have subscribed erlier.
+	var e = document.createEvent('Event')
+	e.initEvent('DOMContentLoaded', false, false)
+	document.dispatchEvent(e)
 }
 checkready.interval = setInterval(checkready, 100)
 
