@@ -13,9 +13,3 @@ $.load = function (src)
 	cache[src] = node
 	return node
 }
-$.iamready = function ()
-{
-	var e = document.createEvent('Event')
-	e.initEvent('ready', false, false)
-	document.dispatchEvent(e)
-}
