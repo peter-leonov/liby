@@ -23,6 +23,12 @@ function fixNode (node)
 	
 	var klass = classByNodeName[node.nodeName] || Element
 	
+	// In the version for MSIE 6 and 7
+	// this lines implement Element.prototype.
+	// This is the only difference between two files.
+	// Fixinf for MSIE 8 is needed to imlement such things
+	// as <input> focus bubbling, <script> onload event fix, etc.
+	
 	var hook = klass.__pmc_fixHook
 	if (hook)
 		hook(node)

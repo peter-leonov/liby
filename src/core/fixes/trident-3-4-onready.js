@@ -9,9 +9,10 @@ function checkready ()
 	try { doc.documentElement.doScroll("left") }
 	catch (ex) { return }
 	
+	// run once
 	clearInterval(checkready.interval)
 	
-	// IE8 gain native support for Element.prototype
+	// IE 8 gain native support for Element.prototype
 	// so __pmc__fixNodes is no more needed
 	if (doc.__pmc__fixNodes)
 		// IE 6 and 7
