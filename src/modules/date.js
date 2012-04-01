@@ -35,14 +35,14 @@ D.computeDiff = function (diff)
 	return diff[0] == '-' ? -s : s
 }
 
-D.prototype.diff = function (str)
+D.prototype.add = function (str)
 {
 	return new Date(+this + D.computeDiff(D.parseDiff(str)))
 }
 
-D.diff = function (str)
+D.add = function (str)
 {
-	return new D().diff(str)
+	return new D().add(str)
 }
 
 })();
