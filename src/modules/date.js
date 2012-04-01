@@ -6,6 +6,7 @@ D.second = 1000
 D.minute = 6e4
 D.hour = 36e5
 D.day = 864e5
+D.week = 7 * 864e5
 D.year = 365 * 864e5
 
 if (!D.now)
@@ -17,12 +18,13 @@ var map =
 	m: 'minute',
 	h: 'hour',
 	d: 'day',
+	w: 'week',
 	y: 'year'
 }
 
 D.parseDiff = function (str)
 {
-	var m = /^([+-])?(\d+(?:\.\d+)?)([smhdy])?$/.exec(str)
+	var m = /^([+-])?(\d+(?:\.\d+)?)([smhdwy])?$/.exec(str)
 	if (!m)
 		return null
 	
