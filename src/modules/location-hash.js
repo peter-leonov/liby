@@ -38,6 +38,12 @@ Me.prototype =
 	{
 		this.manual = true
 		this.window.location.href = '#' + this.encode(v)
+
+		if (!v)
+		{
+			if ( typeof window.history.replaceState === 'function' )
+				window.history.replaceState('page', '', window.location.href.replace( /#.*/, ""))
+		}
 	},
 	
 	get: function ()
