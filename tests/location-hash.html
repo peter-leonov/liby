@@ -46,6 +46,9 @@ Tests.test(function (t)
 		
 		lh.set('1?2')
 		t.eq(lh.get(), '1?2', 'get')
+		
+		lh.set('')
+		t.eq(lh.get(), '', 'get')
 	})
 	
 	t.test('external changing', function (t)
