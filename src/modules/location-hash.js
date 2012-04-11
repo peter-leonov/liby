@@ -34,16 +34,25 @@ Me.prototype =
 		this.dispatchEventData('change')
 	},
 	
+	eraseHash: function()
+	{
+		this.window.location.href = '#'
+	},
+	
+	eraseHashEx: function()
+	{
+		window.history.pushState(null, null, this.window.location.pathname + this.window.location.search)
+		this.onhashchange(null)
+	},
+	
 	set: function (v)
 	{
 		this.manual = true
-		this.window.location.href = '#' + this.encode(v)
 
 		if (!v)
-		{
-			if ( typeof window.history.replaceState === 'function' )
-				window.history.replaceState('page', '', window.location.href.replace( /#.*/, ""))
-		}
+			this.eraseHash()
+		else
+			this.window.location.href = '#' + this.encode(v)			
 	},
 	
 	get: function ()
@@ -65,6 +74,9 @@ Me.prototype =
 		}
 	}
 }
+
+if ( typeof window.history.pushState === 'function' )
+	Me.prototype.eraseHash = Me.prototype.eraseHashEx 
 
 Me.mixIn(EventDriven)
 
