@@ -49,7 +49,7 @@ Me.prototype =
 	{
 		this.manual = true
 
-		if (!v)
+		if (v == '')
 			this.eraseHash()
 		else
 			this.window.location.href = '#' + this.encode(v)			
