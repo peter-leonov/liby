@@ -41,8 +41,8 @@ Me.prototype =
 	
 	eraseHashEx: function()
 	{
-		window.history.pushState(null, null, this.window.location.pathname + this.window.location.search)
-		this.onhashchange(null)
+		this.window.location.href = '#'
+		window.history.replaceState(null, null, this.window.location.pathname + this.window.location.search)
 	},
 	
 	set: function (v)
