@@ -49,6 +49,7 @@ Tests.test(function (t)
 		
 		lh.set('')
 		t.eq(lh.get(), '', 'get')
+		t.eq(lh.get().indexOf('#'), -1, 'location.hash.indexOf("#")')
 	})
 	
 	t.test('external changing', function (t)
