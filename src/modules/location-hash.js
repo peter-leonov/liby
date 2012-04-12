@@ -75,7 +75,7 @@ Me.prototype =
 	}
 }
 
-if ( typeof window.history.pushState === 'function' )
+if (window.history.pushState)
 	Me.prototype.eraseHash = Me.prototype.eraseHashEx 
 
 Me.mixIn(EventDriven)
