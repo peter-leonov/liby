@@ -164,6 +164,16 @@ var prototype =
 		else
 			return this.fail([a, new Label('<=', 'label middle'), b], d)
 	},
+	gtlt: function (a, b, c, d)
+	{
+		if (a <= b)
+			return this.fail([a, new Label('<=', 'label middle'), b], d)
+		
+		if (a >= c)
+			return this.fail([a, new Label('>=', 'label middle'), c], d)
+		
+		return this.pass([b, new Label('<', 'label middle'), a, new Label('<', 'label middle'), c], d)
+	},
 	
 	instance: function (a, b, d)
 	{
