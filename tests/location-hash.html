@@ -25,7 +25,7 @@ Tests.test(function (t)
 		setTimeout(function () { window.location.setHashchangeCheckInterval() }, 10000)
 	}
 	
-	var lh = new LocationHash().bind(window)
+	var lh = new LocationHash().bind()
 	
 	t.test('setting and getting', function (t)
 	{
