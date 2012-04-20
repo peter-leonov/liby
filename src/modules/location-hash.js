@@ -43,11 +43,15 @@ Me.prototype =
 	set: function (v)
 	{
 		this.manual = true
-
+		
 		if (v === '')
-			this.eraseHash()
-		else
-			this.window.location.href = '#' + this.encode(v)			
+		{
+			window.location.href = '#-'
+			this.eraseEmptyHash()
+			return
+		}
+		
+		window.location.href = '#' + this.encode(v)
 	},
 	
 	get: function ()
