@@ -11,6 +11,10 @@
 	<script src="../src/core/fixes/onhashchange.js"></script>
 	<script src="../src/modules/event-driven.js"></script>
 	<script src="../src/modules/location-hash.js"></script>
+	
+	<style>
+	body { height: 4000px; }
+	</style>
 </head>
 <body>
 <script>
@@ -101,6 +105,16 @@ Tests.test(function (t)
 			
 			t.async(function () {}, 100)
 		})
+	})
+	
+	t.test('prevent jump to top on empty hash', function (t)
+	{
+		window.scrollTo(0, 10)
+		t.eq(window.pageYOffset, 10, 'pageYOffset')
+		lh.set('blabla')
+		lh.set('')
+		t.eq(window.pageYOffset, 10, 'pageYOffset')
+		window.scrollTo(0, 0)
 	})
 	
 	t.test('eraseEmptyHash()', function (t)
