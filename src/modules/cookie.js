@@ -26,9 +26,9 @@ var Me =
 		return cookie ? decode(cookie[2]) : null
 	},
 	
-	erase: function (name)
+	erase: function (name, path)
 	{
-		this.set(name, '', 0)
+		this.set(name, '', 0, path)
 	},
 	
 	keys: function ()
@@ -52,13 +52,6 @@ var Me =
 		}
 		
 		return hash
-	},
-	
-	clear: function ()
-	{
-		var keys = this.keys()
-		for (var i = 0; i < keys.length; i++)
-			this.erase(keys[i])
 	}
 }
 
