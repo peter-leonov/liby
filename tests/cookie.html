@@ -29,9 +29,13 @@ Tests.test(function (t)
 	t.test('erase', function (t)
 	{
 		Cookie.set('erase-one', 'asdf123')
-		t.eq(Cookie.get('erase-one'), 'asdf123', '"asdf123"')
+		t.eq(Cookie.get('erase-one'), 'asdf123', 'erase-one')
 		Cookie.erase('erase-one')
-		t.eq(Cookie.get('erase-one'), null, '"asdf123"')
+		t.eq(Cookie.get('erase-one'), null, 'erase-one')
+		
+		Cookie.set('erase-two', 'asdf123', +new Date() + 3000)
+		Cookie.erase('erase-two')
+		t.eq(Cookie.get('erase-two'), null, 'erase-two')
 	})
 	
 	t.test('expires', function (t)
