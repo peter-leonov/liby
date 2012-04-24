@@ -28,9 +28,7 @@ var Me =
 	
 	erase: function (name)
 	{
-		var cookie = this.get(name) || true
 		this.set(name, '', 0)
-		return cookie
 	},
 	
 	keys: function ()
