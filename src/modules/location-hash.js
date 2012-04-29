@@ -6,7 +6,10 @@ function Me () {}
 
 Me.prototype =
 {
-	encode: encodeURIComponent,
+	encode: function (str)
+	{
+		return (''+str).replace('%', '%25').replace(' ', '%20')
+	},
 	decode: decodeURIComponent,
 	
 	bind: function ()
