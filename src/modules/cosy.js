@@ -3,7 +3,7 @@ $.onready = function (f) { document.addEventListener('DOMContentLoaded', f, fals
 $.load = function (src)
 {
 	var me = arguments.callee
-	var cache = me.cache || (me.cache = {}) 
+	var cache = me.cache || (me.cache = {})
 	if (me.cache[src])
 		return me.cache[src]
 	var node = document.createElement('script')
