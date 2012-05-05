@@ -58,7 +58,13 @@ function querySelector (query)
 	return result
 }
 
+function getElementsByClassName (className)
+{
+	return this.querySelectorAll('.' + className)
+}
+
 document.querySelectorAll = Element.prototype.querySelectorAll = querySelectorAll
 document.querySelector = Element.prototype.querySelector = querySelector
+document.getElementsByClassName = Element.prototype.getElementsByClassName = getElementsByClassName
 
 })();

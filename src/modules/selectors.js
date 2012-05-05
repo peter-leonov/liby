@@ -17,10 +17,4 @@ window.$$ = function (query, root)
 }
 window.$ = function (id) { return document.getElementById(id) }
 
-if (!document.getElementsByClassName)
-Element.prototype.getElementsByClassName = document.getElementsByClassName = function (className)
-{
-	return this.querySelectorAll('.' + className)
-}
-
 })();
