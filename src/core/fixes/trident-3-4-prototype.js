@@ -3,6 +3,13 @@
 if (!Array.copy)
 Array.copy = function (s)
 {
+	try
+	{
+		return Array.prototype.slice.call(s)
+	}
+	catch (ex) {}
+	
+	
 	var d = []
 	
 	if (!s)
