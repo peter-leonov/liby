@@ -18,7 +18,7 @@
 <input type="radio" name="radio" id="radio-2"/>
 </form>
 <script>
-function $ (id) { return document.getElementById(id) }
+function $id (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
 	t.test('input', function (t)
@@ -34,15 +34,15 @@ Tests.test(function (t)
 				t.done()
 		}
 		
-		// var input = $('text-1')
+		// var input = $id('text-1')
 		// input.addEventListener('change', function (e) { check('text') }, false)
 		// 
-		// var input = $('radio-1')
+		// var input = $id('radio-1')
 		// input.addEventListener('change', function (e) { check('radio1') }, false)
-		// var input = $('radio-2')
+		// var input = $id('radio-2')
 		// input.addEventListener('change', function (e) { check('radio2') }, false)
 		
-		var form = $('form-1')
+		var form = $id('form-1')
 		form.addEventListener('change', function (e) { check('form') }, false)
 		
 		t.wait(10000)

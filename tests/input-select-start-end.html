@@ -22,7 +22,7 @@
 <input type="text" id="test-3"/>
 <input type="text" id="test-4"/>
 <script>
-function $ (id) { return document.getElementById(id) }
+function $id (id) { return document.getElementById(id) }
 
 var selection
 if (/MSIE [678]\./.test(navigator.userAgent))
@@ -37,7 +37,7 @@ Tests.test(function (t)
 	{
 		t.test('actual selection', function (t)
 		{
-			var node = $('ie-actual-selection')
+			var node = $id('ie-actual-selection')
 			
 			node.value = '1234567890'
 			
@@ -62,7 +62,7 @@ Tests.test(function (t)
 		
 		t.test('actual selection', function (t)
 		{
-			var node = $('ie-selection-create-range')
+			var node = $id('ie-selection-create-range')
 			
 			node.value = 'abcdefghij'
 			node.focus()
@@ -83,7 +83,7 @@ Tests.test(function (t)
 	
 	t.test('initial state', function (t)
 	{
-		var node = $('test-1')
+		var node = $id('test-1')
 		
 		t.eq(node.selectionStart, 0, 'selectionStart')
 		t.eq(node.selectionEnd, 0, 'selectionEnd')
@@ -91,7 +91,7 @@ Tests.test(function (t)
 	
 	t.test('selectionStart', function (t)
 	{
-		var node = $('test-2')
+		var node = $id('test-2')
 		node.focus()
 		
 		node.value = ''
@@ -130,7 +130,7 @@ Tests.test(function (t)
 	
 	t.test('selectionEnd', function (t)
 	{
-		var node = $('test-3')
+		var node = $id('test-3')
 		node.focus()
 		
 		node.value = ''
@@ -170,7 +170,7 @@ Tests.test(function (t)
 	
 	t.test('selectionStart with selectionEnd', function (t)
 	{
-		var node = $('test-4')
+		var node = $id('test-4')
 		
 		node.value = '123456'
 		

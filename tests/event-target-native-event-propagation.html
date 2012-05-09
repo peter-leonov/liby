@@ -21,7 +21,7 @@
 Tests.ignoreGlobals(['__tests_objectName', 'onscroll', 'veryGlobalCounter1'])
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	window.__tests_objectName = 'window'
 	document.__tests_objectName = 'document'
@@ -35,7 +35,7 @@ Tests.test(function (t)
 	
 	t.test('submit on form', function (t)
 	{
-		var node = $('node-1')
+		var node = $id('node-1')
 		node.__tests_objectName = 'node'
 		
 		var fired = false
@@ -66,7 +66,7 @@ Tests.test(function (t)
 	
 	t.test('load on script', function (t)
 	{
-		var node = $('node-2')
+		var node = $id('node-2')
 		node.__tests_objectName = 'node'
 		
 		var order = []
@@ -97,7 +97,7 @@ Tests.test(function (t)
 	
 	t.test('keydown on input', function (t)
 	{
-		var node = $('node-3')
+		var node = $id('node-3')
 		node.__tests_objectName = 'node'
 		
 		var order = []
@@ -128,11 +128,11 @@ Tests.test(function (t)
 	window.focus()
 	
 	
-	var focusDonor = $('node-5')
+	var focusDonor = $id('node-5')
 	focusDonor.focus()
 	t.test('focus+blur on input', function (t)
 	{
-		var node = $('node-4')
+		var node = $id('node-4')
 		node.__tests_objectName = 'node'
 		focusDonor.__tests_objectName = 'donor'
 		
@@ -188,7 +188,7 @@ Tests.test(function (t)
 				
 				// hide it here, otherwise scroll event called twice
 				node.scrollTo(0, 0)
-				$('spacer').style.display = 'none'
+				$id('spacer').style.display = 'none'
 			}, 0)
 		}, 100)
 		

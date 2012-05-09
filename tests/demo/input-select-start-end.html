@@ -27,15 +27,15 @@
 <div><input type="text" id="input" value="Viva the Web!"/></div>
 <div id="output"><span id="before"> </span><span id="selection"> </span><span id="after"> </span></div>
 <script>
-function $ (id) { return document.getElementById(id) }
+function $id (id) { return document.getElementById(id) }
 
 function loaded (e)
 {
-	var input = $('input'),
-		output = $('output'),
-		before = $('before').firstChild,
-		selection = $('selection').firstChild,
-		after = $('after').firstChild
+	var input = $id('input'),
+		output = $id('output'),
+		before = $id('before').firstChild,
+		selection = $id('selection').firstChild,
+		after = $id('after').firstChild
 	
 	function delay ()
 	{

@@ -44,12 +44,12 @@
 <script>
 $.onload(function ()
 {
-	var count = parseInt($('count').value), transparent = $('transparency').checked
+	var count = parseInt($('#count').value), transparent = $('#transparency').checked
 	
 	if (isNaN(count) || !count)
-		count = $('count').value = 25
+		count = $('#count').value = 25
 	
-	var boxesRoot = $('boxes')
+	var boxesRoot = $('#boxes')
 	
 	if (transparent)
 		boxesRoot.addClassName('transparent')
@@ -127,8 +127,8 @@ $.onload(function ()
 	
 	function setupFrame ()
 	{
-		var frameNode = $('frame'),
-			statNode = $('stat').firstChild
+		var frameNode = $('#frame'),
+			statNode = $('#stat').firstChild
 		
 		var frame = new VisibilityFrame()
 		frame.gridder.maxSteps = count * 10
@@ -152,7 +152,7 @@ $.onload(function ()
 	
 	function setupMovable (frame)
 	{
-		var frameNode = $('frame')
+		var frameNode = $('#frame')
 		
 		var m = new Moveable()
 		m.bind(frameNode)
@@ -184,7 +184,7 @@ $.onload(function ()
 		{
 			boxesRoot.toggleClassName('transparent', this.checked)
 		}
-		$('transparency').addEventListener('click', toggleTransparency, false)
+		$('#transparency').addEventListener('click', toggleTransparency, false)
 		
 		var addByKey = {38: 1, 40: -1, 33: 10, 34: -10}
 		function catchKeys (e)
@@ -214,7 +214,7 @@ $.onload(function ()
 			
 			updateCount(count)
 		}
-		$('count').addEventListener('keypress', catchKeys, false)
+		$('#count').addEventListener('keypress', catchKeys, false)
 	}
 	
 	function updateCount (count)
@@ -234,7 +234,7 @@ $.onload(function ()
 	updateCount(count)
 	
 	boxesRoot.addClassName('wide')
-	$('count').focus()
+	$('#count').focus()
 })
 </script>
 </body>

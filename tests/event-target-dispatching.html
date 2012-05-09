@@ -16,13 +16,13 @@
 Tests.ignoreGlobals(['__tests_objectName'])
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	t.test('node → parentNode → document → window', function (t)
 	{
 		function stopPropagation (e) { e.stopPropagation() }
 		
-		var node = $('test-node-1')
+		var node = $id('test-node-1')
 		
 		var pn = {}
 		pn[Event.CAPTURING_PHASE] = 1

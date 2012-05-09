@@ -35,7 +35,7 @@
 	</p>
 </div>
 <script>
-function $ (id) { return document.getElementById(id) }
+function $id (id) { return document.getElementById(id) }
 function toArray (list) { var arr = []; for (var i = 0, il = list.length; i < il; i++) arr[i] = list[i]; return arr }
 Tests.test(function (t)
 {
@@ -47,55 +47,55 @@ Tests.test(function (t)
 	
 	t.test('absolute', function (t)
 	{
-		t.like(toArray(document.querySelectorAll('body i')), [$('i1'), $('i2'), $('i3'), $('i4'), $('i5')], 'body i')
-		t.like(toArray(document.querySelectorAll('body b')), [$('b1'), $('b2'), $('b3'), $('b4'), $('b5')], 'body b')
-		t.like(toArray(document.querySelectorAll('i')), [$('i1'), $('i2'), $('i3'), $('i4'), $('i5')], 'i')
-		t.like(toArray(document.querySelectorAll('b')), [$('b1'), $('b2'), $('b3'), $('b4'), $('b5')], 'b')
-		t.like(toArray(document.querySelectorAll('div.iii i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'div.iii i')
-		t.like(toArray(document.querySelectorAll('div.iii b')), [$('b1'), $('b2'), $('b3'), $('b4')], 'div.iii b')
-		t.like(toArray(document.querySelectorAll('#iii1 i')), [$('i1'), $('i2'), $('i3'), $('i4')], '#iii1 i')
-		t.like(toArray(document.querySelectorAll('#iii1 b')), [$('b1'), $('b2'), $('b3'), $('b4')], '#iii1 b')
+		t.like(toArray(document.querySelectorAll('body i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4'), $id('i5')], 'body i')
+		t.like(toArray(document.querySelectorAll('body b')), [$id('b1'), $id('b2'), $id('b3'), $id('b4'), $id('b5')], 'body b')
+		t.like(toArray(document.querySelectorAll('i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4'), $id('i5')], 'i')
+		t.like(toArray(document.querySelectorAll('b')), [$id('b1'), $id('b2'), $id('b3'), $id('b4'), $id('b5')], 'b')
+		t.like(toArray(document.querySelectorAll('div.iii i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4')], 'div.iii i')
+		t.like(toArray(document.querySelectorAll('div.iii b')), [$id('b1'), $id('b2'), $id('b3'), $id('b4')], 'div.iii b')
+		t.like(toArray(document.querySelectorAll('#iii1 i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4')], '#iii1 i')
+		t.like(toArray(document.querySelectorAll('#iii1 b')), [$id('b1'), $id('b2'), $id('b3'), $id('b4')], '#iii1 b')
 	})
 	
 	t.test('relative', function (t)
 	{
-		var node = $('iii1')
-		t.like(toArray(node.querySelectorAll('body i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'i')
-		t.like(toArray(node.querySelectorAll('i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'i')
-		t.like(toArray(node.querySelectorAll('div.iii i')), [$('i1'), $('i2'), $('i3'), $('i4')], 'div.iii i')
-		t.like(toArray(node.querySelectorAll('#iii1 i')), [$('i1'), $('i2'), $('i3'), $('i4')], '#iii1 i')
+		var node = $id('iii1')
+		t.like(toArray(node.querySelectorAll('body i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4')], 'i')
+		t.like(toArray(node.querySelectorAll('i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4')], 'i')
+		t.like(toArray(node.querySelectorAll('div.iii i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4')], 'div.iii i')
+		t.like(toArray(node.querySelectorAll('#iii1 i')), [$id('i1'), $id('i2'), $id('i3'), $id('i4')], '#iii1 i')
 	})
 	
 	t.test('display: none', function (t)
 	{
-		var node = $('node2')
-		t.like(toArray(node.querySelectorAll('body dl')), [$('dl1')], 'dl')
+		var node = $id('node2')
+		t.like(toArray(node.querySelectorAll('body dl')), [$id('dl1')], 'dl')
 	})
 	
 	t.test('comma-separated', function (t)
 	{
-		var node = $('iii1')
-		t.like(toArray(node.querySelectorAll('body i, body b')), [$('i1'), $('i2'), $('i3'), $('i4'), $('b1'), $('b2'), $('b3'), $('b4')], 'i')
+		var node = $id('iii1')
+		t.like(toArray(node.querySelectorAll('body i, body b')), [$id('i1'), $id('i2'), $id('i3'), $id('i4'), $id('b1'), $id('b2'), $id('b3'), $id('b4')], 'i')
 	})
 	
 	t.test('unknown tags', function (t)
 	{
-		t.eq(document.querySelector('blablabla'), $('blablabla1'), 'blablabla')
-		t.eq(document.querySelector('#blablabla1'), $('blablabla1'), '#blablabla1')
-		t.eq(document.querySelector('ololo'), $('ololo1'), 'ololo')
-		t.eq(document.querySelector('#ololo1'), $('ololo1'), '#ololo1')
+		t.eq(document.querySelector('blablabla'), $id('blablabla1'), 'blablabla')
+		t.eq(document.querySelector('#blablabla1'), $id('blablabla1'), '#blablabla1')
+		t.eq(document.querySelector('ololo'), $id('ololo1'), 'ololo')
+		t.eq(document.querySelector('#ololo1'), $id('ololo1'), '#ololo1')
 		
-		t.like(toArray(document.querySelectorAll('blablabla')), [$('blablabla1'), $('blablabla2')], 'blablabla')
-		t.like(toArray(document.querySelectorAll('ololo')), [$('ololo1'), $('ololo2')], 'ololo')
+		t.like(toArray(document.querySelectorAll('blablabla')), [$id('blablabla1'), $id('blablabla2')], 'blablabla')
+		t.like(toArray(document.querySelectorAll('ololo')), [$id('ololo1'), $id('ololo2')], 'ololo')
 		
-		t.like(toArray(document.querySelectorAll('.blablabla-class')), [$('blablabla1'), $('blablabla2')], '.blablabla')
+		t.like(toArray(document.querySelectorAll('.blablabla-class')), [$id('blablabla1'), $id('blablabla2')], '.blablabla')
 	})
 	
 	t.test('many times for one', function (t)
 	{
 		t.test('body', function (t)
 		{
-			var node = $('body1')
+			var node = $id('body1')
 			t.time('time')
 			for (var i = 0; i < 50; i++)
 				t.eq(document.querySelector('body'), node, i)
@@ -104,7 +104,7 @@ Tests.test(function (t)
 		
 		t.test('#body1', function (t)
 		{
-			var node = $('body1')
+			var node = $id('body1')
 			t.time('time')
 			for (var i = 0; i < 50; i++)
 				t.eq(document.querySelector('#body1'), node, i)
@@ -116,7 +116,7 @@ Tests.test(function (t)
 	{
 		t.test('body', function (t)
 		{
-			var node = $('body1')
+			var node = $id('body1')
 			t.time('time')
 			for (var i = 0; i < 50; i++)
 				t.eq(document.querySelectorAll('body')[0], node, i)
@@ -125,7 +125,7 @@ Tests.test(function (t)
 		
 		t.test('#body1', function (t)
 		{
-			var node = $('body1')
+			var node = $id('body1')
 			t.time('time')
 			for (var i = 0; i < 50; i++)
 				t.eq(document.querySelectorAll('#body1')[0], node, i)

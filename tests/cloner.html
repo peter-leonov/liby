@@ -36,11 +36,11 @@
 <script>
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	t.test('simple tree clone', function (t)
 	{
-		var root = $('root1'),
+		var root = $id('root1'),
 			head = root.getElementsByTagName('dt')[0],
 			body = root.getElementsByTagName('dd')[0],
 			text = root.getElementsByTagName('span')[1]
@@ -68,7 +68,7 @@ Tests.test(function (t)
 	
 	t.test('sync()', function (t)
 	{
-		var root = $('root2'),
+		var root = $id('root2'),
 			item1 = root.getElementsByTagName('li')[0],
 			item2 = root.getElementsByTagName('li')[1],
 			item3 = root.getElementsByTagName('li')[2]
@@ -113,7 +113,7 @@ Tests.test(function (t)
 	
 	t.test('non-standart attributes', function (t)
 	{
-		var root = $('root3'),
+		var root = $id('root3'),
 			item1 = root.getElementsByTagName('li')[0],
 			item2 = root.getElementsByTagName('li')[1],
 			item3 = root.getElementsByTagName('li')[2]

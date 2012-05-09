@@ -23,7 +23,7 @@
 <script>
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	function bakeNodes (count)
 	{
@@ -43,8 +43,8 @@ Tests.test(function (t)
 		t.time('whole')
 		
 		var set = bakeNodes(count)
-		$('holder').empty()
-		$('holder').appendChild(set.root)
+		$id('holder').empty()
+		$id('holder').appendChild(set.root)
 		
 		t.time('nodesToBoxes()')
 		Boxer.nodesToBoxes(set.nodes, set.root)
@@ -52,8 +52,8 @@ Tests.test(function (t)
 		
 		
 		var set = bakeNodes(count)
-		$('holder').empty()
-		$('holder').appendChild(set.root)
+		$id('holder').empty()
+		$id('holder').appendChild(set.root)
 		
 		t.time('nodesToBoxes() with width and height')
 		Boxer.nodesToBoxes(set.nodes, set.root, 100, 100)
@@ -61,8 +61,8 @@ Tests.test(function (t)
 		
 		
 		var set = bakeNodes(count)
-		$('holder').empty()
-		$('holder').appendChild(set.root)
+		$id('holder').empty()
+		$id('holder').appendChild(set.root)
 		
 		t.time('sameNodesToBoxes()')
 		Boxer.sameNodesToBoxes(set.nodes, set.root)

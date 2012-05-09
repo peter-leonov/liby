@@ -17,14 +17,14 @@
 <script>
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	t.parallel(1)
 	var count = 5000, wait = 3000
 	
 	t.test('direct', function (t)
 	{
-		var root = $('root-1')
+		var root = $id('root-1')
 		t.lag('lag')
 		t.time('time')
 		for (var i = 0; i < count; i++)
@@ -39,7 +39,7 @@ Tests.test(function (t)
 	
 	t.test('via fragment', function (t)
 	{
-		var root = $('root-2')
+		var root = $id('root-2')
 		t.lag('lag')
 		t.time('time')
 		var fragment = document.createDocumentFragment()

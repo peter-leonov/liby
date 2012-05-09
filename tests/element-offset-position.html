@@ -63,7 +63,7 @@
 <script>
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	t.test('prerequisites', function (t)
 	{
@@ -72,7 +72,7 @@ Tests.test(function (t)
 	
 	t.test('in body', function (t)
 	{
-		var node = $('in-body')
+		var node = $id('in-body')
 		var pos = node.offsetPosition()
 		
 		t.eq(pos.left, 10, 'left')
@@ -83,7 +83,7 @@ Tests.test(function (t)
 	{
 		t.mayFail()
 		
-		var node = $('in-document-element')
+		var node = $id('in-document-element')
 		document.documentElement.appendChild(node)
 		var pos = node.offsetPosition()
 		
@@ -95,7 +95,7 @@ Tests.test(function (t)
 	
 	t.test('in scrolled window', function (t)
 	{
-		var node = $('in-scrolled-window')
+		var node = $id('in-scrolled-window')
 		window.scrollTo(1, 2)
 		var pos = node.offsetPosition()
 		window.scrollTo(0, 0)
@@ -106,7 +106,7 @@ Tests.test(function (t)
 	
 	t.test('in scrolled window', function (t)
 	{
-		var node = $('in-scrolled-window')
+		var node = $id('in-scrolled-window')
 		document.documentElement.className = 'relative'
 		window.scrollTo(1, 2)
 		var pos = node.offsetPosition()
@@ -119,7 +119,7 @@ Tests.test(function (t)
 	
 	t.test('in scrolled box', function (t)
 	{
-		var node = $('in-scrolled-box')
+		var node = $id('in-scrolled-box')
 		node.parentNode.scrollLeft = 15
 		node.parentNode.scrollTop = 25
 		var pos = node.offsetPosition()
@@ -130,7 +130,7 @@ Tests.test(function (t)
 	
 	t.test('self scrolled', function (t)
 	{
-		var node = $('self-scrolled')
+		var node = $id('self-scrolled')
 		node.scrollLeft = 1000
 		node.scrollTop = 2000
 		var pos = node.offsetPosition()
@@ -141,7 +141,7 @@ Tests.test(function (t)
 	
 	t.test('nested', function (t)
 	{
-		var node = $('nested')
+		var node = $id('nested')
 		var pos = node.offsetPosition()
 		
 		t.eq(pos.left, 90 + 10 * 5, 'left')
@@ -150,8 +150,8 @@ Tests.test(function (t)
 	
 	t.test('nested with offset parent', function (t)
 	{
-		var node = $('nested')
-		var pos = node.offsetPosition($('nested-offset-parent'))
+		var node = $id('nested')
+		var pos = node.offsetPosition($id('nested-offset-parent'))
 		
 		t.eq(pos.left, 90 + 10 * 2, 'left')
 		t.eq(pos.top, 100 + 10 * 2, 'top')
@@ -159,8 +159,8 @@ Tests.test(function (t)
 	
 	t.test('nested with plain parent', function (t)
 	{
-		var node = $('nested')
-		var pos = node.offsetPosition($('nested-plain-parent'))
+		var node = $id('nested')
+		var pos = node.offsetPosition($id('nested-plain-parent'))
 		
 		t.eq(pos.left, 90 + 10 * 5, 'left')
 		t.eq(pos.top, 100 + 10 * 5, 'top')
@@ -168,7 +168,7 @@ Tests.test(function (t)
 	
 	t.test('with scrolled root', function (t)
 	{
-		var node = $('with-scrolled-root')
+		var node = $id('with-scrolled-root')
 		node.parentNode.scrollLeft = 1000
 		node.parentNode.scrollTop = 2000
 		var pos = node.offsetPosition(node.parentNode)
@@ -179,7 +179,7 @@ Tests.test(function (t)
 	
 	t.test('self rooted', function (t)
 	{
-		var node = $('self-rooted')
+		var node = $id('self-rooted')
 		var pos = node.offsetPosition(node)
 		
 		t.eq(pos.left, 0, 'left')

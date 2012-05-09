@@ -45,7 +45,7 @@ Tests.test(function (t)
 {
 	t.test('simple events', function (t)
 	{
-		function $ (id) { return document.getElementById(id) }
+		function $id (id) { return document.getElementById(id) }
 		var time = 0
 		function bind (t, node, type, callback)
 		{
@@ -71,30 +71,30 @@ Tests.test(function (t)
 		
 		t.test('mousemove', function (t)
 		{
-			bind(t, $('mouse'), 'mousemove')
+			bind(t, $id('mouse'), 'mousemove')
 		})
 		
 		t.test('mousedown', function (t)
 		{
-			bind(t, $('mouse'), 'mousedown')
+			bind(t, $id('mouse'), 'mousedown')
 		})
 		
 		t.test('mouseup', function (t)
 		{
-			bind(t, $('mouse'), 'mouseup')
+			bind(t, $id('mouse'), 'mouseup')
 		})
 		
 		t.test('click', function (t)
 		{
-			bind(t, $('mouse'), 'click')
+			bind(t, $id('mouse'), 'click')
 		})
 		
 		t.test('submit', function (t)
 		{
-			bind(t, $('submit'), 'submit', preventDefault)
+			bind(t, $id('submit'), 'submit', preventDefault)
 		})
 		
-		var keyboard = $('keyboard')
+		var keyboard = $id('keyboard')
 		keyboard.value = '0'
 		
 		t.test('keydown', function (t)
@@ -134,7 +134,7 @@ Tests.test(function (t)
 		player.bind()
 		player.load(scrollerScript)
 		
-		var cursor = $('recorder-cursor')
+		var cursor = $id('recorder-cursor')
 		player.onstep = function (n, a)
 		{
 			var p

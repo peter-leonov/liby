@@ -67,14 +67,14 @@
 </form>
 
 <script>
-function $ (id) { return document.getElementById(id) }
+function $id (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
 	var toHash = FormHelper.toHash
 	
 	t.test('form 1', function (t)
 	{
-		var hash = toHash($('test-from-1'))
+		var hash = toHash($id('test-from-1'))
 		t.eq(hash['unicode'], 'Юникод', 'unicode')
 		t.eq(hash['text'], 'text', 'text')
 		t.eq(hash['textarea'], 'textarea', 'textarea')
@@ -93,7 +93,7 @@ Tests.test(function (t)
 	
 	t.test('form 2', function (t)
 	{
-		var hash = toHash($('test-from-2'))
+		var hash = toHash($id('test-from-2'))
 		var k = null
 		for (k in hash) log(hash)
 		t.ok(k === null, 'empty form')
@@ -101,7 +101,7 @@ Tests.test(function (t)
 	
 	t.test('form 3', function (t)
 	{
-		var hash = toHash($('test-from-3'))
+		var hash = toHash($id('test-from-3'))
 		var k = null
 		for (k in hash) log(hash)
 		t.ok(k === null, 'form with only unnamed input')
@@ -109,7 +109,7 @@ Tests.test(function (t)
 	
 	t.test('form 4', function (t)
 	{
-		var hash = toHash($('test-from-4'))
+		var hash = toHash($id('test-from-4'))
 		t.eq(hash['empty'], '', 'empty input')
 		t.eq(hash['unvalued'], '', 'unvalued')
 	})

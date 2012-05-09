@@ -17,7 +17,7 @@
 <script>
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	function run (t, kind, type, node, conf)
 	{
@@ -224,27 +224,27 @@ Tests.test(function (t)
 	
 	t.test('Event: load on script', function (t)
 	{
-		run(t, 'Event', 'load', $('test-node-3'), {document: false, bubbles: false})
+		run(t, 'Event', 'load', $id('test-node-3'), {document: false, bubbles: false})
 	})
 	
 	t.test('Event: hide on node (bubbles)', function (t)
 	{
-		run(t, 'Event', 'hide', $('test-node-1'), {bubbles: true})
+		run(t, 'Event', 'hide', $id('test-node-1'), {bubbles: true})
 	})
 	
 	t.test('Event: hide on node (does not bubble)', function (t)
 	{
-		run(t, 'Event', 'hide', $('test-node-1'), {bubbles: false})
+		run(t, 'Event', 'hide', $id('test-node-1'), {bubbles: false})
 	})
 	
 	t.test('MouseEvent: click on node (bubbles)', function (t)
 	{
-		run(t, 'MouseEvent', 'click', $('test-node-2'), {bubbles: true})
+		run(t, 'MouseEvent', 'click', $id('test-node-2'), {bubbles: true})
 	})
 	
 	t.test('MouseEvent: click on node (does not bubble)', function (t)
 	{
-		run(t, 'MouseEvent', 'click', $('test-node-2'), {bubbles: false})
+		run(t, 'MouseEvent', 'click', $id('test-node-2'), {bubbles: false})
 	})
 })
 </script>

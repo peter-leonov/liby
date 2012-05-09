@@ -20,13 +20,13 @@
 <div class="box" id="manual">Чер­но­смо­ро­ди­но­вый</div>
 <div class="box" id="none">Чер­но­смо­ро­ди­но­вый</div>
 <script>
-function $ (id) { return document.getElementById(id) }
+function $id (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
-	t.gt($('plain').scrollWidth, 100, 'plan')
-	t.lte($('word').scrollWidth, 17, 'word')
-	t.gtlt($('auto').scrollWidth, 17, 45, 'auto')
-	t.gtlt($('manual').scrollWidth, 17, 30, 'manual')
-	t.gt($('none').scrollWidth, 100, 'none')
+	t.gt($id('plain').scrollWidth, 100, 'plan')
+	t.lte($id('word').scrollWidth, 17, 'word')
+	t.gtlt($id('auto').scrollWidth, 17, 45, 'auto')
+	t.gtlt($id('manual').scrollWidth, 17, 30, 'manual')
+	t.gt($id('none').scrollWidth, 100, 'none')
 })
 </script>

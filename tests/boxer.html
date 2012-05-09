@@ -29,11 +29,11 @@
 <script>
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	t.test('nodes without a root', function (t)
 	{
-		var node = $('different-nodes'),
+		var node = $id('different-nodes'),
 			children = node.childNodes
 		var boxes = Boxer.nodesToBoxes(children)
 		
@@ -48,7 +48,7 @@ Tests.test(function (t)
 	
 	t.test('nodes with different boundaries', function (t)
 	{
-		var node = $('different-nodes'),
+		var node = $id('different-nodes'),
 			children = node.childNodes
 		var boxes = Boxer.nodesToBoxes(children, node)
 		
@@ -63,7 +63,7 @@ Tests.test(function (t)
 	
 	t.test('different nodes with custom width and height', function (t)
 	{
-		var node = $('different-nodes'),
+		var node = $id('different-nodes'),
 			children = node.childNodes
 		var boxes = Boxer.nodesToBoxes(children, node, 55, 66)
 		
@@ -78,7 +78,7 @@ Tests.test(function (t)
 	
 	t.test('nodes with same boundaries', function (t)
 	{
-		var node = $('same-nodes'),
+		var node = $id('same-nodes'),
 			children = node.childNodes
 		var boxes = Boxer.sameNodesToBoxes(children, node)
 		

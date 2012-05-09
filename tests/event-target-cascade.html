@@ -15,11 +15,11 @@
 <script>
 Tests.test(function (t)
 {
-	function $ (id) { return document.getElementById(id) }
+	function $id (id) { return document.getElementById(id) }
 	
 	t.test('nested dispatching', function (t)
 	{
-		var node = $('test-node-1')
+		var node = $id('test-node-1')
 		
 		function outer (e)
 		{
