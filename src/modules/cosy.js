@@ -23,6 +23,7 @@ window.$ = function (query, root)
 	return node
 }
 
+$.id = function (id) { return document.getElementById(id) }
 
 $.onload = function (f) { return window.addEventListener('load', f, false) }
 $.onready = function (f) { document.addEventListener('DOMContentLoaded', f, false) }
