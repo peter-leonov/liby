@@ -3,8 +3,11 @@
 window.$$ = function (query, root)
 {
 	var list = (root || document).querySelectorAll(query)
-	// if (!list || list.length == 0)
-	// 	alert('empty $$("' + query + '")')
+	if (list.length == 0)
+	{
+		log('empty $$("' + query + '")')
+		return []
+	}
 	
 	return Array.copy(list)
 }
