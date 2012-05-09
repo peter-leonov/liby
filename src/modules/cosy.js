@@ -11,7 +11,18 @@ window.$$ = function (query, root)
 	
 	return Array.copy(list)
 }
-window.$ = function (id) { return document.getElementById(id) }
+window.$ = function (query, root)
+{
+	var node = (root || document).querySelector(query)
+	if (!node)
+	{
+		log('empty $("' + query + '")')
+		return node
+	}
+	
+	return node
+}
+
 
 $.onload = function (f) { return window.addEventListener('load', f, false) }
 $.onready = function (f) { document.addEventListener('DOMContentLoaded', f, false) }
