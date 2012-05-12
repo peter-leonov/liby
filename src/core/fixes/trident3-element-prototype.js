@@ -4,6 +4,7 @@ var doc = document, win = window, Element = win.Element
 
 var classByNodeName =
 {
+	'IMG': HTMLImageElement,
 	'SCRIPT': HTMLScriptElement,
 	'INPUT': HTMLInputElement,
 	'FORM': HTMLFormElement

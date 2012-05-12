@@ -45,3 +45,16 @@ Me.prototype = new Element()
 window.HTMLFormElement = Me
 
 })();
+
+
+;(function(){
+
+if (window.HTMLImageElement)
+	return
+
+function Me () {}
+Me.prototype = new Element()
+
+window.HTMLImageElement = Me
+
+})();
