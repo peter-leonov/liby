@@ -5,6 +5,7 @@
 <!--# include virtual="trident-3-4-script-onload.js" -->
 <!--# include virtual="trident-3-4-input-focus-blur-change.js" -->
 <!--# include virtual="trident-3-4-form-submit.js" -->
+<!--# include virtual="trident-3-4-image-dragdrop.js" -->
 <!--# include virtual="trident-3-nodes-shortcut.js" -->
 <!--# include virtual="trident3-element-prototype.js" -->
 <!--# include virtual="trident-3-4-onready.js" -->
