@@ -52,6 +52,7 @@ Event.prototype =
 		this.detail = - e.wheelDelta / 30
 		this.pageX = e.clientX + docelem.scrollLeft - doc.body.clientLeft // document.body.scrollLeft
 		this.pageY = e.clientY + docelem.scrollTop  - doc.body.clientTop // document.body.scrollTop
+		this.dataTransfer = e.dataTransfer
 	},
 	
 	initEvent: function (type, bubbles, cancelable)
