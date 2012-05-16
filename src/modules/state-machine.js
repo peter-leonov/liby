@@ -27,20 +27,25 @@ Me.prototype =
 	
 	switchState: function (name)
 	{
+		if (this.inTransition)
+			throw new Error('switching state in transition is not supported')
+		
 		var from = this.state
 		var to = this.states[name]
+		
+		this.inTransition = true
 		
 		var leave = from['leave_to_' + to.name] || from.leave
 		if (leave)
 			leave.call(this.papa, this)
 		
-		this.state = null
+		this.state = to
 		
 		var enter = to['enter_from_' + from.name] || to.enter
 		if (enter)
 			enter.call(this.papa, this)
 		
-		this.state = to
+		this.inTransition = false
 		
 		this.onswitch.call(this.papa, from.name, to.name)
 		
