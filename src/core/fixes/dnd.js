@@ -85,7 +85,7 @@ var Me =
 		
 		states.stopDrag =
 		{
-			enter: function (sm)
+			job: function (sm)
 			{
 				var ne = document.createEvent('Event')
 				ne.initEvent('dragend', true, true)
