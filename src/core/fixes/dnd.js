@@ -5,35 +5,44 @@ document.addEventListener('mousedown', function () {}, false)
 
 var Me =
 {
-	states: function ()
+	states: function (sm)
 	{
 		var states = {}
+		
+		var me = this
+		
+		;(function(){
+		
+		function mousedown (e)
+		{
+			e.preventDefault()
+			
+			me.startNode = e.target
+			me.startX = e.pageX
+			me.startY = e.pageY
+			
+			sm.switchState('waitForMoveFarEnough')
+		}
 		
 		states.waitForMouseDown =
 		{
 			enter: function (sm)
 			{
-				var me = this
-				function mousedown (e)
-				{
-					e.preventDefault()
-					
-					me.startNode = e.target
-					me.startX = e.pageX
-					me.startY = e.pageY
-					
-					document.removeEventListener('mousedown', mousedown, false)
-					sm.switchState('waitForMoveFarEnough')
-				}
 				document.addEventListener('mousedown', mousedown, false)
+			},
+			
+			leave: function (sm)
+			{
+				document.removeEventListener('mousedown', mousedown, false)
 			}
 		}
+		
+		})();
 		
 		states.waitForMoveFarEnough =
 		{
 			enter: function (sm)
 			{
-				var me = this
 				function mousemove (e)
 				{
 					if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
@@ -70,7 +79,6 @@ var Me =
 				}
 				document.addEventListener('mousemove', mousemove, false)
 				
-				var me = this
 				function mouseup (e)
 				{
 					me.stopNode = e.target
@@ -107,7 +115,7 @@ var Me =
 	bind: function ()
 	{
 		var sm = this.sm = new StateMachine(this)
-		sm.setStates(this.states())
+		sm.setStates(this.states(sm))
 		sm.switchState('waitForMouseDown')
 	}
 }
