@@ -8,33 +8,54 @@ var Me =
 		
 		waitForMouseDown: function (sm)
 		{
-			function listener (e)
+			function mousedown (e)
 			{
 				this.startX = e.pageX
 				this.startY = e.pageY
 				
-				document.removeEventListener('mousedown', listener, false)
+				document.removeEventListener('mousedown', mousedown, false)
 				sm.switchState('waitForMoveFarEnough')
 			}
-			document.addEventListener('mousedown', listener, false)
+			document.addEventListener('mousedown', mousedown, false)
 		},
 		
 		waitForMoveFarEnough: function (sm)
 		{
-			function listener (e)
+			function mousemove (e)
 			{
-				if (Math.abs(this.startX - e.pageX) < 5 || Math.abs(this.startY - e.pageY) < 5)
+				if (Math.abs(this.startX - e.pageX) < 4 || Math.abs(this.startY - e.pageY) < 4)
 					return
 				
-				document.removeEventListener('mousemove', listener, false)
+				document.removeEventListener('mousemove', mousemove, false)
+				document.removeEventListener('mouseup', mouseup, false)
 				sm.switchState('startDrag')
 			}
-			document.addEventListener('mousemove', listener, false)
+			document.addEventListener('mousemove', mousemove, false)
+			
+			function mouseup (e)
+			{
+				document.removeEventListener('mousemove', mousemove, false)
+				document.removeEventListener('mouseup', mouseup, false)
+				sm.switchState('waitForMouseDown')
+			}
+			document.addEventListener('mouseup', mouseup, false)
 		},
 		
-		startDrag: function ()
+		startDrag: function (sm)
 		{
+			function mousemove (e)
+			{
+				log('draggint at', e.target)
+			}
+			document.addEventListener('mousemove', mousemove, false)
 			
+			function mouseup (e)
+			{
+				document.removeEventListener('mousemove', mousemove, false)
+				document.removeEventListener('mouseup', mouseup, false)
+				sm.switchState('waitForMouseDown')
+			}
+			document.addEventListener('mouseup', mouseup, false)
 		}
 	},
 	
