@@ -58,7 +58,7 @@ var Me =
 			
 			function mousemove (e)
 			{
-				log('draggint at', e.target)
+				// dragover even emulation here
 			}
 			document.addEventListener('mousemove', mousemove, false)
 			
