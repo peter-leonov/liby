@@ -51,19 +51,42 @@ var Me =
 		
 		startDrag: function (sm)
 		{
+			var ne = document.createEvent('Event')
+			ne.initEvent('dragstart', true, true)
+			this.dataTransfer = ne.dataTransfer = new DataTransfer()
+			this.startNode.dispatchEvent(ne)
+			
 			function mousemove (e)
 			{
 				log('draggint at', e.target)
 			}
 			document.addEventListener('mousemove', mousemove, false)
 			
+			var me = this
 			function mouseup (e)
 			{
+				me.stopNode = e.target
+				
 				document.removeEventListener('mousemove', mousemove, false)
 				document.removeEventListener('mouseup', mouseup, false)
-				sm.switchState('waitForMouseDown')
+				sm.switchState('stopDrag')
 			}
 			document.addEventListener('mouseup', mouseup, false)
+		},
+		
+		stopDrag: function (sm)
+		{
+			var ne = document.createEvent('Event')
+			ne.initEvent('dragend', true, true)
+			ne.dataTransfer = this.dataTransfer
+			this.startNode.dispatchEvent(ne)
+			
+			var ne = document.createEvent('Event')
+			ne.initEvent('drop', true, true)
+			ne.dataTransfer = this.dataTransfer
+			this.stopNode.dispatchEvent(ne)
+			
+			sm.switchState('waitForMouseDown')
 		}
 	},
 	
@@ -76,5 +99,23 @@ var Me =
 }
 
 Me.bind()
+
+function DataTransfer ()
+{
+	this.data = {}
+}
+
+DataTransfer.prototype =
+{
+	setData: function (k, v)
+	{
+		this.data[k] = v
+	},
+	
+	getData: function (k)
+	{
+		return this.data[k]
+	}
+}
 
 })();
