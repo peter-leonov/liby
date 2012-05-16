@@ -7,86 +7,98 @@ var Me =
 {
 	states:
 	{
-		initial: function () {},
+		initial: {},
 		
-		waitForMouseDown: function (sm)
+		waitForMouseDown:
 		{
-			var me = this
-			function mousedown (e)
+			enter: function (sm)
 			{
-				e.preventDefault()
-				
-				me.startNode = e.target
-				me.startX = e.pageX
-				me.startY = e.pageY
-				
-				document.removeEventListener('mousedown', mousedown, false)
-				sm.switchState('waitForMoveFarEnough')
+				var me = this
+				function mousedown (e)
+				{
+					e.preventDefault()
+					
+					me.startNode = e.target
+					me.startX = e.pageX
+					me.startY = e.pageY
+					
+					document.removeEventListener('mousedown', mousedown, false)
+					sm.switchState('waitForMoveFarEnough')
+				}
+				document.addEventListener('mousedown', mousedown, false)
 			}
-			document.addEventListener('mousedown', mousedown, false)
 		},
 		
-		waitForMoveFarEnough: function (sm)
+		waitForMoveFarEnough:
 		{
-			var me = this
-			function mousemove (e)
+			enter: function (sm)
 			{
-				if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
-					return
+				var me = this
+				function mousemove (e)
+				{
+					if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
+						return
+					
+					document.removeEventListener('mousemove', mousemove, false)
+					document.removeEventListener('mouseup', mouseup, false)
+					sm.switchState('startDrag')
+				}
+				document.addEventListener('mousemove', mousemove, false)
 				
-				document.removeEventListener('mousemove', mousemove, false)
-				document.removeEventListener('mouseup', mouseup, false)
-				sm.switchState('startDrag')
+				function mouseup (e)
+				{
+					document.removeEventListener('mousemove', mousemove, false)
+					document.removeEventListener('mouseup', mouseup, false)
+					sm.switchState('waitForMouseDown')
+				}
+				document.addEventListener('mouseup', mouseup, false)
 			}
-			document.addEventListener('mousemove', mousemove, false)
-			
-			function mouseup (e)
+		},
+		
+		startDrag:
+		{
+			enter: function (sm)
 			{
-				document.removeEventListener('mousemove', mousemove, false)
-				document.removeEventListener('mouseup', mouseup, false)
+				var ne = document.createEvent('Event')
+				ne.initEvent('dragstart', true, true)
+				this.dataTransfer = ne.dataTransfer = new DataTransfer()
+				this.startNode.dispatchEvent(ne)
+				
+				function mousemove (e)
+				{
+					// dragover even emulation here
+				}
+				document.addEventListener('mousemove', mousemove, false)
+				
+				var me = this
+				function mouseup (e)
+				{
+					me.stopNode = e.target
+					
+					document.removeEventListener('mousemove', mousemove, false)
+					document.removeEventListener('mouseup', mouseup, false)
+					sm.switchState('stopDrag')
+				}
+				document.addEventListener('mouseup', mouseup, false)
+			}
+		},
+		
+		stopDrag:
+		{
+			enter: function (sm)
+			{
+				var ne = document.createEvent('Event')
+				ne.initEvent('dragend', true, true)
+				ne.dataTransfer = this.dataTransfer
+				this.startNode.dispatchEvent(ne)
+				
+				var ne = document.createEvent('Event')
+				ne.initEvent('drop', true, true)
+				ne.dataTransfer = this.dataTransfer
+				this.stopNode.dispatchEvent(ne)
+				
 				sm.switchState('waitForMouseDown')
 			}
-			document.addEventListener('mouseup', mouseup, false)
-		},
-		
-		startDrag: function (sm)
-		{
-			var ne = document.createEvent('Event')
-			ne.initEvent('dragstart', true, true)
-			this.dataTransfer = ne.dataTransfer = new DataTransfer()
-			this.startNode.dispatchEvent(ne)
-			
-			function mousemove (e)
-			{
-				// dragover even emulation here
-			}
-			document.addEventListener('mousemove', mousemove, false)
-			
-			var me = this
-			function mouseup (e)
-			{
-				me.stopNode = e.target
-				
-				document.removeEventListener('mousemove', mousemove, false)
-				document.removeEventListener('mouseup', mouseup, false)
-				sm.switchState('stopDrag')
-			}
-			document.addEventListener('mouseup', mouseup, false)
-		},
-		
-		stopDrag: function (sm)
-		{
-			var ne = document.createEvent('Event')
-			ne.initEvent('dragend', true, true)
-			ne.dataTransfer = this.dataTransfer
-			this.startNode.dispatchEvent(ne)
-			
-			var ne = document.createEvent('Event')
-			ne.initEvent('drop', true, true)
-			ne.dataTransfer = this.dataTransfer
-			this.stopNode.dispatchEvent(ne)
-			
-			sm.switchState('waitForMouseDown')
 		}
 	},
 	
