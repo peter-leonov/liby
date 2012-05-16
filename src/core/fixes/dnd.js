@@ -11,10 +11,14 @@ var Me =
 		
 		waitForMouseDown: function (sm)
 		{
+			var me = this
 			function mousedown (e)
 			{
-				this.startX = e.pageX
-				this.startY = e.pageY
+				e.preventDefault()
+				
+				me.startNode = e.target
+				me.startX = e.pageX
+				me.startY = e.pageY
 				
 				document.removeEventListener('mousedown', mousedown, false)
 				sm.switchState('waitForMoveFarEnough')
@@ -24,9 +28,10 @@ var Me =
 		
 		waitForMoveFarEnough: function (sm)
 		{
+			var me = this
 			function mousemove (e)
 			{
-				if (Math.abs(this.startX - e.pageX) < 4 || Math.abs(this.startY - e.pageY) < 4)
+				if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
 					return
 				
 				document.removeEventListener('mousemove', mousemove, false)
