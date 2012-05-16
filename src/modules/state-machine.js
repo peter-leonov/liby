@@ -12,7 +12,7 @@ Me.prototype =
 		this.states = states
 		
 		for (var k in states)
-			states[k].stateName = k
+			states[k].name = k
 		
 		this.state = states.initial
 	},
@@ -27,19 +27,19 @@ Me.prototype =
 		var from = this.state
 		var to = this.states[name]
 		
-		var leave = from['leave_to_' + to.stateName] || from.leave
+		var leave = from['leave_to_' + to.name] || from.leave
 		if (leave)
 			leave.call(this.papa, this)
 		
 		this.state = null
 		
-		var enter = to['enter_from_' + from.stateName] || to.enter
+		var enter = to['enter_from_' + from.name] || to.enter
 		if (enter)
 			enter.call(this.papa, this)
 		
 		this.state = to
 		
-		this.onswitch.call(this.papa, from.stateName, to.stateName)
+		this.onswitch.call(this.papa, from.name, to.name)
 		
 		this.exec()
 	},
