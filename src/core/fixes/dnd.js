@@ -5,11 +5,11 @@ document.addEventListener('mousedown', function () {}, false)
 
 var Me =
 {
-	states:
+	states: function ()
 	{
-		initial: {},
+		var states = {}
 		
-		waitForMouseDown:
+		states.waitForMouseDown =
 		{
 			enter: function (sm)
 			{
@@ -27,9 +27,9 @@ var Me =
 				}
 				document.addEventListener('mousedown', mousedown, false)
 			}
-		},
+		}
 		
-		waitForMoveFarEnough:
+		states.waitForMoveFarEnough =
 		{
 			enter: function (sm)
 			{
@@ -53,9 +53,9 @@ var Me =
 				}
 				document.addEventListener('mouseup', mouseup, false)
 			}
-		},
+		}
 		
-		startDrag:
+		states.startDrag =
 		{
 			enter: function (sm)
 			{
@@ -81,9 +81,9 @@ var Me =
 				}
 				document.addEventListener('mouseup', mouseup, false)
 			}
-		},
+		}
 		
-		stopDrag:
+		states.stopDrag =
 		{
 			enter: function (sm)
 			{
@@ -100,12 +100,14 @@ var Me =
 				sm.switchState('waitForMouseDown')
 			}
 		}
+		
+		return states
 	},
 	
 	bind: function ()
 	{
 		var sm = this.sm = new StateMachine(this)
-		sm.setStates(this.states)
+		sm.setStates(this.states())
 		sm.switchState('waitForMouseDown')
 	}
 }
