@@ -27,13 +27,13 @@ Me.prototype =
 		var from = this.state
 		var to = this.states[name]
 		
-		var leave = from.leave
+		var leave = from['leave_to_' + to.stateName] || from.leave
 		if (leave)
 			leave.call(this.papa, this)
 		
 		this.state = null
 		
-		var enter = to.enter
+		var enter = to['enter_from_' + from.stateName] || to.enter
 		if (enter)
 			enter.call(this.papa, this)
 		
