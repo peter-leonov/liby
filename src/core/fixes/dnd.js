@@ -1,5 +1,8 @@
 (function(){
 
+// this crazy hack prevents Opera's default drag action somehow
+document.addEventListener('mousedown', function () {}, false)
+
 var Me =
 {
 	states:
