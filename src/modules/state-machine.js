@@ -11,6 +11,9 @@ Me.prototype =
 	{
 		this.states = states
 		
+		if (!states.initial)
+			states.initial = {}
+		
 		for (var k in states)
 			states[k].name = k
 		
