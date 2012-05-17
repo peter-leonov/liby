@@ -47,7 +47,7 @@ Me.prototype =
 		
 		this.inTransition = false
 		
-		this.onswitch.call(this.papa, from.name, to.name)
+		this.onswitch(from.name, to.name)
 		
 		this.exec()
 	},
