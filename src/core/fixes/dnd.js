@@ -102,7 +102,7 @@ var Me =
 				this.startNode.dispatchEvent(ne)
 				
 				if (!this.dataTransfer.used)
-					return
+					return sm.switchState('stopDrag')
 				
 				var clone = this.cloneNode = this.startNode.cloneNode(true)
 				clone.id = '123'
