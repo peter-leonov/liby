@@ -76,7 +76,8 @@ var Me =
 		
 		function mousemove (e)
 		{
-			// dragover even emulation here
+			me.cloneNode.style.left = e.pageX + 'px'
+			me.cloneNode.style.top = e.pageY + 'px'
 		}
 		
 		function mouseup (e)
@@ -99,6 +100,16 @@ var Me =
 				ne.initEvent('dragstart', true, true)
 				this.dataTransfer = ne.dataTransfer = new DataTransfer()
 				this.startNode.dispatchEvent(ne)
+				
+				if (!this.dataTransfer.used)
+					return
+				
+				var clone = this.cloneNode = this.startNode.cloneNode(true)
+				clone.id = '123'
+				document.body.appendChild(clone)
+				clone.addClassName('dragging-object')
+				clone.style.left = '0'
+				clone.style.top = '0'
 			},
 			leave: function (sm)
 			{
@@ -113,6 +124,8 @@ var Me =
 		{
 			job: function (sm)
 			{
+				// document.body.removeChild(this.cloneNode)
+				
 				var ne = document.createEvent('Event')
 				ne.initEvent('dragend', true, true)
 				ne.dataTransfer = this.dataTransfer
@@ -149,6 +162,7 @@ DataTransfer.prototype =
 {
 	setData: function (k, v)
 	{
+		this.used = true
 		this.data[k] = v
 	},
 	
