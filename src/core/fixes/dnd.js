@@ -39,30 +39,38 @@ var Me =
 		
 		})();
 		
+		
+		;(function(){
+		
+		function mousemove (e)
+		{
+			if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
+				return
+			
+			sm.switchState('startDrag')
+		}
+		
+		function mouseup (e)
+		{
+			sm.switchState('waitForMouseDown')
+		}
+		
 		states.waitForMoveFarEnough =
 		{
 			enter: function (sm)
 			{
-				function mousemove (e)
-				{
-					if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
-						return
-					
-					document.removeEventListener('mousemove', mousemove, false)
-					document.removeEventListener('mouseup', mouseup, false)
-					sm.switchState('startDrag')
-				}
 				document.addEventListener('mousemove', mousemove, false)
-				
-				function mouseup (e)
-				{
-					document.removeEventListener('mousemove', mousemove, false)
-					document.removeEventListener('mouseup', mouseup, false)
-					sm.switchState('waitForMouseDown')
-				}
 				document.addEventListener('mouseup', mouseup, false)
+			},
+			leave: function (sm)
+			{
+				document.removeEventListener('mousemove', mousemove, false)
+				document.removeEventListener('mouseup', mouseup, false)
 			}
 		}
+		
+		})();
+		
 		
 		states.startDrag =
 		{
