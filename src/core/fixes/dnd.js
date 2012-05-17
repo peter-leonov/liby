@@ -72,32 +72,42 @@ var Me =
 		})();
 		
 		
+		;(function(){
+		
+		function mousemove (e)
+		{
+			// dragover even emulation here
+		}
+		
+		function mouseup (e)
+		{
+			me.stopNode = e.target
+			
+			sm.switchState('stopDrag')
+		}
+		
 		states.startDrag =
 		{
 			enter: function (sm)
+			{
+				document.addEventListener('mousemove', mousemove, false)
+				document.addEventListener('mouseup', mouseup, false)
+			},
+			job: function (sm)
 			{
 				var ne = document.createEvent('Event')
 				ne.initEvent('dragstart', true, true)
 				this.dataTransfer = ne.dataTransfer = new DataTransfer()
 				this.startNode.dispatchEvent(ne)
-				
-				function mousemove (e)
-				{
-					// dragover even emulation here
-				}
-				document.addEventListener('mousemove', mousemove, false)
-				
-				function mouseup (e)
-				{
-					me.stopNode = e.target
-					
-					document.removeEventListener('mousemove', mousemove, false)
-					document.removeEventListener('mouseup', mouseup, false)
-					sm.switchState('stopDrag')
-				}
-				document.addEventListener('mouseup', mouseup, false)
+			},
+			leave: function (sm)
+			{
+				document.removeEventListener('mousemove', mousemove, false)
+				document.removeEventListener('mouseup', mouseup, false)
 			}
 		}
+		
+		})();
 		
 		states.stopDrag =
 		{
