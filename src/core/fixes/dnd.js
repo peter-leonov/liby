@@ -175,6 +175,7 @@ var Me =
 	bind: function ()
 	{
 		var sm = this.sm = new StateMachine(this)
+		sm.name = 'dnd'
 		sm.setStates(this.states(sm))
 		sm.switchState('waitForMouseDown')
 		sm.onswitch = function () {}
