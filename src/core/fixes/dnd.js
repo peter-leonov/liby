@@ -49,7 +49,7 @@ var Me =
 		
 		function mousemove (e)
 		{
-			if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
+			if (Math.abs(me.startX - e.pageX) < 4 && Math.abs(me.startY - e.pageY) < 4)
 				return
 			
 			me.startX = e.pageX
