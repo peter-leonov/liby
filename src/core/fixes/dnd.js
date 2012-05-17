@@ -84,7 +84,7 @@ var Me =
 		{
 			me.stopNode = e.target
 			
-			sm.switchState('stopDrag')
+			sm.switchState('drop')
 		}
 		
 		states.startDrag =
@@ -120,6 +120,19 @@ var Me =
 		
 		})();
 		
+		states.drop =
+		{
+			job: function (sm)
+			{
+				var ne = document.createEvent('Event')
+				ne.initEvent('drop', true, true)
+				ne.dataTransfer = this.dataTransfer
+				this.stopNode.dispatchEvent(ne)
+				
+				sm.switchState('stopDrag')
+			}
+		}
+		
 		states.stopDrag =
 		{
 			job: function (sm)
@@ -130,11 +143,6 @@ var Me =
 				ne.initEvent('dragend', true, true)
 				ne.dataTransfer = this.dataTransfer
 				this.startNode.dispatchEvent(ne)
-				
-				var ne = document.createEvent('Event')
-				ne.initEvent('drop', true, true)
-				ne.dataTransfer = this.dataTransfer
-				this.stopNode.dispatchEvent(ne)
 				
 				sm.switchState('waitForMouseDown')
 			}
