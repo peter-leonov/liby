@@ -1,7 +1,10 @@
 (function(){
 
+var count = 0
+
 function Me (papa)
 {
+	this.name = 'state-machine-' + ++count
 	this.papa = papa
 }
 
@@ -22,7 +25,7 @@ Me.prototype =
 	
 	onswitch: function (from, to)
 	{
-		log(from + ' -> ' + to)
+		log(this.name + ': ' + from + ' -> ' + to)
 	},
 	
 	switchState: function (name)
