@@ -30,7 +30,12 @@ var Me =
 			{
 				document.addEventListener('mousedown', mousedown, false)
 			},
-			
+			job: function ()
+			{
+				this.startNode = null
+				this.cloneNode = null
+				this.stopNode = null
+			},
 			leave: function (sm)
 			{
 				document.removeEventListener('mousedown', mousedown, false)
