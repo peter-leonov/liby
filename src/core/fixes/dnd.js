@@ -110,7 +110,6 @@ var Me =
 					return sm.switchState('stopDrag')
 				
 				var clone = this.cloneNode = this.startNode.cloneNode(true)
-				clone.id = '123'
 				document.body.appendChild(clone)
 				clone.addClassName('dragging-object')
 				clone.style.left = '0'
