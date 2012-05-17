@@ -99,7 +99,12 @@ var Me =
 				var ne = document.createEvent('Event')
 				ne.initEvent('dragstart', true, true)
 				this.dataTransfer = ne.dataTransfer = new DataTransfer()
-				this.startNode.dispatchEvent(ne)
+				try // someone may has startNode deleted
+				{
+					this.startNode.dispatchEvent(ne)
+				}
+				catch (ex) {}
+				
 				
 				if (!this.dataTransfer.used)
 					return sm.switchState('stopDrag')
@@ -127,7 +132,11 @@ var Me =
 				var ne = document.createEvent('Event')
 				ne.initEvent('drop', true, true)
 				ne.dataTransfer = this.dataTransfer
-				this.stopNode.dispatchEvent(ne)
+				try // and stopNode too
+				{
+					this.stopNode.dispatchEvent(ne)
+				}
+				catch (ex) {}
 				
 				sm.switchState('stopDrag')
 			}
@@ -143,7 +152,11 @@ var Me =
 				var ne = document.createEvent('Event')
 				ne.initEvent('dragend', true, true)
 				ne.dataTransfer = this.dataTransfer
-				this.startNode.dispatchEvent(ne)
+				try // and startNode once more
+				{
+					this.startNode.dispatchEvent(ne)
+				}
+				catch (ex) {}
 				
 				sm.switchState('waitForMouseDown')
 			}
