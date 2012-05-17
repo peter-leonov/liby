@@ -177,6 +177,7 @@ var Me =
 		var sm = this.sm = new StateMachine(this)
 		sm.setStates(this.states(sm))
 		sm.switchState('waitForMouseDown')
+		sm.onswitch = function () {}
 	}
 }
 
