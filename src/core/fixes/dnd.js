@@ -52,7 +52,10 @@ var Me =
 			if (Math.abs(me.startX - e.pageX) < 4 || Math.abs(me.startY - e.pageY) < 4)
 				return
 			
-			sm.switchState('startDrag')
+			me.startX = e.pageX
+			me.startY = e.pageY
+			
+			sm.switchState('startDrag', e)
 		}
 		
 		function mouseup (e)
@@ -117,8 +120,8 @@ var Me =
 				var clone = this.cloneNode = this.startNode.cloneNode(true)
 				document.body.appendChild(clone)
 				clone.addClassName('dragging-object')
-				clone.style.left = '0'
-				clone.style.top = '0'
+				clone.style.left = this.startX + 'px'
+				clone.style.top = this.startY + 'px'
 			},
 			leave: function (sm)
 			{
