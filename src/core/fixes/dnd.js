@@ -137,7 +137,8 @@ var Me =
 		{
 			job: function (sm)
 			{
-				// document.body.removeChild(this.cloneNode)
+				if (this.cloneNode)
+					document.body.removeChild(this.cloneNode)
 				
 				var ne = document.createEvent('Event')
 				ne.initEvent('dragend', true, true)
