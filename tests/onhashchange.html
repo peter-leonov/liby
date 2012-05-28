@@ -34,7 +34,7 @@ Tests.test(function (t)
 		
 		window.addEventListener('hashchange', onhashchange, false)
 		
-		setTimeout(function () { window.location.hash = Math.longRandom() }, 0)
+		setTimeout(function () { window.location.hash = Math.random() }, 0)
 		t.wait(1000)
 	})
 	
@@ -43,7 +43,7 @@ Tests.test(function (t)
 		if (/Chrome [123456]\.|MSIE [67]\./.test(Tests.ua))
 			return t.warn('This browser (' + Tests.ua + ') does not take location.hash changes in history account.')
 		
-		// window.location.hash = Math.longRandom()
+		// window.location.hash = Math.random()
 		
 		function onhashchange (e)
 		{
@@ -74,7 +74,7 @@ Tests.test(function (t)
 		function onhashchange () { count++ }
 		window.addEventListener('hashchange', onhashchange, false)
 		
-		window.location.hash = Math.longRandom()
+		window.location.hash = Math.random()
 		
 		function check ()
 		{
