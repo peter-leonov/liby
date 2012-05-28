@@ -1,104 +1,226 @@
-// base objects extensions
-// this code is heavily minified and it couldn not be changed frequently
 ;(function(){
 
-var O = Object, A = Array, Ap = A.prototype, S = String, Sp = S.prototype, Fp = Function.prototype, D = Date, M = Math
-
-function add (d, s) { if (d) for (var k in s) if (!(k in d)) d[k] = s[k]; return d }
-function extend (d, s) { if (d) for (var k in s) d[k] = s[k]; return d }
-
-add
-(
-	O,
+function add (d, s)
+{
+	if (!d)
+		return d
+	
+	for (var k in s)
 	{
-		add: add,
-		extend: extend,
-		copy: function (s) { var d = {}; for (var k in s) d[k] = s[k]; return d },
-		keys: function (s) { var r = []; for (var k in s) r.push(k); return r },
-		keysCount: function (s) { var l = 0; for (var k in s) l++; return l },
-		values: function (s) { var r = []; for (var k in s) r.push(s[k]); return r },
-		isEmpty: function (s) { for (var k in s) return false; return true }
+		if (k in d)
+			continue
+		
+		d[k] = s[k]
 	}
-)
+	
+	return d
+}
 
-add
-(
-	S,
+function extend (d, s)
+{
+	if (!d)
+		return d
+	
+	for (var k in s)
+		d[k] = s[k]
+	
+	return d
+}
+
+function copy (s)
+{
+	var d = {}
+	
+	for (var k in s)
+		d[k] = s[k]
+	
+	return d
+}
+
+function keys (s)
+{
+	var r = []
+	
+	for (var k in s)
+		r.push(k)
+	
+	return r
+}
+
+function keysCount (s)
+{
+	var l = 0
+	
+	for (var k in s)
+		l++
+	
+	return l
+}
+
+function values (s)
+{
+	var r = []
+	
+	for (var k in s)
+		r.push(s[k])
+	
+	return r
+}
+
+function isEmpty (s)
+{
+	for (var k in s)
+		return false
+	
+	return true
+}
+
+add(Object, {add: add, extend: extend, copy: copy, keys: keys, keysCount: keysCount, values: values, isEmpty: isEmpty})
+
+})();
+
+
+;(function(){
+
+function localeCompare (a, b)
+{
+	if (a < b)
+		return -1
+	if (a > b)
+		return 1
+	
+	return 0
+}
+
+function trim ()
+{
+	return this.replace(/^\s+|\s+$/g, '')
+}
+
+function capitalize ()
+{
+	return this.charAt(0).toUpperCase() + this.substr(1)
+}
+
+Object.add(String, {localeCompare: localeCompare})
+Object.add(String.prototype, {trim: trim, capitalize: capitalize})
+
+})();
+
+
+;(function(){
+
+function mixIn (module)
+{
+	return Object.extend(this.prototype, module.prototype)
+}
+
+function extend (s)
+{
+	for (var k in s)
+		this[k] = s[k]
+	
+	return this
+}
+
+function bind (inv, args)
+{
+	var f = this
+	function wrapper ()
 	{
-		localeCompare: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0) }
+		f.apply(inv, args || arguments)
 	}
-)
+	return wrapper
+}
 
-add
-(
-	Sp,
+Object.add(Function.prototype, {mixIn: mixIn, extend: extend, bind: bind})
+
+})();
+
+
+;(function(){
+
+var round = Math.round,
+	random = Math.random
+
+function longRandom ()
+{
+	return +new Date() + '' + round(random() * 1E+17)
+}
+
+Object.add(Math, {longRandom: longRandom})
+
+})();
+
+
+;(function(){
+
+var ceil = Math.ceil, floor = Math.floor
+
+function indexOf (v, i)
+{
+	var len = this.length
+	
+	i = +i
+	
+	if (i)
 	{
-		trim: function () { return this.replace(/^\s+|\s+$/g, '') },
-		capitalize: function () { return this.charAt(0).toUpperCase() + this.substr(1) }
+		if (i < 0)
+			i = ceil(i) + len
+		else
+			i = floor(i)
 	}
-)
-
-add
-(
-	Fp,
+	else
 	{
-		mixIn: function (module) { return extend(this.prototype, module.prototype) },
-		extend: function (s) { for (var k in s) this[k] = s[k]; return this },
-		bind: function (inv, args) { var me = this; return function () { me.apply(inv, args || arguments) } }
+		i = 0
 	}
-)
+	
+	for (; i < len; i++)
+		if (i in this && this[i] === v)
+			return i
+	
+	return -1
+}
 
-var ceil = M.ceil, floor = M.floor, round = M.round, random = M.random
-add(M, {longRandom: function () { return (new D()).getTime().toString() + round(random() * 1E+17) }})
-
-
-add
-(
-	Ap,
+function uniq ()
+{
+	var res = []
+	
+	var j = 0
+	for (var i = 0, il = this.length; i < il; i++)
 	{
-		indexOf: function (v, i)
-		{
-			var len = this.length
-			
-			if ((i = +i))
-			{
-				if (i < 0)
-					i = ceil(i) + len
-				else
-					i = floor(i)
-			}
-			else
-				i = 0
-			
-			for (; i < len; i++)
-				if (i in this && this[i] === v)
-					return i
-			return -1
-		},
-		uniq: function ()
-		{
-			var res = [], j = 0
-			for (var i = 0, il = this.length; i < il; i++)
-			{
-				var v = this[i]
-				if (res.indexOf(v) === -1)
-					res[j++] = v
-			}
-			return res
-		},
-		forEach: function (f, inv) { for (var i = 0, len = this.length; i < len; i++) f.call(inv, this[i], i, this) },
-		map: function(f, inv)
-		{
-			var len = this.length,
-				res = new A(len)
-			for (var i = 0; i < len; i++)
-				if (i in this)
-					res[i] = f.call(inv, this[i], i, this)
-			return res
-		}
+		var v = this[i]
+		if (res.indexOf(v) == -1)
+			res[j++] = v
 	}
-)
+	
+	return res
+}
 
-add(A, {copy: function (src) { return Ap.slice.call(src) }})
+function forEach (f, inv)
+{
+	for (var i = 0, il = this.length; i < il; i++)
+		f.call(inv, this[i], i, this)
+}
+
+function map (f, inv)
+{
+	var res = []
+	
+	for (var i = 0, il = this.length; i < il; i++)
+		if (i in this)
+			res[i] = f.call(inv, this[i], i, this)
+	
+	return res
+}
+
+var slice = Array.prototype.slice
+function copy (ary)
+{
+	return slice.call(ary)
+}
+
+Object.add(Array.prototype, {indexOf: indexOf, uniq: uniq, forEach: forEach, map: map})
+Object.add(Array, {copy: copy})
 
 })();
