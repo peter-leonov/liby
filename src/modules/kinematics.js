@@ -29,7 +29,7 @@ Space.prototype =
 	run: function (timeout)
 	{
 		var me = this
-		clearTimeout(this.timers.timeout)
+		window.clearTimeout(this.timers.timeout)
 		if (timeout)
 			this.timers.timeout = window.setTimeout(function (d) { me.timeout(d) }, timeout)
 		
@@ -54,7 +54,7 @@ Space.prototype =
 			return
 		this.running = false
 		
-		clearTimeout(this.timers.timeout)
+		window.clearTimeout(this.timers.timeout)
 		GlobalTimer.remove(this.timers.tick)
 	},
 	

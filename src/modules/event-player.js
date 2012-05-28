@@ -26,7 +26,7 @@ Me.prototype =
 		this.nodes = {}
 		this.frame = 0
 		// this.last = new Date()
-		clearTimeout(this.timer)
+		window.clearTimeout(this.timer)
 		var me = this
 		this.callFrame = function () { me.nextFrame() }
 		if (this.onstart && this.onstart() === false)

@@ -22,7 +22,7 @@ Me.prototype =
 	{
 		this.args = arguments
 		
-		clearTimeout(this.delayTimer)
+		window.clearTimeout(this.delayTimer)
 		this.delayTimer = window.setTimeout(this.timerCallback, this.delay)
 		
 		if (!this.timeoutTimer)
@@ -34,14 +34,14 @@ Me.prototype =
 		var delayTimer = this.delayTimer
 		if (delayTimer)
 		{
-			clearTimeout(delayTimer)
+			window.clearTimeout(delayTimer)
 			this.delayTimer = 0
 		}
 		
 		var timeoutTimer = this.timeoutTimer
 		if (timeoutTimer)
 		{
-			clearTimeout(timeoutTimer)
+			window.clearTimeout(timeoutTimer)
 			this.timeoutTimer = 0
 		}
 		
