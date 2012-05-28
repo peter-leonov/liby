@@ -14,7 +14,7 @@ Me.prototype =
 		
 		if (state == 'ready')
 		{
-			setTimeout(f, 0)
+			window.setTimeout(f, 0)
 			return
 		}
 		
@@ -35,7 +35,7 @@ Me.prototype =
 		
 		var listeners = this.listeners
 		for (var i = 0; i < listeners.length; i++)
-			setTimeout(listeners[i], 0)
+			window.setTimeout(listeners[i], 0)
 		
 		this.listeners.length = 0
 	},

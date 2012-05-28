@@ -71,19 +71,19 @@ Tests.test(function (t)
 		
 		t.test('1', function (t)
 		{
-			setTimeout(function () { order.push(1); t.done() }, 500)
+			window.setTimeout(function () { order.push(1); t.done() }, 500)
 			t.wait(1000)
 		})
 		
 		t.test('2', function (t)
 		{
-			setTimeout(function () { order.push(2); t.done() }, 10)
+			window.setTimeout(function () { order.push(2); t.done() }, 10)
 			t.wait(1000)
 		})
 		
 		t.test('3', function (t)
 		{
-			setTimeout(function () { order.push(3); t.done() }, 250)
+			window.setTimeout(function () { order.push(3); t.done() }, 250)
 			t.wait(1000)
 		})
 		
@@ -179,7 +179,7 @@ Tests.test(function (t)
 			t.pass('job')
 			t.done()
 		}
-		setTimeout(job, 250)
+		window.setTimeout(job, 250)
 		t.wait(1000)
 	})
 	
@@ -205,7 +205,7 @@ Tests.test(function (t)
 			t.pass('job')
 			t.done()
 		}
-		setTimeout(job, 10)
+		window.setTimeout(job, 10)
 		t.wait()
 	})
 	

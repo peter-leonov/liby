@@ -12,7 +12,7 @@
 var node = document.getElementById('test-1')
 function onclick (e)
 {
-	setTimeout(function () { alert(e.target === node ? 'passed' : 'failed') }, 0)
+	window.setTimeout(function () { alert(e.target === node ? 'passed' : 'failed') }, 0)
 }
 node.addEventListener('click', onclick, false)
 

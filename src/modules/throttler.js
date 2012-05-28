@@ -23,10 +23,10 @@ Me.prototype =
 		this.args = arguments
 		
 		clearTimeout(this.delayTimer)
-		this.delayTimer = setTimeout(this.timerCallback, this.delay)
+		this.delayTimer = window.setTimeout(this.timerCallback, this.delay)
 		
 		if (!this.timeoutTimer)
-			this.timeoutTimer = setTimeout(this.timeoutCallback, this.timeout)
+			this.timeoutTimer = window.setTimeout(this.timeoutCallback, this.timeout)
 	},
 	
 	fire: function ()

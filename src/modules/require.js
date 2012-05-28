@@ -19,7 +19,7 @@ function Me (name, f)
 	if (state)
 	{
 		if (state.loaded)
-			setTimeout(function () { run([f], state.data) })
+			window.setTimeout(function () { run([f], state.data) })
 		else
 			state.callbacks.push(f)
 	}

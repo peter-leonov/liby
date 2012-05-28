@@ -30,7 +30,7 @@ Tests.test(function (t)
 				t.eq(window.veryGlobalCounter1, num)
 				t.no(called[num], 'already called')
 				called[num] = true
-				setTimeout(function () { t.done() }, 250)
+				window.setTimeout(function () { t.done() }, 250)
 			}
 			
 			require('require-file-1.js?ac=' + Math.random(), onload)

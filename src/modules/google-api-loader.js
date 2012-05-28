@@ -43,7 +43,7 @@ Me.prototype =
 		}
 		
 		if (this.state == 'ready')
-			setTimeout(function () { me.fireAll() }, 1)
+			window.setTimeout(function () { me.fireAll() }, 1)
 			
 		return this
 	},

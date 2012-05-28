@@ -97,7 +97,7 @@ function setter ()
 		{
 			updateSelection(node)
 		}
-		catch (ex) { setTimeout(function () { throw ex }, 10) }
+		catch (ex) { window.setTimeout(function () { throw ex }, 10) }
 	}
 	else if (name == 'selectionEnd')
 	{
@@ -120,7 +120,7 @@ function setter ()
 		{
 			updateSelection(node)
 		}
-		catch (ex) { setTimeout(function () { throw ex }, 10) }
+		catch (ex) { window.setTimeout(function () { throw ex }, 10) }
 	}
 	
 	internal = false
@@ -132,7 +132,7 @@ Me.__pmc_fixHook = function (node)
 	node.attachEvent('onpropertychange', setter)
 	
 	function update () { updateProperties(node) }
-	function updateDelayed () { setTimeout(function () { updateProperties(node) }, 0) }
+	function updateDelayed () { window.setTimeout(function () { updateProperties(node) }, 0) }
 	
 	node.addEventListener('keypress', updateDelayed, false)
 	node.addEventListener('mousedown', updateDelayed, false)

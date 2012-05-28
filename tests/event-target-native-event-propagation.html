@@ -84,7 +84,7 @@ Tests.test(function (t)
 			t.done()
 		}
 		
-		function fire () { fired = true; setTimeout(check, 10) }
+		function fire () { fired = true; window.setTimeout(check, 10) }
 		if (node.attachEvent)
 			node.attachEvent('onreadystatechange', function () { if (node.readyState == 'loaded') fire() })
 		else

@@ -31,7 +31,7 @@ Space.prototype =
 		var me = this
 		clearTimeout(this.timers.timeout)
 		if (timeout)
-			this.timers.timeout = setTimeout(function (d) { me.timeout(d) }, timeout)
+			this.timers.timeout = window.setTimeout(function (d) { me.timeout(d) }, timeout)
 		
 		if (this.running)
 			return

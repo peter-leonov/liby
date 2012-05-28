@@ -43,7 +43,7 @@ Me.prototype =
 		if (this.__async)
 		{
 			var me = this
-			setTimeout(function () { me.__r.send(data) }, 0)
+			window.setTimeout(function () { me.__r.send(data) }, 0)
 			// __r.send() is wrapped in timer because of #97
 		}
 		else

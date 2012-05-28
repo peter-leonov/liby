@@ -12,14 +12,14 @@ document.body.style.height = '10000px'
 var eventPhase
 window.addEventListener('scroll', function (e) { eventPhase = e.eventPhase }, true)
 window.scrollTo(0, 1)
-setTimeout(function () { alert(eventPhase == Event.CAPTURING_PHASE ? 'passed' : 'failed: ' + eventPhase) }, 0)
+window.setTimeout(function () { alert(eventPhase == Event.CAPTURING_PHASE ? 'passed' : 'failed: ' + eventPhase) }, 0)
 
 
 document.body.style.height = '10000px'
 var fired
 document.addEventListener('scroll', function (e) { fired = true }, true)
 window.scrollTo(0, 2)
-setTimeout(function () { alert(fired ? 'passed' : 'failed') }, 0)
+window.setTimeout(function () { alert(fired ? 'passed' : 'failed') }, 0)
 
 })();
 </script>

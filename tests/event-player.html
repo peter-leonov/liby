@@ -103,7 +103,7 @@ Tests.test(function (t)
 			function check (e)
 			{
 				t.eq(e.target.value, '0', 'within')
-				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+				window.setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
 			}
 			bind(t, keyboard, 'keydown', check)
 		})
@@ -114,7 +114,7 @@ Tests.test(function (t)
 			function check (e)
 			{
 				t.eq(e.target.value, '0', 'within')
-				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+				window.setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
 			}
 			bind(t, keyboard, 'keypress', check)
 		})
@@ -125,7 +125,7 @@ Tests.test(function (t)
 			function check (e)
 			{
 				t.eq(e.target.value, '1', 'within')
-				setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
+				window.setTimeout(function () { t.eq(e.target.value, '1', 'after') }, 0)
 			}
 			bind(t, keyboard, 'keyup', check)
 		})

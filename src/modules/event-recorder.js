@@ -103,7 +103,7 @@ Me.prototype =
 				action.inputValue = node.value
 			}
 			// setting zero timeout could be enough to get the value in time
-			setTimeout(save, 0)
+			window.setTimeout(save, 0)
 			
 			if (this.lastAction.e == 'keydown')
 			{

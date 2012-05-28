@@ -34,7 +34,7 @@ Tests.test(function (t)
 		
 		window.addEventListener('hashchange', onhashchange, false)
 		
-		setTimeout(function () { window.location.hash = Math.random() }, 0)
+		window.setTimeout(function () { window.location.hash = Math.random() }, 0)
 		t.wait(1000)
 	})
 	
@@ -60,7 +60,7 @@ Tests.test(function (t)
 			history.back()
 		}
 		
-		setTimeout(back, 1)
+		window.setTimeout(back, 1)
 		t.wait(1000)
 	})
 	

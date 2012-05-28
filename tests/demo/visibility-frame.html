@@ -143,7 +143,7 @@ $.onload(function ()
 			for (var i = 0; i < show.length; i++)
 				show[i].node.addClassName('visible')
 			
-			setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
+			window.setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
 		}
 		frame.moveTo(frameNode.offsetLeft, frameNode.offsetTop)
 		
@@ -196,7 +196,7 @@ $.onload(function ()
 			}
 			
 			var input = this
-			setTimeout(function () { adjustCount.call(input, e) }, 1)
+			window.setTimeout(function () { adjustCount.call(input, e) }, 1)
 		}
 		function adjustCount (e)
 		{

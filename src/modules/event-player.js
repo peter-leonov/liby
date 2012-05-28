@@ -31,7 +31,7 @@ Me.prototype =
 		this.callFrame = function () { me.nextFrame() }
 		if (this.onstart && this.onstart() === false)
 			return
-		this.timer = setTimeout(this.callFrame, 0)
+		this.timer = window.setTimeout(this.callFrame, 0)
 	},
 	
 	nextFrame: function ()
@@ -45,7 +45,7 @@ Me.prototype =
 			return this.oncomplete && this.oncomplete()
 		
 		var next = action.t// - (new Date() - this.last)
-		setTimeout(this.callFrame, next <= 0 ? 0 : next)
+		window.setTimeout(this.callFrame, next <= 0 ? 0 : next)
 	},
 	
 	processAction: function (action)

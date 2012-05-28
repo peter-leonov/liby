@@ -14,7 +14,7 @@ Me.prototype =
 		this.nodes = nodes
 		
 		var me = this
-		function onvalue (e) { setTimeout(function () { me.checkValue(e.target) }, 0) }
+		function onvalue (e) { window.setTimeout(function () { me.checkValue(e.target) }, 0) }
 		function onfocus (e) { me.focus(e.target) }
 		function onblur (e) { me.blur(e.target) }
 		
