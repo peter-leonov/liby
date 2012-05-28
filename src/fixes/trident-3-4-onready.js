@@ -23,7 +23,7 @@ function checkready ()
 	catch (ex) { return }
 	
 	// run once
-	clearInterval(interval)
+	window.clearInterval(interval)
 	
 	fireDCL()
 }

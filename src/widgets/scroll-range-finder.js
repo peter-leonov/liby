@@ -85,7 +85,7 @@ Me.prototype =
 	
 	monitor: function (start)
 	{
-		clearInterval(this.timer)
+		window.clearInterval(this.timer)
 		if (start)
 		{
 			var me = this

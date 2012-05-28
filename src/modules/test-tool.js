@@ -292,7 +292,7 @@ var prototype =
 		if (!lag)
 			return
 		
-		clearInterval(lag.timer)
+		window.clearInterval(lag.timer)
 		
 		var times = lag.times
 		if (times.length < 2)

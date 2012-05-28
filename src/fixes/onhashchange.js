@@ -22,7 +22,7 @@ function check ()
 var timer
 function restart (d)
 {
-	clearInterval(timer)
+	window.clearInterval(timer)
 	if (d < 0)
 		return
 	

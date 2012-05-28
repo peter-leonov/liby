@@ -33,7 +33,7 @@ Me.prototype =
 				if (!window.google)
 					return
 				
-				clearInterval(timer)
+				window.clearInterval(timer)
 				me.apiLoaderLoaded()
 			}
 			

@@ -44,7 +44,7 @@ Tests.test(function (t)
 		{
 			Oops.enable()
 			
-			clearInterval(intervalTimer)
+			window.clearInterval(intervalTimer)
 			throw new Error('setInterval')
 		}
 		var intervalTimer = window.setInterval(setInterval, 10)

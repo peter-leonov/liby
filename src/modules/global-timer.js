@@ -41,7 +41,7 @@ var myName = 'GlobalTimer', Me =
 			// if have deleted last timer
 			if (--this.total <= 0)
 			{
-				clearInterval(this.timer)
+				window.clearInterval(this.timer)
 				this.timer = null
 			}
 			
