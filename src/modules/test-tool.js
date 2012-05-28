@@ -282,7 +282,7 @@ var prototype =
 			times.push(new Date())
 		}
 		
-		lag.timer = setInterval(shot, delay)
+		lag.timer = window.setInterval(shot, delay)
 		shot()
 	},
 	

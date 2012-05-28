@@ -90,7 +90,7 @@ Me.prototype =
 		{
 			var me = this
 			function check () { me.check() }
-			this.timer = setInterval(check, this.interval)
+			this.timer = window.setInterval(check, this.interval)
 			me.check()
 		}
 	}

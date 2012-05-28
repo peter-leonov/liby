@@ -37,7 +37,7 @@ Me.prototype =
 				me.apiLoaderLoaded()
 			}
 			
-			var timer = setInterval(wait, 250)
+			var timer = window.setInterval(wait, 250)
 			
 			this.state = 'loading'
 		}

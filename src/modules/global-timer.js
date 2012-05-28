@@ -24,7 +24,7 @@ var myName = 'GlobalTimer', Me =
 			if (this.timer !== null)
 				throw new Error(myName + '.timer had been broken')
 			var me = this
-			this.timer = setInterval(function (d) { me.tick(d) }, 1000 / this.fps)
+			this.timer = window.setInterval(function (d) { me.tick(d) }, 1000 / this.fps)
 		}
 		
 		this.timers[++this.id] = callback

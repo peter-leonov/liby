@@ -27,7 +27,7 @@ function checkready ()
 	
 	fireDCL()
 }
-var interval = setInterval(checkready, 100)
+var interval = window.setInterval(checkready, 100)
 
 // safe fallback
 window.addEventListener('load', fireDCL, false)
