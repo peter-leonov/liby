@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Look for support of getters/settersof some kind</title>
+	<script src="tests.common.js"></script>
+	
+	<script src="../src/modules/prototype.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	t.test('Object.defineProperty', function (t)
+	{
+		var o = {},
+			value
+		
+		Object.defineProperty(o, 'a', {get: function () { return 1 }, set: function (v) { value = v }})
+		
+		t.eq(o.a, 1, 'get')
+		o.a = 3
+		t.eq(value, 3, 'set')
+	})
+	
+	t.test('__defineGetter/Setter__', function (t)
+	{
+		var o = {},
+			value
+		
+		o.__defineGetter__('a', function () { return 1 })
+		o.__defineSetter__('a', function (v) { value = v })
+		
+		t.eq(o.a, 1, 'get')
+		o.a = 3
+		t.eq(value, 3, 'set')
+	})
+	
+	t.test('get value (), set value ()', function (t)
+	{
+		var o,
+			value
+		
+		o = eval('({get a () { return 1 }, set a (v) { value = v }})')
+		
+		t.eq(o.a, 1, 'get')
+		o.a = 3
+		t.eq(value, 3, 'set')
+	})
+})
+</script>
+</body>
+</html>
