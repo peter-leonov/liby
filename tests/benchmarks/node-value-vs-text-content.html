@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>element.textContent vs node.nodeValue</title>
+	<script src="tests.common.js"></script>
+</head>
+<body>
+<div id="box"><span id="node">bla-bla-bla</span></div>
+<script>
+Tests.test(function (t)
+{
+	var box = document.querySelector('#box'),
+		node = document.querySelector('#box')
+	
+	for (var i = 0; i < 1000; i++)
+	{
+		var p = document.createElement('p')
+		p.appendChild(document.createTextNode('node number ' + i))
+		box.appendChild(p)
+	}
+	
+	var count = 50000
+	
+	var strings = []
+	for (var i = 0; i < count; i++)
+		strings[i] = 'string number ' + i
+	
+	t.test('innerHTML', function (t)
+	{
+		var n = node,
+			s = strings
+		
+		t.time('from array')
+		for (var i = 0, il = count; i < il; i++)
+			n.innerHTML = s[i]
+		t.timeEnd('from array')
+		
+		t.time('constant')
+		for (var i = 0, il = count; i < il; i++)
+			n.innerHTML = 'bla-bla-lba'
+		t.timeEnd('constant')
+		
+		t.time('with entities')
+		for (var i = 0, il = count; i < il; i++)
+			n.innerHTML = 'bla-&amp;bla&gt;&lt;&copy;-lba'
+		t.timeEnd('with entities')
+	})
+	
+	t.test('textContent', function (t)
+	{
+		var n = node,
+			s = strings
+		
+		t.time('from array')
+		for (var i = 0, il = count; i < il; i++)
+			n.textContent = s[i]
+		t.timeEnd('from array')
+		
+		t.time('constant')
+		for (var i = 0, il = count; i < il; i++)
+			n.textContent = 'bla-bla-lba'
+		t.timeEnd('constant')
+		
+		t.time('with entities')
+		for (var i = 0, il = count; i < il; i++)
+			n.textContent = 'bla-&amp;bla&gt;&lt;&copy;-lba'
+		t.timeEnd('with entities')
+	})
+	
+	t.test('nodeValue', function (t)
+	{
+		var n = node.firstChild,
+			s = strings
+		
+		t.time('from array')
+		for (var i = 0, il = count; i < il; i++)
+			n.nodeValue = s[i]
+		t.timeEnd('from array')
+		
+		t.time('constant')
+		for (var i = 0, il = count; i < il; i++)
+			n.nodeValue = 'bla-bla-lba'
+		t.timeEnd('constant')
+		
+		t.time('with entities')
+		for (var i = 0, il = count; i < il; i++)
+			n.nodeValue = 'bla-&amp;bla&gt;&lt;&copy;-lba'
+		t.timeEnd('with entities')
+	})
+})
+</script>
+</body>
+</html>
