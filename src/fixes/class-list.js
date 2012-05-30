@@ -74,6 +74,25 @@ ClassList.prototype =
 			this.remove(cn)
 		else
 			this.add(cn)
+	},
+	
+	toArray: function ()
+	{
+		var className = this.node.className
+		if (!className)
+			return []
+		
+		return className.replace(/^\s+|\s+$/g, '').split(/ +/)
+	},
+	
+	item: function (n)
+	{
+		return this.toArray()[n]
+	},
+	
+	getLength: function ()
+	{
+		return this.toArray().length
 	}
 }
 
