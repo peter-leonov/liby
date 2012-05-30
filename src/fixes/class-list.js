@@ -118,7 +118,7 @@ ClassList.prototype =
 	}
 }
 
-ClassList.prototype.__defineGetter__('length', ClassList.prototype.getLength)
+Object.defineProperty(ClassList.prototype, 'length', {get: ClassList.prototype.getLength})
 
 function bakeItemGetter (n)
 {
@@ -126,7 +126,7 @@ function bakeItemGetter (n)
 }
 
 for (var i = 0; i < 100; i++)
-	ClassList.prototype.__defineGetter__(i, bakeItemGetter(i))
+	Object.defineProperty(ClassList.prototype, i, {get: bakeItemGetter(i)})
 
 
 function getClassList ()
@@ -138,6 +138,6 @@ function getClassList ()
 	return this.__classList = new ClassList(this)
 }
 
-Element.prototype.__defineGetter__('classList', getClassList)
+Object.defineProperty(Element.prototype, 'classList', {get: getClassList})
 
 })();
