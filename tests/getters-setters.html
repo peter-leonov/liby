@@ -21,6 +21,20 @@ Tests.test(function (t)
 		t.eq(o.a, 1, 'get')
 		o.a = 3
 		t.eq(value, 3, 'set')
+		
+		t.test('prototype', function (t)
+		{
+			var value
+			
+			function A () {}
+			Object.defineProperty(A.prototype, 'a', {get: function () { return 1 }, set: function (v) { value = v }})
+			
+			var o = new A()
+			t.eq(o.a, 1, 'get')
+			o.a = 3
+			t.eq(value, 3, 'set')
+		})
+		
 	})
 	
 	t.test('__defineGetter/Setter__', function (t)
