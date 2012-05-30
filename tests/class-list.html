@@ -14,8 +14,8 @@ Tests.test(function (t)
 	t.test('write className read classList', function (t)
 	{
 		var node = document.createElement('div')
-		
 		var cl = node.classList
+		
 		t.eq(cl.length, 0, 'length')
 		
 		t.no(cl.contains('a'), 'a')
@@ -41,8 +41,8 @@ Tests.test(function (t)
 	t.test('write classList read className', function (t)
 	{
 		var node = document.createElement('div')
-		
 		var cl = node.classList
+		
 		t.eq(node.className, '', 'empty')
 		
 		cl.add('a')
@@ -63,6 +63,47 @@ Tests.test(function (t)
 		
 		t.ok(cl.contains('a'), 'contains a')
 		t.no(cl.contains('b'), 'contains b')
+	})
+	
+	t.test('spaces in className', function (t)
+	{
+		var node = document.createElement('div')
+		var cl = node.classList
+		
+		node.className = '  a b   c  '
+		t.eq(node.className, '  a b   c  ', 'lots of spaces')
+		t.like(Array.copy(cl), ['a', 'b', 'c'], 'list')
+		
+		cl.add('d')
+		t.eq(node.className, '  a b   c  d', 'same spaces')
+		
+		cl.toggle('d')
+		t.eq(node.className, '  a b   c', 'same spaces except trailing ones')
+		
+		cl.toggle('b')
+		t.eq(node.className, '  a c', 'same spaces except those around b')
+	})
+	
+	t.test('bad names in className', function (t)
+	{
+		var node = document.createElement('div')
+		var cl = node.classList
+		
+		node.className = 'b:n a b x,f - c'
+		t.eq(node.className, 'b:n a b x,f - c', 'lots of spaces')
+		t.like(Array.copy(cl), ['b:n', 'a', 'b', 'x,f', '-', 'c'], 'list')
+		
+		cl.add('d')
+		t.eq(node.className, 'b:n a b x,f - c d', 'same string')
+		
+		cl.toggle('d')
+		t.eq(node.className, 'b:n a b x,f - c', 'same string')
+		
+		cl.toggle('b')
+		t.eq(node.className, 'b:n a x,f - c', 'same string')
+		
+		cl.toggle('x,f')
+		t.eq(node.className, 'b:n a - c', 'toggle bad item')
 	})
 })
 </script>
