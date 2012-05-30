@@ -37,11 +37,11 @@ ClassList.prototype =
 		var node = this.node
 		
 		var className = node.className
-		if (className)
-		{
-			var rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
-			node.className = className.replace(rex, ' ').replace(/^\s+|\s+$/g, '') // trim
-		}
+		if (!className)
+			return
+		
+		var rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
+		node.className = className.replace(rex, ' ').replace(/^\s+|\s+$/g, '') // trim
 	},
 	
 	contains: function (cn)
