@@ -20,7 +20,7 @@ function getRex (cn)
 		return rex
 	}
 	
-	return rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
+	return rexCache[cn] = new R('(?:^| +)(?:' + R.escape(cn) + '(?:$| +))+', 'g')
 }
 
 ClassList.prototype =
