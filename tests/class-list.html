@@ -146,6 +146,17 @@ Tests.test(function (t)
 		t.eq(cl[4], 'e', '[4]')
 		t.eq(cl[5], 'f', '[5]')
 	})
+	
+	t.test('copy with Array.prototype.slice()', function (t)
+	{
+		t.mayFail()
+		
+		var node = document.createElement('div')
+		var cl = node.classList
+		
+		node.className = 'a b c d e f'
+		t.like(Array.prototype.slice.call(cl), ['a', 'b', 'c', 'd', 'e', 'f'], 'slice.call()')
+	})
 })
 </script>
 </body>
