@@ -22,8 +22,14 @@ ClassList.prototype =
 			node.className = cn
 			return
 		}
-		else
-			node.className = className + ' ' + cn
+		
+		if (className.substr(-1) == ' ')
+		{
+			node.className = className + cn
+			return
+		}
+		
+		node.className = className + ' ' + cn
 	},
 	
 	remove: function (cn)
