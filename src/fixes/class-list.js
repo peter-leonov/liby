@@ -87,7 +87,8 @@ ClassList.prototype =
 	
 	item: function (n)
 	{
-		return this.toArray()[n]
+		var v = this.toArray()[n]
+		return v === undefined ? null : v
 	},
 	
 	getLength: function ()
@@ -97,6 +98,15 @@ ClassList.prototype =
 }
 
 ClassList.prototype.__defineGetter__('length', ClassList.prototype.getLength)
+
+function bakeItemGetter (n)
+{
+	return function () { return this.item(n) }
+}
+
+for (var i = 0; i < 100; i++)
+	ClassList.prototype.__defineGetter__(i, bakeItemGetter(i))
+
 
 function getClassList ()
 {
