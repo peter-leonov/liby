@@ -18,11 +18,12 @@ ClassList.prototype =
 		
 		var className = node.className
 		if (!className)
+		{
 			node.className = cn
+			return
+		}
 		else
 			node.className = className + ' ' + cn
-		
-		return cn
 	},
 	
 	remove: function (cn)
@@ -43,7 +44,6 @@ ClassList.prototype =
 			
 			node.className = className.replace(rex, ' ').replace(/^\s+|\s+$/g, '') // trim
 		}
-		return cn
 	},
 	
 	contains: function (cn)
@@ -71,9 +71,13 @@ ClassList.prototype =
 	toggle: function (cn)
 	{
 		if (this.contains(cn))
+		{
 			this.remove(cn)
-		else
-			this.add(cn)
+			return false
+		}
+		
+		this.add(cn)
+		return true
 	},
 	
 	toArray: function ()
