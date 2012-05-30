@@ -6,6 +6,8 @@ if (document.documentElement.classList)
 function ClassList (node)
 {
 	this.node = node
+	this.lastClassName = null
+	this.lastAry = null
 }
 
 var R = RegExp
@@ -21,6 +23,16 @@ function getRex (cn)
 	}
 	
 	return rexCache[cn] = new R('(?:^| +)(?:' + R.escape(cn) + '(?:$| +))+', 'g')
+}
+
+var aryCache = {}
+function classNameToArray (cn)
+{
+	var ary = aryCache[cn]
+	if (ary)
+		return ary
+	
+	return aryCache[cn] = cn.replace(/^ +| +$/g, '').split(/ +/)
 }
 
 ClassList.prototype =
@@ -85,7 +97,13 @@ ClassList.prototype =
 		if (!className)
 			return []
 		
-		return className.replace(/^\s+|\s+$/g, '').split(/ +/)
+		if (this.lastClassName == className)
+			return this.lastAry
+		
+		var ary = this.lastAry = classNameToArray(className)
+		this.lastClassName = className
+		
+		return ary
 	},
 	
 	item: function (n)
