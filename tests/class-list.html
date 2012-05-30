@@ -18,10 +18,10 @@ Tests.test(function (t)
 		
 		t.eq(cl.length, 0, 'length')
 		
-		t.no(cl.contains('a'), 'a')
+		t.no(cl.contains('a'), 'contains a 1')
 		node.className = 'a'
-		t.ok(cl.contains('a'), 'a')
-		t.ok(cl[0], 'a')
+		t.ok(cl.contains('a'), 'contains a 2')
+		t.eq(cl[0], 'a', '[0]')
 		t.eq(cl.length, 1, 'length')
 		
 		node.className = 'a b'
