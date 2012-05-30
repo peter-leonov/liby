@@ -60,10 +60,10 @@ Tests.test(function (t)
 		cl.remove('b')
 		t.eq(node.className, 'a c', 'remove')
 		
-		t.no(cl.toggle('a'), 'toggle to false')
+		t.eq(cl.toggle('a'), false, 'toggle to false')
 		t.eq(node.className, 'c', 'toggle a')
 		
-		t.ok(cl.toggle('a'), 'toggle to true')
+		t.eq(cl.toggle('a'), true, 'toggle to true')
 		t.eq(node.className, 'c a', 'toggle a')
 		
 		t.ok(cl.contains('a'), 'contains a')
