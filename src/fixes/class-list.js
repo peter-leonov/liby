@@ -8,7 +8,7 @@ function ClassList (node)
 	this.node = node
 }
 
-var R = RegExp, rexCache = {}
+var R = RegExp
 
 ClassList.prototype =
 {
@@ -39,15 +39,7 @@ ClassList.prototype =
 		var className = node.className
 		if (className)
 		{
-			var rex = rexCache[cn]
-			if (!rex)
-			{
-				// the following regexp has to be the exact copy of the regexp from hasClassName()
-				// because these two methods have the same regexp cache
-				rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
-				rexCache[cn] = rex
-			}
-			
+			var rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
 			node.className = className.replace(rex, ' ').replace(/^\s+|\s+$/g, '') // trim
 		}
 	},
@@ -60,17 +52,7 @@ ClassList.prototype =
 		if (className == cn)
 			return true
 		
-		// the following regexp has to be the exact copy of the regexp from removeClassName()
-		// because these two methods have the same regexp cache
-		var rex = rexCache[cn]
-		if (rex)
-			rex.lastIndex = 0
-		else
-		{
-			rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
-			rexCache[cn] = rex
-		}
-		
+		var rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
 		return rex.test(className)
 	},
 	
