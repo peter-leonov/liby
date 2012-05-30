@@ -40,8 +40,7 @@ ClassList.prototype =
 		if (!className)
 			return
 		
-		var rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
-		node.className = className.replace(rex, ' ').replace(/^\s+|\s+$/g, '') // trim
+		node.className = className.replace(new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g'), '∅').replace(/^∅|∅$/g, '').replace(/∅/g, ' ')
 	},
 	
 	contains: function (cn)
