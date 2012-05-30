@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Element#className manipulation tests</title>
+	<script src="tests.common.js"></script>
+	
+	<script src="../src/fixes/class-list.js"></script>
+	
+	<script src="../src/modules/prototype.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	function N ()
+	{
+		return document.createElement('div')
+	}
+	
+	t.test('classList.add()', function (t)
+	{
+		var fake = N()
+		fake.className = ''
+		fake.classList.add('a')
+		t.eq(fake.className, 'a', '""')
+		
+		var fake = N()
+		fake.className = '0'
+		fake.classList.add('a')
+		t.eq(fake.className, '0 a', '"0"')
+		
+		var node = N()
+		node.classList.add('a')
+		t.eq(node.className, 'a', '""')
+	})
+	
+	t.test('classList.remove()', function (t)
+	{
+		var fake = N()
+		fake.className = ''
+		fake.classList.remove('a')
+		t.eq(fake.className, '', '""')
+		
+		var fake = N()
+		fake.className = '0'
+		fake.classList.remove('a')
+		t.eq(fake.className, '0', '"0"')
+		
+		var node = N()
+		node.className = 'a'
+		node.classList.remove('a')
+		t.eq(node.className, '', '"a"')
+		
+		var node = N()
+		node.className = 'a a'
+		node.classList.remove('a')
+		t.eq(node.className, '', '"a a"')
+		
+		var node = N()
+		node.className = 'a a a a a a a a a'
+		node.classList.remove('a')
+		t.eq(node.className, '', '"a a a a a a a a a"')
+		
+		var node = N()
+		node.className = 'b a'
+		node.classList.remove('a')
+		t.eq(node.className, 'b', '"b a"')
+		
+		var node = N()
+		node.className = 'a b'
+		node.classList.remove('a')
+		t.eq(node.className, 'b', '"a b"')
+		
+		var node = N()
+		node.className = 'a b a b a a b b a'
+		node.classList.remove('a')
+		t.eq(node.className, 'b b b b', 'hard mix')
+		
+		var node = N()
+		node.className = ' a '
+		node.classList.remove('a')
+		t.eq(node.className, '', '" a "')
+		
+		var node = N()
+		node.className = ' a b '
+		node.classList.remove('a')
+		t.eq(node.className, 'b ', '" a b "')
+		
+		var node = N()
+		node.className = 'a a-b a'
+		node.classList.remove('a')
+		t.eq(node.className, 'a-b', '"a a-b a"')
+		
+		var node = N()
+		node.className = 'a-b-a-b-a a'
+		node.classList.remove('a')
+		t.eq(node.className, 'a-b-a-b-a', '"a-b-a-b-a a"')
+		
+		var node = N()
+		node.className = 'a-b-a-b-a'
+		node.classList.remove('a')
+		t.eq(node.className, 'a-b-a-b-a', '"a-b-a-b-a"')
+	})
+	
+	t.test('classList.contains()', function (t)
+	{
+		var fake = N()
+		fake.className = ''
+		t.no(fake.classList.contains('a'), '""')
+		
+		var fake = N()
+		fake.className = '0'
+		t.no(fake.classList.contains('a'), '"0"')
+		
+		var node = N()
+		t.no(node.classList.contains('a'), 'untouched')
+		
+		
+		var node = N()
+		node.className = 'a'
+		t.ok(node.classList.contains('a'), '"a"')
+		
+		var node = N()
+		node.className = 'a a'
+		t.ok(node.classList.contains('a'), '"a a"')
+		
+		var node = N()
+		node.className = 'a a a a a a a a a'
+		t.ok(node.classList.contains('a'), '"a a a a a a a a a"')
+		
+		var node = N()
+		node.className = 'b a'
+		t.ok(node.classList.contains('a'), '"b a"')
+		
+		var node = N()
+		node.className = 'b a '
+		t.ok(node.classList.contains('a'), '"b a "')
+		
+		var node = N()
+		node.className = 'c b a'
+		t.ok(node.classList.contains('a'), '"c b a"')
+		
+		var node = N()
+		node.className = 'a b'
+		t.ok(node.classList.contains('a'), '"a b"')
+		
+		var node = N()
+		node.className = 'a b a b a a b b a'
+		t.ok(node.classList.contains('a'), '"a b a b a a b b a"')
+		
+		var node = N()
+		node.className = ' a '
+		t.ok(node.classList.contains('a'), '" a "')
+		
+		var node = N()
+		node.className = ' a b '
+		t.ok(node.classList.contains('a'), '" a b "')
+		
+		var node = N()
+		node.className = 'a a-b a'
+		t.ok(node.classList.contains('a'), '"a a-b a"')
+		
+		var node = N()
+		node.className = 'a-b-a-b-a a'
+		t.ok(node.classList.contains('a'), '"a-b-a-b-a a"')
+		
+		var node = N()
+		node.className = 'a-b-a-b-a'
+		t.no(node.classList.contains('a'), '"a-b-a-b-a"')
+	})
+	
+	t.test('classList.toggle()', function (t)
+	{
+		var node = N()
+		node.className = ' x y y y x y y x '
+		node.classList.toggle('y')
+		t.eq(node.className, ' x x x ', '" x y y y x y y x "')
+		
+		var node = N()
+		node.className = 'x z'
+		node.classList.toggle('y')
+		t.eq(node.className, 'x z y', '"x z"')
+		
+		var node = N()
+		node.classList.toggle('y')
+		t.eq(node.className, 'y', 'untouched')
+		
+		var node = N()
+		node.classList.toggle('y')
+		t.eq(node.className, 'y', 'untouched true')
+	})
+	
+	t.test('regexp cache', function (t)
+	{
+		var node = N()
+		node.className = ' x y y y x y y x '
+		t.ok(node.classList.contains('y'), 'classList.contains(y)')
+		node.classList.remove('y')
+		t.eq(node.className, ' x x x ', '"x"')
+	})
+})
+</script>
+</body>
+</html>
