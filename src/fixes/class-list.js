@@ -10,6 +10,19 @@ function ClassList (node)
 
 var R = RegExp
 
+var rexCache = {}
+function getRex (cn)
+{
+	var rex = rexCache[cn]
+	if (rex)
+	{
+		rex.lastIndex = 0
+		return rex
+	}
+	
+	return rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
+}
+
 ClassList.prototype =
 {
 	add: function (cn)
@@ -40,7 +53,7 @@ ClassList.prototype =
 		if (!className)
 			return
 		
-		node.className = className.replace(new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g'), '∅').replace(/^∅|∅$/g, '').replace(/∅/g, ' ')
+		node.className = className.replace(getRex(cn), '∅').replace(/^∅|∅$/g, '').replace(/∅/g, ' ')
 	},
 	
 	contains: function (cn)
@@ -51,8 +64,7 @@ ClassList.prototype =
 		if (className == cn)
 			return true
 		
-		var rex = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
-		return rex.test(className)
+		return getRex(cn).test(className)
 	},
 	
 	toggle: function (cn)
