@@ -75,7 +75,16 @@ function isEmpty (s)
 	return true
 }
 
-add(Object, {add: add, extend: extend, copy: copy, keys: keys, keysCount: keysCount, values: values, isEmpty: isEmpty})
+function defineProperty (o, p, c)
+{
+	if (c.get)
+		o.__defineGetter__(p, c.get)
+	
+	if (c.set)
+		o.__defineSetter__(p, c.set)
+}
+
+add(Object, {add: add, extend: extend, copy: copy, keys: keys, keysCount: keysCount, values: values, isEmpty: isEmpty, defineProperty: defineProperty})
 
 })();
 
