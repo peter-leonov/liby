@@ -63,6 +63,11 @@ Tests.test(function (t)
 		t.eq(node.className, '', '"a a a a a a a a a"')
 		
 		var node = N()
+		node.className = '   a a a a   a a a a a  '
+		node.classList.remove('a')
+		t.eq(node.className, '', '"   a a a a   a a a a a  "')
+		
+		var node = N()
 		node.className = 'b a'
 		node.classList.remove('a')
 		t.eq(node.className, 'b', '"b a"')
