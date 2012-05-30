@@ -194,3 +194,17 @@ Object.add(Array.prototype, {indexOf: indexOf, forEach: forEach, map: map})
 Object.add(Array, {copy: copy})
 
 })();
+
+
+;(function(){
+
+var meta = /([\\\.\*\+\?\$\^\|\(\)\[\]\{\}])/g
+
+function escape (str)
+{
+	return ('' + str).replace(meta, '\\$1')
+}
+
+Object.add(RegExp, {escape: escape})
+
+})();
