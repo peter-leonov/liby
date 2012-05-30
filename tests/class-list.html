@@ -34,6 +34,8 @@ Tests.test(function (t)
 		node.className = 'a b c'
 		t.like(Array.copy(cl), ['a', 'b', 'c'], 'list')
 		t.eq(cl.item(1), 'b', 'item(1)')
+		t.eq(cl.item(10), null, 'item(10)')
+		t.eq(cl.item(99), null, 'item(99)')
 		
 		node.className = ''
 		t.no(cl.contains('a'), 'a')
