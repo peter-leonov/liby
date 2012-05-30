@@ -89,6 +89,16 @@ Tests.test(function (t)
 		t.eq(node.className, '  a c', 'toggled d again')
 	})
 	
+	t.test('duples', function (t)
+	{
+		var node = document.createElement('div')
+		var cl = node.classList
+		
+		node.className = '  a b  a c  a '
+		cl.remove('a')
+		t.eq(node.className, 'b c', 'without spaces')
+	})
+	
 	t.test('bad names in className', function (t)
 	{
 		var node = document.createElement('div')
