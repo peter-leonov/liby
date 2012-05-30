@@ -13,6 +13,14 @@
 <script>
 Tests.test(function (t)
 {
+	function copy (list)
+	{
+		var ary = []
+		for (var i = 0, il = list.length; i < il; i++)
+			ary[i] = list.item(i)
+		return ary
+	}
+	
 	t.test('write className read classList', function (t)
 	{
 		var node = document.createElement('div')
@@ -32,7 +40,7 @@ Tests.test(function (t)
 		t.eq(cl.length, 2, 'length')
 		
 		node.className = 'a b c'
-		t.like(Array.copy(cl), ['a', 'b', 'c'], 'list')
+		t.like(copy(cl), ['a', 'b', 'c'], 'list')
 		t.eq(cl.item(1), 'b', 'item(1)')
 		t.eq(cl.item(10), null, 'item(10)')
 		t.eq(cl.item(99), null, 'item(99)')
@@ -77,7 +85,7 @@ Tests.test(function (t)
 		
 		node.className = '  a b   c  '
 		t.eq(node.className, '  a b   c  ', 'lots of spaces')
-		t.like(Array.copy(cl), ['a', 'b', 'c'], 'list')
+		t.like(copy(cl), ['a', 'b', 'c'], 'list')
 		
 		cl.add('d')
 		t.eq(node.className, '  a b   c  d', 'added d')
@@ -106,7 +114,7 @@ Tests.test(function (t)
 		
 		node.className = 'b:n a b x,f [-] c'
 		t.eq(node.className, 'b:n a b x,f [-] c', 'lots of spaces')
-		t.like(Array.copy(cl), ['b:n', 'a', 'b', 'x,f', '[-]', 'c'], 'list')
+		t.like(copy(cl), ['b:n', 'a', 'b', 'x,f', '[-]', 'c'], 'list')
 		
 		cl.add('d')
 		t.eq(node.className, 'b:n a b x,f [-] c d', 'same string')
