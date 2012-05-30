@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Tests for element.classList</title>
+	<script src="tests.common.js"></script>
+	
+	<script src="../src/modules/prototype.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	t.test('write className read classList', function (t)
+	{
+		var node = document.createElement('div')
+		
+		var cl = node.classList
+		t.eq(cl.length, 0, 'length')
+		
+		t.no(cl.contains('a'), 'a')
+		node.className = 'a'
+		t.ok(cl.contains('a'), 'a')
+		t.ok(cl[0], 'a')
+		t.eq(cl.length, 1, 'length')
+		
+		node.className = 'a b'
+		t.ok(cl.contains('a'), 'a')
+		t.ok(cl.contains('b'), 'b')
+		t.eq(cl.length, 2, 'length')
+		
+		node.className = 'a b c'
+		t.like(Array.copy(cl), ['a', 'b', 'c'], 'list')
+		
+		node.className = ''
+		t.no(cl.contains('a'), 'a')
+		t.no(cl.contains('b'), 'b')
+		t.eq(cl.length, 0, 'length')
+	})
+	
+	t.test('write classList read className', function (t)
+	{
+		var node = document.createElement('div')
+		
+		var cl = node.classList
+		t.eq(node.className, '', 'empty')
+		
+		cl.add('a')
+		t.eq(node.className, 'a', 'add one')
+		
+		cl.add('b')
+		cl.add('c')
+		t.eq(node.className, 'a b c', 'add two more')
+		
+		cl.remove('b')
+		t.eq(node.className, 'a c', 'remove')
+		
+		cl.toggle('a')
+		t.eq(node.className, 'c', 'toggle a')
+		
+		cl.toggle('a')
+		t.eq(node.className, 'c a', 'toggle a')
+		
+		t.ok(cl.contains('a'), 'contains a')
+		t.no(cl.contains('b'), 'contains b')
+	})
+})
+</script>
+</body>
+</html>
