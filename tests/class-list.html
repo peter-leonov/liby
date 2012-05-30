@@ -80,13 +80,13 @@ Tests.test(function (t)
 		t.like(Array.copy(cl), ['a', 'b', 'c'], 'list')
 		
 		cl.add('d')
-		t.eq(node.className, '  a b   c  d', 'same spaces')
+		t.eq(node.className, '  a b   c  d', 'added d')
 		
 		cl.toggle('d')
-		t.eq(node.className, '  a b   c', 'same spaces except trailing ones')
+		t.eq(node.className, '  a b   c', 'toggled d')
 		
 		cl.toggle('b')
-		t.eq(node.className, '  a c', 'same spaces except those around b')
+		t.eq(node.className, '  a c', 'toggled d again')
 	})
 	
 	t.test('bad names in className', function (t)
