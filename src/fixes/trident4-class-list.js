@@ -5,8 +5,6 @@ function ClassList (node)
 	this.node = node
 	this.lastClassName = null
 	this.lastAry = null
-	
-	
 }
 
 var R = RegExp

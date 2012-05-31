@@ -43,5 +43,15 @@ Array.prototype.indexOf = function (v, i)
 	return -1
 }
 
+var sp = String.prototype
+var substr = sp.substr
+sp.substr = function  (start, length)
+{
+	if (start < 0)
+		start = this.length + start
+	
+	return substr.call(this, start, length)
+}
+
 
 })();
