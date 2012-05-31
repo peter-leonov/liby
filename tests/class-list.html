@@ -25,17 +25,13 @@ Tests.test(function (t)
 		var node = document.createElement('div')
 		var cl = node.classList
 		
-		t.eq(cl.length, 0, 'length')
-		
 		t.no(cl.contains('a'), 'contains a 1')
 		node.className = 'a'
 		t.ok(cl.contains('a'), 'contains a 2')
-		t.eq(cl.length, 1, 'length')
 		
 		node.className = 'a b'
 		t.ok(cl.contains('a'), 'a')
 		t.ok(cl.contains('b'), 'b')
-		t.eq(cl.length, 2, 'length')
 		
 		node.className = 'a b c'
 		t.like(copy(cl), ['a', 'b', 'c'], 'list')
@@ -46,7 +42,6 @@ Tests.test(function (t)
 		node.className = ''
 		t.no(cl.contains('a'), 'a')
 		t.no(cl.contains('b'), 'b')
-		t.eq(cl.length, 0, 'length')
 	})
 	
 	t.test('write classList read className', function (t)
