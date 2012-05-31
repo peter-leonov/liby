@@ -14,6 +14,9 @@ Tests.test(function (t)
 {
 	function copy (list)
 	{
+		if (list.toArray)
+			return list.toArray()
+		
 		var ary = []
 		for (var i = 0, il = list.length; i < il; i++)
 			ary[i] = list.item(i)
