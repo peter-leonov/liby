@@ -18,8 +18,8 @@ function ClassList (node)
 	node.attachEvent('onpropertychange', propertychange)
 }
 
-ClassList.prototype = new CommonClassList()
-ClassList.prototype.sync = function ()
+var proto = ClassList.prototype = new CommonClassList()
+proto.sync = function ()
 {
 	var ary = this.toArray()
 	
@@ -34,6 +34,8 @@ ClassList.prototype.sync = function ()
 	this.length = length
 }
 
+for (var i = 0; i < 100; i++)
+	proto[i] = null
 
 function getClassList ()
 {
