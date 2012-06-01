@@ -5,6 +5,17 @@ function ClassList (node)
 	this.node = node
 	this.lastClassName = null
 	this.lastAry = null
+	this.length = 0
+	
+	var me = this
+	function propertychange (e)
+	{
+		if (e.propertyName != 'className')
+			return
+		
+		me.sync()
+	}
+	node.attachEvent('onpropertychange', propertychange)
 }
 
 var R = RegExp
@@ -107,6 +118,21 @@ ClassList.prototype =
 	{
 		var v = this.toArray()[n]
 		return v === undefined ? null : v
+	},
+	
+	sync: function ()
+	{
+		var ary = this.toArray()
+		
+		var length = this.length
+		for (var i = 0; i < length; i++)
+			this[i] = undefined
+		
+		var length = ary.length
+		for (var i = 0; i < length; i++)
+			this[i] = ary[i]
+		
+		this.length = length
 	}
 }
 
