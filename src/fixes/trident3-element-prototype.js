@@ -18,9 +18,9 @@ function fixNodes (nodes)
 
 function fixNode (node)
 {
-	if (node.__pmc__nodeFixed)
+	if (node.__liby__nodeFixed)
 		return
-	node.__pmc__nodeFixed = true
+	node.__liby__nodeFixed = true
 	
 	var klass = classByNodeName[node.nodeName] || Element
 	
@@ -39,10 +39,10 @@ function fixNode (node)
 // var sandbox = document.createElement('div')
 // document.documentElement.appendChild(sandbox)
 
-doc.__pmc__createElement = doc.createElement
+doc.__liby__createElement = doc.createElement
 doc.createElement = function (type)
 {
-	var node = doc.__pmc__createElement(type)
+	var node = doc.__liby__createElement(type)
 	fixNode(node)
 	// sandbox.appendChild(node)
 	return node
@@ -50,6 +50,6 @@ doc.createElement = function (type)
 
 // events must be fixed at this point to preserve handlers call order
 document.addEventListener('DOMContentLoaded', function () { fixNodes(doc.all) })
-document.__pmc__fixNodes = fixNodes
+document.__liby__fixNodes = fixNodes
 
 })();

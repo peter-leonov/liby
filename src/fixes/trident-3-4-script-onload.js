@@ -13,7 +13,7 @@ HTMLScriptElement.__liby_fixHook = function (node)
 	}
 	
 	node.attachEvent('onreadystatechange', onreadystatechange)
-	node.__pmc_getListeners('load')
+	node.__liby_getListeners('load')
 }
 
 })();

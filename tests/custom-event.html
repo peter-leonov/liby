@@ -30,8 +30,8 @@ Tests.test(function (t)
 			var node = document.getElementById('test-node-2'), calls = 0
 			function handler (e) { calls++ }
 			
-			var type = document.__pmc__eventTransport
-			t.log('transport event is "' + document.__pmc__eventTransport + '"')
+			var type = document.__liby__eventTransport
+			t.log('transport event is "' + document.__liby__eventTransport + '"')
 			
 			document.attachEvent('on' + type, handler)
 			node.fireEvent('on' + type, document.createEventObject())

@@ -2,7 +2,7 @@
 
 HTMLFormElement.__liby_fixHook = function (node)
 {
-	node.__pmc__bindCatcher('submit')
+	node.__liby__bindCatcher('submit')
 }
 
 })();

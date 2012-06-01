@@ -1,12 +1,12 @@
 (function(){
 
 var doc = document, docelem = doc.documentElement, win = window, undef
-win.__pmc_isWindow = true
+win.__liby_isWindow = true
 
 if (win.addEventListener || !win.attachEvent)
 	return
 
-var eventTransport = doc.__pmc__eventTransport = 'beforeeditfocus'
+var eventTransport = doc.__liby__eventTransport = 'beforeeditfocus'
 
 function elementSupportedEvents () {}
 var supportedEvents = elementSupportedEvents.prototype = {abort:1, activate:1, afterprint:1, afterupdate:1, beforeactivate:1, beforecopy:1, beforecut:1, beforedeactivate:1, beforeeditfocus:1, beforepaste:1, beforeprint:1, beforeunload:1, beforeupdate:1, blur:1, bounce:1, cellchange:1, change:1, click:1, contextmenu:1, controlselect:1, copy:1, cut:1, dataavailable:1, datasetchanged:1, datasetcomplete:1, dblclick:1, deactivate:1, drag:1, dragend:1, dragenter:1, dragleave:1, dragover:1, dragstart:1, drop:1, error:1, errorupdate:1, filterchange:1, finish:1, focus:1, focusin:1, focusout:1, help:1, keydown:1, keypress:1, keyup:1, layoutcomplete:1, load:2, losecapture:1, message:1, mousedown:1, mouseenter:1, mouseleave:1, mousemove:1, mouseout:1, mouseover:1, mouseup:1, mousewheel:1, move:1, moveend:1, movestart:1, offline:1, online:1, page:1, paste:1, progress:1, propertychange:1, readystatechange:1, reset:1, resize:1, resizeend:1, resizestart:1, rowenter:1, rowexit:1, rowsdelete:1, rowsinserted:1, scroll:1, select:1, selectionchange:1, selectstart:1, start:1, stop:1, storage:1, storagecommit:1, submit:2, timeout:1, unload:1}
@@ -75,14 +75,14 @@ Event.prototype =
 	
 	preventDefault: function ()
 	{
-		this.__pmc__event.returnValue = false
+		this.__liby__event.returnValue = false
 		this.defaultPrevented = true
 	},
 	
 	stopPropagation: function ()
 	{
 		this.__propagationStopped = true
-		this.__pmc__event.cancelBubble = true
+		this.__liby__event.cancelBubble = true
 	}
 }
 
@@ -135,20 +135,20 @@ var eventConstructors = {Event:Event, /*DocumentEvent:DocumentEvent,*/ UIEvent:U
 
 function getEventWrapper (e, kind)
 {
-	if (e.__pmc__wrapper)
-		return e.__pmc__wrapper
+	if (e.__liby__wrapper)
+		return e.__liby__wrapper
 	var w = new (eventConstructors[kind] || Event)()
 	w.__updateFromNative(e)
-	w.__pmc__event = e
-	e.__pmc__wrapper = w
+	w.__liby__event = e
+	e.__liby__wrapper = w
 	
 	return w
 }
 
-doc.__pmc__eventListeners = {}
-win.__pmc__eventListeners = {}
+doc.__liby__eventListeners = {}
+win.__liby__eventListeners = {}
 
-win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_dispatchEvent = function (w)
+win.__liby_dispatchEvent = doc.__liby_dispatchEvent = Element.prototype.__liby_dispatchEvent = function (w)
 {
 	var target = w.target,
 		node = this,
@@ -157,20 +157,20 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 	var branch = [], branchListeners = [], head, headListeners, // captures = [], bubbles = [],
 		all, byType, listeners
 	
-	if (target.__pmc_isWindow)
+	if (target.__liby_isWindow)
 	{
 		branch.push(win)
-		all = win.__pmc__eventListeners
+		all = win.__liby__eventListeners
 		branchListeners.push(all && all[type])
 	}
 	else if (target === doc)
 	{
 		branch.push(doc)
-		all = doc.__pmc__eventListeners
+		all = doc.__liby__eventListeners
 		branchListeners.push(all && all[type])
 		
 		branch.push(win)
-		all = win.__pmc__eventListeners
+		all = win.__liby__eventListeners
 		branchListeners.push(all && all[type])
 	}
 	else
@@ -178,12 +178,12 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 		for (; node; node = node.parentNode)
 		{
 			branch.push(node)
-			all = node.__pmc__eventListeners
+			all = node.__liby__eventListeners
 			branchListeners.push(all && all[type])
 		}
 		
 		branch.push(win)
-		all = win.__pmc__eventListeners
+		all = win.__liby__eventListeners
 		branchListeners.push(all && all[type])
 	}
 	
@@ -320,17 +320,17 @@ win.__pmc_dispatchEvent = doc.__pmc_dispatchEvent = Element.prototype.__pmc_disp
 	}
 }
 
-win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getListeners = function (type, dir)
+win.__liby_getListeners = doc.__liby_getListeners = Element.prototype.__liby_getListeners = function (type, dir)
 {
-	var all = this.__pmc__eventListeners
+	var all = this.__liby__eventListeners
 	if (!all)
-		all = this.__pmc__eventListeners = {}
+		all = this.__liby__eventListeners = {}
 	
 	var byType = all[type]
 	if (!byType)
 	{
 		byType = all[type] = []
-		byType.catcher = this.__pmc__bindCatcher(type)
+		byType.catcher = this.__liby__bindCatcher(type)
 	}
 	
 	var listeners = byType[dir]
@@ -340,27 +340,27 @@ win.__pmc_getListeners = doc.__pmc_getListeners = Element.prototype.__pmc_getLis
 	return listeners
 }
 
-win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindCatcher = function (type)
+win.__liby__bindCatcher = doc.__liby__bindCatcher = Element.prototype.__liby__bindCatcher = function (type)
 {
-	var c = this.__pmc__catcher
+	var c = this.__liby__catcher
 	if (!c)
 	{
 		var node = this
 		function catcher ()
 		{
-			if (event.__pmc_dispatched)
+			if (event.__liby_dispatched)
 				return
-			event.__pmc_dispatched = true
+			event.__liby_dispatched = true
 			
 			var w = getEventWrapper(event)
 			
-			node.__pmc_dispatchEvent(w)
+			node.__liby_dispatchEvent(w)
 		}
 		
-		c = this.__pmc__catcher = catcher
+		c = this.__liby__catcher = catcher
 	}
 	
-	var key = '__pmc_catcher_bind:' + type
+	var key = '__liby_catcher_bind:' + type
 	if (!c[key])
 	{
 		this.attachEvent('on' + type, c)
@@ -369,9 +369,9 @@ win.__pmc__bindCatcher = doc.__pmc__bindCatcher = Element.prototype.__pmc__bindC
 	return catcher
 }
 
-win.__pmc_addEventListener = doc.__pmc_addEventListener = Element.prototype.__pmc_addEventListener = function (type, func, dir)
+win.__liby_addEventListener = doc.__liby_addEventListener = Element.prototype.__liby_addEventListener = function (type, func, dir)
 {
-	var listeners = this.__pmc_getListeners(type, dir)
+	var listeners = this.__liby_getListeners(type, dir)
 	
 	var dup = listeners.indexOf(func)
 	if (dup != -1)
@@ -380,9 +380,9 @@ win.__pmc_addEventListener = doc.__pmc_addEventListener = Element.prototype.__pm
 	listeners.push(func)
 }
 
-win.__pmc_removeEventListener = doc.__pmc_removeEventListener = Element.prototype.__pmc_removeEventListener = function (type, func, dir)
+win.__liby_removeEventListener = doc.__liby_removeEventListener = Element.prototype.__liby_removeEventListener = function (type, func, dir)
 {
-	var all = this.__pmc__eventListeners
+	var all = this.__liby__eventListeners
 	if (!all)
 		return
 	
@@ -408,19 +408,19 @@ win.__pmc_removeEventListener = doc.__pmc_removeEventListener = Element.prototyp
 
 doc.addEventListener = Element.prototype.addEventListener = function (type, func, dir)
 {
-	this.__pmc_addEventListener(type, func, dir ? 1 : 0)
+	this.__liby_addEventListener(type, func, dir ? 1 : 0)
 }
 
 win.addEventListener = function (type, func, dir)
 {
 	// returned catcher is useless ATM
-	document.__pmc__bindCatcher(type)
-	this.__pmc_addEventListener(type, func, dir ? 1 : 0)
+	document.__liby__bindCatcher(type)
+	this.__liby_addEventListener(type, func, dir ? 1 : 0)
 }
 
 win.removeEventListener = doc.removeEventListener = Element.prototype.removeEventListener = function (type, func, dir)
 {
-	this.__pmc_removeEventListener(type, func, dir ? 1 : 0)
+	this.__liby_removeEventListener(type, func, dir ? 1 : 0)
 }
 
 
@@ -436,9 +436,9 @@ doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 	w.target = this
 	
 	if (isEventSupportedOnNode(this, type))
-		this.fireEvent('on' + type, w.__pmc__event)
+		this.fireEvent('on' + type, w.__liby__event)
 	else
-		this.__pmc_dispatchEvent(w)
+		this.__liby_dispatchEvent(w)
 	
 	return !w.defaultPrevented
 }
@@ -448,7 +448,7 @@ doc.dispatchEvent = Element.prototype.dispatchEvent = function (w)
 win.dispatchEvent = function (w)
 {
 	w.target = this
-	this.__pmc_dispatchEvent(w)
+	this.__liby_dispatchEvent(w)
 	return !w.defaultPrevented
 }
 
