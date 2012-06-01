@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Look for DOM classes</title>
+	<script src="tests.common.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	t.ok(window.Element, 'Element')
+	t.ok(window.HTMLScriptElement, 'HTMLScriptElement')
+	t.ok(window.HTMLInputElement, 'HTMLInputElement')
+	t.ok(window.HTMLFormElement, 'HTMLFormElement')
+	t.ok(window.HTMLImageElement, 'HTMLImageElement')
+})
+</script>
+</body>
+</html>
