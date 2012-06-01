@@ -30,7 +30,7 @@ function fixNode (node)
 	// Fixinf for MSIE 8 is needed to imlement such things
 	// as <input> focus bubbling, <script> onload event fix, etc.
 	
-	var hook = klass.__pmc_fixHook
+	var hook = klass.__liby_fixHook
 	if (hook)
 		hook(node)
 }

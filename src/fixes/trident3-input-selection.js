@@ -127,7 +127,7 @@ function setter ()
 }
 
 
-Me.__pmc_fixHook = function (node)
+Me.__liby_fixHook = function (node)
 {
 	node.attachEvent('onpropertychange', setter)
 	

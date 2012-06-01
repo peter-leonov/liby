@@ -1,6 +1,6 @@
 (function(){
 
-HTMLInputElement.__pmc_fixHook = function (node)
+HTMLInputElement.__liby_fixHook = function (node)
 {
 	node.__pmc__bindCatcher('select')
 }

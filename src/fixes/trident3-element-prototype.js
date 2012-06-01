@@ -30,7 +30,7 @@ function fixNode (node)
 	for (var p in proto)
 		node[p] = proto[p]
 	
-	var hook = klass.__pmc_fixHook
+	var hook = klass.__liby_fixHook
 	if (hook)
 		hook(node)
 }

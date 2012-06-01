@@ -1,6 +1,6 @@
 (function(){
 
-HTMLImageElement.__pmc_fixHook = function (node)
+HTMLImageElement.__liby_fixHook = function (node)
 {
 	node.__pmc__bindCatcher('dragstart')
 	node.__pmc__bindCatcher('drag')

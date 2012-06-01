@@ -1,6 +1,6 @@
 (function(){
 
-HTMLScriptElement.__pmc_fixHook = function (node)
+HTMLScriptElement.__liby_fixHook = function (node)
 {
 	function onreadystatechange (e)
 	{
