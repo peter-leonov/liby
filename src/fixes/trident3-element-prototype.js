@@ -35,12 +35,16 @@ function fixNode (node)
 		hook(node)
 }
 
+// // to fire propertychange (and other) events node has to be added to the document tree
+// var sandbox = document.createElement('div')
+// document.documentElement.appendChild(sandbox)
 
 doc.__pmc__createElement = doc.createElement
 doc.createElement = function (type)
 {
 	var node = doc.__pmc__createElement(type)
 	fixNode(node)
+	// sandbox.appendChild(node)
 	return node
 }
 
