@@ -1,6 +1,6 @@
 (function(){
 
-HTMLImageElement.__liby_fixHook = function (node)
+function fix (node)
 {
 	node.__liby__bindCatcher('dragstart')
 	node.__liby__bindCatcher('drag')
@@ -10,5 +10,7 @@ HTMLImageElement.__liby_fixHook = function (node)
 	node.__liby__bindCatcher('drop')
 	node.__liby__bindCatcher('dragend')
 }
+
+HTMLImageElement.__liby_fixHooks.push(fix)
 
 })();

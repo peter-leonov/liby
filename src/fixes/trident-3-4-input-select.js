@@ -1,8 +1,10 @@
 (function(){
 
-HTMLInputElement.__liby_fixHook = function (node)
+function fix (node)
 {
 	node.__liby__bindCatcher('select')
 }
+
+HTMLInputElement.__liby_fixHooks.push(fix)
 
 })();

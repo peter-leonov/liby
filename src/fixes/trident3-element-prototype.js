@@ -10,6 +10,17 @@ var classByNodeName =
 	'FORM': HTMLFormElement
 }
 
+Element.__liby_fixHooks = []
+for (var k in classByNodeName)
+	classByNodeName[k].__liby_fixHooks = []
+
+function bakeFixHooks ()
+{
+	var element = Element.__liby_fixHooks
+	for (var k in classByNodeName)
+		classByNodeName[k].__liby_fixHooks = element.concat(classByNodeName[k].__liby_fixHooks)
+}
+
 function fixNodes (nodes)
 {
 	for (var i = 0, il = nodes.length; i < il; i++)
@@ -30,9 +41,10 @@ function fixNode (node)
 	for (var p in proto)
 		node[p] = proto[p]
 	
-	var hook = klass.__liby_fixHook
-	if (hook)
-		hook(node)
+	var hooks = klass.__liby_fixHooks
+	if (hooks)
+		for (var i = 0, il = hooks.length; i < il; i++)
+			hooks[i](node)
 }
 
 // // to fire propertychange (and other) events node has to be added to the document tree
@@ -48,8 +60,14 @@ doc.createElement = function (type)
 	return node
 }
 
+function onload ()
+{
+	bakeFixHooks()
+	fixNodes(doc.all)
+}
+
 // events must be fixed at this point to preserve handlers call order
-document.addEventListener('DOMContentLoaded', function () { fixNodes(doc.all) })
+document.addEventListener('DOMContentLoaded', onload)
 document.__liby__fixNodes = fixNodes
 
 })();

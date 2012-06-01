@@ -1,6 +1,6 @@
 (function(){
 
-HTMLScriptElement.__liby_fixHook = function (node)
+function fix (node)
 {
 	function onreadystatechange (e)
 	{
@@ -15,5 +15,7 @@ HTMLScriptElement.__liby_fixHook = function (node)
 	node.attachEvent('onreadystatechange', onreadystatechange)
 	node.__liby_getListeners('load')
 }
+
+HTMLScriptElement.__liby_fixHooks.push(fix)
 
 })();

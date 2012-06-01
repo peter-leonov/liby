@@ -126,7 +126,7 @@ function setter ()
 }
 
 
-HTMLInputElement.__liby_fixHook = function (node)
+function fix (node)
 {
 	node.attachEvent('onpropertychange', setter)
 	
@@ -141,6 +141,7 @@ HTMLInputElement.__liby_fixHook = function (node)
 	node.addEventListener('focus', updateDelayed, false)
 }
 
+HTMLInputElement.__liby_fixHooks.push(fix)
 HTMLInputElement.prototype.selectionStart = 0
 HTMLInputElement.prototype.selectionEnd = 0
 
