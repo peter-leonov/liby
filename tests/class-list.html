@@ -144,6 +144,17 @@ Tests.test(function (t)
 		t.eq(cl[3], 'd', '[3]')
 		t.eq(cl[4], 'e', '[4]')
 		t.eq(cl[5], 'f', '[5]')
+		t.eq(cl[6], undefined, '[6]')
+		
+		node.className = 'a b'
+		t.eq(cl.length, 2, 'length')
+		t.eq(cl[0], 'a', '[0]')
+		t.eq(cl[1], 'b', '[1]')
+		t.eq(cl[2], undefined, '[2]')
+		t.eq(cl[3], undefined, '[3]')
+		t.eq(cl[4], undefined, '[4]')
+		t.eq(cl[5], undefined, '[5]')
+		t.eq(cl[6], undefined, '[6]')
 	})
 	
 	t.test('copy with Array.prototype.slice()', function (t)
