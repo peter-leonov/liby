@@ -136,6 +136,9 @@ Tests.test(function (t)
 		var node = document.createElement('div')
 		var cl = node.classList
 		
+		// for MSIE <= 8 to cache propertychange event
+		document.body.appendChild(node)
+		
 		node.className = 'a b c d e f'
 		t.eq(cl.length, 6, 'length')
 		t.eq(cl[0], 'a', '[0]')
