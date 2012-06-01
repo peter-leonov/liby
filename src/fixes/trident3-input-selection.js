@@ -5,8 +5,7 @@
 // http://javascript.nwbox.com/cursor_position/
 // http://msdn.microsoft.com/en-us/library/ms536620(v=VS.85).aspx
 
-var selection = document.selection,
-	Me = HTMLInputElement
+var selection = document.selection
 
 function updateSelection (node)
 {
@@ -127,7 +126,7 @@ function setter ()
 }
 
 
-Me.__liby_fixHook = function (node)
+HTMLInputElement.__liby_fixHook = function (node)
 {
 	node.attachEvent('onpropertychange', setter)
 	
@@ -142,7 +141,7 @@ Me.__liby_fixHook = function (node)
 	node.addEventListener('focus', updateDelayed, false)
 }
 
-Me.prototype.selectionStart = 0
-Me.prototype.selectionEnd = 0
+HTMLInputElement.prototype.selectionStart = 0
+HTMLInputElement.prototype.selectionEnd = 0
 
 })();
