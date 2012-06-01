@@ -46,6 +46,10 @@ Tests.test(function (t)
 		node.className = ''
 		t.no(cl.contains('a'), 'a')
 		t.no(cl.contains('b'), 'b')
+		
+		var node = document.createElement('img')
+		node.className = 'a'
+		t.ok(node.classList.contains('a'), 'img contains a')
 	})
 	
 	t.test('write classList read className', function (t)
