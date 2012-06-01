@@ -10,3 +10,4 @@
 <!--# include virtual="trident3-xml-http-request.js" -->
 <!--# include virtual="trident-3-4-window-page-offset.js" -->
 <!--# include virtual="trident3-selectors.js" -->
+<!--# include virtual="trident3-class-list.js" -->
