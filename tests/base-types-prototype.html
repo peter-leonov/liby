@@ -30,6 +30,11 @@ Tests.test(function (t)
 		
 		var a = {}
 		t.eq([1, 2, 3, a, 4].indexOf(a), 3, '[1, 2, 3, a, 4].indexOf(a)')
+		
+		t.eq([1, 2, 3, 2].indexOf(2), 1, '[1, 2, 3, 2].indexOf(2)')
+		t.eq([1, 2, 3, 2].indexOf(2, 2), 3, '[1, 2, 3, 2].indexOf(2, 2)')
+		t.eq([1, 2, 3, 2].indexOf(2, -3), 1, '[1, 2, 3, 2].indexOf(2, -3)')
+		t.eq([1, 2, 3, 2].indexOf(2, -2), 3, '[1, 2, 3, 2].indexOf(2, -2)')
 	})
 	
 	t.test('Array#each() simple case', function (t)
