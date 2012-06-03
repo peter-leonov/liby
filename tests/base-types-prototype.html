@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Base types tests</title>
+	<script src="tests.common.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	function arrayFrom (list)
+	{
+		var ary = []
+		for (var i = 0, il = list.length; i < il; i++)
+			ary[i] = list[i]
+		return ary
+	}
+	
+	t.test('String#substr(-n)', function (t)
+	{
+		t.eq('abcd'.substr(-2), 'cd', 'abcd.substr(-2)')
+	})
+	
+	
+	t.test('Array#indexOf()', function (t)
+	{
+		t.eq([1, 2, 3].indexOf(2), 1, '[1, 2, 3].indexOf(2)')
+		t.eq([1, 2, 3].indexOf(777), -1, '[1, 2, 3].indexOf(777)')
+		
+		var a = {}
+		t.eq([1, 2, 3, a, 4].indexOf(a), 3, '[1, 2, 3, a, 4].indexOf(a)')
+	})
+	
+	t.test('Array#each() simple case', function (t)
+	{
+		t.ok([].forEach, '[].forEach')
+		
+		var a = [1,2,3],
+			b = []
+		
+		a.forEach(function (v) { b.push(v) })
+		t.like(b[0], 1, 'b[0]')
+		t.like(b[1], 2, 'b[1]')
+		t.like(b[2], 3, 'b[2]')
+		t.like(b[3], undefined, 'b[3]')
+	})
+	
+	t.test('Array#each() hard case', function (t)
+	{
+		var o = {},
+			a = [1,2,3],
+			b = []
+		
+		a.forEach(function () { b.push([this].concat(arrayFrom(arguments))) }, o)
+		t.like(b[0], [o, 1, 0, a], 'b[0]')
+		t.like(b[1], [o, 2, 1, a], 'b[1]')
+		t.like(b[2], [o, 3, 2, a], 'b[2]')
+		t.like(b[3], undefined, 'b[3]')
+	})
+	
+	t.test('Array#map() simple case', function (t)
+	{
+		t.ok([].map, '[].map')
+		
+		var a = [1,2,3]
+		
+		var b = a.map(function (v) { return v * 2 })
+		t.like(b[0], 2, 'b[0]')
+		t.like(b[1], 4, 'b[1]')
+		t.like(b[2], 6, 'b[2]')
+		t.like(b[3], undefined, 'b[3]')
+	})
+	
+	t.test('Array#map() hard case', function (t)
+	{
+		var o = {},
+			a = [1,2,3],
+			b = []
+		
+		var c = a.map(function (v) { b.push([this].concat(arrayFrom(arguments))); return v * 2 }, o)
+		t.like(b[0], [o, 1, 0, a], 'b[0]')
+		t.like(b[1], [o, 2, 1, a], 'b[1]')
+		t.like(b[2], [o, 3, 2, a], 'b[2]')
+		t.like(b[3], undefined, 'b[3]')
+		
+		t.like(c[0], 2, 'c[0]')
+		t.like(c[1], 4, 'c[1]')
+		t.like(c[2], 6, 'c[2]')
+		t.like(c[3], undefined, 'c[3]')
+	})
+})
+</script>
+</body>
+</html>
