@@ -12,6 +12,14 @@
 <script>
 Tests.test(function (t)
 {
+	function arrayFrom (list)
+	{
+		var ary = []
+		for (var i = 0, il = list.length; i < il; i++)
+			ary[i] = list[i]
+		return ary
+	}
+	
 	t.test('Array#from()', function (t)
 	{
 		var a = [1,2,3,4,'5']
