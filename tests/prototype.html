@@ -21,6 +21,8 @@ Tests.test(function (t)
 			b = Array.from(a)
 		t.eq(a.length, b.length, 'nodes list length')
 		t.eq(a[2], b[2], 'nodes list [2]')
+		
+		t.like(Array.from({0: 1, 1: 2, 2: 3, length: 3}), [1, 2, 3], 'object with length property')
 	})
 	
 	
