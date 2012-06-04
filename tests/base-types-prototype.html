@@ -27,6 +27,21 @@ Tests.test(function (t)
 		t.eq('  abcd  '.trim(), 'abcd', 'abcd.trim()')
 	})
 	
+	t.test('String#localeCompare()', function (t)
+	{
+		t.ok(''.localeCompare, '"".localeCompare')
+		
+		t.eq('a'.localeCompare('a'), 0, '"a".localeCompare("a")')
+		t.lt('a'.localeCompare('b'), 0, '"a".localeCompare("b")')
+		t.gt('b'.localeCompare('a'), 0, '"b".localeCompare("a")')
+		
+		t.lt('aab'.localeCompare('aac'), 0, '"aab".localeCompare("aac")')
+		
+		t.lt('и'.localeCompare('й'), 0, '"и".localeCompare("й")')
+		
+		t.gt('1234'.localeCompare('01234'), 0, '"1234".localeCompare("01234")')
+	})
+	
 	
 	t.test('Array#indexOf()', function (t)
 	{
