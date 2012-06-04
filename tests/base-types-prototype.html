@@ -61,7 +61,7 @@ Tests.test(function (t)
 		t.eq([1, 2, 3, 2].indexOf(2, -2), 3, '[1, 2, 3, 2].indexOf(2, -2)')
 	})
 	
-	t.test('Array#each() simple case', function (t)
+	t.test('Array#forEach() simple case', function (t)
 	{
 		t.ok([].forEach, '[].forEach')
 		
@@ -75,7 +75,7 @@ Tests.test(function (t)
 		t.like(b[3], undefined, 'b[3]')
 	})
 	
-	t.test('Array#each() hard case', function (t)
+	t.test('Array#forEach() hard case', function (t)
 	{
 		var o = {},
 			a = [1,2,3],
