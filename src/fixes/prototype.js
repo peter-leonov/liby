@@ -95,16 +95,6 @@ if (!Object.defineProperty && o.__defineGetter__ && o.__defineSetter__)
 
 ;(function(){
 
-function localeCompare (a, b)
-{
-	if (a < b)
-		return -1
-	if (a > b)
-		return 1
-	
-	return 0
-}
-
 function trim ()
 {
 	return this.replace(/^\s+|\s+$/g, '')
@@ -115,7 +105,7 @@ function capitalize ()
 	return this.charAt(0).toUpperCase() + this.substr(1)
 }
 
-Object.add(String.prototype, {trim: trim, capitalize: capitalize, localeCompare: localeCompare})
+Object.add(String.prototype, {trim: trim, capitalize: capitalize})
 
 })();
 
@@ -146,50 +136,6 @@ Object.add(Function.prototype, {mixIn: mixIn, bind: bind})
 
 ;(function(){
 
-var ceil = Math.ceil, floor = Math.floor
-
-function indexOf (v, i)
-{
-	var len = this.length
-	
-	i = +i
-	
-	if (i)
-	{
-		if (i < 0)
-			i = ceil(i) + len
-		else
-			i = floor(i)
-	}
-	else
-	{
-		i = 0
-	}
-	
-	for (; i < len; i++)
-		if (i in this && this[i] === v)
-			return i
-	
-	return -1
-}
-
-function forEach (f, inv)
-{
-	for (var i = 0, il = this.length; i < il; i++)
-		f.call(inv, this[i], i, this)
-}
-
-function map (f, inv)
-{
-	var res = []
-	
-	for (var i = 0, il = this.length; i < il; i++)
-		if (i in this)
-			res[i] = f.call(inv, this[i], i, this)
-	
-	return res
-}
-
 function from (list)
 {
 	var ary = []
@@ -200,7 +146,6 @@ function from (list)
 	return ary
 }
 
-Object.add(Array.prototype, {indexOf: indexOf, forEach: forEach, map: map})
 Object.add(Array, {from: from})
 
 })();
