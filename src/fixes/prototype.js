@@ -127,12 +127,14 @@ function mixIn (module)
 	return Object.extend(this.prototype, module.prototype)
 }
 
-function bind (inv, args)
+function bind (inv)
 {
+	var args = Array.from(arguments).slice(1)
+	
 	var f = this
 	function wrapper ()
 	{
-		f.apply(inv, args || arguments)
+		return f.apply(inv, args.concat(Array.from(arguments)))
 	}
 	return wrapper
 }
