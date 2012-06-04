@@ -134,10 +134,7 @@ var myName = 'Tests', Me =
 	test: function (f)
 	{
 		this.callback = f
-		if (window.addEventListener)
-			window.addEventListener('load', this.onload, false)
-		else
-			window.onload = this.onload
+		window.onload = this.onload
 	},
 	
 	run: function ()
