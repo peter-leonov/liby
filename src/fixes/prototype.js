@@ -127,14 +127,6 @@ function mixIn (module)
 	return Object.extend(this.prototype, module.prototype)
 }
 
-function extend (s)
-{
-	for (var k in s)
-		this[k] = s[k]
-	
-	return this
-}
-
 function bind (inv, args)
 {
 	var f = this
@@ -145,7 +137,7 @@ function bind (inv, args)
 	return wrapper
 }
 
-Object.add(Function.prototype, {mixIn: mixIn, extend: extend, bind: bind})
+Object.add(Function.prototype, {mixIn: mixIn, bind: bind})
 
 })();
 
