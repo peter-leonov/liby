@@ -5,8 +5,6 @@
 	<title>Tests for some of the core prototype extensions</title>
 	<script src="tests.common.js"></script>
 	
-	<!--[if lte IE 7]><script src="../src/fixes/trident3.js"></script><![endif]-->
-	<!--[if IE 8]><script src="../src/fixes/trident4.js"></script><![endif]-->
 	<script src="../src/fixes/prototype.js"></script>
 </head>
 <body>
@@ -35,6 +33,18 @@ Tests.test(function (t)
 		t.eq('Abc'.capitalize(), 'Abc', 'Abc')
 		t.eq('эюя'.capitalize(), 'Эюя', 'эюя')
 		t.eq('Эюя'.capitalize(), 'Эюя', 'Эюя')
+	})
+	
+	
+	t.test('Object.*', function (t)
+	{
+		t.mayFail()
+		
+		t.type(Object.extend, 'function', 'Object.extend')
+		t.type(Object.keys, 'function', 'Object.keys')
+		t.type(Object.keysCount, 'function', 'Object.keysCount')
+		t.type(Object.values, 'function', 'Object.values')
+		t.type(Object.isEmpty, 'function', 'Object.isEmpty')
 	})
 })
 </script>

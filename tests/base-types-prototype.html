@@ -139,19 +139,6 @@ Tests.test(function (t)
 		t.like(f.call(o), [o], 'f()')
 		t.like(f.bind(o, 1, 2, 3)(4), [o, 1, 2, 3, 4], 'f.bind(o, 1, 2, 3)(4)')
 	})
-	
-	
-	t.test('Object.*', function (t)
-	{
-		t.mayFail()
-		
-		t.type(Object.extend, 'function', 'Object.extend')
-		t.type(Object.keys, 'function', 'Object.keys')
-		t.type(Object.keysCount, 'function', 'Object.keysCount')
-		t.type(Object.values, 'function', 'Object.values')
-		t.type(Object.isEmpty, 'function', 'Object.isEmpty')
-	})
-	
 })
 </script>
 </body>
