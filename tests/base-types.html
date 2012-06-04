@@ -34,6 +34,18 @@ Tests.test(function (t)
 	})
 	
 	
+	t.test('Array#concat()', function (t)
+	{
+		t.type([].concat, 'function', '[].concat')
+		
+		function f ()
+		{
+			return [1, 2].concat(arguments)
+		}
+		t.unlike(f(3, 4), [1, 2, 3, 4], '[…].concat(arguments)')
+	})
+	
+	
 	t.test('Array#splice()', function (t)
 	{
 		var arr = [1,2,3]
