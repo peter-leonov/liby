@@ -117,6 +117,17 @@ Tests.test(function (t)
 		t.like(c[3], undefined, 'c[3]')
 	})
 	
+	t.test('Array#concat()', function (t)
+	{
+		t.type([].concat, 'function', '[].concat')
+		
+		function f ()
+		{
+			return [1, 2].concat(arguments)
+		}
+		t.unlike(f(3, 4), [1, 2, 3, 4], '[…].concat(arguments)')
+	})
+	
 	
 	t.test('Function#bind() simple case', function (t)
 	{
