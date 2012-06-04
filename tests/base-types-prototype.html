@@ -22,6 +22,11 @@ Tests.test(function (t)
 		t.eq('abcd'.substr(-2), 'cd', 'abcd.substr(-2)')
 	})
 	
+	t.test('String#trim()', function (t)
+	{
+		t.eq('  abcd  '.trim(), 'abcd', 'abcd.trim()')
+	})
+	
 	
 	t.test('Array#indexOf()', function (t)
 	{
