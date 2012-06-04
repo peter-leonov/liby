@@ -99,6 +99,27 @@ Tests.test(function (t)
 		t.like(c[2], 6, 'c[2]')
 		t.like(c[3], undefined, 'c[3]')
 	})
+	
+	
+	t.test('Function#bind() simple case', function (t)
+	{
+		var f = function () { return this }
+		
+		t.ok(f.bind, 'f.bind')
+		
+		var o = {}
+		t.eq(f(), self, 'f()')
+		t.eq(f.bind(o)(), o, 'f.bind(o)()')
+	})
+	
+	t.test('Function#bind() hard case', function (t)
+	{
+		var f = function () { return [this].concat(arrayFrom(arguments)) }
+		
+		var o = {}
+		t.like(f.call(o), [o], 'f()')
+		t.like(f.bind(o, 1, 2, 3)(4), [o, 1, 2, 3, 4], 'f.bind(o, 1, 2, 3)(4)')
+	})
 })
 </script>
 </body>
