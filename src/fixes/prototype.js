@@ -188,14 +188,18 @@ function map (f, inv)
 	return res
 }
 
-var slice = Array.prototype.slice
-function copy (ary)
+function from (list)
 {
-	return slice.call(ary)
+	var ary = []
+	
+	for (var i = 0, il = list.length; i < il; i++)
+		ary[i] = list[i]
+	
+	return ary
 }
 
 Object.add(Array.prototype, {indexOf: indexOf, forEach: forEach, map: map})
-Object.add(Array, {copy: copy})
+Object.add(Array, {from: from})
 
 })();
 
