@@ -111,8 +111,7 @@ function capitalize ()
 	return this.charAt(0).toUpperCase() + this.substr(1)
 }
 
-Object.add(String, {localeCompare: localeCompare})
-Object.add(String.prototype, {trim: trim, capitalize: capitalize})
+Object.add(String.prototype, {trim: trim, capitalize: capitalize, localeCompare: localeCompare})
 
 })();
 
