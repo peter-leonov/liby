@@ -9,7 +9,7 @@ window.$$ = function (query, root)
 		return []
 	}
 	
-	return Array.copy(list)
+	return Array.from(list)
 }
 window.$ = function (query, root)
 {

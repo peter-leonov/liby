@@ -266,7 +266,7 @@ var Selecter1 =
 		{
 			if (typeof num !== 'number')
 				num = this.getValueNumber(num)
-			var optionsChilds = Array.copy(this.nodes.options.childNodes)
+			var optionsChilds = Array.from(this.nodes.options.childNodes)
 			var selected = optionsChilds[num]
 			if (selected)
 			{

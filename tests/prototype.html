@@ -14,13 +14,13 @@
 <script>
 Tests.test(function (t)
 {
-	t.test('Array#copy()', function (t)
+	t.test('Array#from()', function (t)
 	{
 		var a = [1,2,3,4,'5']
-		t.like(a, Array.copy(a), 'plain array')
+		t.like(a, Array.from(a), 'plain array')
 		
 		var a = document.getElementsByTagName('p'),
-			b = Array.copy(a)
+			b = Array.from(a)
 		t.eq(a.length, b.length, 'nodes list length')
 		t.eq(a[2], b[2], 'nodes list [2]')
 	})
