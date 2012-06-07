@@ -48,6 +48,8 @@ Tests.test(function (t)
 		t.eq(cl.item(10), null, 'item(10)')
 		t.eq(cl.item(99), null, 'item(99)')
 		
+		t.eq('' + cl, 'a b c', 'toString()')
+		
 		node.className = ''
 		t.no(cl.contains('a'), 'a')
 		t.no(cl.contains('b'), 'b')

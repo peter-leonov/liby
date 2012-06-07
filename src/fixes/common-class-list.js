@@ -104,6 +104,11 @@ ClassList.prototype =
 	{
 		var v = this.toArray()[n]
 		return v === undefined ? null : v
+	},
+	
+	toString: function ()
+	{
+		return this.node.className
 	}
 }
 
