@@ -29,6 +29,18 @@ Tests.test(function (t)
 		return ary
 	}
 	
+	t.test('extend', function (t)
+	{
+		var node = document.createElement('div')
+		var cl = node.classList
+		
+		t.ok(window.DOMTokenList, 'DOMTokenList')
+		
+		DOMTokenList.prototype.abcdefGH = function () { return 123 }
+		
+		t.eq(cl.abcdefGH(), 123, 'cl.abcdefGH()')
+	})
+	
 	t.test('write className read classList', function (t)
 	{
 		var node = document.createElement('div')
