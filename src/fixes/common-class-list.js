@@ -114,4 +114,8 @@ ClassList.prototype =
 
 window.CommonClassList = ClassList
 
+if (!window.DOMTokenList)
+	window.DOMTokenList = ClassList
+
+
 })();
