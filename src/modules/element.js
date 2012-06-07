@@ -1,5 +1,15 @@
 ;(function(){
 
+function toggleTo (cn, state)
+{
+	if (!!this.contains(cn) == !!state)
+		return
+	
+	this.toggle(cn)
+}
+
+DOMTokenList.prototype.toggleTo = toggleTo
+
 var R = RegExp, rexCache = {}
 
 Object.add
