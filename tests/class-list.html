@@ -95,8 +95,8 @@ Tests.test(function (t)
 		t.eq(cl.toggle('a'), true, 'toggle to true')
 		t.eq(node.className, 'c a', 'toggle a')
 		
-		t.ok(cl.contains('a'), 'contains a')
-		t.no(cl.contains('b'), 'contains b')
+		t.eq(cl.contains('a'), true, 'contains a')
+		t.eq(cl.contains('b'), false, 'contains b')
 	})
 	
 	t.test('spaces in className', function (t)
