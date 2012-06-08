@@ -16,12 +16,6 @@ Object.add
 (
 	Element.prototype,
 	{
-		setClassName: function (cn)
-		{
-			this.className = cn
-			return cn
-		},
-		
 		addClassName: function (cn)
 		{
 			// this.removeClassName(cn)

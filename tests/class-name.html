@@ -195,17 +195,6 @@ Tests.test(function (t)
 		t.no(node.hasClassName('a'), '"a-b-a-b-a"')
 	})
 	
-	t.test('setClassName()', function (t)
-	{
-		var node = test1.cloneNode(true)
-		node.setClassName('y')
-		t.eq(node.className, 'y', '"y"')
-		
-		var node = test1.cloneNode(true)
-		node.setClassName('x y')
-		t.eq(node.className, 'x y', '"x y"')
-	})
-	
 	t.test('regexp cache', function (t)
 	{
 		var node = test1.cloneNode(true)
