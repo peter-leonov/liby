@@ -25,9 +25,7 @@ function classNameToArray (cn)
 	return aryCache[cn] = cn.replace(/^ +| +$/g, '').split(/ +/)
 }
 
-function ClassList () {}
-
-ClassList.prototype =
+var ClassList_prototype =
 {
 	lastClassName: null,
 	lastAry: null,
@@ -112,10 +110,18 @@ ClassList.prototype =
 	}
 }
 
+function Proxy (proto)
+{
+	for (var k in proto)
+		this[k] = proto[k]
+	
+	this.toString = proto.toString
+}
+Proxy.prototype = DOMTokenList.prototype
+
+function ClassList () {}
+ClassList.prototype = new Proxy(ClassList_prototype)
+
 window.CommonClassList = ClassList
-
-if (!window.DOMTokenList)
-	window.DOMTokenList = ClassList
-
 
 })();

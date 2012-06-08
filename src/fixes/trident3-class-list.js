@@ -1,3 +1,9 @@
+;(function(){
+
+window.DOMTokenList = function () {}
+
+})();
+
 <!--# include virtual="common-class-list.js" -->
 
 ;(function(){
