@@ -92,12 +92,12 @@ Me.prototype =
 		var tabs = nodes.tabs
 		for (var i = 0; i < tabs.length; i++)
 			if ((node = tabs[i]))
-				node.toggleClassName('selected', num === i)
+				node.classList.toggleTo('selected', num === i)
 		
 		var sections = nodes.sections
 		for (var i = 0; i < sections.length; i++)
 			if ((node = sections[i]))
-				node.toggleClassName('hidden', num !== i)
+				node.classList.toggleTo('hidden', num !== i)
 	}
 }
 

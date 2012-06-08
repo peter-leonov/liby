@@ -56,16 +56,6 @@ Object.add
 			return cn
 		},
 		
-		toggleClassName: function (cn, state)
-		{
-			if (arguments.length < 2)
-				state = !this.hasClassName(cn)
-			
-			this.removeClassName(cn)
-			if (state)
-				this.addClassName(cn)
-		},
-		
 		hasClassName: function (cn)
 		{
 			var className = this.className

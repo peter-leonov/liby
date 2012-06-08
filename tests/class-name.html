@@ -21,7 +21,6 @@ Tests.test(function (t)
 		var methods = {}
 		methods.addClassName = test1.addClassName
 		methods.removeClassName = test1.removeClassName
-		methods.toggleClassName = test1.toggleClassName
 		
 		var fake = {className: undefined}
 		Object.add(fake, methods)
@@ -48,7 +47,6 @@ Tests.test(function (t)
 		var methods = {}
 		methods.addClassName = test1.addClassName
 		methods.removeClassName = test1.removeClassName
-		methods.toggleClassName = test1.toggleClassName
 		
 		var fake = {className: undefined}
 		Object.add(fake, methods)
@@ -126,7 +124,6 @@ Tests.test(function (t)
 		var methods = {}
 		methods.addClassName = test1.addClassName
 		methods.removeClassName = test1.removeClassName
-		methods.toggleClassName = test1.toggleClassName
 		methods.hasClassName = test1.hasClassName
 		
 		var fake = {className: undefined}
@@ -196,31 +193,6 @@ Tests.test(function (t)
 		var node = test1.cloneNode(true)
 		node.className = 'a-b-a-b-a'
 		t.no(node.hasClassName('a'), '"a-b-a-b-a"')
-	})
-	
-	t.test('toggleClassName()', function (t)
-	{
-		var node = test1.cloneNode(true)
-		node.className = ' x y y y x y y x '
-		node.toggleClassName('y')
-		t.eq(node.className, 'x x x', '" x y y y x y y x "')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'x z'
-		node.toggleClassName('y')
-		t.eq(node.className, 'x z y', '"x z"')
-		
-		var node = test1.cloneNode(true)
-		node.toggleClassName('y')
-		t.eq(node.className, 'y', 'untouched')
-		
-		var node = test1.cloneNode(true)
-		node.toggleClassName('y', true)
-		t.eq(node.className, 'y', 'untouched true')
-		
-		var node = test1.cloneNode(true)
-		node.toggleClassName('y', false)
-		t.eq(node.className, '', 'untouched false')
 	})
 	
 	t.test('setClassName()', function (t)

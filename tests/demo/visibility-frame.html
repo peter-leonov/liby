@@ -182,7 +182,7 @@ $.onload(function ()
 	{
 		function toggleTransparency (e)
 		{
-			boxesRoot.toggleClassName('transparent', this.checked)
+			boxesRoot.classList.toggleTo('transparent', this.checked)
 		}
 		$('#transparency').addEventListener('click', toggleTransparency, false)
 		
