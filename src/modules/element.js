@@ -10,27 +10,10 @@ function toggleTo (cn, state)
 
 DOMTokenList.prototype.toggleTo = toggleTo
 
-var R = RegExp, rexCache = {}
-
 Object.add
 (
 	Element.prototype,
 	{
-		hasClassName: function (cn)
-		{
-			var className = this.className
-			if (className == cn)
-				return true
-			
-			var rex = rexCache[cn]
-			if (rex)
-				rex.lastIndex = 0
-			else
-				rex = rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')
-			
-			return rex.test(className)
-		},
-		
 		empty: function ()
 		{
 			var node
