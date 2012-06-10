@@ -16,36 +16,9 @@ Tests.test(function (t)
 {
 	var test1 = document.getElementById('test1')
 	
-	t.test('addClassName()', function (t)
-	{
-		var methods = {}
-		methods.addClassName = test1.addClassName
-		methods.removeClassName = test1.removeClassName
-		
-		var fake = {className: undefined}
-		Object.add(fake, methods)
-		fake.addClassName('a')
-		t.eq(fake.className, 'a', 'undefined')
-		
-		var fake = {className: ''}
-		Object.add(fake, methods)
-		fake.addClassName('a')
-		t.eq(fake.className, 'a', '""')
-		
-		var fake = {className: '0'}
-		Object.add(fake, methods)
-		fake.addClassName('a')
-		t.eq(fake.className, '0 a', '"0"')
-		
-		var node = test1.cloneNode(true)
-		node.addClassName('a')
-		t.eq(node.className, 'a', '""')
-	})
-	
 	t.test('removeClassName()', function (t)
 	{
 		var methods = {}
-		methods.addClassName = test1.addClassName
 		methods.removeClassName = test1.removeClassName
 		
 		var fake = {className: undefined}
@@ -122,7 +95,6 @@ Tests.test(function (t)
 	t.test('hasClassName()', function (t)
 	{
 		var methods = {}
-		methods.addClassName = test1.addClassName
 		methods.removeClassName = test1.removeClassName
 		methods.hasClassName = test1.hasClassName
 		

@@ -16,27 +16,6 @@ Object.add
 (
 	Element.prototype,
 	{
-		addClassName: function (cn)
-		{
-			// this.removeClassName(cn)
-			var className = this.className
-			if (!className)
-				this.className = cn
-			else
-				this.className = className + ' ' + cn
-			return cn
-		},
-		
-		addClassNames: function (cns)
-		{
-			var className = this.className
-			if (!className)
-				this.className = cns.join(' ')
-			else
-				this.className = className + ' ' + cns.join(' ')
-			return cns
-		},
-		
 		removeClassName: function (cn)
 		{
 			var className = this.className
@@ -74,7 +53,7 @@ Object.add
 				this.removeChild(node)
 		},
 		
-		hide: function () { this.addClassName('hidden') },
+		hide: function () { this.classList.add('hidden') },
 		show: function () { this.removeClassName('hidden') },
 		
 		remove: function ()

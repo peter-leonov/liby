@@ -119,7 +119,7 @@ var Me =
 				
 				var clone = this.cloneNode = this.startNode.cloneNode(true)
 				document.body.appendChild(clone)
-				clone.addClassName('dragging-object')
+				clone.classList.add('dragging-object')
 				clone.style.left = this.startX + 'px'
 				clone.style.top = this.startY + 'px'
 			},

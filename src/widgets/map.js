@@ -68,7 +68,7 @@ Me.prototype =
 		var me = this
 		googleApiLoader.addEventListener('maps', function (e) { me.apiLoaded(e) }, false)
 		googleApiLoader.load('maps', 2)
-		nodes.wrapper.addClassName('loading')
+		nodes.wrapper.classList.add('loading')
 	},
 	
 	apiLoaded: function (e)

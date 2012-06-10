@@ -60,7 +60,7 @@ Me.prototype =
 			e.preventDefault()
 			Me.closeGoup(me.group)
 			
-			main.addClassName('open')
+			main.classList.add('open')
 			main.addEventListener('mousedown', close, false)
 			main.removeEventListener('mousedown', open, false)
 			document.addEventListener('mouseup', close, false)
@@ -109,7 +109,7 @@ Me.prototype =
 		if (!options.length)
 		{
 			main.removeClassName('single')
-			main.addClassName('empty')
+			main.classList.add('empty')
 			return options
 		}
 		
@@ -129,7 +129,7 @@ Me.prototype =
 		}
 		
 		if (options.length == 1)
-			main.addClassName('single')
+			main.classList.add('single')
 		else
 			main.removeClassName('single')
 		
@@ -171,13 +171,13 @@ Me.prototype =
 		if (last)
 			last.removeClassName('selected')
 		
-		optionsCache[num].addClassName('selected')
+		optionsCache[num].classList.add('selected')
 		
 		this.setCaption(this.options[num])
 		
 		var main = this.nodes.main
 		main.removeClassName('selected-option-' + this.lastSelected)
-		main.addClassName('selected-option-' + num)
+		main.classList.add('selected-option-' + num)
 		
 		this.lastSelected = num
 	}
@@ -227,10 +227,10 @@ var Selecter1 =
 				}
 				
 				if (options.length == 1)
-					this.addClassName('single')
+					this.classList.add('single')
 			}
 			else
-				this.addClassName('empty')
+				this.classList.add('empty')
 			
 			return options
 		}
@@ -276,7 +276,7 @@ var Selecter1 =
 				for (var i = 0; i < optionsChilds.length; i++)
 					optionsChilds[i].remClassName('selected')
 				
-				selected.addClassName('selected')
+				selected.classList.add('selected')
 				this.setCaption(selected.innerHTML)
 			}
 			else
@@ -299,7 +299,7 @@ var Selecter1 =
 				return
 			Selecter.closeAll()
 			e.stopPropagation()
-			main.addClassName('open')
+			main.classList.add('open')
 			main.addEventListener('mousedown', close, false)
 			main.removeEventListener('mousedown', open, false)
 			document.addEventListener('mouseup', close, false)

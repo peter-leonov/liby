@@ -36,13 +36,13 @@ Me.prototype =
 		if (node.value === '')
 			parent.removeClassName(this.filledClassName)
 		else
-			parent.addClassName(this.filledClassName)
+			parent.classList.add(this.filledClassName)
 		
 	},
 	
 	focus: function (node)
 	{
-		node.parentNode.addClassName(this.focusedClassName)
+		node.parentNode.classList.add(this.focusedClassName)
 	},
 	
 	blur: function (node)

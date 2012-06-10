@@ -52,7 +52,7 @@ $.onload(function ()
 	var boxesRoot = $('#boxes')
 	
 	if (transparent)
-		boxesRoot.addClassName('transparent')
+		boxesRoot.classList.add('transparent')
 	
 	
 	var rw = boxesRoot.offsetWidth, rh = boxesRoot.offsetHeight,
@@ -141,7 +141,7 @@ $.onload(function ()
 				hide[i].node.removeClassName('visible')
 			
 			for (var i = 0; i < show.length; i++)
-				show[i].node.addClassName('visible')
+				show[i].node.classList.add('visible')
 			
 			window.setTimeout(function () { statNode.nodeValue = 'show: ' + show.length + ', hide: ' + hide.length + ', time: ' + (new Date() - begin) + 'ms' }, 0)
 		}
@@ -233,7 +233,7 @@ $.onload(function ()
 	
 	updateCount(count)
 	
-	boxesRoot.addClassName('wide')
+	boxesRoot.classList.add('wide')
 	$('#count').focus()
 })
 </script>

@@ -90,7 +90,7 @@ Me.prototype =
 	{
 		this.space.stop()
 		this.startX = this.globalX
-		this.nodes.root.addClassName('grabbing')
+		this.nodes.root.classList.add('grabbing')
 	},
 	
 	onmoveabout: function ()
