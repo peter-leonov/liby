@@ -11,7 +11,10 @@
 	<script src="../src/modules/cosy.js"></script>
 	<script>
 	if (!document.documentElement.classList)
+	{
+		$.load('../src/fixes/dom-token-list.js')
 		$.load('../src/fixes/class-list.js')
+	}
 	</script>
 </head>
 <body>
