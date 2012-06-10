@@ -16,27 +16,12 @@ Object.add
 (
 	Element.prototype,
 	{
-		removeClassName: function (cn)
-		{
-			var className = this.className
-			if (className)
-			{
-				// the following regexp has to be the exact copy of the regexp from hasClassName()
-				// because these two methods have the same regexp cache
-				this.className = className.replace(rexCache[cn] || (rexCache[cn] = new R('(?:^| +)(?:' + cn + '(?:$| +))+', 'g')), ' ')
-										  .replace(/^\s+|\s+$/g, '') // trim
-			}
-			return cn
-		},
-		
 		hasClassName: function (cn)
 		{
 			var className = this.className
 			if (className == cn)
 				return true
 			
-			// the following regexp has to be the exact copy of the regexp from removeClassName()
-			// because these two methods have the same regexp cache
 			var rex = rexCache[cn]
 			if (rex)
 				rex.lastIndex = 0
@@ -54,7 +39,7 @@ Object.add
 		},
 		
 		hide: function () { this.classList.add('hidden') },
-		show: function () { this.removeClassName('hidden') },
+		show: function () { this.classList.remove('hidden') },
 		
 		remove: function ()
 		{

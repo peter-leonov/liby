@@ -101,7 +101,7 @@ $.onload(function ()
 			{
 				var node = boxes[i].node
 				boxesRoot.removeChild(node)
-				node.removeClassName('visible')
+				node.classList.remove('visible')
 			}
 		}
 		
@@ -138,7 +138,7 @@ $.onload(function ()
 			var begin = new Date()
 			
 			for (var i = 0; i < hide.length; i++)
-				hide[i].node.removeClassName('visible')
+				hide[i].node.classList.remove('visible')
 			
 			for (var i = 0; i < show.length; i++)
 				show[i].node.classList.add('visible')

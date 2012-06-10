@@ -109,7 +109,7 @@ Me.prototype =
 	
 	onmoveend: function (e)
 	{
-		this.nodes.root.removeClassName('grabbing')
+		this.nodes.root.classList.remove('grabbing')
 		
 		var ms = e.data.movements.reverse()
 		if (!ms[3])

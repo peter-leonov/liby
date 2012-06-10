@@ -102,7 +102,7 @@ Me.prototype =
 	mapLoaded: function ()
 	{
 		var me = this
-		this.nodes.wrapper.removeClassName('loading')
+		this.nodes.wrapper.classList.remove('loading')
 		this.api.Event.addListener(this.map, 'moveend', function () { me.mapMoveEnd(this) })
 		this.addControls()
 	},

@@ -68,7 +68,7 @@ Me.prototype =
 		
 		function close ()
 		{
-			main.removeClassName('open')
+			main.classList.remove('open')
 			main.addEventListener('mousedown', open, false)
 			main.removeEventListener('mousedown', close, false)
 			document.removeEventListener('mouseup', close, false)
@@ -108,12 +108,12 @@ Me.prototype =
 		
 		if (!options.length)
 		{
-			main.removeClassName('single')
+			main.classList.remove('single')
 			main.classList.add('empty')
 			return options
 		}
 		
-		main.removeClassName('empty')
+		main.classList.remove('empty')
 		
 		for (var i = 0; i < options.length; i++)
 		{
@@ -131,7 +131,7 @@ Me.prototype =
 		if (options.length == 1)
 			main.classList.add('single')
 		else
-			main.removeClassName('single')
+			main.classList.remove('single')
 		
 		return options
 	},
@@ -169,14 +169,14 @@ Me.prototype =
 			
 		var last = optionsCache[this.lastSelected]
 		if (last)
-			last.removeClassName('selected')
+			last.classList.remove('selected')
 		
 		optionsCache[num].classList.add('selected')
 		
 		this.setCaption(this.options[num])
 		
 		var main = this.nodes.main
-		main.removeClassName('selected-option-' + this.lastSelected)
+		main.classList.remove('selected-option-' + this.lastSelected)
 		main.classList.add('selected-option-' + num)
 		
 		this.lastSelected = num

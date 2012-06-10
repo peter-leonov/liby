@@ -16,86 +16,9 @@ Tests.test(function (t)
 {
 	var test1 = document.getElementById('test1')
 	
-	t.test('removeClassName()', function (t)
-	{
-		var methods = {}
-		methods.removeClassName = test1.removeClassName
-		
-		var fake = {className: undefined}
-		Object.add(fake, methods)
-		fake.removeClassName('a')
-		t.eq(fake.className, undefined, 'was undefined')
-		
-		var fake = {className: ''}
-		Object.add(fake, methods)
-		fake.removeClassName('a')
-		t.eq(fake.className, '', '""')
-		
-		var fake = {className: '0'}
-		Object.add(fake, methods)
-		fake.removeClassName('a')
-		t.eq(fake.className, '0', '"0"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a'
-		node.removeClassName('a')
-		t.eq(node.className, '', '"a"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a a'
-		node.removeClassName('a')
-		t.eq(node.className, '', '"a a"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a a a a a a a a a'
-		node.removeClassName('a')
-		t.eq(node.className, '', '"a a a a a a a a a"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'b a'
-		node.removeClassName('a')
-		t.eq(node.className, 'b', '"b a"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a b'
-		node.removeClassName('a')
-		t.eq(node.className, 'b', '"a b"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a b a b a a b b a'
-		node.removeClassName('a')
-		t.eq(node.className, 'b b b b', 'hard mix')
-		
-		var node = test1.cloneNode(true)
-		node.className = ' a '
-		node.removeClassName('a')
-		t.eq(node.className, '', '" a "')
-		
-		var node = test1.cloneNode(true)
-		node.className = ' a b '
-		node.removeClassName('a')
-		t.eq(node.className, 'b', '" a b "')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a a-b a'
-		node.removeClassName('a')
-		t.eq(node.className, 'a-b', '"a a-b a"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a-b-a-b-a a'
-		node.removeClassName('a')
-		t.eq(node.className, 'a-b-a-b-a', '"a-b-a-b-a a"')
-		
-		var node = test1.cloneNode(true)
-		node.className = 'a-b-a-b-a'
-		node.removeClassName('a')
-		t.eq(node.className, 'a-b-a-b-a', '"a-b-a-b-a"')
-	})
-	
 	t.test('hasClassName()', function (t)
 	{
 		var methods = {}
-		methods.removeClassName = test1.removeClassName
 		methods.hasClassName = test1.hasClassName
 		
 		var fake = {className: undefined}
@@ -165,15 +88,6 @@ Tests.test(function (t)
 		var node = test1.cloneNode(true)
 		node.className = 'a-b-a-b-a'
 		t.no(node.hasClassName('a'), '"a-b-a-b-a"')
-	})
-	
-	t.test('regexp cache', function (t)
-	{
-		var node = test1.cloneNode(true)
-		node.className = ' x y y y x y y x '
-		t.ok(node.hasClassName('y'), 'hasClassName(y)')
-		node.removeClassName('y')
-		t.eq(node.className, 'x x x', '"x"')
 	})
 })
 </script>

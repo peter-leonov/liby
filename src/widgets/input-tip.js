@@ -34,7 +34,7 @@ Me.prototype =
 	{
 		var parent = node.parentNode
 		if (node.value === '')
-			parent.removeClassName(this.filledClassName)
+			parent.classList.remove(this.filledClassName)
 		else
 			parent.classList.add(this.filledClassName)
 		
@@ -47,7 +47,7 @@ Me.prototype =
 	
 	blur: function (node)
 	{
-		node.parentNode.removeClassName(this.focusedClassName)
+		node.parentNode.classList.remove(this.focusedClassName)
 	}
 }
 
