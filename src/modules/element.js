@@ -27,7 +27,10 @@ Object.add
 		remove: function ()
 		{
 			var parent = this.parentNode
-			return parent ? parent.removeChild(this) : this
+			if (!parent)
+				return
+			
+			parent.removeChild(this)
 		},
 		
 		isParent: function (parent, root)
