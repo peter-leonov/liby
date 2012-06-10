@@ -45,6 +45,27 @@ Tests.test(function (t)
 		t.eq(cl.abcdefGH(), 123, 'cl.abcdefGH()')
 	})
 	
+	t.test('multiple', function (t)
+	{
+		t.mayFail()
+		
+		var node = document.createElement('div')
+		var cl = node.classList
+		
+		t.exception(function (t)
+		{
+			cl.add('a b c')
+		},
+		function (t, ex)
+		{
+			t.match(ex.toString(), /invalid/i, 'invalid')
+		},
+		'add("a b c")')
+		
+		t.eq(node.className, '', 'className')
+	})
+	
+	
 	t.test('write className read classList', function (t)
 	{
 		var node = document.createElement('div')
