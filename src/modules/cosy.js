@@ -41,4 +41,20 @@ $.load = function (src)
 	return node
 }
 
+$.require = function (src)
+{
+	var r = new XMLHttpRequest()
+	r.open('GET', src, false)
+	r.onreadystatechange = function ()
+	{
+		if (this.readyState != 4)
+			return
+		
+		var script = document.createElement('script')
+		document.body.appendChild(script)
+		script.text = this.responseText
+	}
+	r.send(null)
+}
+
 })();
