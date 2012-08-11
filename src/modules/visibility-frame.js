@@ -72,7 +72,7 @@ Me.prototype =
 	update: function ()
 	{
 		this.moveTo(this.x, this.y)
-	}
+	},
 	
 	// // slow version
 	// moveTo: function (x, y)
@@ -84,6 +84,11 @@ Me.prototype =
 	// 	
 	// 	this.onmove(boxes, visible, boxes)
 	// }
+	
+	getGridder: function ()
+	{
+		return this.gridder
+	}
 }
 
 Me.className = myName
