@@ -13,6 +13,7 @@ Me.prototype =
 	spaceTimeout: 30000,
 	maxInertia: 500,
 	onscroll: function () {},
+	onstop: function () {},
 	
 	bind: function (root, width)
 	{
@@ -53,6 +54,8 @@ Me.prototype =
 		space.add(point)
 		
 		space.ontick = function () { me.spaceTick() }
+		
+		space.onfreeze = function() { me.onstop() }
 		
 		return this
 	},
