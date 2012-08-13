@@ -7,6 +7,8 @@ function Me ()
 	this.nodes = {}
 }
 
+var round = Math.round
+
 Me.prototype =
 {
 	power: 1.5,
@@ -32,22 +34,6 @@ Me.prototype =
 		moveable.addEventListener('move', function (e) { me.onmoving(e) }, false)
 		moveable.addEventListener('moveend', function (e) { me.onmoveend(e) }, false)
 		
-		this.setX = function (x)
-		{
-			if (me.globalX == x)
-				return
-			me.globalX = x
-			
-			var w = me.width,
-				real
-			if (w == 0)
-				real = 0
-			else
-				real = x < 0 ? w + x % w : x % w
-			root.scrollLeft = Math.round(real)
-			this.onscroll(x, real)
-		}
-		
 		
 		var space = this.space = new Kinematics.Space()
 		var point = this.point = new Kinematics.Point(0, 0, 0, 0)
@@ -58,6 +44,24 @@ Me.prototype =
 		space.onfreeze = function() { me.onstop() }
 		
 		return this
+	},
+	
+	setX: function (x)
+	{
+		x = round(x)
+		
+		if (this.globalX == x)
+			return
+		this.globalX = x
+		
+		var w = this.width,
+			real
+		if (w == 0)
+			real = 0
+		else
+			real = x < 0 ? w + x % w : x % w
+		this.nodes.root.scrollLeft = this.realX = real
+		this.onscroll(x, real)
 	},
 	
 	guessWidth: function ()
