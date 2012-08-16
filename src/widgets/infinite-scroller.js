@@ -147,6 +147,12 @@ Me.prototype =
 	run: function (timeout)
 	{
 		this.space.run(timeout === undefined ? this.spaceTimeout : timeout) // set a reasonable timeout
+	},
+	
+	moveToX: function (x)
+	{
+		this.point.x = x
+		this.spaceTick()
 	}
 }
 
