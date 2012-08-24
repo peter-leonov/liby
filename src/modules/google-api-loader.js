@@ -14,10 +14,10 @@ function Me (keys, host, language)
 
 Me.prototype =
 {
-	load: function (name, version)
+	load: function (name, version, opts)
 	{
 		if (name)
-			this.apis.push({name: name, version: version})
+			this.apis.push({name: name, version: version, opts: opts || {}})
 		
 		var me = this
 		
@@ -72,12 +72,10 @@ Me.prototype =
 			me.apiLoaded(api)
 		}
 		
-		var opts =
-		{
-			nocss: true,
-			language: this.language,
-			callback: callback
-		}
+		var opts = api.opts
+		opts.nocss = true
+		opts.language = this.language
+		opts.callback = callback
 		
 		window.google.load(api.name, api.version, opts)
 	},
