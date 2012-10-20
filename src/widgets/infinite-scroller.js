@@ -46,7 +46,7 @@ Me.prototype =
 		return this
 	},
 	
-	setX: function (x)
+	scrollTo: function (x)
 	{
 		x = round(x)
 		
@@ -80,14 +80,14 @@ Me.prototype =
 	reset: function ()
 	{
 		this.space.stop()
-		this.setX(0)
+		this.scrollTo(0)
 		this.point.x = this.globalX
 		this.setVelocity(0, 0)
 	},
 	
 	spaceTick: function ()
 	{
-		this.setX(this.point.x)
+		this.scrollTo(this.point.x)
 	},
 	
 	onmovestart: function (e)
@@ -108,7 +108,7 @@ Me.prototype =
 	
 	onmoving: function (e)
 	{
-		this.setX(this.startX - e.data.dx)
+		this.scrollTo(this.startX - e.data.dx)
 	},
 	
 	onmoveend: function (e)
@@ -149,7 +149,7 @@ Me.prototype =
 	jumpTo: function (x)
 	{
 		this.point.x = x
-		this.setX(x)
+		this.scrollTo(x)
 	}
 }
 
