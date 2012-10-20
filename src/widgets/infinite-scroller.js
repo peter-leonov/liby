@@ -54,12 +54,9 @@ Me.prototype =
 			return
 		this.globalX = x
 		
-		var w = this.width,
-			real
-		if (w == 0)
-			real = 0
-		else
-			real = x < 0 ? w + x % w : x % w
+		var w = this.width
+		
+		var real = x < 0 ? w + x % w : x % w
 		this.nodes.root.scrollLeft = this.realX = real
 		this.onscroll(x, real)
 	},
@@ -152,7 +149,7 @@ Me.prototype =
 	moveToX: function (x)
 	{
 		this.point.x = x
-		this.spaceTick()
+		this.setX(x)
 	}
 }
 
