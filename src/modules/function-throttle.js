@@ -7,6 +7,18 @@ function throttle (soft, hard, invocant)
 		hardTimer = 0,
 		args
 	
+	function call ()
+	{
+		args = arguments
+		
+		if (softTimer)
+			window.clearTimeout(softTimer)
+		softTimer = window.setTimeout(fire, soft)
+		
+		if (!hardTimer && hard)
+			hardTimer = window.setTimeout(fire, hard)
+	}
+	
 	function fire ()
 	{
 		if (softTimer)
@@ -22,18 +34,6 @@ function throttle (soft, hard, invocant)
 		}
 		
 		callback.apply(invocant, args)
-	}
-	
-	function call ()
-	{
-		args = arguments
-		
-		if (softTimer)
-			window.clearTimeout(softTimer)
-		softTimer = window.setTimeout(fire, soft)
-		
-		if (!hardTimer && hard)
-			hardTimer = window.setTimeout(fire, hard)
 	}
 	
 	return call
