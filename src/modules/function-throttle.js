@@ -1,24 +1,24 @@
 ;(function(){
 
-function throttle (delay, timeout, invocant)
+function throttle (soft, hard, invocant)
 {
 	var callback = this,
-		delayTimer = 0,
-		timeoutTimer = 0,
+		softTimer = 0,
+		hardTimer = 0,
 		args
 	
 	function fire ()
 	{
-		if (delayTimer)
+		if (softTimer)
 		{
-			window.clearTimeout(delayTimer)
-			delayTimer = 0
+			window.clearTimeout(softTimer)
+			softTimer = 0
 		}
 		
-		if (timeoutTimer)
+		if (hardTimer)
 		{
-			window.clearTimeout(timeoutTimer)
-			timeoutTimer = 0
+			window.clearTimeout(hardTimer)
+			hardTimer = 0
 		}
 		
 		callback.apply(invocant, args)
@@ -28,12 +28,12 @@ function throttle (delay, timeout, invocant)
 	{
 		args = arguments
 		
-		if (delayTimer)
-			window.clearTimeout(delayTimer)
-		delayTimer = window.setTimeout(fire, delay)
+		if (softTimer)
+			window.clearTimeout(softTimer)
+		softTimer = window.setTimeout(fire, soft)
 		
-		if (!timeoutTimer)
-			timeoutTimer = window.setTimeout(fire, timeout)
+		if (!hardTimer && hard)
+			hardTimer = window.setTimeout(fire, hard)
 	}
 	
 	return call
