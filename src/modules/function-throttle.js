@@ -7,7 +7,16 @@ function throttle (soft, hard, invocant)
 		hardTimer = 0,
 		args
 	
-	function call ()
+	function debounce ()
+	{
+		args = arguments
+		
+		if (softTimer)
+			window.clearTimeout(softTimer)
+		softTimer = window.setTimeout(fire, soft)
+	}
+	
+	function throttle ()
 	{
 		args = arguments
 		
@@ -15,7 +24,7 @@ function throttle (soft, hard, invocant)
 			window.clearTimeout(softTimer)
 		softTimer = window.setTimeout(fire, soft)
 		
-		if (!hardTimer && hard)
+		if (!hardTimer)
 			hardTimer = window.setTimeout(fire, hard)
 	}
 	
@@ -36,7 +45,7 @@ function throttle (soft, hard, invocant)
 		callback.apply(invocant, args)
 	}
 	
-	return call
+	return hard ? throttle : debounce
 }
 
 Function.prototype.throttle = throttle
