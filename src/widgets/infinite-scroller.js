@@ -146,7 +146,7 @@ Me.prototype =
 		this.space.run(timeout === undefined ? this.spaceTimeout : timeout) // set a reasonable timeout
 	},
 	
-	moveToX: function (x)
+	jumpTo: function (x)
 	{
 		this.point.x = x
 		this.setX(x)
