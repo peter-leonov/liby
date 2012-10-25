@@ -26,10 +26,10 @@ Q.prototype =
 		state[n] = true
 		
 		if (++this.total == (this.min || state.length))
-			this._done()
+			this.fire()
 	},
 	
-	_done: function ()
+	fire: function ()
 	{
 		var callback = this.callback
 		if (!callback)
