@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Q tests</title>
+	<script src="tests.common.js"></script>
+	
+	<script src="../src/modules/q.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	var fired
+	function done ()
+	{
+		fired = true
+	}
+	
+	t.test('all', function (t)
+	{
+		fired = false
+		
+		var q = Q.all(done)
+		t.no(fired, 'just created')
+		
+		var a = q.wait()
+		t.no(fired, 'a wait')
+		
+		var b = q.wait()
+		t.no(fired, 'b wait')
+		
+		b()
+		t.no(fired, 'b fired')
+		
+		a()
+		t.ok(fired, 'a fired')
+	})
+	
+	t.test('any', function (t)
+	{
+		fired = false
+		
+		var q = Q.any(done)
+		t.no(fired, 'just created')
+		
+		var a = q.wait()
+		t.no(fired, 'a wait')
+		
+		var b = q.wait()
+		t.no(fired, 'b wait')
+		
+		b()
+		t.ok(fired, 'b fired')
+		
+		fired = false
+		
+		a()
+		t.no(fired, 'a fired')
+	})
+	
+	t.test('been fired', function (t)
+	{
+		fired = false
+		
+		var q = Q.all(done)
+		q.fire()
+		t.ok(fired, 'just created')
+		
+		fired = false
+		
+		var a = q.wait()
+		t.no(fired, 'a wait')
+		
+		var b = q.wait()
+		t.no(fired, 'b wait')
+		
+		b()
+		t.no(fired, 'b fired')
+		
+		a()
+		t.no(fired, 'a fired')
+		
+		a()
+		t.no(fired, 'a fired second time')
+		b()
+		t.no(fired, 'a fired second time')
+		
+		var c = q.wait()
+		t.no(fired, 'c wait')
+		
+		c()
+		t.no(fired, 'c fired')
+	})
+	
+	
+	
+	
+})
+</script>
+</body>
+</html>
