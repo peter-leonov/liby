@@ -17,6 +17,38 @@ Tests.test(function (t)
 		fired = true
 	}
 	
+	t.test('n', function (t)
+	{
+		fired = false
+		
+		var q = new Q.n(done, 3)
+		t.no(fired, 'just created')
+		
+		var a = q.wait()
+		t.no(fired, 'a wait')
+		
+		var b = q.wait()
+		t.no(fired, 'b wait')
+		
+		var c = q.wait()
+		t.no(fired, 'b wait')
+		
+		var d = q.wait()
+		t.no(fired, 'b wait')
+		
+		var e = q.wait()
+		t.no(fired, 'b wait')
+		
+		c()
+		t.no(fired, 'c fired')
+		
+		e()
+		t.no(fired, 'e fired')
+		
+		a()
+		t.ok(fired, 'a fired')
+	})
+	
 	t.test('all', function (t)
 	{
 		fired = false
@@ -112,11 +144,20 @@ Tests.test(function (t)
 		any.wait()
 		any.wait()
 		
+		var any = q.n(3)
+		any.wait()()
+		any.wait()
+		var c = any.wait()
+		any.wait()()
+		any.wait()
+		
 		t.no(fired, 'ready to fire')
 		a()
 		t.no(fired, 'a fired')
 		b()
-		t.ok(fired, 'b fired')
+		t.no(fired, 'b fired')
+		c()
+		t.ok(fired, 'c fired')
 	})
 })
 </script>

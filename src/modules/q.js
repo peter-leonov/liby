@@ -40,6 +40,11 @@ Q.prototype =
 	},
 	
 	// handy shortcuts
+	n: function (n)
+	{
+		return new Q(this.wait(), n)
+	},
+	
 	all: function ()
 	{
 		return new Q(this.wait())
@@ -51,6 +56,11 @@ Q.prototype =
 	}
 }
 
+
+Q.n = function all (callback, n)
+{
+	return new Q(callback, n)
+}
 
 Q.all = function all (callback)
 {
