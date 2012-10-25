@@ -93,9 +93,31 @@ Tests.test(function (t)
 		t.no(fired, 'c fired')
 	})
 	
-	
-	
-	
+	t.test('shortcuts', function (t)
+	{
+		fired = false
+		
+		var q = Q.all(done)
+		
+		var all = q.all()
+		var a = all.wait()
+		all.wait()()
+		all.wait()()
+		all.wait()()
+		
+		var any = q.any()
+		any.wait()
+		any.wait()
+		var b = any.wait()
+		any.wait()
+		any.wait()
+		
+		t.no(fired, 'ready to fire')
+		a()
+		t.no(fired, 'a fired')
+		b()
+		t.ok(fired, 'b fired')
+	})
 })
 </script>
 </body>

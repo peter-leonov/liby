@@ -42,12 +42,12 @@ Q.prototype =
 	// handy shortcuts
 	all: function ()
 	{
-		new Q(this.wait())
+		return new Q(this.wait())
 	},
 	
 	any: function ()
 	{
-		new Q(this.wait(), 1)
+		return new Q(this.wait(), 1)
 	}
 }
 
