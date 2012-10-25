@@ -61,12 +61,15 @@ Me.prototype =
 	
 	wait: function (d)
 	{
-		var me = this
-		var c = this.add(function () { me.timedOut() })
-		c.spawnable = false
-		if (d !== undefined)
-			c.start(d)
 		this.setStatus('waiting')
+		
+		var w = this.q.wait()
+		
+		if (d === undefined)
+			return
+		
+		var me = this
+		window.setTimeout(function () { me.timedOut() }, d)
 	},
 	
 	timedOut: function ()
