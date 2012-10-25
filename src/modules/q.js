@@ -25,7 +25,7 @@ Q.prototype =
 			return
 		state[n] = true
 		
-		if (++this.total == min || state.length)
+		if (++this.total == this.min || state.length)
 			this._done()
 	},
 	
