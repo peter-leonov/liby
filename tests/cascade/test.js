@@ -1,6 +1,6 @@
 ;(function(){
 
-var myName = 'Test', Super = Cascade
+var myName = 'Test'
 
 function indexOf (a, v, i)
 {
@@ -14,59 +14,42 @@ function indexOf (a, v, i)
 	return -1
 }
 
-function Me (parent, name, conf, callback)
+function Me (parent, name, conf, job, callback)
 {
-	Super.call(this)
-	
 	this.conf = conf || {}
 	this.results = []
 	
 	this.parent = parent
-	this.name = name || '(untitled)'
+	this.reporter = parent.reporter.create()
+	this.reporter.name(name || '(untitled)')
 	this.callback = callback
 	
 	this.tool = new Me.Tool(this)
-	this.constructor = Me
+	
+	var me = this
+	this.q = Q.all(function () { me._done() })
+	
+	var last = this.q.wait()
+	this.exec(job, [this.tool])
+	last()
 }
 
-var sup = Super.prototype,
-	prototype =
+Me.prototype =
 {
 	status: 'new',
 	finished: false,
 	reporter: devNull,
 	
-	run: function ()
-	{
-		this.start()
-	},
-	
-	start: function (delay)
-	{
-		this.reporter.name(this.name)
-		this.supercall('start', [delay])
-	},
-	
 	exec: function (f, args)
 	{
-		try
+		// try
 		{
 			f.apply(null, args)
 		}
-		catch (ex)
-		{
-			this.fail([ex], 'got an exception')
-		}
-	},
-	
-	job: function ()
-	{
-		this.exec(this.callback, [this.tool])
-	},
-	
-	oncomplete: function ()
-	{
-		this._done()
+		// catch (ex)
+		// {
+		// 	this.fail([ex], 'got an exception')
+		// }
 	},
 	
 	async: function (f, d)
@@ -94,7 +77,7 @@ var sup = Super.prototype,
 	
 	done: function ()
 	{
-		this.stop()
+		this.q.fire()
 	},
 	
 	_done: function ()
@@ -128,6 +111,7 @@ var sup = Super.prototype,
 		this.finished = true
 		this.summary()
 		this.parent.childTest(this)
+		this.callback()
 	},
 	
 	childTest: function (test)
@@ -139,29 +123,24 @@ var sup = Super.prototype,
 			this.pass()
 	},
 	
-	test: function (name, conf, callback)
+	test: function (name, conf, job)
 	{
 		if (arguments.length == 2)
 		{
-			callback = conf
+			job = conf
 			conf = undefined
 		}
 		else if (arguments.length == 1)
 		{
-			callback = name
+			job = name
 			conf = undefined
 			name = undefined
 		}
 		
-		if (typeof callback !== 'function')
-			throw new Error('callback is not present')
+		if (typeof job !== 'function')
+			throw new Error('job is not present')
 		
-		var test = new Me(this, name, conf, callback)
-		test.holder = this.holder
-		test.reporter = this.reporter.create(test.holder, test)
-		
-		// link cascades
-		this.add(test)
+		var test = new Me(this, name, conf, job, this.q.wait())
 		
 		return test
 	},
@@ -213,19 +192,8 @@ var sup = Super.prototype,
 	{
 		this.status = s
 		this.reporter.setStatus(s)
-	},
-	
-	supercall: function (name, args)
-	{
-		// oh, mama…
-		this.constructor.prototype.constructor.prototype[name].apply(this, args)
 	}
 }
-
-var proto = new Super()
-for (var k in prototype)
-	proto[k] = prototype[k]
-Me.prototype = proto
 
 Me.className = myName
 self[myName] = Me

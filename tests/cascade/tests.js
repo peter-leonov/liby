@@ -133,7 +133,7 @@ var myName = 'Tests', Me =
 	
 	test: function (f)
 	{
-		this.callback = f
+		this.job = f
 		window.onload = this.onload
 	},
 	
@@ -144,46 +144,41 @@ var myName = 'Tests', Me =
 		
 		this.windowSnapshot = Object_copy(window)
 		
-		var test = this.mainTest = new Test(this, title, null, this.callback)
-		test.holder = window
+		var reporter = this.reporter =
+		{
+			create: function () { return new Reporter() },
+			nodes: {main: this.nodes.main}
+		}
+		
+		
+		var test = this.mainTest = new Test(this, title, null, this.job, function () {})
+		
+		this.nodes.main.appendChild(test.reporter.nodes.main)
+		
 		var me = this
 		test.onbeforecomplete = function () { me.onbeforecomplete() }
 		
-		var reporter = test.reporter = new Reporter(test.holder, test)
-		this.nodes.main.appendChild(reporter.nodes.main)
-		
-		test.run()
-		
-		var hide = reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
+		var hide = test.reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
 		hide.onclick = function () { reporter.hide() }
 	},
 	
 	childTest: function ()
 	{
 		this.nodes.main.className += 'done'
-		this.oncomplete()
 	},
 	
 	onbeforecomplete: function ()
 	{
 		this.drawWindowDiff()
-	},
-	
-	oncomplete: function () {},
-	
-	// ignore raw sigchilds
-	sigchild: function () {}
+	}
 }
 
 Me.className = myName
 self[myName] = Me
 
-var Reporter = function (holder, parent)
+var Reporter = function ()
 {
 	var nodes = this.nodes = {}
-	
-	this.holder = holder
-	this.parent = parent
 	
 	nodes.main = N('dl', 'test')
 	nodes.head = nodes.main.appendChild(N('dt', 'head'))
@@ -194,9 +189,9 @@ var Reporter = function (holder, parent)
 
 Reporter.prototype =
 {
-	create: function (holder, parent)
+	create: function ()
 	{
-		var reporter = new Reporter(holder, parent)
+		var reporter = new Reporter()
 		this.node(reporter.nodes.main)
 		return reporter
 	},
