@@ -15,10 +15,10 @@ Q.prototype =
 	{
 		var n = this.state.push(false) - 1
 		var queue = this
-		return function listener () { queue._fire(n) }
+		return function listener () { queue._got(n) }
 	},
 	
-	_fire: function (n)
+	_got: function (n)
 	{
 		var state = this.state
 		if (state[n])
