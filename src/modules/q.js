@@ -23,9 +23,16 @@ Q.prototype =
 		var state = this.state
 		if (state[n])
 			return
-		state[n] = true
 		
-		if (++this.total == (this.min || state.length))
+		state[n] = true
+		this.total++
+		
+		this.check()
+	},
+	
+	check: function ()
+	{
+		if (this.total == (this.min || this.state.length))
 			this.fire()
 	},
 	
