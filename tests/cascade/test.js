@@ -75,6 +75,9 @@ Me.prototype =
 	
 	timedOut: function ()
 	{
+		if (this.finished)
+			return
+		
 		this.fail(new Me.Label('test timed out'))
 		this.done()
 	},
