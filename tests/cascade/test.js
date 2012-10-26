@@ -42,14 +42,15 @@ Me.prototype =
 	
 	exec: function (f, args)
 	{
-		// try
+		try
 		{
 			f.apply(null, args)
 		}
-		// catch (ex)
-		// {
-		// 	this.fail([ex], 'got an exception')
-		// }
+		catch (ex)
+		{
+			this.fail([ex], 'got an exception')
+			window.setTimeout(function () { throw ex }, 0)
+		}
 	},
 	
 	async: function (f, d)
