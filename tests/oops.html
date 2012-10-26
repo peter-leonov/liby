@@ -16,7 +16,11 @@ Tests.ignoreGlobals(['Tracker', 'onerror'])
 Tests.test(function (t)
 {
 	var reports = []
-	window.Tracker = { track: function (c, a, l, v) { reports.push({category: c, action: a, label: l, value: v}) } }
+	window.Tracker =
+	{
+		track: function (c, a, l, v) { reports.push({category: c, action: a, label: l, value: v}) },
+		event: function (c, a, l, v) { reports.push({category: c, action: a, label: l, value: v}) }
+	}
 	
 	var evented = /Chrome\/[345]\.0|Version\/[34]\..+Safari/.test(navigator.userAgent)
 	
