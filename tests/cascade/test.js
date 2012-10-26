@@ -40,6 +40,28 @@ Me.prototype =
 	finished: false,
 	reporter: devNull,
 	
+	test: function (name, conf, job)
+	{
+		if (arguments.length == 2)
+		{
+			job = conf
+			conf = undefined
+		}
+		else if (arguments.length == 1)
+		{
+			job = name
+			conf = undefined
+			name = undefined
+		}
+		
+		if (typeof job !== 'function')
+			throw new Error('job is not present')
+		
+		var test = new Me(this, name, conf, job, this.q.wait())
+		
+		return test
+	},
+	
 	exec: function (f, args)
 	{
 		try
@@ -140,28 +162,6 @@ Me.prototype =
 			this.fail()
 		else if (status === 'passed')
 			this.pass()
-	},
-	
-	test: function (name, conf, job)
-	{
-		if (arguments.length == 2)
-		{
-			job = conf
-			conf = undefined
-		}
-		else if (arguments.length == 1)
-		{
-			job = name
-			conf = undefined
-			name = undefined
-		}
-		
-		if (typeof job !== 'function')
-			throw new Error('job is not present')
-		
-		var test = new Me(this, name, conf, job, this.q.wait())
-		
-		return test
 	},
 	
 	summary: function ()
