@@ -30,7 +30,7 @@ var prototype =
 	info: function (m, d) { return this.parent.reporter.info(m, d) },
 	warn: function (m, d) { return this.parent.reporter.warn(m, d) },
 	mayFail: function (v) { return this.parent.mayFail(v) },
-	parallel: function (v) { return this.parent.parallel = v },
+	parallel: function (v) { return this.parent.childrenParallelLimit = v },
 	
 	finished: function () { return this.parent.finished },
 	

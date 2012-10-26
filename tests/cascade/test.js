@@ -19,6 +19,10 @@ function Me (parent, name, conf, job, callback)
 	this.conf = conf || {}
 	this.results = []
 	
+	this.childrenQueue = []
+	this.childrenSpawned = 0
+	this.childrenParallelLimit = Infinity
+	
 	this.parent = parent
 	this.reporter = parent.reporter.create()
 	this.reporter.name(name || '(untitled)')
@@ -52,7 +56,8 @@ Me.prototype =
 			throw new Error('job is not present')
 		
 		var test = new Me(this, name, conf, job, this.q.wait())
-		test.run()
+		
+		this.addChildTest(test)
 	},
 	
 	run: function (callback)
@@ -158,6 +163,26 @@ Me.prototype =
 		this.callback()
 	},
 	
+	addChildTest: function (test)
+	{
+		this.childrenQueue.push(test)
+		this.spawnChildren()
+	},
+	
+	spawnChildren: function ()
+	{
+		while (this.childrenSpawned < this.childrenParallelLimit)
+		{
+			this.childrenSpawned++
+			
+			var test = this.childrenQueue.shift()
+			if (!test)
+				break
+			
+			test.run()
+		}
+	},
+	
 	childTest: function (test)
 	{
 		var status = test.status
@@ -165,6 +190,9 @@ Me.prototype =
 			this.fail()
 		else if (status === 'passed')
 			this.pass()
+		
+		this.childrenSpawned--
+		this.spawnChildren()
 	},
 	
 	summary: function ()
