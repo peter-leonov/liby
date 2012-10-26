@@ -34,7 +34,7 @@ Tests.test(function (t)
 		
 		t.noexception(function (t)
 		{
-			var log = console.log
+			var log = console.log.bind(console)
 			log()
 		},
 		'log()')
