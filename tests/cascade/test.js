@@ -179,7 +179,12 @@ Me.prototype =
 			if (!test)
 				break
 			
-			test.run()
+			run(test)
+		}
+		
+		function run (test)
+		{
+			window.setTimeout(function () { test.run() }, 0)
 		}
 	},
 	
