@@ -55,9 +55,22 @@ Me.prototype =
 	
 	async: function (f, d)
 	{
-		var me = this
-		this.add(function () { f(me.tool) }).start(d)
+		var w = this.q.wait()
 		this.setStatus('waiting')
+		
+		var me = this
+		function callback ()
+		{
+			try
+			{
+				f(me.tool)
+			}
+			finally
+			{
+				w()
+			}
+		}
+		window.setTimeout(callback, d)
 	},
 	
 	wait: function (d)
