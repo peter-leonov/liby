@@ -75,9 +75,8 @@ Me.prototype =
 	
 	wait: function (d)
 	{
+		this.q.wait()
 		this.setStatus('waiting')
-		
-		var w = this.q.wait()
 		
 		if (d === undefined)
 			return
