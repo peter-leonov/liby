@@ -158,6 +158,8 @@ var myName = 'Tests', Me =
 		var me = this
 		test.onbeforecomplete = function () { me.onbeforecomplete() }
 		
+		test.run()
+		
 		var hide = test.reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
 		hide.onclick = function () { reporter.hide() }
 	},

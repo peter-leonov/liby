@@ -22,16 +22,10 @@ function Me (parent, name, conf, job, callback)
 	this.parent = parent
 	this.reporter = parent.reporter.create()
 	this.reporter.name(name || '(untitled)')
+	this.job = job
 	this.callback = callback
 	
 	this.tool = new Me.Tool(this)
-	
-	var me = this
-	this.q = Q.all(function () { me._done() })
-	
-	var last = this.q.wait()
-	this.exec(job, [this.tool])
-	last()
 }
 
 Me.prototype =
@@ -58,8 +52,17 @@ Me.prototype =
 			throw new Error('job is not present')
 		
 		var test = new Me(this, name, conf, job, this.q.wait())
+		test.run()
+	},
+	
+	run: function (callback)
+	{
+		var me = this
+		this.q = Q.all(function () { me._done() })
 		
-		return test
+		var last = this.q.wait()
+		this.exec(this.job, [this.tool])
+		last()
 	},
 	
 	exec: function (f, args)
