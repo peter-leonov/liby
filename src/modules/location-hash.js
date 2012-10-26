@@ -32,15 +32,9 @@ Me.prototype =
 		this.dispatchEventData('change')
 	},
 	
-	eraseHash: function()
+	eraseEmptyHash: function()
 	{
-		this.window.location.href = '#'
-	},
-	
-	eraseHashEx: function()
-	{
-		this.window.location.href = '#'
-		window.history.replaceState(null, null, this.window.location.pathname + this.window.location.search)
+		window.history.replaceState(null, null, window.location.pathname + window.location.search)
 	},
 	
 	set: function (v)
@@ -77,8 +71,8 @@ Me.prototype =
 	}
 }
 
-if (window.history.pushState)
-	Me.prototype.eraseHash = Me.prototype.eraseHashEx 
+if (!window.history.pushState)
+	Me.prototype.eraseEmptyHash = function () {}
 
 Me.mixIn(EventDriven)
 

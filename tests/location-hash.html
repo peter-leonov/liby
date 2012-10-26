@@ -50,13 +50,6 @@ Tests.test(function (t)
 		
 		lh.set('1?2')
 		t.eq(lh.get(), '1?2', 'get')
-		
-		lh.set('')
-		t.eq(lh.get(), '', 'get')
-		t.eq(lh.get().indexOf('#'), -1, 'location.hash.indexOf("#")')
-		
-		t.eq(location.pathname, "/liby/tests/location-hash.html", 'location.pathname')
-		t.eq(location.search, "", 'location.search')
 	})
 	
 	t.test('external changing', function (t)
