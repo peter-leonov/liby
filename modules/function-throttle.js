@@ -1,15 +1,16 @@
 ;(function(){
 
-function throttle (soft, hard, invocant)
+function throttle (soft, hard)
 {
 	var callback = this,
 		softTimer = 0,
 		hardTimer = 0,
-		args
+		args, inv
 	
 	function debounce ()
 	{
 		args = arguments
+		inv = this
 		
 		if (softTimer)
 			window.clearTimeout(softTimer)
@@ -19,6 +20,7 @@ function throttle (soft, hard, invocant)
 	function throttle ()
 	{
 		args = arguments
+		inv = this
 		
 		if (softTimer)
 			window.clearTimeout(softTimer)
@@ -42,7 +44,7 @@ function throttle (soft, hard, invocant)
 			hardTimer = 0
 		}
 		
-		callback.apply(invocant, args)
+		callback.apply(inv, args)
 	}
 	
 	return hard ? throttle : debounce
