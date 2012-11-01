@@ -9,8 +9,9 @@ function onreadystatechange ()
 	if (this.readyState == 4)
 	{
 		this.statusType = types[Math.floor(this.status / 100)]
-		if (this.callback)
-			this.callback()
+		var callback = this.callback
+		if (callback)
+			callback(this.responseText, this)
 	}
 }
 
