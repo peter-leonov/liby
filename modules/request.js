@@ -25,7 +25,7 @@ var Me = self[myName] =
 {
 	onreadystatechange: onreadystatechange,
 	charset: 'utf-8',
-	post: function (url, params, callback, sync)
+	post: function (url, data, callback, sync)
 	{
 		var r = new XHR()
 		
@@ -35,19 +35,16 @@ var Me = self[myName] =
 			r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
 		if (callback)
 			r.callback = callback
-		r.send(typeof params == 'string' ? params : UrlEncode.stringify(params))
+		r.send(data)
 		if (sync)
 			onreadystatechange.call(r)
 		
 		return r
 	},
 	
-	get: function (url, params, callback, sync)
+	get: function (url, callback, sync)
 	{
 		var r = new XHR()
-		
-		if (params)
-			url += (url.indexOf('?') != -1 ? UrlEncode.paramDelimiter : '?') + UrlEncode.stringify(params)
 		
 		r.open('GET', url, !sync)
 		if (!sync)
