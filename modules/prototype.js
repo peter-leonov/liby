@@ -129,7 +129,18 @@ function bind (inv)
 	return wrapper
 }
 
-Object.add(Function.prototype, {mixIn: mixIn, bind: bind})
+function async (timeout)
+{
+	var f = this
+	return function asyncWrapper ()
+	{
+		var that = this, args = arguments
+		return window.setTimeout(function () { f.apply(that, args) }, timeout)
+	}
+}
+
+
+Object.add(Function.prototype, {mixIn: mixIn, bind: bind, async: async})
 
 })();
 
