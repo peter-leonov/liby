@@ -19,9 +19,6 @@ var prototype =
 			this.removeChild(node)
 	},
 	
-	hide: function () { this.classList.add('hidden') },
-	show: function () { this.classList.remove('hidden') },
-	
 	remove: function ()
 	{
 		var parent = this.parentNode
