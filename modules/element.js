@@ -43,6 +43,24 @@ var prototype =
 		return false
 	},
 	
+	parentWithClass: function (cn, root)
+	{
+		if (!root)
+			root = document.documentElement
+		
+		var node = this
+		do
+		{
+			if (node.classList.contains(cn))
+				return node
+			if (node === root)
+				break
+		}
+		while ((node = node.parentNode))
+		
+		return null
+	},
+	
 	offsetPosition: function (root)
 	{
 		var node = this,
