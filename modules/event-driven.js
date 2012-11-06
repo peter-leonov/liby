@@ -51,6 +51,9 @@ Me.prototype =
 	
 	dispatchEvent: function (type, e)
 	{
+		if (!e)
+			e = {}
+		
 		e.__dispatched = true
 		
 		e.type = type
