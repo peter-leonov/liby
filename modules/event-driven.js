@@ -9,16 +9,27 @@ Me.prototype =
 {
 	addEventListener: function (type, listener, capture)
 	{
-		var handlers, harr
-		if (handlers = this[handlersProp])
+		var handlers = this[handlersProp]
+		if (!handlers)
 		{
-			if (harr = handlers[type])
-				harr.indexOf(listener) < 0 ? harr.push(listener) : 1
-			else
-				handlers[type] = [listener]
+			// bake all in two steps
+			handlers = this[handlersProp] = {}
+			handlers[type] = [listener]
+			return
 		}
-		else
-			(this[handlersProp] = {})[type] = [listener]
+		
+		var harr = handlers[type]
+		if (!harr)
+		{
+			handlers[type] = [listener]
+			return
+		}
+		
+		var i = harr.indexOf(listener)
+		if (i != -1)
+			return
+		
+		harr.push(listener)
 	},
 	
 	removeEventListener: function (type, listener, capture)
