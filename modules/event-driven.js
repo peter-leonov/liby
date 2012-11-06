@@ -35,9 +35,7 @@ Me.prototype =
 		if (i == -1)
 			return
 		
-		for (var il = harr.length; i < il; i++)
-			harr[i] = harr[i + 1]
-		harr.length--
+		harr.splice(i, 1)
 	},
 	
 	dispatchEvent: function (type, e)
