@@ -23,17 +23,21 @@ Me.prototype =
 	
 	removeEventListener: function (type, listener, capture)
 	{
-		var handlers, harr, i, len
-		if (handlers = this[handlersProp])
-			if ((harr = handlers[type]))
-			{
-				if ((i = harr.indexOf(listener)) >= 0)
-				{
-					for (len = harr.length; i < len; i++)
-						harr[i] = harr[i + 1]
-					harr.length--
-				}
-			}
+		var handlers = this[handlersProp]
+		if (!handlers)
+			return
+		
+		var harr = handlers[type]
+		if (!harr)
+			return
+		
+		var i = harr.indexOf(listener)
+		if (i == -1)
+			return
+		
+		for (var il = harr.length; i < il; i++)
+			harr[i] = harr[i + 1]
+		harr.length--
 	},
 	
 	dispatchEvent: function (type, e)
