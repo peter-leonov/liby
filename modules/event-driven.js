@@ -36,28 +36,28 @@ Me.prototype =
 			}
 	},
 	
-	dispatchEvent: function (e)
+	dispatchEvent: function (type, e)
 	{
 		e.__dispatched = true
-		var handlers, harr, len
-		if ((handlers = this[handlersProp]))
-			if ((harr = handlers[e.type]))
-				if ((len = harr.length))
-				{
-					for (var i = 0; i < len; i++)
-						harr[i].call(this, e)
-					return !e.defaultPrevented
-				}
 		
-		return true
-	},
-	
-	dispatchEventData: function (type, data)
-	{
-		var e = new Event()
 		e.type = type
-		e.data = data
-		return this.dispatchEvent(e)
+		
+		var handlers = this[handlersProp]
+		if (!handlers)
+			return true
+		
+		var harr = handlers[e.type]
+		if (!harr)
+			return true
+		
+		var len = harr.length
+		if (!len)
+			return true
+		
+		for (var i = 0; i < len; i++)
+			harr[i].call(this, e)
+		
+		return !e.defaultPrevented
 	}
 }
 
