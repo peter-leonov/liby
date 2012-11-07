@@ -1,10 +1,9 @@
 ;(function(){
 
-var D = Date,
-	rusMonths = D.rusMonths = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
-	rusMonths2 = D.rusMonths2 = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+var proto = Date.prototype
 
-D.prototype.toRusDate = function () { return this.getDate() + ' ' + rusMonths2[this.getMonth()] + ' ' + this.getFullYear() }
-D.prototype.toRusDateShort = function () { return this.getDate() + ' ' + rusMonths2[this.getMonth()] }
+var rusMonths = Date.rusMonths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+proto.toRusDate = function () { return this.getDate() + ' ' + rusMonths[this.getMonth()] + ' ' + this.getFullYear() }
+proto.toRusDateShort = function () { return this.getDate() + ' ' + rusMonths[this.getMonth()] }
 
 })();
