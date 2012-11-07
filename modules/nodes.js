@@ -16,7 +16,7 @@ proto.text = plain.text = function (text)
 }
 
 
-var tags = ['div', 'span', 'ul', 'dl', 'li', 'dt', 'dd', 'img']
+var tags = 'div span ul dl li dt dd img input textarea'.split(' ')
 for (var i = 0, il = tags.length; i < il; i++)
 	bakeShortcut(tags[i])
 
