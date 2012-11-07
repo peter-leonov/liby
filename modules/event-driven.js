@@ -1,11 +1,10 @@
 ;(function(){
 
-var myName = 'EventDriven',
-	Me = self[myName] = function () {},
-	handlersProp = '__' + myName + 'Handlers',
-	doc = document
+var handlersProp = '__EventDrivenHandlers'
 
-Me.prototype =
+function EventDriven () {}
+
+EventDriven.prototype =
 {
 	addEventListener: function (type, listener, capture)
 	{
@@ -77,6 +76,10 @@ Me.prototype =
 	}
 }
 
+self[EventDriven.name] = EventDriven
+
+
+
 function Event () {}
 
 Event.prototype =
@@ -103,6 +106,6 @@ Event.prototype =
 	}
 }
 
-Me.Event = Event
+EventDriven.Event = Event
 
 })();
