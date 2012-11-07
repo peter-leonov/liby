@@ -6,9 +6,9 @@ function NodesBuilder (node)
 }
 
 var proto = NodesBuilder.prototype
-var fast = NodesBuilder.fast = {}
+var plain = NodesBuilder.plain = {}
 
-proto.text = fast.text = function (text)
+proto.text = plain.text = function (text)
 {
 	var node = doc.createTextNode(text)
 	this.node.appendChild(node)
@@ -40,7 +40,7 @@ function bakeShortcut (tag)
 		return new NodesBuilder(node)
 	}
 	
-	fast[tag] = function (cn)
+	plain[tag] = function (cn)
 	{
 		var node = doc.createElement(tag)
 		node.className = cn
