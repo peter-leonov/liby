@@ -16,6 +16,14 @@ proto.text = plain.text = function (text)
 	return node
 }
 
+proto.add = function (tag, cn)
+{
+	var node = doc.createElement(tag)
+	node.className = cn
+	this.node.appendChild(node)
+	return new NodesBuilder(node)
+}
+
 
 var tags = 'div span a ul dl li dt dd img input textarea'.split(' ')
 for (var i = 0, il = tags.length; i < il; i++)
