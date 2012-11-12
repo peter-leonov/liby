@@ -3,6 +3,7 @@
 function NodesBuilder (node)
 {
 	this.node = node
+	return this
 }
 
 var proto = NodesBuilder.prototype
