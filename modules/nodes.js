@@ -9,7 +9,12 @@ function NodesBuilder (node)
 var proto = NodesBuilder.prototype
 var plain = NodesBuilder.plain = {}
 
-proto.text = plain.text = function (text)
+plain.text = function (text)
+{
+	return doc.createTextNode(text)
+}
+
+proto.text = function (text)
 {
 	var node = doc.createTextNode(text)
 	this.node.appendChild(node)
