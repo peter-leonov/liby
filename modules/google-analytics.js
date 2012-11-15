@@ -17,7 +17,6 @@ var Me =
 		
 		// must be called before any other event tracking
 		window._gaq.push(['_setAccount', this.account])
-		window._gaq.push(['_trackPageview'])
 		
 		// untouched inclusion snippet
 		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -29,9 +28,7 @@ var Me =
 	{
 		this.load()
 		window._gaq.push(a)
-	},
-	
-	trackPageview: function () { this.load() }
+	}
 }
 
 Me.className = 'GoogleAnalytics'
