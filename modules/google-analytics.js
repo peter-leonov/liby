@@ -11,9 +11,9 @@ var Me =
 	
 	load: function ()
 	{
-		if (this.loaded)
+		if (this.included)
 			return
-		this.loaded = true
+		this.included = true
 		
 		// must be called before any other event tracking
 		window._gaq.push(['_setAccount', this.account])
