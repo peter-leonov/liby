@@ -208,18 +208,7 @@ win.__liby_dispatchEvent = doc.__liby_dispatchEvent = Element.prototype.__liby_d
 			continue
 		
 		for (var j = 0, jl = listeners.length; j < jl; j++)
-		{
-			// try
-			// {
-				listeners[j].call(branch[i], w)
-			// }
-			// catch (ex)
-			// {
-			// 	// this trick is useful to report errors from all listeners
-			// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
-			// 	window.setTimeout(function () { throw ex }, 1000)
-			// }
-		}
+			listeners[j].call(branch[i], w)
 		
 		if (w.__propagationStopped)
 			return
@@ -233,48 +222,26 @@ win.__liby_dispatchEvent = doc.__liby_dispatchEvent = Element.prototype.__liby_d
 		{
 			if (!headListeners)
 				break capture
-		
+			
 			listeners = headListeners[1]
 			if (!listeners)
 				break capture
-		
+			
 			for (var j = 0, jl = listeners.length; j < jl; j++)
-			{
-				// try
-				// {
-					listeners[j].call(head, w)
-				// }
-				// catch (ex)
-				// {
-				// 	// this trick is useful to report errors from all listeners
-				// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
-				// 	window.setTimeout(function () { throw ex }, 1000)
-				// }
-			}
+				listeners[j].call(head, w)
 		}
 	
 		bubble:
 		{
 			if (!headListeners)
 				break bubble
-		
+			
 			listeners = headListeners[0]
 			if (!listeners)
 				break bubble
-		
+			
 			for (var j = 0, jl = listeners.length; j < jl; j++)
-			{
-				// try
-				// {
-					listeners[j].call(head, w)
-				// }
-				// catch (ex)
-				// {
-				// 	// this trick is useful to report errors from all listeners
-				// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
-				// 	window.setTimeout(function () { throw ex }, 1000)
-				// }
-			}
+				listeners[j].call(head, w)
 		}
 	}
 	
@@ -298,18 +265,7 @@ win.__liby_dispatchEvent = doc.__liby_dispatchEvent = Element.prototype.__liby_d
 			continue
 		
 		for (var j = 0, jl = listeners.length; j < jl; j++)
-		{
-			// try
-			// {
-				listeners[j].call(branch[i], w)
-			// }
-			// catch (ex)
-			// {
-			// 	// this trick is useful to report errors from all listeners
-			// 	// 1000 delay helps to avoid sensitive lag when error reporting is on
-			// 	window.setTimeout(function () { throw ex }, 1000)
-			// }
-		}
+			listeners[j].call(branch[i], w)
 		
 		if (w.__propagationStopped)
 			return
