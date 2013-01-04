@@ -84,8 +84,6 @@ Event.prototype =
 	}
 }
 
-// var DocumentEvent = win.DocumentEvent = function () { this.constructor = DocumentEvent }
-// DocumentEvent.prototype = new Event()
 var UIEvent = win.UIEvent = function () { this.constructor = UIEvent }
 UIEvent.prototype = new Event()
 UIEvent.prototype.initUIEvent = function (type, bubbles, cancelable, view, detail)
@@ -128,7 +126,7 @@ KeyboardEvent.prototype = new Event()
 var MutationEvent = win.MutationEvent = function () { this.constructor = MutationEvent }
 MutationEvent.prototype = new Event()
 
-var eventConstructors = {Event:Event, /*DocumentEvent:DocumentEvent,*/ UIEvent:UIEvent, MouseEvent:MouseEvent, KeyboardEvent:KeyboardEvent, MutationEvent:MutationEvent}
+var eventConstructors = {Event:Event, UIEvent:UIEvent, MouseEvent:MouseEvent, KeyboardEvent:KeyboardEvent, MutationEvent:MutationEvent}
 
 
 function getEventWrapper (e, kind)
@@ -152,7 +150,7 @@ win.__liby_dispatchEvent = doc.__liby_dispatchEvent = Element.prototype.__liby_d
 		node = this,
 		type = w.type
 	
-	var branch = [], branchListeners = [], head, headListeners, // captures = [], bubbles = [],
+	var branch = [], branchListeners = [], head, headListeners,
 		all, byType, listeners
 	
 	if (target.__liby_isWindow)
