@@ -3,13 +3,13 @@
 <!--# include virtual="event-listener.js" -->
 <!--# include virtual="element-fix.js" -->
 
-// event dispatching
+// dispatching proper events right way
 <!--# include virtual="script-onload.js" -->
 <!--# include virtual="input-focus-blur-change.js" -->
 <!--# include virtual="input-select.js" -->
 <!--# include virtual="form-submit.js" -->
 <!--# include virtual="image-dragdrop.js" -->
-<!--# include virtual="onready.js" -->
+<!--# include virtual="dom-content-loaded.js" -->
 
 // css class
 <!--# include virtual="get-elements-by-class-name.js" -->
