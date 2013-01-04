@@ -49,17 +49,10 @@ Event.prototype =
 		this.currentTarget = this.target = (e.srcElement || doc) // dirty hack for window/document targets
 		this.detail = - e.wheelDelta / 30
 		
-		var body = doc.body
-		if (body)
-		{
-			this.pageX = e.clientX + docelem.scrollLeft - body.clientLeft // document.body.scrollLeft
-			this.pageY = e.clientY + docelem.scrollTop  - body.clientTop // document.body.scrollTop
-		}
-		else
-		{
-			this.pageX = e.clientX + docelem.scrollLeft
-			this.pageY = e.clientY + docelem.scrollTop
-		}
+		// relies on window-page-offset fix
+		this.pageX = e.clientX + win.pageXOffset
+		this.pageY = e.clientY + win.pageYOffset
+		
 		this.dataTransfer = e.dataTransfer
 	},
 	
