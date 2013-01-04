@@ -1,12 +1,19 @@
-<!--# include virtual="trident-3-4-prototype.js" -->
+// core
+<!--# include virtual="prototype.js" -->
+<!--# include virtual="event-listener.js" -->
+<!--# include virtual="element-fix.js" -->
 
-<!--# include virtual="trident-3-4-event-listener.js" -->
-<!--# include virtual="trident4-element-fix.js" -->
-<!--# include virtual="trident-3-4-script-onload.js" -->
-<!--# include virtual="trident-3-4-input-focus-blur-change.js" -->
-<!--# include virtual="trident-3-4-form-submit.js" -->
-<!--# include virtual="trident-3-4-image-dragdrop.js" -->
-<!--# include virtual="trident-3-4-onready.js" -->
-<!--# include virtual="trident-3-4-window-page-offset.js" -->
-<!--# include virtual="trident4-selectors.js" -->
-<!--# include virtual="trident4-class-list.js" -->
+// event dispatching
+<!--# include virtual="script-onload.js" -->
+<!--# include virtual="input-focus-blur-change.js" -->
+<!--# include virtual="input-select.js" -->
+<!--# include virtual="form-submit.js" -->
+<!--# include virtual="image-dragdrop.js" -->
+<!--# include virtual="onready.js" -->
+
+// css class
+<!--# include virtual="get-elements-by-class-name.js" -->
+<!--# include virtual="class-list.js" -->
+
+// misc
+<!--# include virtual="window-page-offset.js" -->
