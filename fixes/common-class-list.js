@@ -1,3 +1,4 @@
+// the axact copy of triden4/common-class-list.js
 ;(function(){
 
 var R = RegExp
