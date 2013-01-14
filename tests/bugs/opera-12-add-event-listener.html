@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Opera duplicated event listener breaks order (DSK-380942@bugs.opera.com)</title>
+	<script src="../test-framework/tests.common.js"></script>
+</head>
+<body>
+<script>
+Tests.test(function (t)
+{
+	var order = []
+	function dup () { order.push(1) }
+	document.body.addEventListener('click', dup)
+	document.body.addEventListener('click', function () { order.push(2) })
+	document.body.addEventListener('click', function () { order.push(3) })
+	document.body.addEventListener('click', dup)
+	
+	var e = document.createEvent('UIEvents')
+	e.initEvent('click', true, true)
+	document.body.dispatchEvent(e)
+	
+	t.like(order, [1, 2, 3], 'order')
+})
+</script>
+</body>
+</html>
