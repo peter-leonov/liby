@@ -5,6 +5,26 @@
 if (document.documentElement.classList)
 	return
 
+
+var defineProperty
+if (Object.defineProperty)
+	defineProperty = function (o, p, c)
+	{
+		return Object.defineProperty(o, p, c)
+	}
+else if (Object.__defineGetter__)
+	defineProperty = function (o, p, c)
+	{
+		if (c.get)
+			o.__defineGetter__(p, c.get)
+		
+		if (c.set)
+			o.__defineSetter__(p, c.set)
+	}
+else
+	throw new Error('no support for any kind of getters and setters')
+
+
 function ClassList (node)
 {
 	this.node = node
@@ -17,7 +37,7 @@ ClassList.prototype.getLength = function ()
 }
 
 
-Object.defineProperty(ClassList.prototype, 'length', {get: ClassList.prototype.getLength})
+defineProperty(ClassList.prototype, 'length', {get: ClassList.prototype.getLength})
 
 function bakeItemGetter (n)
 {
@@ -25,7 +45,7 @@ function bakeItemGetter (n)
 }
 
 for (var i = 0; i < 100; i++)
-	Object.defineProperty(ClassList.prototype, i, {get: bakeItemGetter(i)})
+	defineProperty(ClassList.prototype, i, {get: bakeItemGetter(i)})
 
 
 function getClassList ()
@@ -37,6 +57,6 @@ function getClassList ()
 	return this.__classList = new ClassList(this)
 }
 
-Object.defineProperty(Element.prototype, 'classList', {get: getClassList})
+defineProperty(Element.prototype, 'classList', {get: getClassList})
 
 })();
