@@ -14,9 +14,9 @@ Tests.test(function (t)
 	t.test('deleted preventDefault()', function (t)
 	{
 		t.eq(typeof document.createEvent, 'function', 'document.createEvent is a function')
-		t.eq(typeof UIEvent.prototype.preventDefault, 'function')
-		delete UIEvent.prototype.preventDefault
-		t.eq(document.createEvent('Event').preventDefault, undefined, 'preventDefault must be undefined')
+		t.eq(typeof Event.prototype.preventDefault, 'function')
+		delete Event.prototype.preventDefault
+		t.eq(document.createEvent('UIEvent').preventDefault, undefined, 'preventDefault must be undefined')
 	})
 	
 	t.test('event base classes', function (t)
