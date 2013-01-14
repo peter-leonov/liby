@@ -79,7 +79,6 @@ Me.prototype =
 		catch (ex)
 		{
 			this.fail([ex], 'got an exception')
-			window.setTimeout(function () { throw ex }, 0)
 		}
 	},
 	
