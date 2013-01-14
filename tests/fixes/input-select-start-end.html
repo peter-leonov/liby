@@ -3,16 +3,10 @@
 <head>
 	<meta name="viewport" content="width=device-width"/>
 	<title>Tests for HTMLInputElement selectStart/selectEnd</title>
-	<script src="tests.common.js"></script>
+	<script src="../test-framework/tests.common.js"></script>
 	
-	<!--[if lte IE 7]>
-	<script src="../fixes/trident3.js"></script>
-	<script src="../fixes/trident3-input-selection.js"></script>
-	<![endif]-->
-	<!--[if IE 8]>
-	<script src="../fixes/trident4.js"></script>
-	<script src="../fixes/trident4-input-selection.js"></script>
-	<![endif]-->
+	<!--[if IE 8]><script src="../../fixes/trident4/trident4.js"></script><![endif]-->
+	<!--[if IE 8]><script src="../../fixes/trident4/input-selection.js"></script><![endif]-->
 </head>
 <body>
 <input type="text" id="ie-actual-selection"/>
