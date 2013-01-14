@@ -17,22 +17,22 @@ Tests.test(function (t)
 	t.test('sync GET', function (t)
 	{
 		t.expect(1)
-		function callback ()
+		function callback (text)
 		{
-			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+			t.eq(/<title>(.+?)<\/title>/.exec(text)[1], 'Request tests')
 		}
-		Request.get('?', null, callback, true)
+		Request.get('?', callback, true)
 	})
 	
 	t.test('async GET', function (t)
 	{
 		t.expect(1)
-		function callback ()
+		function callback (text)
 		{
-			t.eq(/<title>(.+?)<\/title>/.exec(this.responseText)[1], 'Request tests')
+			t.eq(/<title>(.+?)<\/title>/.exec(text)[1], 'Request tests')
 			t.done()
 		}
-		Request.get('?', null, callback)
+		Request.get('?', callback)
 		t.wait(1000)
 	})
 	
