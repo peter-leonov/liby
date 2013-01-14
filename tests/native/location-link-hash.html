@@ -32,7 +32,7 @@ Tests.test(function (t)
 		alert(l.hash + '\n' + /#.*$/.exec(l.href))
 	}
 	
-	window.addEventListener('hashchange', check, false)
+	window.onhashchange = check
 })
 </script>
 </body>
