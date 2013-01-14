@@ -63,7 +63,7 @@ Me.prototype =
 	run: function (callback)
 	{
 		var me = this
-		this.q = Q.all(function () { me._done() })
+		this.q = Me.Q.all(function () { me._done() })
 		
 		var last = this.q.wait()
 		this.exec(this.job, [this.tool])
