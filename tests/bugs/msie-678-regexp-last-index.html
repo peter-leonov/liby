@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta name="viewport" content="width=device-width"/>
 	<title>MSIE RegExp object lastIndex test (bug 620217)</title>
+	<script src="../test-framework/tests.common.js"></script>
 </head>
 <body>
-
 <script>
-var rex = /^/
-rex.exec('')
-alert(rex.lastIndex == 0 ? 'passed' : 'failed')
-</script>
+Tests.test(function (t)
+{
+	var rex = /^/
+	rex.exec('')
+	t.ok(rex.lastIndex == 0, 'rex.lastIndex == 0')
 
+})
+</script>
 </body>
 </html>
