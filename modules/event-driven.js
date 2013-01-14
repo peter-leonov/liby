@@ -50,12 +50,17 @@ EventDriven.prototype =
 	
 	dispatchEvent: function (type, e)
 	{
-		if (!e)
-			e = {}
+		if (typeof type == 'string')
+		{
+			if (!e)
+				e = {}
+			
+			e.type = type
+		}
+		else
+			e = type
 		
 		e.__dispatched = true
-		
-		e.type = type
 		
 		var handlers = this[handlersProp]
 		if (!handlers)
