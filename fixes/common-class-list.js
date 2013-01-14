@@ -1,5 +1,19 @@
 // the axact copy of triden4/common-class-list.js
+(function(){
+
+if (window.DOMTokenList)
+	return
+
+window.DOMTokenList = function () {}
+
+})();
+
 ;(function(){
+
+function R_escape (str)
+{
+	return ('' + str).replace(/([\\\.\*\+\?\$\^\|\(\)\[\]\{\}])/g, '\\$1')
+}
 
 var R = RegExp
 
@@ -13,7 +27,7 @@ function getRex (cn)
 		return rex
 	}
 	
-	return rexCache[cn] = new R('(?:^| +)(?:' + R.escape(cn) + '(?:$| +))+', 'g')
+	return rexCache[cn] = new R('(?:^| +)(?:' + R_escape(cn) + '(?:$| +))+', 'g')
 }
 
 var aryCache = {}

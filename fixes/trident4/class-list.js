@@ -1,23 +1,3 @@
-;(function(){
-
-window.DOMTokenList = function () {}
-
-})();
-
-;(function(){
-
-var meta = /([\\\.\*\+\?\$\^\|\(\)\[\]\{\}])/g
-
-function escape (str)
-{
-	return ('' + str).replace(meta, '\\$1')
-}
-
-RegExp.escape = escape
-
-})();
-
-
 <!--# include virtual="common-class-list.js" -->
 
 ;(function(){
