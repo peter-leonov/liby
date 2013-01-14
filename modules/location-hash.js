@@ -29,7 +29,7 @@ Me.prototype =
 			return
 		}
 		
-		this.dispatchEventData('change')
+		this.dispatchEvent('change')
 	},
 	
 	eraseEmptyHash: function()

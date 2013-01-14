@@ -52,7 +52,7 @@ Me.prototype =
 		if (this.disabled)
 			return
 		
-		if (this.dispatchEventData('moveabout', {event: e, mousedownEvent: this.mousedownEvent}))
+		if (this.dispatchEvent('moveabout', {event: e, mousedownEvent: this.mousedownEvent}))
 		{
 			this.startX = e.clientX
 			this.startY = e.clientY
@@ -75,7 +75,7 @@ Me.prototype =
 		
 		if (dx * dx > 9 || dy * dy > 9)
 		{
-			if (this.dispatchEventData('movestart', {event: e, mousedownEvent: this.mousedownEvent}))
+			if (this.dispatchEvent('movestart', {event: e, mousedownEvent: this.mousedownEvent}))
 			{
 				Me.dropClick()
 				
@@ -95,7 +95,7 @@ Me.prototype =
 			}
 		}
 		else
-			this.dispatchEventData('movestarting', {event: e, mousedownEvent: this.mousedownEvent})
+			this.dispatchEvent('movestarting', {event: e, mousedownEvent: this.mousedownEvent})
 	},
 	
 	onup: function (e)
@@ -119,7 +119,7 @@ Me.prototype =
 		{
 			this.lastDX = dx
 			this.lastDY = dy
-			this.dispatchEventData('move', {event: e, dx: dx, dy: dy})
+			this.dispatchEvent('move', {event: e, dx: dx, dy: dy})
 		}
 	},
 	
@@ -128,7 +128,7 @@ Me.prototype =
 		var dx = e.clientX - this.startX,
 			dy = e.clientY - this.startY
 		
-		if (this.dispatchEventData('moveend', {event: e, dx: dx, dy: dy, movements: this.movements}))
+		if (this.dispatchEvent('moveend', {event: e, dx: dx, dy: dy, movements: this.movements}))
 		{
 			e.preventDefault()
 			e.stopPropagation()

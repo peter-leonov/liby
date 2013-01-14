@@ -44,7 +44,7 @@ Me.prototype =
 	
 	select: function (value, num)
 	{
-		var ok = this.dispatchEventData('select', {value: value, num: num})
+		var ok = this.dispatchEvent('select', {value: value, num: num})
 		if (ok)
 			this.renderSelected(num)
 		return ok

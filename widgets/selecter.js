@@ -148,7 +148,7 @@ Me.prototype =
 		if (!this.optionPresent[num])
 			return
 		
-		if (!this.dispatchEventData('select', {value: this.options[num], num: num}))
+		if (!this.dispatchEvent('select', {value: this.options[num], num: num}))
 			return
 		
 		this.renderSelected(num)
