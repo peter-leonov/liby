@@ -116,10 +116,8 @@ MouseEvent.prototype.initMouseEvent = function (type, bubbles, cancelable, view,
 }
 var KeyboardEvent = win.KeyboardEvent = function () { this.constructor = KeyboardEvent }
 KeyboardEvent.prototype = new Event()
-var MutationEvent = win.MutationEvent = function () { this.constructor = MutationEvent }
-MutationEvent.prototype = new Event()
 
-var eventConstructors = {Event:Event, UIEvent:UIEvent, MouseEvent:MouseEvent, KeyboardEvent:KeyboardEvent, MutationEvent:MutationEvent}
+var eventConstructors = {Event:Event, UIEvent:UIEvent, MouseEvent:MouseEvent, KeyboardEvent:KeyboardEvent}
 
 
 function getEventWrapper (e, kind)
