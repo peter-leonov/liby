@@ -11,6 +11,8 @@ Tests.test(function (t)
 {
 	t.test('Object.defineProperty on a node', function (t)
 	{
+		t.mayFail()
+		
 		var o = document.createElement('div'),
 			value
 		
@@ -36,6 +38,8 @@ Tests.test(function (t)
 	
 	t.test('Object.defineProperty on a regular object', function (t)
 	{
+		t.mayFail()
+		
 		var o = {},
 			value
 		
@@ -62,6 +66,8 @@ Tests.test(function (t)
 	
 	t.test('__defineGetter/Setter__', function (t)
 	{
+		t.mayFail()
+		
 		var o = {},
 			value
 		
@@ -75,6 +81,8 @@ Tests.test(function (t)
 	
 	t.test('get value (), set value ()', function (t)
 	{
+		t.mayFail()
+		
 		var o,
 			value
 		
