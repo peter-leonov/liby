@@ -11,23 +11,6 @@
 <script>
 Tests.test(function (t)
 {
-	t.test('presence', function (t)
-	{
-		var node = document.createElement('div')
-		
-		t.ok(EventTarget, 'defined')
-		
-		// to date nor IE and Safari neither Opera support EventTarget
-		t.ok(node instanceof self.EventTarget, 'instanceof EventTarget')
-	})
-	
-	t.test('subclassing', function (t)
-	{
-		function A () {}
-		A.prototype = document.body
-		t.instance(new A(), EventTarget)
-	})
-	
 	t.test('add listener then dispatch', function (t)
 	{
 		var node = document.createElement('div')
