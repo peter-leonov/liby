@@ -3,15 +3,38 @@
 <head>
 	<meta name="viewport" content="width=device-width"/>
 	<title>Look for support of getters/settersof some kind</title>
-	<script src="tests.common.js"></script>
-	
-	<script src="../modules/prototype.js"></script>
+	<script src="../test-framework/tests.common.js"></script>
 </head>
 <body>
 <script>
 Tests.test(function (t)
 {
-	t.test('Object.defineProperty', function (t)
+	t.test('Object.defineProperty on a node', function (t)
+	{
+		var o = document.createElement('div'),
+			value
+		
+		Object.defineProperty(o, 'a', {get: function () { return 1 }, set: function (v) { value = v }})
+		
+		t.eq(o.a, 1, 'get')
+		o.a = 3
+		t.eq(value, 3, 'set')
+		
+		t.test('prototype', function (t)
+		{
+			var value
+			
+			Object.defineProperty(Element.prototype, 'a', {get: function () { return 1 }, set: function (v) { value = v }})
+			
+			var o = document.createElement('div')
+			t.eq(o.a, 1, 'get')
+			o.a = 3
+			t.eq(value, 3, 'set')
+		})
+		
+	})
+	
+	t.test('Object.defineProperty on a regular object', function (t)
 	{
 		var o = {},
 			value
