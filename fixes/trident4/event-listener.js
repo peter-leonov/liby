@@ -320,7 +320,10 @@ win.__liby_addEventListener = doc.__liby_addEventListener = Element.prototype.__
 	
 	var dup = listeners.indexOf(func)
 	if (dup != -1)
-		listeners.splice(dup, 1)
+	{
+		listeners[dup] = func
+		return
+	}
 	
 	listeners.push(func)
 }
