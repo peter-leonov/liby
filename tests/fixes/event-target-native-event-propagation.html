@@ -110,15 +110,15 @@ Tests.test(function (t)
 		function fire () { fired = true }
 		node.onkeydown = fire
 		
-		if (!window.hasNativeDOMEvents)
-		{
-			node.fireEvent('onkeydown')
-		}
-		else
+		if (window.hasNativeDOMEvents)
 		{
 			var e = document.createEvent('UIEvent')
 			e.initEvent('keydown', true, true)
 			node.dispatchEvent(e)
+		}
+		else
+		{
+			node.fireEvent('onkeydown')
 		}
 		
 		t.like(order, ['captures-keydown-1:node', 'bubbles-keydown-3:node'], '“keydown” captures and bubbles')
