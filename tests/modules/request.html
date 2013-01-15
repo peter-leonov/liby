@@ -28,6 +28,20 @@ Tests.test(function (t)
 		t.wait(1000)
 	})
 	
+	t.test('HEAD', function (t)
+	{
+		t.expect(2)
+		
+		function callback (r)
+		{
+			t.eq(r.status, 200, 'status')
+			t.eq(r.responseText, '', 'title')
+			t.done()
+		}
+		Request.head('?', callback)
+		t.wait(1000)
+	})
+	
 	t.test('POST', function (t)
 	{
 		t.expect(2)

@@ -7,6 +7,11 @@ var Request =
 		return Request.open('GET', url, null, callback)
 	},
 	
+	head: function (url, callback)
+	{
+		return Request.open('HEAD', url, null, callback)
+	},
+	
 	post: function (url, data, callback)
 	{
 		return Request.open('POST', url, data, callback)
