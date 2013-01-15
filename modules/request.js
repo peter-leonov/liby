@@ -26,22 +26,12 @@ var Request =
 		
 		r.open('GET', url, true)
 		
-		// no need to check state without the callback present
-		if (callback)
+		r.onreadystatechange = function onreadystatechange ()
 		{
-			r.onreadystatechange = function onreadystatechange ()
-			{
-				if (r.readyState != 4)
-					return
-				
-				if (r.status != 200)
-				{
-					callback(null, r)
-					return
-				}
-				
-				callback(r)
-			}
+			if (r.readyState != 4)
+				return
+			
+			callback(r)
 		}
 		
 		// postpone sending a request giving caller a chance to configure the request
