@@ -1,7 +1,6 @@
 ;(function(){
 
 var myName = 'Request',
-	XHR = XMLHttpRequest,
 	types = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
 function onreadystatechange ()
@@ -15,19 +14,13 @@ function onreadystatechange ()
 	}
 }
 
-XHR.UNSENT = 0
-XHR.OPENED = 1
-XHR.HEADERS_RECEIVED = 2
-XHR.LOADING = 3
-XHR.DONE = 4
-
 var Me = self[myName] =
 {
 	onreadystatechange: onreadystatechange,
 	charset: 'utf-8',
 	post: function (url, data, callback, sync)
 	{
-		var r = new XHR()
+		var r = new XMLHttpRequest()
 		
 		r.open('POST', url, !sync)
 		r.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=' + this.charset)
@@ -44,7 +37,7 @@ var Me = self[myName] =
 	
 	get: function (url, callback, sync)
 	{
-		var r = new XHR()
+		var r = new XMLHttpRequest()
 		
 		r.open('GET', url, !sync)
 		if (!sync)
