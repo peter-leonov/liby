@@ -4,12 +4,12 @@ var types = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
 function onreadystatechange (r, callback)
 {
-	if (r.readyState == 4)
-	{
-		r.statusType = types[Math.floor(r.status / 100)]
-		if (callback)
-			callback(r.responseText, r)
-	}
+	if (r.readyState != 4)
+		return
+	
+	r.statusType = types[Math.floor(r.status / 100)]
+	if (callback)
+		callback(r.responseText, r)
 }
 
 var Request =
