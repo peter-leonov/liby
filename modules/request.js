@@ -7,9 +7,13 @@ function onreadystatechange (r, callback)
 	if (r.readyState != 4)
 		return
 	
-	r.statusType = types[Math.floor(r.status / 100)]
-	if (callback)
-		callback(r.responseText, r)
+	if (r.status != 200)
+	{
+		callback(null, r)
+		return
+	}
+	
+	callback(r)
 }
 
 var Request =
@@ -38,8 +42,13 @@ var Request =
 		var r = new XMLHttpRequest()
 		
 		r.open('GET', url, true)
-		r.onreadystatechange = function () { onreadystatechange(r, callback) }
-		r.send(null)
+		
+		// no need to check state without the callback present
+		if (callback)
+			r.onreadystatechange = function () { onreadystatechange(r, callback) }
+		
+		// postpone sending a request giving caller a chance to configure the request
+		window.setTimeout(function () { r.send() }, 0)
 		
 		return r
 	}

@@ -17,9 +17,9 @@ Tests.test(function (t)
 	t.test('GET', function (t)
 	{
 		t.expect(1)
-		function callback (text)
+		function callback (r)
 		{
-			t.like(/<title>.+?<\/title>/.exec(text), ['<title>Request tests</title>'])
+			t.like(/<title>.+?<\/title>/.exec(r.responseText), ['<title>Request tests</title>'])
 			t.done()
 		}
 		Request.get('?', callback)
