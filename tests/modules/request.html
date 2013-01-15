@@ -18,10 +18,10 @@ Tests.test(function (t)
 	{
 		t.expect(2)
 		
-		function callback (r)
+		function callback (body, status)
 		{
-			t.eq(r.status, 200, 'status')
-			t.match(r.responseText, /Request tests/i, 'title')
+			t.eq(status, 200, 'status')
+			t.match(body, /Request tests/i, 'title')
 			t.done()
 		}
 		Request.get('?', callback)
@@ -32,10 +32,10 @@ Tests.test(function (t)
 	{
 		t.expect(2)
 		
-		function callback (r)
+		function callback (body, status)
 		{
-			t.eq(r.status, 200, 'status')
-			t.eq(r.responseText, '', 'title')
+			t.eq(status, 200, 'status')
+			t.eq(body, '', 'title')
 			t.done()
 		}
 		Request.head('?', callback)
@@ -46,10 +46,10 @@ Tests.test(function (t)
 	{
 		t.expect(2)
 		
-		function callback (r)
+		function callback (body, status)
 		{
-			t.eq(r.status, 405, 'status')
-			t.match(r.responseText, /Not Allowed/i, 'title')
+			t.eq(status, 405, 'status')
+			t.match(body, /Not Allowed/i, 'title')
 			t.done()
 		}
 		Request.post('?', 'data', callback)
@@ -60,10 +60,10 @@ Tests.test(function (t)
 	{
 		t.expect(2)
 		
-		function callback (r)
+		function callback (body, status)
 		{
-			t.eq(r.status, 405, 'status')
-			t.match(r.responseText, /Not Allowed/i, 'title')
+			t.eq(status, 405, 'status')
+			t.match(body, /Not Allowed/i, 'title')
 			t.done()
 		}
 		Request.open('PUT', '?', 'data', callback)

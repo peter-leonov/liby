@@ -28,7 +28,7 @@ var Request =
 			if (r.readyState != 4)
 				return
 			
-			callback(r)
+			callback(r.responseText, r.status, r)
 		}
 		
 		// postpone sending a request giving caller a chance to configure the request
