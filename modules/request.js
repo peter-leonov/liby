@@ -1,22 +1,7 @@
 ;(function(){
 
-function onreadystatechange (r, callback)
-{
-	if (r.readyState != 4)
-		return
-	
-	if (r.status != 200)
-	{
-		callback(null, r)
-		return
-	}
-	
-	callback(r)
-}
-
 var Request =
 {
-	onreadystatechange: onreadystatechange,
 	charset: 'utf-8',
 	post: function (url, data, callback, sync)
 	{
@@ -43,7 +28,21 @@ var Request =
 		
 		// no need to check state without the callback present
 		if (callback)
-			r.onreadystatechange = function () { onreadystatechange(r, callback) }
+		{
+			r.onreadystatechange = function onreadystatechange ()
+			{
+				if (r.readyState != 4)
+					return
+				
+				if (r.status != 200)
+				{
+					callback(null, r)
+					return
+				}
+				
+				callback(r)
+			}
+		}
 		
 		// postpone sending a request giving caller a chance to configure the request
 		window.setTimeout(function () { r.send() }, 0)
