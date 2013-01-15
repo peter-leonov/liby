@@ -1,7 +1,5 @@
 ;(function(){
 
-var types = ['success', 'information', 'success', 'redirect', 'error', 'error']
-
 function onreadystatechange (r, callback)
 {
 	if (r.readyState != 4)
