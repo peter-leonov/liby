@@ -2,14 +2,14 @@
 
 var types = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
-function onreadystatechange ()
+function onreadystatechange (r)
 {
-	if (this.readyState == 4)
+	if (r.readyState == 4)
 	{
-		this.statusType = types[Math.floor(this.status / 100)]
-		var callback = this.callback
+		r.statusType = types[Math.floor(r.status / 100)]
+		var callback = r.callback
 		if (callback)
-			callback(this.responseText, this)
+			callback(r.responseText, r)
 	}
 }
 
@@ -39,7 +39,7 @@ var Request =
 		var r = new XMLHttpRequest()
 		
 		r.open('GET', url, true)
-		r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
+		r.onreadystatechange = function () { onreadystatechange(r) }
 		if (callback)
 			r.callback = callback
 		r.send(null)
