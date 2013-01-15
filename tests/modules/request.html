@@ -16,16 +16,31 @@ Tests.test(function (t)
 {
 	t.test('GET', function (t)
 	{
-		t.expect(1)
+		t.expect(2)
+		
 		function callback (r)
 		{
-			t.like(/<title>.+?<\/title>/.exec(r.responseText), ['<title>Request tests</title>'])
+			t.eq(r.status, 200, 'status')
+			t.match(r.responseText, /Request tests/i, 'title')
 			t.done()
 		}
 		Request.get('?', callback)
 		t.wait(1000)
 	})
 	
+	t.test('POST', function (t)
+	{
+		t.expect(2)
+		
+		function callback (r)
+		{
+			t.eq(r.status, 405, 'status')
+			t.match(r.responseText, /Not Allowed/i, 'title')
+			t.done()
+		}
+		Request.post('?', 'data', callback)
+		t.wait(1000)
+	})
 })
 </script>
 </body>
