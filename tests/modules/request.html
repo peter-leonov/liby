@@ -55,6 +55,20 @@ Tests.test(function (t)
 		Request.post('?', 'data', callback)
 		t.wait(1000)
 	})
+	
+	t.test('PUT', function (t)
+	{
+		t.expect(2)
+		
+		function callback (r)
+		{
+			t.eq(r.status, 405, 'status')
+			t.match(r.responseText, /Not Allowed/i, 'title')
+			t.done()
+		}
+		Request.open('PUT', '?', 'data', callback)
+		t.wait(1000)
+	})
 })
 </script>
 </body>
