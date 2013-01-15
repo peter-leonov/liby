@@ -38,4 +38,10 @@ $.require = function (src)
 	r.send(null)
 }
 
+if (self.Request)
+{
+	$.get = Request.get
+	$.post = Request.post
+}
+
 })();
