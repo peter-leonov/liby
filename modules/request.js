@@ -2,26 +2,26 @@
 
 var Request =
 {
-	get: function (url, callback)
+	get: function (uri, callback)
 	{
-		return Request.open('GET', url, null, callback)
+		return Request.open('GET', uri, null, callback)
 	},
 	
-	head: function (url, callback)
+	head: function (uri, callback)
 	{
-		return Request.open('HEAD', url, null, callback)
+		return Request.open('HEAD', uri, null, callback)
 	},
 	
-	post: function (url, data, callback)
+	post: function (uri, data, callback)
 	{
-		return Request.open('POST', url, data, callback)
+		return Request.open('POST', uri, data, callback)
 	},
 	
-	open: function (method, url, data, callback)
+	open: function (method, uri, data, callback)
 	{
 		var r = new XMLHttpRequest()
 		
-		r.open(method, url, true)
+		r.open(method, uri, true)
 		
 		r.onreadystatechange = function onreadystatechange ()
 		{
