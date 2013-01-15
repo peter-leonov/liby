@@ -1,7 +1,6 @@
 ;(function(){
 
-var myName = 'Request',
-	types = ['success', 'information', 'success', 'redirect', 'error', 'error']
+var types = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
 function onreadystatechange ()
 {
@@ -14,7 +13,7 @@ function onreadystatechange ()
 	}
 }
 
-var Me = self[myName] =
+var Request =
 {
 	onreadystatechange: onreadystatechange,
 	charset: 'utf-8',
@@ -52,5 +51,6 @@ var Me = self[myName] =
 	}
 }
 
+self.Request = Request
 
 })();
