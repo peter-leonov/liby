@@ -34,18 +34,15 @@ var Request =
 		return r
 	},
 	
-	get: function (url, callback, sync)
+	get: function (url, callback)
 	{
 		var r = new XMLHttpRequest()
 		
-		r.open('GET', url, !sync)
-		if (!sync)
-			r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
+		r.open('GET', url, true)
+		r.onreadystatechange = function () { onreadystatechange.call(r) } // wrapped for FF 2.0
 		if (callback)
 			r.callback = callback
 		r.send(null)
-		if (sync)
-			onreadystatechange.call(r) // called for FF 3.5, 3.6
 		
 		return r
 	}
