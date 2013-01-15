@@ -14,22 +14,12 @@
 <script>
 Tests.test(function (t)
 {
-	t.test('sync GET', function (t)
+	t.test('GET', function (t)
 	{
 		t.expect(1)
 		function callback (text)
 		{
-			t.eq(/<title>(.+?)<\/title>/.exec(text)[1], 'Request tests')
-		}
-		Request.get('?', callback, true)
-	})
-	
-	t.test('async GET', function (t)
-	{
-		t.expect(1)
-		function callback (text)
-		{
-			t.eq(/<title>(.+?)<\/title>/.exec(text)[1], 'Request tests')
+			t.like(/<title>.+?<\/title>/.exec(text), ['<title>Request tests</title>'])
 			t.done()
 		}
 		Request.get('?', callback)
