@@ -2,12 +2,11 @@
 
 var types = ['success', 'information', 'success', 'redirect', 'error', 'error']
 
-function onreadystatechange (r)
+function onreadystatechange (r, callback)
 {
 	if (r.readyState == 4)
 	{
 		r.statusType = types[Math.floor(r.status / 100)]
-		var callback = r.callback
 		if (callback)
 			callback(r.responseText, r)
 	}
@@ -39,9 +38,7 @@ var Request =
 		var r = new XMLHttpRequest()
 		
 		r.open('GET', url, true)
-		r.onreadystatechange = function () { onreadystatechange(r) }
-		if (callback)
-			r.callback = callback
+		r.onreadystatechange = function () { onreadystatechange(r, callback) }
 		r.send(null)
 		
 		return r
