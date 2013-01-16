@@ -2,8 +2,6 @@
 
 var Request =
 {
-	name: 'Request',
-	
 	get: function (uri, callback)
 	{
 		return Request.open('GET', uri, null, callback)
@@ -40,6 +38,6 @@ var Request =
 	}
 }
 
-Liby.module(Request)
+Liby.Request = Request
 
 })();

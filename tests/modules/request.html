@@ -5,6 +5,7 @@
 	<title>Request tests</title>
 	<script src="../test-framework/tests.common.js"></script>
 	
+	<script>Liby = {}</script>
 	<script src="../../modules/request.js"></script>
 </head>
 <body>
@@ -22,7 +23,7 @@ Tests.test(function (t)
 			t.match(body, /Request tests/i, 'title')
 			t.done()
 		}
-		Request.get('?', callback)
+		Liby.Request.get('?', callback)
 		t.wait(1000)
 	})
 	
@@ -36,7 +37,7 @@ Tests.test(function (t)
 			t.eq(body, '', 'title')
 			t.done()
 		}
-		Request.head('?', callback)
+		Liby.Request.head('?', callback)
 		t.wait(1000)
 	})
 	
@@ -50,7 +51,7 @@ Tests.test(function (t)
 			t.match(body, /Not Allowed/i, 'title')
 			t.done()
 		}
-		Request.post('?', 'data', callback)
+		Liby.Request.post('?', 'data', callback)
 		t.wait(1000)
 	})
 	
@@ -64,7 +65,7 @@ Tests.test(function (t)
 			t.match(body, /Not Allowed/i, 'title')
 			t.done()
 		}
-		Request.open('PUT', '?', 'data', callback)
+		Liby.Request.open('PUT', '?', 'data', callback)
 		t.wait(1000)
 	})
 })
