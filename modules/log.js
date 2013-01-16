@@ -24,10 +24,6 @@ if (s.console && s.console.log) // native console.log() present
 		}
 	}
 }
-else if (s.opera && s.opera.postError) // Opera < 10.5
-{
-	s.log = function () { return s.opera.postError(arguments) }
-}
 else // none
 {
 	s.log = function () {}
