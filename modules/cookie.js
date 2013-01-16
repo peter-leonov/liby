@@ -55,6 +55,6 @@ var Cookie =
 	}
 }
 
-self.Cookie = Cookie
+Liby.Cookie = Cookie
 
 })();
