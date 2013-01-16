@@ -5,50 +5,46 @@
 	<title>tests for Date</title>
 	<script src="../test-framework/tests.common.js"></script>
 	
+	<script>Liby = {}</script>
 	<script src="../../modules/date-diff.js"></script>
 </head>
 <body>
 <script>
 Tests.test(function (t)
 {
-	t.eq(Date.now(), +new Date(), 'Date.now()')
+	var DD = Liby.DateDiff
+	// t.eq(Date.now(), +new Date(), 'Date.now()')
 	
-	t.test('Date.parseDiff()', function (t)
+	t.test('DD.parse()', function (t)
 	{
-		t.like(Date.parseDiff('-35.8m'), ['-', 35.8, 'minute'], '-35.8m')
-		t.like(Date.parseDiff('7777.0s'), ['+', 7777, 'second'], '7777.0s')
-		t.like(Date.parseDiff('+80.001h'), ['+', 80.001, 'hour'], '+80.001h')
-		t.like(Date.parseDiff('4d'), ['+', 4, 'day'], '4d')
-		t.like(Date.parseDiff('9.5w'), ['+', 9.5, 'week'], '9.5w')
-		t.like(Date.parseDiff('-18y'), ['-', 18, 'year'], '-18y')
-		t.like(Date.parseDiff('0'), ['+', 0, 'second'], '0')
-		t.like(Date.parseDiff('-0'), ['-', 0, 'second'], '0')
-		t.like(Date.parseDiff('asdf'), null, 'asdf')
+		t.like(DD.parse('-35.8m'), ['-', 35.8, 'minute'], '-35.8m')
+		t.like(DD.parse('7777.0s'), ['+', 7777, 'second'], '7777.0s')
+		t.like(DD.parse('+80.001h'), ['+', 80.001, 'hour'], '+80.001h')
+		t.like(DD.parse('4d'), ['+', 4, 'day'], '4d')
+		t.like(DD.parse('9.5w'), ['+', 9.5, 'week'], '9.5w')
+		t.like(DD.parse('-18y'), ['-', 18, 'year'], '-18y')
+		t.like(DD.parse('0'), ['+', 0, 'second'], '0')
+		t.like(DD.parse('-0'), ['-', 0, 'second'], '0')
+		t.like(DD.parse('asdf'), null, 'asdf')
 	})
 	
-	t.test('Date.computeDiff()', function (t)
+	t.test('DD.compute()', function (t)
 	{
-		t.like(Date.computeDiff(['-', 35.8, 'minute']), -35.8 * 60 * 1000, '-35.8m')
-		t.like(Date.computeDiff(['+', 7777, 'second']), 7777 * 1000, '7777s')
-		t.like(Date.computeDiff(['+', 80.001, 'hour']), Math.round(80.001 * 60 * 60 * 1000), '80.001h')
-		t.like(Date.computeDiff(['+', 4, 'day']), 4 * 24 * 60 * 60 * 1000, '4d')
-		t.like(Date.computeDiff(['+', 9.5, 'week']), 9.5 * 7 * 24 * 60 * 60 * 1000, '4d')
-		t.like(Date.computeDiff(['-', 18, 'year']), -18 * 365 * 24 * 60 * 60 * 1000, '4d')
-		t.like(Date.computeDiff(['+', 0, 'second']), 0, '0')
-		t.like(Date.computeDiff(['-', 0, 'second']), 0, '0')
+		t.like(DD.compute(['-', 35.8, 'minute']), -35.8 * 60 * 1000, '-35.8m')
+		t.like(DD.compute(['+', 7777, 'second']), 7777 * 1000, '7777s')
+		t.like(DD.compute(['+', 80.001, 'hour']), Math.round(80.001 * 60 * 60 * 1000), '80.001h')
+		t.like(DD.compute(['+', 4, 'day']), 4 * 24 * 60 * 60 * 1000, '4d')
+		t.like(DD.compute(['+', 9.5, 'week']), 9.5 * 7 * 24 * 60 * 60 * 1000, '4d')
+		t.like(DD.compute(['-', 18, 'year']), -18 * 365 * 24 * 60 * 60 * 1000, '4d')
+		t.like(DD.compute(['+', 0, 'second']), 0, '0')
+		t.like(DD.compute(['-', 0, 'second']), 0, '0')
 	})
 	
-	t.test('Date#add()', function (t)
+	t.test('DD.add()', function (t)
 	{
-		t.like(new Date(0).add('1s'), new Date(1000), '1s')
-		t.like(new Date(2 * 60 * 60 * 1000 + 3000).add('-2h'), new Date(3000), '-2h')
+		t.like(DD.add(new Date(0), '1s'), new Date(1000), '1s')
+		t.like(DD.add(new Date(2 * 60 * 60 * 1000 + 3000), '-2h'), new Date(3000), '-2h')
 	})
-	
-	t.test('Date.add()', function (t)
-	{
-		t.like(Date.add('1s'), new Date().add('1s'), '1s')
-	})
-	
 })
 </script>
 </body>
