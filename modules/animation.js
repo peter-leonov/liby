@@ -42,7 +42,7 @@ function Animation (node, motion, duration, trans, unit)
 
 Animation.defaults = {unit: 'px', motion: 'linearTween', duration: 1}
 
-Element.prototype.animate = function (motion, props, duration, unit)
+Animation.animate = function (node, motion, props, duration, unit)
 {
 	var defaults = Animation.defaults
 	if (!motion)
@@ -59,9 +59,9 @@ Element.prototype.animate = function (motion, props, duration, unit)
 		if (prop.length == 2)
 			trans.push({property: k, begin: prop[0], end: prop[1]})
 		else
-			trans.push({property: k, begin: Animation.getStyleProperty(this, k), end: prop[0] || prop})
+			trans.push({property: k, begin: Animation.getStyleProperty(node, k), end: prop[0] || prop})
 	}
-	return new Animation(this, motion, duration, trans, unit).start()
+	return new Animation(node, motion, duration, trans, unit).start()
 }
 
 
@@ -127,11 +127,6 @@ Animation.setStyleProperty = function (node, p, value, unit)
 		if (/color/.test(p))
 			return node.style[p] = 'rgb(' + parseInt(value) + ',' + parseInt(value) + ',' + parseInt(value) + ')'
 		
-		// for SVG elements
-		if (p == 'r')
-			return node.r.baseVal.value = value
-		
-		
 		if (/scroll/.test(p))
 			return node[p] = Math.round(value)
 		
@@ -148,11 +143,10 @@ Animation.setStyleProperty = function (node, p, value, unit)
 	}
 	catch (ex)
 	{
-		log('setStyleProperty(' + arguments +'): ' + ex)
 		return value
 	}
 }
 
-self.Animation = Animation
+Liby.Animation = Animation
 
 })();
