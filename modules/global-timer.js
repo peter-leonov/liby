@@ -1,6 +1,6 @@
 ;(function () {
 
-var myName = 'GlobalTimer', Me =
+var GlobalTimer =
 {
 	fps: 60,
 	total: 0,
@@ -22,7 +22,7 @@ var myName = 'GlobalTimer', Me =
 		if (this.total++ <= 0)
 		{
 			if (this.timer !== null)
-				throw new Error(myName + '.timer had been broken')
+				throw new Error('GlobalTimer.timer had been broken')
 			var me = this
 			this.timer = window.setInterval(function (d) { me.tick(d) }, 1000 / this.fps)
 		}
@@ -57,6 +57,6 @@ var myName = 'GlobalTimer', Me =
 	}
 }
 
-self[myName] = Me
+self.GlobalTimer = GlobalTimer
 
 })();

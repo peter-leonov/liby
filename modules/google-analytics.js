@@ -5,7 +5,7 @@
 if (!window._gaq)
 	window._gaq = []
 
-var Me =
+var GoogleAnalytics =
 {
 	setAccount: function (a) { this.account = a },
 	
@@ -31,7 +31,6 @@ var Me =
 	}
 }
 
-Me.className = 'GoogleAnalytics'
-self[Me.className] = Me
+self.GoogleAnalytics = GoogleAnalytics
 
 })();

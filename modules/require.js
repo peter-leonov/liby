@@ -1,8 +1,7 @@
 // inspired by RequireJS (http://requirejs.org/) by James Burke (http://twitter.com/jrburke)
 ;(function(){
 
-var myName = 'require',
-	states = {}
+var states = {}
 
 function run (callbacks, data)
 {
@@ -10,9 +9,9 @@ function run (callbacks, data)
 		callbacks[i](data)
 }
 
-function Me (name, f)
+function require (name, f)
 {
-	var src = Me.names[name] || name
+	var src = require.names[name] || name
 	
 	var state = states[src]
 	
@@ -32,12 +31,12 @@ function Me (name, f)
 			if (state.loaded)
 				return
 			state.loaded = true
-			state.data = Me.lastData
+			state.data = require.lastData
 			
 			run(state.callbacks, state.data)
 		}
 		
-		var script = state.node = Me.rootNode.appendChild(document.createElement('script'))
+		var script = state.node = require.rootNode.appendChild(document.createElement('script'))
 		script.addEventListener('load', onload, false)
 		script.src = src
 	}
@@ -45,15 +44,14 @@ function Me (name, f)
 	return state.node
 }
 
-Me.data = function (data)
+require.data = function (data)
 {
 	this.lastData = data
 }
 
-Me.names = {}
-Me.rootNode = document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] || document.documentElement
+require.names = {}
+require.rootNode = document.getElementsByTagName('head')[0]
 
-Me.className = myName
-self[myName] = Me
+self.require = require
 
 })();

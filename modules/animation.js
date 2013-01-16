@@ -1,15 +1,13 @@
-;(function () {
+;(function(){
 
-var M = Motion, myName = 'Animation'
-
-function Me (node, motion, duration, trans, unit)
+function Animation (node, motion, duration, trans, unit)
 {
 	this.node = node
 	switch (typeof motion)
 	{
 		case 'string':
 			var name = motion
-			if (!(motion = M.types[name]))
+			if (!(motion = Motion.types[name]))
 				throw new Error('Unknown motion type name "' + name + '"')
 			break
 		case 'function':
@@ -34,19 +32,19 @@ function Me (node, motion, duration, trans, unit)
 		{
 			return function (value)
 			{
-				Me.setStyleProperty(node, tr.property, value, unit)
+				Animation.setStyleProperty(node, tr.property, value, unit)
 			}
 		}
-		this.motions[i] = new M(tr.begin, tr.end, duration, motion, bakeStep(tr), complete)
+		this.motions[i] = new Motion(tr.begin, tr.end, duration, motion, bakeStep(tr), complete)
 	}
 	
 }
 
-Me.defaults = {unit: 'px', motion: 'linearTween', duration: 1}
+Animation.defaults = {unit: 'px', motion: 'linearTween', duration: 1}
 
 Element.prototype.animate = function (motion, props, duration, unit)
 {
-	var defaults = Me.defaults
+	var defaults = Animation.defaults
 	if (!motion)
 		motion = defaults.motion
 	if (!duration)
@@ -61,13 +59,13 @@ Element.prototype.animate = function (motion, props, duration, unit)
 		if (prop.length == 2)
 			trans.push({property: k, begin: prop[0], end: prop[1]})
 		else
-			trans.push({property: k, begin: Me.getStyleProperty(this, k), end: prop[0] || prop})
+			trans.push({property: k, begin: Animation.getStyleProperty(this, k), end: prop[0] || prop})
 	}
-	return new Me(this, motion, duration, trans, unit).start()
+	return new Animation(this, motion, duration, trans, unit).start()
 }
 
 
-Me.prototype =
+Animation.prototype =
 {
 	oncomplete: function () {},
 	start: function ()
@@ -103,7 +101,7 @@ Me.prototype =
 	}
 }
 
-Me.getStyleProperty = function (node, p)
+Animation.getStyleProperty = function (node, p)
 {
 	if (p == "top" && !node.style[p])
 		return node.offsetTop
@@ -122,7 +120,7 @@ Me.getStyleProperty = function (node, p)
 	return parseFloat(node.style[p]) || 0
 },
 
-Me.setStyleProperty = function (node, p, value, unit)
+Animation.setStyleProperty = function (node, p, value, unit)
 {
 	try
 	{
@@ -155,6 +153,6 @@ Me.setStyleProperty = function (node, p, value, unit)
 	}
 }
 
-self[myName] = Me
+self.Animation = Animation
 
 })();

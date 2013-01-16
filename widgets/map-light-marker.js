@@ -1,12 +1,10 @@
 ;(function(){
 
-var myName = 'MapLightMarker'
-
-function Me () {}
+function MapLightMarker () {}
 
 eval(NodesShortcut.include())
 
-Me.prototype = new Map.Overlay()
+MapLightMarker.prototype = new Map.Overlay()
 
 var myProto =
 {
@@ -43,9 +41,8 @@ var myProto =
 	}
 }
 
-Object.extend(Me.prototype, myProto)
+Object.extend(MapLightMarker.prototype, myProto)
 
-self[myName] = Me
-Me.className = myName
+self.MapLightMarker = MapLightMarker
 
 })();

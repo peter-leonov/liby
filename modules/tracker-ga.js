@@ -1,12 +1,12 @@
 ;(function(){
 
-function log (str) { try { console.log(Me.className + ': ' + str) } catch (ex) {} }
+function log (str) { try { console.log('TrackerGA: ' + str) } catch (ex) {} }
 
 // As far as Tracker could be used as error reporter
 // wrap everything in try/catch blocks to avoid
 // infinite reporting on error in Tracker itself.
 
-var Me =
+var Tracker =
 {
 	event: function (category, action, label, value)
 	{
@@ -48,7 +48,6 @@ var Me =
 	}
 }
 
-Me.className = 'Tracker'
-self[Me.className] = Me
+self.Tracker = Tracker
 
 })();

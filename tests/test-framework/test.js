@@ -1,7 +1,5 @@
 ;(function(){
 
-var myName = 'Test'
-
 function indexOf (a, v, i)
 {
 	var len = a.length,
@@ -14,7 +12,7 @@ function indexOf (a, v, i)
 	return -1
 }
 
-function Me (parent, name, conf, job, callback)
+function Test (parent, name, conf, job, callback)
 {
 	this.conf = conf || {}
 	this.results = []
@@ -29,10 +27,10 @@ function Me (parent, name, conf, job, callback)
 	this.job = job
 	this.callback = callback
 	
-	this.tool = new Me.Tool(this)
+	this.tool = new Test.Tool(this)
 }
 
-Me.prototype =
+Test.prototype =
 {
 	status: 'new',
 	finished: false,
@@ -55,7 +53,7 @@ Me.prototype =
 		if (typeof job !== 'function')
 			throw new Error('job is not present')
 		
-		var test = new Me(this, name, conf, job, this.q.wait())
+		var test = new Test(this, name, conf, job, this.q.wait())
 		
 		this.addChildTest(test)
 	},
@@ -63,7 +61,7 @@ Me.prototype =
 	run: function (callback)
 	{
 		var me = this
-		this.q = Me.Q.all(function () { me._done() })
+		this.q = Test.Q.all(function () { me._done() })
 		
 		var last = this.q.wait()
 		this.exec(this.job, [this.tool])
@@ -119,7 +117,7 @@ Me.prototype =
 		if (this.finished)
 			return
 		
-		this.fail(new Me.Label('test timed out'))
+		this.fail(new Test.Label('test timed out'))
 		this.done()
 	},
 	
@@ -139,7 +137,7 @@ Me.prototype =
 			expect = [expect]
 		
 		if (expect !== undefined && indexOf(expect, results.length) == -1)
-			this.fail(new Me.Label(expect + ' expected but ' + results.length + ' run'))
+			this.fail(new Test.Label(expect + ' expected but ' + results.length + ' run'))
 		
 		var ok = true
 		for (var i = 0; i < results.length; i++)
@@ -249,8 +247,7 @@ Me.prototype =
 	}
 }
 
-Me.className = myName
-self[myName] = Me
+self.Test = Test
 
 var empty = function () {}, devNull =
 {

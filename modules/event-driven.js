@@ -81,7 +81,7 @@ EventDriven.prototype =
 	}
 }
 
-self[EventDriven.name] = EventDriven
+self.EventDriven = EventDriven
 
 
 

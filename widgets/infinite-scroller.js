@@ -1,15 +1,13 @@
 ;(function(){
 
-var myName = 'InfiniteScroller'
-
-function Me ()
+function InfiniteScroller ()
 {
 	this.nodes = {}
 }
 
 var round = Math.round
 
-Me.prototype =
+InfiniteScroller.prototype =
 {
 	power: 1.5,
 	spaceTimeout: 30000,
@@ -153,7 +151,6 @@ Me.prototype =
 	}
 }
 
-Me.className = myName
-self[myName] = Me
+self.InfiniteScroller = InfiniteScroller
 
 })();

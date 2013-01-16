@@ -1,14 +1,14 @@
 ;(function(){
 
-var Papa
+var Map
 
 ;(function(){
 
-function Me ()
+function Map ()
 {
-	var m = this.model = new Me.Model(),
-		v = this.view = new Me.View(),
-		c = this.controller = new Me.Controller()
+	var m = this.model = new Map.Model(),
+		v = this.view = new Map.View(),
+		c = this.controller = new Map.Controller()
 	
 	m.view = v
 	v.controller = c
@@ -17,7 +17,7 @@ function Me ()
 	m.parent = v.parent = c.parent = this
 }
 
-Me.prototype = 
+Map.prototype = 
 {
 	bind: function (nodes)
 	{
@@ -30,10 +30,9 @@ Me.prototype =
 	apiLoaded: function () { this.dispatchEvent('ready') }
 }
 
-Me.mixIn(EventDriven)
+Map.mixIn(EventDriven)
 
-Me.className = 'Map'
-self[Me.className] = Papa = Me
+self.Map = Map
 
 
 })();
@@ -41,8 +40,7 @@ self[Me.className] = Papa = Me
 
 ;(function(){
 
-function Me () {}
-Papa.Overlay = Me
+Map.Overlay = function Overlay () {}
 
 })();
 
@@ -51,13 +49,13 @@ Papa.Overlay = Me
 
 eval(NodesShortcut.include())
 
-function Me ()
+function View ()
 {
 	this.nodes = {}
 	this.visibleMarkers = {}
 }
 
-Me.prototype =
+View.prototype =
 {
 	bind: function (nodes)
 	{
@@ -146,7 +144,7 @@ Me.prototype =
 	
 	updateOverlayProto: function ()
 	{
-		var proto = Papa.Overlay.prototype,
+		var proto = Map.Overlay.prototype,
 			api = this.api
 		
 		Object.extend(proto, new api.Overlay())
@@ -192,16 +190,16 @@ Me.prototype =
 	}
 }
 
-Papa.View = Me
+Map.View = View
 
 })();
 
 
 ;(function(){
 
-function Me () {}
+function Controller () {}
 
-Me.prototype = 
+Controller.prototype = 
 {
 	moved: function (center, zoom, sw, ne)
 	{
@@ -211,20 +209,20 @@ Me.prototype =
 	apiLoaded: function () { this.model.apiLoaded(); this.parent.apiLoaded() }
 }
 
-Papa.Controller = Me
+Map.Controller = Controller
 
 })();
 
 
 ;(function(){
 
-function Me ()
+function Model ()
 {
 	this.points = []
 	this.count = 0
 }
 
-Me.prototype =
+Model.prototype =
 {
 	apiLoaded: function ()
 	{
@@ -258,7 +256,7 @@ Me.prototype =
 	}
 }
 
-Papa.Model = Me
+Map.Model = Model
 
 })();
 

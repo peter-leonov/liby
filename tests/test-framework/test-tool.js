@@ -15,9 +15,7 @@ function indexOf (a, v, i)
 
 ;(function(){
 
-var myName = 'Tool'
-
-function Me (parent)
+function Tool (parent)
 {
 	this.parent = parent
 }
@@ -340,8 +338,8 @@ for (var i = 0; i < proxyList.length; i++)
 	prototype[name] = proxyParent(name)
 }
 
-Me.prototype = prototype
-self.Test[myName] = Me
+Tool.prototype = prototype
+self.Test.Tool = Tool
 
 })();
 
@@ -353,13 +351,12 @@ function escapeString (str)
 	return str.replace(/(["\\\n\r\t])/g, function (v) { return escapeChars[v] })
 }
 
-var myName = 'Inspector'
-function Me ()
+function Inspector ()
 {
 	this.seen = []
 }
 
-Me.prototype =
+Inspector.prototype =
 {
 	deep: 1,
 	hard: false,
@@ -540,11 +537,11 @@ Me.prototype =
 	}
 }
 
-Test[myName] = Me
+Test.Inspector = Inspector
 
 Test.Tool.prototype.inspect = function (val)
 {
-	var me = new Me()
+	var me = new Inspector()
 	return me.inspect.apply(me, arguments)
 }
 

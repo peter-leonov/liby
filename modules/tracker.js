@@ -1,9 +1,8 @@
 ;(function(){
 
-var myName = 'Tracker',
-	escape = window.encodeURIComponent || window.escape
+var escape = window.encodeURIComponent
 
-var Me =
+var Tracker =
 {
 	version: 0.3,
 	reportPath: '/tracker/report',
@@ -56,10 +55,9 @@ var Me =
 		r.src = this.reportPath + '?' + q
 	},
 	
-	log: function (str) { try { console.log(myName + ': ' + str) } catch (ex) {} }
+	log: function (str) { try { console.log('Tracker: ' + str) } catch (ex) {} }
 }
 
-self.className = Me
-self[myName] = Me
+self.Tracker = Tracker
 
 })();

@@ -1,10 +1,8 @@
 ;(function(){
 
-var myName = 'LocationHash'
+function LocationHash () {}
 
-function Me () {}
-
-Me.prototype =
+LocationHash.prototype =
 {
 	encode: function (str)
 	{
@@ -72,11 +70,10 @@ Me.prototype =
 }
 
 if (!window.history.pushState)
-	Me.prototype.eraseEmptyHash = function () {}
+	LocationHash.prototype.eraseEmptyHash = function () {}
 
-Me.mixIn(EventDriven)
+LocationHash.mixIn(EventDriven)
 
-Me.className = myName
-self[myName] = Me
+self.LocationHash = LocationHash
 
 })();

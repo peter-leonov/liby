@@ -3,7 +3,7 @@
 // this crazy hack prevents Opera's default drag action somehow
 document.addEventListener('mousedown', function () {}, false)
 
-var Me =
+var DragDrop =
 {
 	states: function (sm)
 	{
@@ -182,7 +182,7 @@ var Me =
 	}
 }
 
-Me.bind()
+DragDrop.bind()
 
 function DataTransfer ()
 {

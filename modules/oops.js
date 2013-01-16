@@ -4,7 +4,7 @@
 
 function log (str) { try { console.log('Oops: ' + str) } catch (ex) {} }
 
-var Me =
+var Oops =
 {
 	enabled: false,
 	masking: true,
@@ -15,7 +15,7 @@ var Me =
 		try
 		{
 			// forward masking mode with return
-			return Me.onerror.apply(Me, arguments)
+			return Oops.onerror.apply(Oops, arguments)
 		}
 		catch (ex) { log('error on reporting') }
 	},
@@ -94,7 +94,6 @@ var Me =
 	}
 }
 
-Me.className = 'Oops'
-self[Me.className] = Me
+self.Oops = Oops
 
 })();

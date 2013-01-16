@@ -3,7 +3,7 @@
 var encode = escape, decode = unescape
 	// encode = encodeURIComponent, decode = decodeURIComponent
 
-var Me =
+var Cookie =
 {
 	set: function (name, value, expires, path)
 	{
@@ -55,7 +55,6 @@ var Me =
 	}
 }
 
-Me.className = 'Cookie'
-self[Me.className] = Me
+self.Cookie = Cookie
 
 })();

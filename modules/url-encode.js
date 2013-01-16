@@ -1,6 +1,6 @@
 ;(function(){
 
-var Me =
+var UrlEncode =
 {
 	decode: decodeURIComponent,
 	encode: encodeURIComponent,
@@ -76,7 +76,6 @@ var Me =
 	}
 }
 
-Me.className = 'UrlEncode'
-self[Me.className] = Me
+self.UrlEncode = UrlEncode
 
 })();

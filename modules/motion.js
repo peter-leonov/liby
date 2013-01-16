@@ -1,9 +1,8 @@
 ;(function () {
 
-var M = Math, myName = 'Motion', globalTimer = GlobalTimer
-function Me (begin, end, duration, motion, onstep, onstop)
+function Motion (begin, end, duration, motion, onstep, onstop)
 {
-	var me = this, frame = 0, total = M.ceil(duration * globalTimer.fps), delta = end - begin
+	var me = this, frame = 0, total = Math.ceil(duration * GlobalTimer.fps), delta = end - begin
 	
 	this.onstop = onstop
 	this.onstep = onstep
@@ -16,15 +15,15 @@ function Me (begin, end, duration, motion, onstep, onstop)
 	
 }
 
-Me.prototype =
+Motion.prototype =
 {
 	start: function ()
 	{
 		if (!this.running)
 		{
 			this.running = true
-			globalTimer.remove(this.timer)
-			this.timer = globalTimer.add(this.step) // step is already a prepared callback
+			GlobalTimer.remove(this.timer)
+			this.timer = GlobalTimer.add(this.step) // step is already a prepared callback
 		}
 		return this
 	},
@@ -34,7 +33,7 @@ Me.prototype =
 		if (this.running)
 		{
 			this.running = false
-			globalTimer.remove(this.timer)
+			GlobalTimer.remove(this.timer)
 			if (this.onstop)
 				this.onstop(comleted)
 		}
@@ -42,6 +41,6 @@ Me.prototype =
 	}
 }
 
-self[myName] = Me
+self.Motion = Motion
 
 })();

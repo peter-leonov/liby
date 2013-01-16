@@ -1,13 +1,8 @@
 ;(function(){
 
-var round = Math.round,
-	random = Math.random
-
-function longRandom ()
+Math.longRandom = function ()
 {
-	return +new Date() + '' + round(random() * 1E+17)
+	return +new Date() + '' + Math.round(Math.random() * 1E+17)
 }
-
-Object.add(Math, {longRandom: longRandom})
 
 })();

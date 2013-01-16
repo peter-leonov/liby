@@ -1,6 +1,6 @@
 ;(function(){
 
-var Me =
+var UserAgent =
 {
 	guessOS: function (ua)
 	{
@@ -73,7 +73,6 @@ var Me =
 	}
 }
 
-Me.className = 'UserAgent'
-self[Me.className] = Me
+self.UserAgent = UserAgent
 
 })();

@@ -61,7 +61,7 @@ function Object_keys (s) // Object.keys copy-n-paste
 
 
 
-var myName = 'Tests', Me =
+var Tests =
 {
 	maxLabelLength: 100,
 	ignoredGlobals: ['sessionStorage', 'localStorage'],
@@ -74,7 +74,7 @@ var myName = 'Tests', Me =
 		
 		this.run()
 	},
-	onload: function () { Me.load() },
+	onload: function () { Tests.load() },
 	
 	ignoreGlobals: function (ary)
 	{
@@ -175,8 +175,7 @@ var myName = 'Tests', Me =
 	}
 }
 
-Me.className = myName
-self[myName] = Me
+self.Tests = Tests
 
 var Reporter = function ()
 {
@@ -300,7 +299,7 @@ if (!s.log)
 
 var m, ua = navigator.userAgent
 
-Me.ua =
+Tests.ua =
 	((m = /(MSIE) (\d+\.?\d*)/.exec(ua)) && m[0]) ||
 	((m = /(Firefox)\/(\d+\.\d+)/.exec(ua)) && m[1]+' '+m[2]) ||
 	((m = /(Chrome)\/(\d+\.\d+)/.exec(ua)) && m[1]+' '+m[2]) ||

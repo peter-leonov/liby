@@ -1,6 +1,6 @@
 ;(function(){
 
-var myName = 'FormHelper', Me =
+var FormHelper =
 {
 	toHash: function (form, fa)
 	{
@@ -65,6 +65,6 @@ var myName = 'FormHelper', Me =
 	}
 }
 
-self[myName] = Me
+self.FormHelper = FormHelper
 
 })();

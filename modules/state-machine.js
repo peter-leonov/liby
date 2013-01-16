@@ -2,13 +2,13 @@
 
 var count = 0
 
-function Me (papa)
+function StateMachine (papa)
 {
 	this.name = 'state-machine-' + ++count
 	this.papa = papa
 }
 
-Me.prototype =
+StateMachine.prototype =
 {
 	setStates: function (states)
 	{
@@ -63,7 +63,6 @@ Me.prototype =
 	}
 }
 
-Me.className = 'StateMachine'
-self[Me.className] = Me
+self.StateMachine = StateMachine
 
 })();
