@@ -1,7 +1,6 @@
 ;(function(){
 
-var selection = document.selection,
-	Me = HTMLInputElement
+var selection = document.selection
 
 // var internal = false
 
@@ -62,7 +61,7 @@ var selectionEnd =
 	}
 }
 
-Object.defineProperty(Me.prototype, "selectionStart", selectionStart)
-Object.defineProperty(Me.prototype, "selectionEnd", selectionEnd)
+Object.defineProperty(HTMLInputElement.prototype, "selectionStart", selectionStart)
+Object.defineProperty(HTMLInputElement.prototype, "selectionEnd", selectionEnd)
 
 })();

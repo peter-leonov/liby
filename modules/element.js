@@ -2,7 +2,7 @@
 
 function toggleTo (cn, state)
 {
-	if (!this.contains(cn) == !state)
+	if (this.contains(cn) == state)
 		return
 	
 	this.toggle(cn)

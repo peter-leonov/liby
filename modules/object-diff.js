@@ -1,6 +1,8 @@
 ;(function(){
 
-if (!Object.diff)
+if (Object.diff)
+	return
+
 Object.diff = function (a, b)
 {
 	var add = {}, change = {}, remove = {}, total = 0
@@ -8,6 +10,7 @@ Object.diff = function (a, b)
 	if (a !== b)
 	{
 		for (var k in b)
+		{
 			if (k in a)
 			{
 				if (a[k] !== b[k])
@@ -21,13 +24,16 @@ Object.diff = function (a, b)
 				add[k] = b[k]
 				total++
 			}
+		}
 		
 		for (var k in a)
+		{
 			if (!(k in b))
 			{
 				remove[k] = a[k]
 				total++
 			}
+		}
 	}
 	
 	return {add: add, change: change, remove: remove, total: total}

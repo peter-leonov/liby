@@ -1,6 +1,6 @@
 
 // 1, 2, 5: банкир, банкира, банкиров
-String.prototype.plural = Number.prototype.plural = function (a, b, c)
+Number.prototype.plural = function (a, b, c)
 {
 	if (this % 1)
 		return b
@@ -18,7 +18,7 @@ String.prototype.plural = Number.prototype.plural = function (a, b, c)
 	return c
 }
 
-String.prototype.pluralA = Number.prototype.pluralA = function (ary)
+Number.prototype.pluralA = function (ary)
 {
 	return this.plural(ary[0], ary[1], ary[2])
 }

@@ -1,5 +1,8 @@
 ;(function(){
 
+if (Function.prototype.throttle)
+	return
+
 function throttle (soft, hard)
 {
 	var callback = this,
