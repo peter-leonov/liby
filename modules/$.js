@@ -38,10 +38,10 @@ $.require = function (src)
 	r.send(null)
 }
 
-if (self.Request)
+if (Liby.Request)
 {
-	$.get = Request.get
-	$.post = Request.post
+	$.get = Liby.Request.get
+	$.post = Liby.Request.post
 }
 
 })();
