@@ -1,35 +1,35 @@
 ;(function(){
 
-var random = Math.random
+var Math_random = Math.random
 
-Array.prototype.randomize = function ()
+function randomize (ary)
 {
-	for (var i = 0, il = this.length; i < il; i++)
+	for (var i = 0, il = ary.length; i < il; i++)
 	{
-		var j = (random() * il) >> 0
-		var v = this[j]
-		this[j] = this[i]
-		this[i] = v
+		var j = (Math_random() * il) >> 0
+		var v = ary[j]
+		ary[j] = ary[i]
+		ary[i] = v
 	}
 	
-	return this
+	return ary
 }
 
-Array.prototype.random = function (n)
+function random (ary, n)
 {
 	if (n <= 0)
 		return []
 	
 	if (n == 1)
-		return [this[(random() * this.length) >> 0]]
+		return [ary[(Math_random() * ary.length) >> 0]]
 	
 	// n > 1
-	return this.slice().fetchRandom(n)
+	return fetchRandom(ary.slice(), n)
 }
 
-Array.prototype.fetchRandom = function (n)
+function fetchRandom (ary, n)
 {
-	var len = this.length
+	var len = ary.length
 	
 	if (n > len)
 		n = len
@@ -38,16 +38,21 @@ Array.prototype.fetchRandom = function (n)
 	
 	for (var i = 0; i < n; i++)
 	{
-		var r = (random() * len) >> 0
+		var r = (Math_random() * len) >> 0
 		
-		res[i] = this[r]
+		res[i] = ary[r]
 		len--
-		this[r] = this[len]
+		ary[r] = ary[len]
 	}
 	
-	this.length = len
+	ary.length = len
 	
 	return res
+}
+
+Liby.ArrayRandom =
+{
+	randomize: randomize, random: random, fetchRandom: fetchRandom
 }
 
 })();
