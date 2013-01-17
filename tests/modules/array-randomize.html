@@ -10,122 +10,126 @@
 </head>
 <body>
 <script>
+// reference implementations
+;(function(){
+
+var Math_random = Math.random
+
+Liby.ArrayRandom.shuffleSwap = function ()
+{
+	for (var i = 0, il = this.length; i < il; i++)
+	{
+		var j = (Math_random() * il) >> 0
+		var v = this[j]
+		this[j] = this[i]
+		this[i] = v
+	}
+	
+	return this
+}
+
+Liby.ArrayRandom.shuffleSort = function ()
+{
+	return this.sort(function (a, b) { return 0.5 - Math_random() })
+}
+
+})();
+
+
 Tests.test(function (t)
 {
-	Array.prototype.randomize = function () { return Liby.ArrayRandom.randomize(this) }
-	Array.prototype.random = function (n) { return Liby.ArrayRandom.random(this, n) }
-	
-	function keysCount (s)
-	{
-		var l = 0
-		
-		for (var k in s)
-			l++
-		
-		return l
-	}
-	
-	
-	function factorial (n)
-	{
-		var res = 1
-		
-		for (var i = 2; i <= n; i++)
-			res *= i
-		
-		return res
-	}
-	
-	t.test('distribution and combinations', function (t)
-	{
-		var arr = [1, 2, 3, 4, 5], combos = {}, count = 100000
-		for (var i = 0; i < count; i++)
-		{
-			var key = arr.slice().randomize().join(', ')
-			if (key in combos)
-				combos[key]++
-			else
-				combos[key] = 1
-		}
-		var total = factorial(arr.length)
-		
-		var normal = 0, rounded = (1 / total * 100 >> 0) / 100
-		for (var k in combos)
-			if ((combos[k] / count * 100) / 100 >= rounded)
-				normal++
-			else
-				t.fail(k)
-		
-		t.eq(Object.keys(combos).length, total, 'total')
-		t.eq(normal, total, 'normal')
-	})
-	
-	t.test('edge cases', function (t)
-	{
-		t.like([].randomize(), [], 'empty')
-		t.like([1].randomize(), [1], 'single')
-		t.like([1, 2].randomize().sort(), [1, 2], 'duo')
-		t.like([1, 2, '3', 'abc', 4.0, [], {}].randomize().sort(), [1, 2, '3', 'abc', 4.0, [], {}].sort(), 'preserve structures')
-	})
+	Array.prototype.random = Liby.ArrayRandom.random
 	
 	t.test('random', function (t)
 	{
-		t.test('edge cases', function (t)
-		{
-			var array = [1, 2, 3, 4, 5]
-			
-			t.like(array.random(0), [], 'zero')
-			t.eq(array.random(1).length, 1, 'one length')
-			t.type(array.random(1)[0], 'number', 'one value')
-			t.eq(array.random(array.length).length, array.length, 'full length')
-			t.eq(array.random(array.length + 1).length, array.length, 'greater then length')
-			t.like(array.random(-1), [], 'less then zero')
-			t.eq(array.random(2.5).length, 3, 'float point')
-		})
+		Array.prototype.shuffle = function () { return this } // noop
 		
-		function declension (arr, n)
+		var array = [1, 2, 3, 4, 5]
+		
+		t.like(array.random(0), [], 'zero')
+		t.eq(array.random(1).length, 1, 'one length')
+		t.type(array.random(1)[0], 'number', 'one value')
+		t.eq(array.random(array.length).length, array.length, 'full length')
+		t.eq(array.random(array.length + 1).length, array.length, 'greater then length')
+		t.like(array.random(-1), [], 'less then zero')
+		t.eq(array.random(2.5).length, 2, 'float point')
+	})
+	
+	
+	t.test('shuffle', function (t)
+	{
+		function declension (n)
 		{
-			var repeat = 50000 * n * n
+			var ary = []
+			for (var i = 0; i < n; i++)
+				ary[i] = i
 			
-			var combos = {}
+			var seen = []
+			for (var i = 0; i < n * n; i++)
+				seen[i] = 0
+			
+			
+			var repeat = n * 100000
+			
 			for (var i = 0; i < repeat; i++)
 			{
-				var key = arr.random(n).join(',')
-				if (combos[key])
-					combos[key]++
-				else
-					combos[key] = 1
+				var res = ary.slice().shuffle()
+				for (var j = 0; j < n; j++)
+					seen[j * n + res[j]]++
 			}
 			
-			var count = keysCount(combos),
-				mid = repeat / count
+			
+			var mid = repeat / n
 			
 			var sum = 0
-			for (var k in combos)
+			for (var i = 0; i < n * n; i++)
 			{
-				var diff = combos[k] / mid - 1
+				var diff = seen[i] / mid - 1
 				sum += diff * diff
 			}
 			
-			return sum / count
+			return sum / n
 		}
 		
-		t.test('declensions', function (t)
+		function run (t, method, limit)
 		{
-			var arr = [1, 2, 3, 4, 5, 6, 7]
+			Array.prototype.shuffle = Liby.ArrayRandom[method]
 			
-			function run (i)
-			{
-				t.test('for ' + i, function (t)
-				{
-					var d = declension(arr, i)
-					t.log(d)
-					t.lt(d, 0.01)
-				})
-			}
+			t.like([].shuffle(), [], 'empty')
+			t.like([1].shuffle(), [1], 'single')
+			t.like([1, 2].shuffle().sort(), [1, 2], 'duo')
+			t.like([1, 2, '3', 'abc', 4.0, [], {}].shuffle().sort(), [1, 2, '3', 'abc', 4.0, [], {}].sort(), 'preserve structures')
 			
-			for (var i = 1; i <= arr.length; i++)
-				run(i)
+			t.time('time')
+			t.lt(declension(1), limit, 'for 1')
+			t.lt(declension(2), limit, 'for 2')
+			t.lt(declension(5), limit, 'for 5')
+			t.lt(declension(10), limit, 'for 10')
+			t.timeEnd('time')
+		}
+		
+		t.test('shuffleHard()', function (t)
+		{
+			run(t, 'shuffleHard', 0.01)
+		})
+		
+		t.test('shuffle()', function (t)
+		{
+			run(t, 'shuffle', 0.01)
+		})
+		
+		
+		
+		// reference implementations
+		
+		t.test('shuffleSwap()', function (t)
+		{
+			run(t, 'shuffleSwap', 1)
+		})
+		
+		t.test('shuffleSort()', function (t)
+		{
+			run(t, 'shuffleSort', 10)
 		})
 	})
 	

@@ -2,57 +2,63 @@
 
 var Math_random = Math.random
 
-function randomize (ary)
+function shuffle ()
 {
-	for (var i = 0, il = ary.length; i < il; i++)
+	var l = this.length
+	
+	var copy = this.slice()
+	for (var i = 0, il = l; i < il; i++)
 	{
-		var j = (Math_random() * il) >> 0
-		var v = ary[j]
-		ary[j] = ary[i]
-		ary[i] = v
+		var r = (Math_random() * l) >> 0
+		
+		this[i] = copy[r]
+		l--
+		copy[r] = copy[l]
 	}
 	
-	return ary
+	return this
 }
 
-function random (ary, n)
+function shuffleHard ()
+{
+	var random = [],
+		index = []
+	
+	var l = this.length
+	
+	for (var i = 0; i < l; i++)
+	{
+		random[i] = Math_random()
+		index[i] = i
+	}
+	
+	index.sort(function (a, b) { return random[a] - random[b] })
+	
+	var copy = this.slice()
+	for (var i = 0; i < l; i++)
+		this[i] = copy[index[i]]
+	
+	return this
+}
+
+function random (n)
 {
 	if (n <= 0)
 		return []
 	
 	if (n == 1)
-		return [ary[(Math_random() * ary.length) >> 0]]
+		return [this[(Math_random() * this.length) >> 0]]
 	
 	// n > 1
-	return fetchRandom(ary.slice(), n)
-}
-
-function fetchRandom (ary, n)
-{
-	var len = ary.length
-	
-	if (n > len)
-		n = len
-	
-	var res = []
-	
-	for (var i = 0; i < n; i++)
-	{
-		var r = (Math_random() * len) >> 0
-		
-		res[i] = ary[r]
-		len--
-		ary[r] = ary[len]
-	}
-	
-	ary.length = len
-	
-	return res
+	return this.slice().shuffle().slice(0, n)
 }
 
 Liby.ArrayRandom =
 {
-	randomize: randomize, random: random, fetchRandom: fetchRandom
+	shuffleHard: shuffleHard,
+	shuffle: shuffle,
+	
+	random: random
 }
 
 })();
