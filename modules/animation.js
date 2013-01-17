@@ -42,7 +42,7 @@ function Animation (node, motion, duration, trans, unit)
 
 Animation.defaults = {unit: 'px', motion: 'linearTween', duration: 1}
 
-Animation.animate = function (node, motion, props, duration, unit)
+Animation.animate = function (motion, props, duration, unit)
 {
 	var defaults = Animation.defaults
 	if (!motion)
@@ -59,9 +59,9 @@ Animation.animate = function (node, motion, props, duration, unit)
 		if (prop.length == 2)
 			trans.push({property: k, begin: prop[0], end: prop[1]})
 		else
-			trans.push({property: k, begin: Animation.getStyleProperty(node, k), end: prop[0] || prop})
+			trans.push({property: k, begin: Animation.getStyleProperty(this, k), end: prop[0] || prop})
 	}
-	return new Animation(node, motion, duration, trans, unit).start()
+	return new Animation(this, motion, duration, trans, unit).start()
 }
 
 
