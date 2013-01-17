@@ -21,10 +21,10 @@ function shuffle ()
 
 function shuffleHard ()
 {
-	var random = [],
-		index = []
-	
 	var l = this.length
+	
+	var random = new Array(l),
+		index = new Array(l)
 	
 	for (var i = 0; i < l; i++)
 	{
