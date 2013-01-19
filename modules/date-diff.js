@@ -41,7 +41,7 @@ var Date_prototype =
 	}
 }
 
-Liby.carefullyAdd(Date.prototype, Date_prototype)
+Liby.carefullyExtend(Date.prototype, Date_prototype)
 
 Liby.DateDiff = DateDiff
 
