@@ -8,7 +8,7 @@ function Liby (m)
 	
 	if (Liby[name])
 		throw new Error('duplicated module: ' + name)
-	log(name)
+	
 	Liby[name] = m
 }
 
@@ -23,36 +23,6 @@ Liby.carefullyAdd = function (to, from)
 	}
 	return to
 }
-
-Liby.addMethods
-
-Liby.carefullyAdd
-(
-	Function.prototype,
-	{
-		addMethods: function ()
-		{
-			var to = this.prototype
-			for (var i = 0, il = arguments.length; i < il; i++)
-			{
-				var f = arguments[i]
-				to[f.name] = f
-			}
-			return to
-		},
-		
-		addStatics: function ()
-		{
-			var to = this
-			for (var i = 0, il = arguments.length; i < il; i++)
-			{
-				var f = arguments[i]
-				to[f.name] = f
-			}
-			return to
-		}
-	}
-)
 
 self.Liby = Liby
 
