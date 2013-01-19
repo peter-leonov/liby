@@ -12,8 +12,6 @@ var units2seconds =
 
 var DateDiff =
 {
-	name: 'DateDiff',
-	
 	parse: function (str)
 	{
 		var m = /^([+-])?(\d+(?:\.\d+)?)([smhdwy])?$/.exec(str)
@@ -29,12 +27,22 @@ var DateDiff =
 		return diff[0] == '-' ? -s : s
 	},
 	
-	add: function (date, str)
+	add: function (str)
 	{
-		return new Date(+date + DateDiff.compute(DateDiff.parse(str)))
+		return new Date().add(str)
 	}
 }
 
-Liby(DateDiff)
+var Date_prototype =
+{
+	add: function (str)
+	{
+		return new Date(+this + DateDiff.compute(DateDiff.parse(str)))
+	}
+}
+
+Liby.carefullyAdd(Date.prototype, Date_prototype)
+
+Liby.DateDiff = DateDiff
 
 })();
