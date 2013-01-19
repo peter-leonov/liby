@@ -13,7 +13,6 @@
 Tests.test(function (t)
 {
 	var DD = Liby.DateDiff
-	// t.eq(Date.now(), +new Date(), 'Date.now()')
 	
 	t.test('DD.parse()', function (t)
 	{
@@ -40,10 +39,15 @@ Tests.test(function (t)
 		t.like(DD.compute(['-', 0, 's']), 0, '0')
 	})
 	
-	t.test('DD.add()', function (t)
+	t.test('Date#add()', function (t)
 	{
-		t.like(DD.add(new Date(0), '1s'), new Date(1000), '1s')
-		t.like(DD.add(new Date(2 * 60 * 60 * 1000 + 3000), '-2h'), new Date(3000), '-2h')
+		t.like(new Date(0).add('1s'), new Date(1000), '1s')
+		t.like(new Date(2 * 60 * 60 * 1000 + 3000).add('-2h'), new Date(3000), '-2h')
+	})
+	
+	t.test('Date.add()', function (t)
+	{
+		t.like(DD.add('1s'), new Date().add('1s'), '1s')
 	})
 })
 </script>
