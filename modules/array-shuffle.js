@@ -48,10 +48,6 @@ function random (n)
 	return shuffled
 }
 
-Liby.carefullyAdd(Array.prototype,
-{
-	shuffle: shuffle,
-	random: random
-})
+Liby.carefullyAddMethods(Array.prototype, shuffle, random)
 
 })();
