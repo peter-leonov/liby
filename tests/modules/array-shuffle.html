@@ -5,7 +5,7 @@
 	<title>Array randomization tests</title>
 	<script src="../test-framework/tests.common.js"></script>
 	
-	<script>Liby = {}</script>
+	<script src="../../liby.js"></script>
 	<script src="../../modules/array-shuffle.js"></script>
 </head>
 <body>
@@ -15,7 +15,7 @@
 
 var Math_random = Math.random
 
-Liby.ArrayRandom.shuffleSwap = function ()
+Array.prototype.shuffleSwap = function ()
 {
 	for (var i = 0, il = this.length; i < il; i++)
 	{
@@ -28,94 +28,116 @@ Liby.ArrayRandom.shuffleSwap = function ()
 	return this
 }
 
-Liby.ArrayRandom.shuffleSort = function ()
+Array.prototype.shuffleSort = function ()
 {
 	return this.sort(function (a, b) { return 0.5 - Math_random() })
 }
 
+Array.prototype.shuffleHard = function ()
+{
+	var l = this.length
+	
+	var random = new Array(l),
+		index = new Array(l)
+	
+	for (var i = 0; i < l; i++)
+	{
+		random[i] = Math_random()
+		index[i] = i
+	}
+	
+	index.sort(function (a, b) { return random[a] - random[b] })
+	
+	var copy = this.slice()
+	for (var i = 0; i < l; i++)
+		this[i] = copy[index[i]]
+	
+	return this
+}
+
+
 })();
+
+
+function declension (job, n)
+{
+	var ary = []
+	for (var i = 0; i < n; i++)
+		ary[i] = i
+	
+	var seen = []
+	for (var i = 0; i < n * n; i++)
+		seen[i] = 0
+	
+	
+	var repeat = n * 100000
+	
+	for (var i = 0; i < repeat; i++)
+	{
+		var res = job(ary)
+		for (var j = 0; j < n; j++)
+			seen[j * n + res[j]]++
+	}
+	
+	
+	var mid = repeat / n
+	
+	var sum = 0
+	for (var i = 0; i < n * n; i++)
+	{
+		var diff = seen[i] / mid - 1
+		sum += diff * diff
+	}
+	
+	return sum / n
+}
+
+function run (t, job, limit)
+{
+	t.like(job([]), [], 'empty')
+	t.like(job([1]), [1], 'single')
+	t.like(job([1, 2]).sort(), [1, 2], 'duo')
+	t.like(job([1, 2, '3', 'abc', 4.0, [], {}]).sort(), [1, 2, '3', 'abc', 4.0, [], {}].sort(), 'preserve structures')
+	
+	t.time('time')
+	t.lt(declension(job, 1), limit, 'for 1')
+	t.lt(declension(job, 2), limit, 'for 2')
+	t.lt(declension(job, 5), limit, 'for 5')
+	t.lt(declension(job, 10), limit, 'for 10')
+	t.timeEnd('time')
+}
 
 
 Tests.test(function (t)
 {
-	Array.prototype.random = Liby.ArrayRandom.random
-	
 	t.test('random', function (t)
 	{
-		Array.prototype.shuffle = function () { return this } // noop
-		
 		var array = [1, 2, 3, 4, 5]
 		
 		t.like(array.random(0), [], 'zero')
 		t.eq(array.random(1).length, 1, 'one length')
+		t.eq(array.random(100).length, 5, 'extra length')
 		t.type(array.random(1)[0], 'number', 'one value')
 		t.eq(array.random(array.length).length, array.length, 'full length')
 		t.eq(array.random(array.length + 1).length, array.length, 'greater then length')
 		t.like(array.random(-1), [], 'less then zero')
 		t.eq(array.random(2.5).length, 2, 'float point')
+		t.eq(array.random().length, 0, 'undefined n')
+		
+		run(t, function (ary) { return ary.random(ary.length).shuffleHard() }, 0.01)
 	})
-	
 	
 	t.test('shuffle', function (t)
 	{
-		function declension (n)
-		{
-			var ary = []
-			for (var i = 0; i < n; i++)
-				ary[i] = i
-			
-			var seen = []
-			for (var i = 0; i < n * n; i++)
-				seen[i] = 0
-			
-			
-			var repeat = n * 100000
-			
-			for (var i = 0; i < repeat; i++)
-			{
-				var res = ary.slice().shuffle()
-				for (var j = 0; j < n; j++)
-					seen[j * n + res[j]]++
-			}
-			
-			
-			var mid = repeat / n
-			
-			var sum = 0
-			for (var i = 0; i < n * n; i++)
-			{
-				var diff = seen[i] / mid - 1
-				sum += diff * diff
-			}
-			
-			return sum / n
-		}
-		
-		function run (t, method, limit)
-		{
-			Array.prototype.shuffle = Liby.ArrayRandom[method]
-			
-			t.like([].shuffle(), [], 'empty')
-			t.like([1].shuffle(), [1], 'single')
-			t.like([1, 2].shuffle().sort(), [1, 2], 'duo')
-			t.like([1, 2, '3', 'abc', 4.0, [], {}].shuffle().sort(), [1, 2, '3', 'abc', 4.0, [], {}].sort(), 'preserve structures')
-			
-			t.time('time')
-			t.lt(declension(1), limit, 'for 1')
-			t.lt(declension(2), limit, 'for 2')
-			t.lt(declension(5), limit, 'for 5')
-			t.lt(declension(10), limit, 'for 10')
-			t.timeEnd('time')
-		}
 		
 		t.test('shuffleHard()', function (t)
 		{
-			run(t, 'shuffleHard', 0.01)
+			run(t, function (ary) { return ary.slice().shuffleHard() }, 0.01)
 		})
 		
 		t.test('shuffle()', function (t)
 		{
-			run(t, 'shuffle', 0.01)
+			run(t, function (ary) { return ary.slice().shuffle() }, 0.01)
 		})
 		
 		
@@ -124,12 +146,12 @@ Tests.test(function (t)
 		
 		t.test('shuffleSwap()', function (t)
 		{
-			run(t, 'shuffleSwap', 1)
+			run(t, function (ary) { return ary.slice().shuffleSwap() }, 1)
 		})
 		
 		t.test('shuffleSort()', function (t)
 		{
-			run(t, 'shuffleSort', 10)
+			run(t, function (ary) { return ary.slice().shuffleSort() }, 10)
 		})
 	})
 	

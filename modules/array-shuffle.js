@@ -5,60 +5,53 @@ var Math_random = Math.random
 function shuffle ()
 {
 	var l = this.length
+	var n = l
 	
-	var copy = this.slice()
-	for (var i = 0, il = l; i < il; i++)
+	var copy = this.slice(),
+		shuffled = this
+	// inline the same algorithm
+	for (var i = 0; i < n; i++)
 	{
 		var r = (Math_random() * l) >> 0
-		
-		this[i] = copy[r]
-		l--
-		copy[r] = copy[l]
+		shuffled[i] = copy[r]
+		copy[r] = copy[--l]
 	}
 	
-	return this
+	return shuffled
 }
 
-function shuffleHard ()
-{
-	var l = this.length
-	
-	var random = new Array(l),
-		index = new Array(l)
-	
-	for (var i = 0; i < l; i++)
-	{
-		random[i] = Math_random()
-		index[i] = i
-	}
-	
-	index.sort(function (a, b) { return random[a] - random[b] })
-	
-	var copy = this.slice()
-	for (var i = 0; i < l; i++)
-		this[i] = copy[index[i]]
-	
-	return this
-}
 
 function random (n)
 {
+	n >>= 0 // to int or zero (not NaN)
 	if (n <= 0)
 		return []
 	
-	if (n == 1)
-		return [this[(Math_random() * this.length) >> 0]]
+	var l = this.length
 	
-	// n > 1
-	return this.slice().shuffle().slice(0, n)
+	if (n == 1)
+		return [this[(Math_random() * l) >> 0]]
+	
+	if (n > l)
+		n = l
+	
+	var copy = this.slice(),
+		shuffled = new Array(n)
+	// inline the same algorithm
+	for (var i = 0; i < n; i++)
+	{
+		var r = (Math_random() * l) >> 0
+		shuffled[i] = copy[r]
+		copy[r] = copy[--l]
+	}
+	
+	return shuffled
 }
 
-Liby.ArrayRandom =
+Liby.carefullyAdd(Array.prototype,
 {
-	shuffleHard: shuffleHard,
 	shuffle: shuffle,
-	
 	random: random
-}
+})
 
 })();
