@@ -4,27 +4,12 @@ var Liby =
 {
 	carefullyExtend: function (to, from)
 	{
-		for (var name in from)
+		for (var k in from)
 		{
-			if (name in to)
-				throw new Error('property "' + name + '" exists while carefully extending ' + to)
+			if (k in to)
+				throw new Error('property "' + k + '" exists while carefully extending ' + to)
 			
-			to[name] = from[name]
-		}
-		return to
-	},
-	
-	carefullyAddMethods: function (to)
-	{
-		for (var i = 0, il = arguments.length; i < il; i++)
-		{
-			var f = arguments[i]
-			
-			var name = f.name
-			if (name in to)
-				throw new Error('property "' + name + '" exists while carefully adding methods to ' + to)
-			
-			to[name] = f
+			to[k] = from[k]
 		}
 		return to
 	}
