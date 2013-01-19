@@ -70,7 +70,7 @@ function declension (job, n)
 		seen[i] = 0
 	
 	
-	var repeat = n * 100000
+	var repeat = n * 2000
 	
 	for (var i = 0; i < repeat; i++)
 	{
@@ -99,12 +99,30 @@ function run (t, job, limit)
 	t.like(job([1, 2]).sort(), [1, 2], 'duo')
 	t.like(job([1, 2, '3', 'abc', 4.0, [], {}]).sort(), [1, 2, '3', 'abc', 4.0, [], {}].sort(), 'preserve structures')
 	
-	t.time('time')
-	t.lt(declension(job, 1), limit, 'for 1')
-	t.lt(declension(job, 2), limit, 'for 2')
-	t.lt(declension(job, 5), limit, 'for 5')
-	t.lt(declension(job, 10), limit, 'for 10')
-	t.timeEnd('time')
+	t.test('for 1', function (t)
+	{
+		t.time('time')
+		t.lt(declension(job, 1), limit, 'declension')
+		t.timeEnd('time')
+	})
+	t.test('for 2', function (t)
+	{
+		t.time('time')
+		t.lt(declension(job, 2), limit, 'declension')
+		t.timeEnd('time')
+	})
+	t.test('for 5', function (t)
+	{
+		t.time('time')
+		t.lt(declension(job, 5), limit, 'declension')
+		t.timeEnd('time')
+	})
+	t.test('for 10', function (t)
+	{
+		t.time('time')
+		t.lt(declension(job, 10), limit, 'declension')
+		t.timeEnd('time')
+	})
 }
 
 
@@ -130,11 +148,6 @@ Tests.test(function (t)
 	t.test('shuffle', function (t)
 	{
 		
-		t.test('shuffleHard()', function (t)
-		{
-			run(t, function (ary) { return ary.slice().shuffleHard() }, 0.01)
-		})
-		
 		t.test('shuffle()', function (t)
 		{
 			run(t, function (ary) { return ary.slice().shuffle() }, 0.01)
@@ -143,6 +156,11 @@ Tests.test(function (t)
 		
 		
 		// reference implementations
+		
+		t.test('shuffleHard()', function (t)
+		{
+			run(t, function (ary) { return ary.slice().shuffleHard() }, 0.01)
+		})
 		
 		t.test('shuffleSwap()', function (t)
 		{
