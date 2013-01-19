@@ -5,12 +5,15 @@
 	<title>tests for Cookie</title>
 	<script src="../test-framework/tests.common.js"></script>
 	
+	<script>Liby = {}</script>
 	<script src="../../modules/cookie.js"></script>
 </head>
 <body>
 <script>
 Tests.test(function (t)
 {
+	var Cookie = Liby.Cookie
+	
 	t.test('single name', function (t)
 	{
 		Cookie.erase('single-name')
