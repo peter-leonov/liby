@@ -49,16 +49,6 @@ function keys (s)
 	return r
 }
 
-function keysCount (s)
-{
-	var l = 0
-	
-	for (var k in s)
-		l++
-	
-	return l
-}
-
 function values (s)
 {
 	var r = []
@@ -77,7 +67,7 @@ function isEmpty (s)
 	return true
 }
 
-add(Object, {add: add, extend: extend, copy: copy, keys: keys, keysCount: keysCount, values: values, isEmpty: isEmpty})
+add(Object, {add: add, extend: extend, copy: copy, keys: keys, values: values, isEmpty: isEmpty})
 
 })();
 
