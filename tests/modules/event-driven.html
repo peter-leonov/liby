@@ -5,7 +5,7 @@
 	<title>EventDriven tests</title>
 	<script src="../test-framework/tests.common.js"></script>
 	
-	<!--[if IE 8]><script src="../../fixes/trident4/trident4.js"></script><![endif]-->
+	<script>Liby = {}</script>
 	<script src="../../modules/prototype.js"></script>
 	<script src="../../modules/event-driven.js"></script>
 </head>
@@ -13,6 +13,8 @@
 <script>
 Tests.test(function (t)
 {
+	var EventDriven = Liby.EventDriven
+	
 	var exception = null,
 		kind = 'Event',
 		type = 'selected'
@@ -21,7 +23,6 @@ Tests.test(function (t)
 	function handler (e) { calls++ }
 	
 	function A () {}
-	A.prototype = {}
 	A.mixIn(EventDriven)
 	var node = new A()
 	

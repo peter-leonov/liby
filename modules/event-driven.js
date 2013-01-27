@@ -81,7 +81,7 @@ EventDriven.prototype =
 	}
 }
 
-self.EventDriven = EventDriven
+Liby.EventDriven = EventDriven
 
 
 
@@ -111,6 +111,6 @@ Event.prototype =
 	}
 }
 
-EventDriven.Event = Event
+Liby.EventDriven.Event = Event
 
 })();
