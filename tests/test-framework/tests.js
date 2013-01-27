@@ -238,7 +238,7 @@ Reporter.prototype =
 	inspect: function (v)
 	{
 		var link = N('a')
-		link.onclick = (function (v) { return function () { (console.dir || console.log)(v) } })(v)
+		link.onclick = (function (v) { return function () { console.dir(v) } })(v)
 		var inspector = new Test.Inspector()
 		link.appendChild(T(this.makeLablel(inspector.inspect(v))))
 		return link
