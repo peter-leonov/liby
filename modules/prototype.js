@@ -103,7 +103,8 @@ Object.add(String.prototype, {trim: trim, capitalize: capitalize})
 
 function mixIn (module)
 {
-	return Object.extend(this.prototype, module.prototype)
+	Object.extend(this.prototype, module.prototype)
+	return this
 }
 
 function bind (inv)
