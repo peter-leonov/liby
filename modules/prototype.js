@@ -37,12 +37,14 @@ function copy (s)
 	return d
 }
 
+var hasOwnProperty = Object.prototype.hasOwnProperty
 function keys (s)
 {
 	var r = []
 	
 	for (var k in s)
-		r.push(k)
+		if (hasOwnProperty.call(s, k))
+			r.push(k)
 	
 	return r
 }

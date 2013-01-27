@@ -25,6 +25,26 @@ Tests.test(function (t)
 			t.like(Object.extend({a: 555, b:777, d:4}, {a:1, b:2}), {a:1, b:2, d:4}, 'replacing an existent properties')
 		})
 		
+		t.test('Object.keys()', function (t)
+		{
+			t.ok(Object.keys, 'Object.keys')
+			
+			t.like(Object.keys({a:1, b:2}), ['a', 'b'], 'plain object')
+			
+			function A () {}
+			A.prototype.a = 1
+			var a = new A()
+			a.b = 2
+			t.like(Object.keys(a), ['b'], 'object with property in prototype')
+			
+			t.like(Object.keys([1,2,3]), ['0','1','2'], 'array')
+			
+			// function fa () {}
+			// t.like(Object.keys(fa), [], 'empty function')
+			// function fb (a, b) {}
+			// t.like(Object.keys(fb), [], 'two params function')
+		})
+		
 		
 		t.type(Object.keys, 'function', 'Object.keys')
 		t.type(Object.keysCount, 'function', 'Object.keysCount')
