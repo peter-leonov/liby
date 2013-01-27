@@ -32,6 +32,7 @@ Tests.test(function (t)
 		t.eq(a[2], b[2], 'nodes list [2]')
 		
 		t.like(Array.from({0: 1, 1: 2, 2: 3, length: 3}), [1, 2, 3], 'object with length property')
+		t.like(Array.from({0: 1, 1: 2, 2: 3, length: 5}), [1, 2, 3, undefined, undefined], 'object with length property')
 	})
 	
 	
