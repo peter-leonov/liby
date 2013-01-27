@@ -13,6 +13,27 @@
 <script>
 Tests.test(function (t)
 {
+	t.test('Object', function (t)
+	{
+		t.test('Object.extend()', function (t)
+		{
+			t.ok(Object.extend, 'Object.extend')
+			
+			t.like(Object.extend({}, {a:1, b:2}), {a:1, b:2}, 'extending an empty object')
+			t.like(Object.extend({a:1, b:2}, {}), {a:1, b:2}, 'extending with empty object')
+			t.like(Object.extend({c:3, d:4}, {a:1, b:2}), {a:1, b:2, c:3, d:4}, 'extending without an overlap')
+			t.like(Object.extend({a: 555, b:777, d:4}, {a:1, b:2}), {a:1, b:2, d:4}, 'replacing an existent properties')
+		})
+		
+		
+		t.type(Object.keys, 'function', 'Object.keys')
+		t.type(Object.keysCount, 'function', 'Object.keysCount')
+		t.type(Object.values, 'function', 'Object.values')
+		t.type(Object.isEmpty, 'function', 'Object.isEmpty')
+	})
+	
+	
+	
 	function arrayFrom (list)
 	{
 		var ary = []
@@ -71,16 +92,6 @@ Tests.test(function (t)
 		var o = {}
 		t.like(f.call(o), [o], 'f()')
 		t.like(f.bind(o, 1, 2, 3)(4), [o, 1, 2, 3, 4], 'f.bind(o, 1, 2, 3)(4)')
-	})
-	
-	
-	t.test('Object.*', function (t)
-	{
-		t.type(Object.extend, 'function', 'Object.extend')
-		t.type(Object.keys, 'function', 'Object.keys')
-		t.type(Object.keysCount, 'function', 'Object.keysCount')
-		t.type(Object.values, 'function', 'Object.values')
-		t.type(Object.isEmpty, 'function', 'Object.isEmpty')
 	})
 })
 </script>
