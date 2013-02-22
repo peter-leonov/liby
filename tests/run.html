@@ -15,8 +15,10 @@
 </head>
 <body>
 <script>
-function run ()
+function ready ()
 {
+	var root = $.n(document.body)
+	
 	function walk (uri)
 	{
 		// console.log(uri)
@@ -29,24 +31,29 @@ function run ()
 				walk(uri + m[1])
 			}
 			
+			
 			var m, rex = /<a href="([\w\-]+)\.t\.html">/g
+			var arr = []
 			while (m = rex.exec(body))
-			{
-				test(uri + m[1] + '.t.html')
-			}
+				arr.push(uri + m[1] + '.t.html')
+			run(uri, arr)
 		}
 	}
 	
-	function test (uri)
+	function run (uri, tests)
 	{
-		// console.log(uri)
-		$.n(document.body).add('iframe').attr('src', uri)
+		if (!tests.length)
+			return
+		
+		// root.h1().text(uri)
+		for (var i = 0, il = tests.length; i < il; i++)
+			root.add('iframe').attr('src', tests[i])
 	}
 	
 	walk('./')
 	
 }
-$.onload(run)
+$.onload(ready)
 </script>
 </body>
 </html>
