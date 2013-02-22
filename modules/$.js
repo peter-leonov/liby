@@ -44,4 +44,9 @@ if (Liby.Request)
 	$.post = Liby.Request.post
 }
 
+if (Liby.NodesBuilder)
+{
+	$.n = function (node) { return new Liby.NodesBuilder(node) }
+}
+
 })();
