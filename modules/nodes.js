@@ -1,3 +1,4 @@
+/*
 ;(function(){
 
 function toggleTo (cn, state)
@@ -100,7 +101,7 @@ var prototype =
 Object.add(Element.prototype, prototype)
 
 })();
-
+*/
 
 
 ;(function(){
