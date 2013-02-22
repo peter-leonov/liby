@@ -134,6 +134,12 @@ proto.add = function (tag, cn)
 	return new NodesBuilder(node)
 }
 
+proto.attr = function (name, val)
+{
+	this.node[name] = val
+	return this
+}
+
 
 var tags = 'div span a ul dl li dt dd img input textarea'.split(' ')
 for (var i = 0, il = tags.length; i < il; i++)
