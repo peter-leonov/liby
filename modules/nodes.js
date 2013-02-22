@@ -109,7 +109,6 @@ Object.add(Element.prototype, prototype)
 function NodesBuilder (node)
 {
 	this.node = node
-	return this
 }
 
 var proto = NodesBuilder.prototype
@@ -124,7 +123,7 @@ proto.text = function (text)
 {
 	var node = doc.createTextNode(text)
 	this.node.appendChild(node)
-	return node
+	return this
 }
 
 proto.add = function (tag, cn)
