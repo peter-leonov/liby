@@ -144,12 +144,7 @@ var Tests =
 		
 		this.windowSnapshot = Object_copy(window)
 		
-		var reporter = this.reporter =
-		{
-			create: function () { return new Reporter() },
-			nodes: {main: this.nodes.main}
-		}
-		
+		var reporter = this.reporter = new Reporter()
 		
 		var test = this.mainTest = new Test(this, title, null, this.job, function () {})
 		
@@ -161,12 +156,12 @@ var Tests =
 		test.run()
 		
 		var hide = test.reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
-		hide.onclick = function () { reporter.hide() }
+		hide.onclick = function () { test.reporter.hide() }
 	},
 	
 	childTest: function ()
 	{
-		this.nodes.main.className += 'done'
+		this.nodes.main.className += ' done'
 	},
 	
 	onbeforecomplete: function ()
