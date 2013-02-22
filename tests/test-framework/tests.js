@@ -162,6 +162,7 @@ var Tests =
 	childTest: function ()
 	{
 		this.nodes.main.className += ' done'
+		window.scrollTo(0, 0)
 	},
 	
 	onbeforecomplete: function ()
