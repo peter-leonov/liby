@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>running all test</title>
+	
+	<!--[if IE 8]><script src="../../fixes/trident4/trident4.js"></script><![endif]-->
+	<script>Liby = {}</script>
+	<script src="../modules/request.js"></script>
+	<script src="../modules/nodes.js"></script>
+	<script src="../modules/$.js"></script>
+	<style>
+	iframe { width: 100px; height: 100px; }
+	</style>
+</head>
+<body>
+<script>
+function run ()
+{
+	function walk (uri)
+	{
+		// console.log(uri)
+		$.get(uri, got)
+		function got (body)
+		{
+			var m, rex = /<a href="([\w\-]+\/)">/g
+			while (m = rex.exec(body))
+			{
+				walk(uri + m[1])
+			}
+			
+			var m, rex = /<a href="([\w\-]+)\.t\.html">/g
+			while (m = rex.exec(body))
+			{
+				test(uri + m[1] + '.t.html')
+			}
+		}
+	}
+	
+	function test (uri)
+	{
+		// console.log(uri)
+		$.n(document.body).add('iframe').attr('src', uri)
+	}
+	
+	walk('./')
+	
+}
+$.onload(run)
+</script>
+</body>
+</html>
