@@ -167,6 +167,6 @@ function bakeShortcut (tag)
 	}
 }
 
-self[NodesBuilder.name] = NodesBuilder
+Liby.NodesBuilder = NodesBuilder
 
 })();
