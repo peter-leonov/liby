@@ -35,7 +35,7 @@ body{font: 12px Arial,sans-serif;}
 #tests-output > .test > .head .hide:hover { opacity: 1; }
 #tests-output > .test > .summary { min-height: 20px; padding: 0 15px 5px; font-size: 1.3em; }
 
-#tests-output.nested > .test > .head { min-height: 100px; font-size: 1em; }
+#tests-output.nested > .test > .head { min-height: 100px; font-size: 1.2em; padding: 5px; }
 #tests-output.nested > .test > .head .hide { top: 115px; }
 
 #tests-output > .test.failed > .head,
