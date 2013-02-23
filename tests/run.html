@@ -10,14 +10,15 @@
 	<script src="../modules/nodes.js"></script>
 	<script src="../modules/$.js"></script>
 	<style>
-	iframe { width: 100px; height: 100px; }
+	.test { display: inline-block; }
+	.test iframe { width: 100px; height: 100px; }
 	</style>
 </head>
 <body>
 <script>
 function ready ()
 {
-	var root = $.n(document.body)
+	walk('./')
 	
 	function walk (uri)
 	{
@@ -31,15 +32,16 @@ function ready ()
 				walk(uri + m[1])
 			}
 			
-			
 			var m, rex = /<a href="([\w\-]+)\.t\.html">/g
 			var arr = []
 			while (m = rex.exec(body))
 				arr.push(uri + m[1] + '.t.html')
+			
 			run(uri, arr)
 		}
 	}
 	
+	var root = $.n(document.body)
 	function run (uri, tests)
 	{
 		if (!tests.length)
@@ -47,11 +49,14 @@ function ready ()
 		
 		// root.h1().text(uri)
 		for (var i = 0, il = tests.length; i < il; i++)
-			root.add('iframe').attr('src', tests[i])
+			test(tests[i])
+		
+		function test (uri)
+		{
+			var test = root.div('test')
+			test.add('iframe').attr('src', uri)
+		}
 	}
-	
-	walk('./')
-	
 }
 $.onload(ready)
 </script>
