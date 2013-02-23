@@ -31,9 +31,12 @@ body{font: 12px Arial,sans-serif;}
 #tests-output > .test > .head,
 #tests-output > .test > .summary { background-color: #888; color: #fff; }
 #tests-output > .test > .head { position: relative; min-height: 26px; padding: 10px 15px 0; font-size: 1.75em; font-weight: bold; }
-#tests-output > .test > .head .hide { position: absolute; top: 115px; right: 15px; opacity: 0.5; }
+#tests-output > .test > .head .hide { position: absolute; top: 20px; right: 15px; opacity: 0.5; }
 #tests-output > .test > .head .hide:hover { opacity: 1; }
 #tests-output > .test > .summary { min-height: 20px; padding: 0 15px 5px; font-size: 1.3em; }
+
+#tests-output.nested > .test > .head { min-height: 100px; font-size: 1em; }
+#tests-output.nested > .test > .head .hide { top: 115px; }
 
 #tests-output > .test.failed > .head,
 #tests-output > .test.failed > .summary { background-color: #d40; color: #fff; }
