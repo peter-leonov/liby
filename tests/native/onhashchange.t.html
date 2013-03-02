@@ -18,65 +18,40 @@ Tests.test(function (t)
 	
 	t.test('dispath on location.hash = …', function (t)
 	{
-		function onhashchange (e)
-		{
-			window.removeEventListener('hashchange', onhashchange, false)
-			
-			t.eq(e.type, 'hashchange', 'event.type')
-			
-			t.done()
-		}
-		
-		window.addEventListener('hashchange', onhashchange, false)
-		
-		window.setTimeout(function () { window.location.hash = Math.random() }, 0)
-		t.wait(1000)
-	})
-	
-	t.test('dispath on history.back()', function (t)
-	{
-		// window.location.hash = Math.random()
+		t.expect(1)
 		
 		function onhashchange (e)
 		{
 			window.removeEventListener('hashchange', onhashchange, false)
 			
 			t.eq(e.type, 'hashchange', 'event.type')
-			
 			t.done()
 		}
 		
-		function back (e)
-		{
-			window.addEventListener('hashchange', onhashchange, false)
-			history.back()
-		}
+		window.addEventListener('hashchange', onhashchange, false)
+		window.location.hash = Math.random()
 		
-		window.setTimeout(back, 1)
-		t.wait(1000)
+		t.wait(15000)
 	})
 	
 	t.test('dispath on history.back()', function (t)
 	{
-		if (window.location.setHashchangeCheckInterval)
-			window.location.setHashchangeCheckInterval(1)
-		
-		var count = 0
-		
-		function onhashchange () { count++ }
-		window.addEventListener('hashchange', onhashchange, false)
+		t.expect(1)
 		
 		window.location.hash = Math.random()
 		
-		function check ()
+		function onhashchange (e)
 		{
-			t.eq(count, 1, 'fired once')
+			window.removeEventListener('hashchange', onhashchange, false)
 			
-			if (window.location.setHashchangeCheckInterval)
-				window.location.setHashchangeCheckInterval()
+			t.eq(e.type, 'hashchange', 'event.type')
+			t.done()
 		}
 		
-		t.async(check, 500)
+		window.addEventListener('hashchange', onhashchange, false)
+		history.back()
+		
+		t.wait(15000)
 	})
 })
 </script>
