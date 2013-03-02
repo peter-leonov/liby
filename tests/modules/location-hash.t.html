@@ -20,14 +20,7 @@ Tests.test(function (t)
 {
 	t.parallel(1)
 	
-	// enable intensive checking for 10 seconds
-	if (window.location.setHashchangeCheckInterval)
-	{
-		window.location.setHashchangeCheckInterval(1)
-		window.setTimeout(function () { window.location.setHashchangeCheckInterval() }, 10000)
-	}
-	
-	var lh = new LocationHash().bind()
+	var lh = new Liby.LocationHash().bind()
 	
 	t.test('setting and getting', function (t)
 	{
@@ -76,10 +69,7 @@ Tests.test(function (t)
 			}
 			
 			lh.addEventListener('change', onchange, false)
-			
-			window.setTimeout(function () { window.location.hash = text }, 0)
-			
-			t.wait(1000)
+			window.location.hash = text
 		})
 		
 		t.test('no change event on set', function (t)
@@ -91,10 +81,7 @@ Tests.test(function (t)
 			}
 			
 			lh.addEventListener('change', onchange, false)
-			
-			window.setTimeout(function () { lh.set('123') }, 0)
-			
-			t.async(function () {}, 100)
+			lh.set('123')
 		})
 	})
 	
