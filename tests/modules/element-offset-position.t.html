@@ -5,9 +5,8 @@
 	<title>Element#offsetPosition()</title>
 	<script src="../test-framework/tests.common.js"></script>
 	
-	<!--[if IE 8]><script src="../../fixes/trident4/trident4.js"></script><![endif]-->
-	<script src="../../modules/prototype.js"></script>
-	<script src="../../modules/element.js"></script>
+	<script>Liby = {}</script>
+	<script src="../../modules/nodes.js"></script>
 	
 	<style>
 	html.relative { position: relative; }
@@ -62,7 +61,7 @@
 <script>
 Tests.test(function (t)
 {
-	function $id (id) { return document.getElementById(id) }
+	function $id (id) { return new Liby.NodesBuilder(document.getElementById(id)) }
 	
 	t.test('prerequisites', function (t)
 	{
@@ -83,10 +82,10 @@ Tests.test(function (t)
 		t.mayFail()
 		
 		var node = $id('in-document-element')
-		document.documentElement.appendChild(node)
+		document.documentElement.appendChild(node.el)
 		var pos = node.offsetPosition()
 		
-		t.eq(node.parentNode, document.documentElement, 'parentNode is a documentElement')
+		t.eq(node.el.parentNode, document.documentElement, 'parentNode is a documentElement')
 		
 		t.eq(pos.left, 30, 'left')
 		t.eq(pos.top, 40, 'top')
@@ -119,8 +118,8 @@ Tests.test(function (t)
 	t.test('in scrolled box', function (t)
 	{
 		var node = $id('in-scrolled-box')
-		node.parentNode.scrollLeft = 15
-		node.parentNode.scrollTop = 25
+		node.el.parentNode.scrollLeft = 15
+		node.el.parentNode.scrollTop = 25
 		var pos = node.offsetPosition()
 		
 		t.eq(pos.left, 50 - 15 + 10, 'left')
@@ -168,9 +167,10 @@ Tests.test(function (t)
 	t.test('with scrolled root', function (t)
 	{
 		var node = $id('with-scrolled-root')
-		node.parentNode.scrollLeft = 1000
-		node.parentNode.scrollTop = 2000
-		var pos = node.offsetPosition(node.parentNode)
+		var parent = node.parent()
+		parent.el.scrollLeft = 1000
+		parent.el.scrollTop = 2000
+		var pos = node.offsetPosition(parent)
 		
 		t.eq(pos.left, 110, 'left')
 		t.eq(pos.top, 120, 'top')
@@ -186,7 +186,7 @@ Tests.test(function (t)
 	})
 })
 
-Tests.oncomplete = function () { document.documentElement.className = 'done' }
+Tests.oncomplete = function () { document.documentElement.className += ' done' }
 </script>
 </body>
 </html>
