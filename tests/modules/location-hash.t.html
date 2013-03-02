@@ -60,6 +60,8 @@ Tests.test(function (t)
 		
 		t.test('change event', function (t)
 		{
+			t.expect(1)
+			
 			var text = 'abc'
 			
 			function onchange ()
@@ -71,18 +73,20 @@ Tests.test(function (t)
 			
 			lh.addEventListener('change', onchange, false)
 			window.location.hash = text
+			t.wait()
 		})
 		
 		t.test('no change event on set', function (t)
 		{
+			t.expect(0)
 			function onchange ()
 			{
-				lh.removeEventListener('change', onchange, false)
 				t.fail('change event')
 			}
 			
 			lh.addEventListener('change', onchange, false)
 			lh.set('123')
+			lh.removeEventListener('change', onchange, false)
 		})
 	})
 	
