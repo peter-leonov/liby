@@ -106,6 +106,8 @@ Object.add(Element.prototype, prototype)
 
 ;(function(){
 
+var doc = document
+
 function NodesBuilder (node)
 {
 	this.node = node
@@ -138,39 +140,6 @@ proto.attr = function (name, val)
 {
 	this.node[name] = val
 	return this
-}
-
-
-var tags = 'div span a ul dl li dt dd img input h1 h2 h3 h4 h5 h6 textarea'.split(' ')
-for (var i = 0, il = tags.length; i < il; i++)
-	bakeShortcut(tags[i])
-
-
-var doc = document
-
-function bakeShortcut (tag)
-{
-	proto[tag] = function (cn)
-	{
-		var node = doc.createElement(tag)
-		node.className = cn
-		this.node.appendChild(node)
-		return new NodesBuilder(node)
-	}
-	
-	NodesBuilder[tag] = function (cn)
-	{
-		var node = doc.createElement(tag)
-		node.className = cn
-		return new NodesBuilder(node)
-	}
-	
-	plain[tag] = function (cn)
-	{
-		var node = doc.createElement(tag)
-		node.className = cn
-		return node
-	}
 }
 
 Liby.NodesBuilder = NodesBuilder

@@ -58,8 +58,8 @@ function ready ()
 	var root = $.n(document.body)
 	function test (uri)
 	{
-		var test = root.div('test')
-		test.a('link').attr('href', uri)
+		var test = root.add('div', 'test')
+		test.add('a', 'link').attr('href', uri)
 		test.add('iframe', 'runner').attr('src', uri)
 	}
 }
