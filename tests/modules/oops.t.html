@@ -60,7 +60,7 @@ Tests.test(function (t)
 		}
 		var node = document.body.appendChild(document.createElement('img'))
 		node.addEventListener('load', addEventListener, false)
-		node.src = 'recorder-cursor.png'
+		node.src = 'pixel.png'
 		
 		function removeEventListener (e)
 		{
@@ -71,7 +71,7 @@ Tests.test(function (t)
 		var node = document.body.appendChild(document.createElement('img'))
 		node.addEventListener('load', removeEventListener, false)
 		node.removeEventListener('load', removeEventListener, false)
-		node.src = 'recorder-cursor.png'
+		node.src = 'pixel.png'
 		
 		var script = document.body.appendChild(document.createElement('script'))
 		window.setTimeout(function () { script.src = 'non-existent.uri' }, 500)
