@@ -71,7 +71,7 @@ var Tests =
 		var main = this.nodes.main = N('div')
 		main.id = 'tests-output'
 		if (window != window.parent)
-			main.className += ' nested'
+			doc.documentElement.className += ' nested'
 		doc.body.appendChild(main)
 		
 		this.run()
