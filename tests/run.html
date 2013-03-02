@@ -10,8 +10,9 @@
 	<script src="../modules/nodes.js"></script>
 	<script src="../modules/$.js"></script>
 	<style>
-	.test { display: inline-block; }
-	.test iframe { width: 100px; height: 100px; }
+	.test { display: inline-block; position: relative; width: 100px; height: 100px; }
+	.test .link { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+	.test .runner { width: 100%; height: 100%; }
 	</style>
 </head>
 <body>
@@ -55,7 +56,8 @@ function ready ()
 	function test (uri)
 	{
 		var test = root.div('test')
-		test.add('iframe').attr('src', uri)
+		test.a('link').attr('href', uri)
+		test.add('iframe', 'runner').attr('src', uri)
 	}
 }
 $.onload(ready)
