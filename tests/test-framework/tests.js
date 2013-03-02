@@ -196,12 +196,16 @@ var Tests =
 	{
 		this.nodes.main.className += ' done'
 		window.scrollTo(0, 0)
+		
+		this.oncomplete()
 	},
 	
 	onbeforecomplete: function ()
 	{
 		this.drawWindowDiff()
-	}
+	},
+	
+	oncomplete: function () {}
 }
 
 self.Tests = Tests
