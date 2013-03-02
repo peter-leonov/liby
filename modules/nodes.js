@@ -1,147 +1,139 @@
-/*
-;(function(){
-
-function toggleTo (cn, state)
-{
-	if (this.contains(cn) == state)
-		return
-	
-	this.toggle(cn)
-}
-
-DOMTokenList.prototype.toggleTo = toggleTo
-
-var prototype =
-{
-	empty: function ()
-	{
-		var node
-		while (node = this.firstChild)
-			this.removeChild(node)
-	},
-	
-	remove: function ()
-	{
-		var parent = this.parentNode
-		if (!parent)
-			return
-		
-		parent.removeChild(this)
-	},
-	
-	isParent: function (parent, root)
-	{
-		var node = this
-		do
-		{
-			if (node === parent)
-				return true
-			if (node === root)
-				break
-		}
-		while ((node = node.parentNode))
-		
-		return false
-	},
-	
-	parentWithClass: function (cn, root)
-	{
-		if (!root)
-			root = document.documentElement
-		
-		var node = this
-		do
-		{
-			if (node.classList.contains(cn))
-				return node
-			if (node === root)
-				break
-		}
-		while ((node = node.parentNode))
-		
-		return null
-	},
-	
-	offsetPosition: function (root)
-	{
-		var node = this,
-			left = 0, top = 0
-		
-		if (node == root)
-			return {left: left, top: top}
-		
-		var parent, lastNode
-		for (;;)
-		{
-			left += node.offsetLeft
-			top += node.offsetTop
-			
-			parent = node.offsetParent
-			if (parent && parent !== root)
-			{
-				lastNode = node
-				node = parent
-			}
-			else
-			{
-				if (lastNode)
-				{
-					left -= lastNode.scrollLeft
-					top -= lastNode.scrollTop
-				}
-				
-				break
-			}
-		}
-		
-		return {left: left, top: top}
-	}
-}
-
-Object.add(Element.prototype, prototype)
-
-})();
-*/
-
-
 ;(function(){
 
 var doc = document
 
-function NodesBuilder (node)
+function NodesBuilder (el)
 {
-	this.node = node
+	this.el = el
 }
 
 var proto = NodesBuilder.prototype
-var plain = NodesBuilder.plain = {}
-
-plain.text = function (text)
-{
-	return doc.createTextNode(text)
-}
 
 proto.text = function (text)
 {
-	var node = doc.createTextNode(text)
-	this.node.appendChild(node)
+	var el = doc.createTextNode(text)
+	this.el.appendChild(el)
 	return this
 }
 
 proto.add = function (tag, cn)
 {
-	var node = doc.createElement(tag)
-	node.className = cn
-	this.node.appendChild(node)
-	return new NodesBuilder(node)
+	var el = doc.createElement(tag)
+	el.className = cn
+	this.el.appendChild(el)
+	return new NodesBuilder(el)
 }
 
 proto.attr = function (name, val)
 {
-	this.node[name] = val
+	this.el[name] = val
 	return this
 }
 
 Liby.NodesBuilder = NodesBuilder
+
+})();
+
+
+;(function(){
+
+var p = Liby.NodesBuilder.prototype
+
+p.empty = function ()
+{
+	var el = this.el
+	var fc
+	while ((fc = el.firstChild))
+		el.removeChild(fc)
+}
+
+p.remove = function ()
+{
+	var parent = this.el.parentNode
+	if (!parent)
+		return
+	
+	parent.removeChild(this.el)
+}
+
+p.parent = function ()
+{
+	var parent = this.el.parentNode
+	if (!parent)
+		return null
+	
+	return new Liby.NodesBuilder(parent)
+}
+
+p.isParent = function (parent, root)
+{
+	var node = this.el
+	do
+	{
+		if (node === parent)
+			return true
+		if (node === root)
+			break
+	}
+	while ((node = node.parentNode))
+	
+	return false
+}
+
+p.parentWithClass = function (cn, root)
+{
+	if (!root)
+		root = document.documentElement
+	
+	var node = this.el
+	do
+	{
+		if (node.classList.contains(cn))
+			return node
+		if (node === root)
+			break
+	}
+	while ((node = node.parentNode))
+	
+	return null
+}
+
+p.offsetPosition = function (root)
+{
+	var node = this.el,
+		left = 0, top = 0
+	
+	if (root)
+		root = root.el
+	
+	if (node == root)
+		return {left: left, top: top}
+	
+	var parent, lastNode
+	for (;;)
+	{
+		left += node.offsetLeft
+		top += node.offsetTop
+		
+		parent = node.offsetParent
+		if (parent && parent !== root)
+		{
+			lastNode = node
+			node = parent
+		}
+		else
+		{
+			if (lastNode)
+			{
+				left -= lastNode.scrollLeft
+				top -= lastNode.scrollTop
+			}
+			
+			break
+		}
+	}
+	
+	return {left: left, top: top}
+}
 
 })();
