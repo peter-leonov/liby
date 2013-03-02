@@ -153,12 +153,9 @@ Tests.test(function (t)
 		node.focus()
 		focusDonor.focus()
 		
-		t.async(function (t)
-		{
-			t.like(order, ['captures-blur-1:donor', 'captures-focus-1:node', 'captures-blur-1:node', 'captures-focus-1:donor'], '“focus+blur” captures only')
-			t.ok(focused, '“focus” was fired on the node itself')
-			t.ok(blured, '“blur” was fired on the node itself')
-		}, 10)
+		t.like(order, ['captures-blur-1:donor', 'captures-focus-1:node', 'captures-blur-1:node', 'captures-focus-1:donor'], '“focus+blur” captures only')
+		t.ok(focused, '“focus” was fired on the node itself')
+		t.ok(blured, '“blur” was fired on the node itself')
 	})
 	
 	t.test('scroll on window', function (t)
