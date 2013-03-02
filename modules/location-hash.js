@@ -72,8 +72,8 @@ LocationHash.prototype =
 if (!window.history.pushState)
 	LocationHash.prototype.eraseEmptyHash = function () {}
 
-LocationHash.mixIn(EventDriven)
+LocationHash.mixIn(Liby.EventDriven)
 
-self.LocationHash = LocationHash
+Liby.LocationHash = LocationHash
 
 })();
