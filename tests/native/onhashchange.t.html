@@ -35,9 +35,6 @@ Tests.test(function (t)
 	
 	t.test('dispath on history.back()', function (t)
 	{
-		if (/Chrome [123456]\.|MSIE [67]\./.test(Tests.ua))
-			return t.warn('This browser (' + Tests.ua + ') does not take location.hash changes in history account.')
-		
 		// window.location.hash = Math.random()
 		
 		function onhashchange (e)
