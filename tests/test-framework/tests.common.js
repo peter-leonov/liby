@@ -10,4 +10,22 @@ script('../test-framework/tests.js')
 
 style('../test-framework/tests.css')
 
+window._TestsHook = function ()
+{
+	var prefix
+	if (/inshaker/.test(window.location.host))
+		prefix = '/www/com.inshaker/htdocs/g/liby/'
+	
+	if (!prefix)
+		return
+	
+	Tests.txmtLink = function ()
+	{
+		var m = /\/(tests\/.+\.html)$/.exec(window.location)
+		if (!m)
+			return
+		return 'txmt://open?url=file://' + prefix + m[1]
+	}
+}
+
 })();

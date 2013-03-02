@@ -68,6 +68,9 @@ var Tests =
 	nodes: {},
 	load: function ()
 	{
+		if (window._TestsHook)
+		window._TestsHook()
+		
 		var main = this.nodes.main = N('div')
 		main.id = 'tests-output'
 		if (window != window.parent)
@@ -82,6 +85,8 @@ var Tests =
 	{
 		this.ignoredGlobals = this.ignoredGlobals.concat(ary)
 	},
+	
+	txmtLink: function () {},
 	
 	drawWindowDiff: function ()
 	{
@@ -151,6 +156,15 @@ var Tests =
 		var test = this.mainTest = new Test(this, title, null, this.job, function () {})
 		
 		this.nodes.main.appendChild(test.reporter.nodes.main)
+		
+		var txmtLink = this.txmtLink()
+		if (txmtLink)
+		{
+			var link = document.createElement('a')
+			link.href = txmtLink
+			link.appendChild(test.reporter.nodes.head.firstChild)
+			test.reporter.nodes.head.appendChild(link)
+		}
 		
 		var me = this
 		test.onbeforecomplete = function () { me.onbeforecomplete() }
