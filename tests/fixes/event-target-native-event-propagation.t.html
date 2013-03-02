@@ -125,13 +125,13 @@ Tests.test(function (t)
 		t.ok(fired, '“keydown” was fired on the node itself')
 	})
 	
-	window.focus()
-	
-	
-	var focusDonor = $id('node-5')
-	focusDonor.focus()
 	t.test('focus+blur on input', function (t)
 	{
+		window.focus()
+		
+		var focusDonor = $id('node-5')
+		focusDonor.focus()
+		
 		var node = $id('node-4')
 		node.__tests_objectName = 'node'
 		focusDonor.__tests_objectName = 'donor'
