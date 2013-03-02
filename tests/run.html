@@ -10,7 +10,7 @@
 	<script src="../modules/nodes.js"></script>
 	<script src="../modules/$.js"></script>
 	<style>
-	.test { display: inline-block; position: relative; width: 100px; height: 100px; }
+	.test { display: inline-block; position: relative; width: 100px; height: 100px; background-color: #ccc; }
 	.test .link { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 	.test .runner { width: 100%; height: 100%; }
 	</style>
@@ -19,12 +19,16 @@
 <script>
 function ready ()
 {
+	var tests = []
+	var pending = 0
+	
 	walk('./')
 	
 	function walk (uri)
 	{
-		// console.log(uri)
+		pending++
 		$.get(uri, got)
+		
 		function got (body)
 		{
 			var m, rex = /<a href="([\w\-]+\/)">/g
@@ -34,20 +38,19 @@ function ready ()
 			}
 			
 			var m, rex = /<a href="([\w\-]+)\.t\.html">/g
-			var arr = []
 			while (m = rex.exec(body))
-				arr.push(uri + m[1] + '.t.html')
+				tests.push(uri + m[1] + '.t.html')
 			
-			run(uri, arr)
+			pending--
+			if (pending == 0)
+				done()
 		}
 	}
 	
-	function run (uri, tests)
+	function done ()
 	{
-		if (!tests.length)
-			return
+		tests.sort()
 		
-		// root.h1().text(uri)
 		for (var i = 0, il = tests.length; i < il; i++)
 			test(tests[i])
 	}
