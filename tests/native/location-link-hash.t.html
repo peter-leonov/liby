@@ -6,7 +6,7 @@
 	<script src="../test-framework/tests.common.js"></script>
 	
 	<style>
-	#box { position: absolute; top: 75px; left: 25px; z-index: 200; font-size: 15px; }
+	#box { position: absolute; top: 175px; left: 25px; z-index: 200; font-size: 15px; }
 	</style>
 </head>
 <body>
@@ -23,6 +23,7 @@
 </ul>
 <script>
 function $ (id) { return document.getElementById(id) }
+Tests.manual()
 Tests.test(function (t)
 {
 	var l = window.location

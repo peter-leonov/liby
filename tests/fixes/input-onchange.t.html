@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta name="viewport" content="width=device-width"/>
-	<title>input* onchange event</title>
+	<title>input onchange event</title>
 	<script src="../test-framework/tests.common.js"></script>
 	
 	<!--[if IE 8]><script src="../../fixes/trident4/trident4.js"></script><![endif]-->
@@ -19,28 +19,30 @@
 </form>
 <script>
 function $id (id) { return document.getElementById(id) }
+Tests.manual()
 Tests.test(function (t)
 {
 	t.test('input', function (t)
 	{
-		t.expect(3)
+		t.expect(6)
 		
 		var count = 0
 		function check (txt)
 		{
 			t.pass(txt)
 			
-			if (++count >= 3)
+			if (++count >= 6)
 				t.done()
 		}
 		
-		// var input = $id('text-1')
-		// input.addEventListener('change', function (e) { check('text') }, false)
-		// 
-		// var input = $id('radio-1')
-		// input.addEventListener('change', function (e) { check('radio1') }, false)
-		// var input = $id('radio-2')
-		// input.addEventListener('change', function (e) { check('radio2') }, false)
+		var input = $id('text-1')
+		input.addEventListener('change', function (e) { check('text') }, false)
+		
+		var input = $id('radio-1')
+		input.addEventListener('change', function (e) { check('radio1') }, false)
+		
+		var input = $id('radio-2')
+		input.addEventListener('change', function (e) { check('radio2') }, false)
 		
 		var form = $id('form-1')
 		form.addEventListener('change', function (e) { check('form') }, false)

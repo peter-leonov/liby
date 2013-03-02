@@ -74,7 +74,10 @@ var Tests =
 		var main = this.nodes.main = N('div')
 		main.id = 'tests-output'
 		if (window != window.parent)
-			doc.documentElement.className += ' nested'
+		{
+			this.autotesting = true
+			doc.documentElement.className += ' auto'
+		}
 		doc.body.appendChild(main)
 		
 		this.run()
@@ -84,6 +87,11 @@ var Tests =
 	ignoreGlobals: function (ary)
 	{
 		this.ignoredGlobals = this.ignoredGlobals.concat(ary)
+	},
+	
+	manual: function ()
+	{
+		this.needsUserInput = true
 	},
 	
 	txmtLink: function () {},
@@ -151,6 +159,15 @@ var Tests =
 		
 		this.windowSnapshot = Object_copy(window)
 		
+		if (this.needsUserInput && this.autotesting)
+		{
+			this.job = function (t)
+			{
+				t.mayFail()
+				t.fail('needs user input')
+			}
+		}
+		
 		var reporter = this.reporter = new Reporter()
 		
 		var test = this.mainTest = new Test(this, title, null, this.job, function () {})
@@ -169,10 +186,10 @@ var Tests =
 		var me = this
 		test.onbeforecomplete = function () { me.onbeforecomplete() }
 		
-		test.run()
-		
 		var hide = test.reporter.nodes.head.appendChild(N('button', 'hide', 'hide'))
 		hide.onclick = function () { test.reporter.hide() }
+		
+		test.run()
 	},
 	
 	childTest: function ()
