@@ -20,8 +20,6 @@ Tests.test(function (t)
 		event: function (c, a, l, v) { reports.push({category: c, action: a, label: l, value: v}) }
 	}
 	
-	var evented = /Chrome\/[345]\.0|Version\/[34]\..+Safari/.test(navigator.userAgent)
-	
 	t.test('check for existence', function (t)
 	{
 		t.ok(Oops, 'global Oops object')
@@ -29,7 +27,7 @@ Tests.test(function (t)
 	
 	t.test('simple exception handling', function (t)
 	{
-		t.expect(5 + (evented ? 1 : 0))
+		var expect = 5
 		
 		function setTimeout ()
 		{
@@ -88,10 +86,6 @@ Tests.test(function (t)
 			t.gte(all.indexOf('setInterval'), 0, 'setInterval()')
 			t.gte(all.indexOf('addEventListener'), 0, 'addEventListener()')
 			t.eq(all.indexOf('removeEventListener'), -1, 'removeEventListener()')
-			if (evented)
-				t.gte(all.indexOf('unable to load'), 0, 'error loading script')
-			else
-				t.log('skipping script load error test')
 		}
 		t.async(1500, check)
 	})
