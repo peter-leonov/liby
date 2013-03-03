@@ -23,18 +23,18 @@ Tests.test(function (t)
 	
 	t.test('prevent jump to top on empty hash', function (t)
 	{
-		window.scrollTo(0, 100)
+		window.scrollTo(0, 11)
 		
 		// async for Safari delayed scrollTo()
 		t.async(500, function (t)
 		{
-			t.eq(window.pageYOffset, 100, 'pageYOffset')
+			t.eq(window.pageYOffset, 11, 'pageYOffset')
 			lh.set('blabla')
 			lh.set('')
 			
 			t.async(500, function (t)
 			{
-				t.eq(window.pageYOffset, 100, 'pageYOffset')
+				t.eq(window.pageYOffset, 11, 'pageYOffset')
 			})
 		})
 	})
