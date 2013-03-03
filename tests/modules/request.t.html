@@ -24,20 +24,6 @@ Tests.test(function (t)
 			t.done()
 		}
 		Liby.Request.get('?', callback)
-	})
-	
-	t.test('HEAD', function (t)
-	{
-		t.expect(2)
-		
-		function callback (body, status)
-		{
-			t.eq(status, 200, 'status')
-			t.eq(body, '', 'title')
-			t.done()
-		}
-		Liby.Request.head('?', callback)
-		t.wait(3000)
 		t.wait(30000)
 	})
 	
