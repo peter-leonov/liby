@@ -127,7 +127,7 @@ Tests.test(function (t)
 		t.log('clearing Oops cookie')
 		document.cookie = 'Oops=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
 		
-		t.ok(!/Oops=/.test(document.cookie), 'Oops cookie cleared')
+		t.mismatch(document.cookie, (/Oops=/), 'Oops cookie cleared')
 		
 		Oops.maybeEnable()
 		t.ok(Oops.enabled, 'Oops is enabled')

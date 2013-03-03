@@ -80,6 +80,14 @@ var prototype =
 			return this.fail([a, new Label('does not match', 'label middle'), b], d)
 	},
 	
+	mismatch: function (a, b, d)
+	{
+		if (!b.test(a))
+			return this.pass([a, new Label('mismatches', 'label middle'), b], d)
+		else
+			return this.fail([a, new Label('does match', 'label middle'), b], d)
+	},
+	
 	ina: function (a, b, d)
 	{
 		if (indexOf(b, a) != -1)
