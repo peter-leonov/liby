@@ -13,30 +13,27 @@
 </head>
 <body>
 <form id="form-1">
-<input type="text" name="text" id="text-1"/>
 <input type="radio" name="radio" id="radio-1"/>
 <input type="radio" name="radio" id="radio-2"/>
 </form>
 <script>
 function $id (id) { return document.getElementById(id) }
-Tests.manual()
 Tests.test(function (t)
 {
 	t.test('input', function (t)
 	{
-		t.expect(6)
+		var expect = 4
+		
+		t.expect(expect)
 		
 		var count = 0
 		function check (txt)
 		{
 			t.pass(txt)
 			
-			if (++count >= 6)
+			if (++count >= expect)
 				t.done()
 		}
-		
-		var input = $id('text-1')
-		input.addEventListener('change', function (e) { check('text') }, false)
 		
 		var input = $id('radio-1')
 		input.addEventListener('change', function (e) { check('radio1') }, false)
@@ -46,6 +43,9 @@ Tests.test(function (t)
 		
 		var form = $id('form-1')
 		form.addEventListener('change', function (e) { check('form') }, false)
+		
+		window.setTimeout(function () { $id('radio-1').click() }, 1)
+		window.setTimeout(function () { $id('radio-2').click() }, 2)
 		
 		t.wait(10000)
 	})
