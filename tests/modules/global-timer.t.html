@@ -70,10 +70,21 @@ Tests.test(function (t)
 	t.test('call order', function (t)
 	{
 		var order = []
-		var timer1 = GlobalTimer.add(function () { order.push(1) })
-		var timer2 = GlobalTimer.add(function () { order.push(2) })
-		var timer3 = GlobalTimer.add(function () { order.push(3), GlobalTimer.remove(timer4); })
-		var timer4 = GlobalTimer.add(function () { order.push(4) })
+		function push (n)
+		{
+			order.push(n)
+			if (order.length < 10)
+				return
+			
+			t.like(order, [1, 3, 5, 1, 3, 5, 1, 5, 5, 5])
+			t.done()
+		}
+		
+		var order = []
+		var timer1 = GlobalTimer.add(function () { push(1) })
+		var timer2 = GlobalTimer.add(function () { push(2) })
+		var timer3 = GlobalTimer.add(function () { push(3), GlobalTimer.remove(timer4); })
+		var timer4 = GlobalTimer.add(function () { push(4) })
 		
 		// waiting for t.waitFor()
 		function done (e)
@@ -94,7 +105,7 @@ Tests.test(function (t)
 		var count = 0
 		function callback5 ()
 		{
-			order.push(5)
+			push(5)
 			count++
 			if (count >= 2)
 				GlobalTimer.remove(timer3)
@@ -110,7 +121,7 @@ Tests.test(function (t)
 		
 		GlobalTimer.remove(timer2)
 		
-		t.async(5000, function () { t.like(order, [1, 3, 5, 1, 3, 5, 1, 5, 5, 5]) })
+		t.wait(5000)
 	})
 })
 </script>
