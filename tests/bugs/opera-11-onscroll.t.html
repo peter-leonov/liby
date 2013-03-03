@@ -21,7 +21,7 @@ Tests.test(function (t)
 		var fired
 		document.addEventListener('scroll', function (e) { log(fired = true) }, true)
 		window.scrollTo(0, 1)
-		t.async(function (t) { t.ok(fired, 'scroll fired') }, 0)
+		t.async(function (t) { t.ok(fired, 'scroll fired') })
 	})
 	
 	t.test('event phase', function (t)
@@ -29,7 +29,7 @@ Tests.test(function (t)
 		var eventPhase
 		window.addEventListener('scroll', function (e) { eventPhase = e.eventPhase }, true)
 		window.scrollTo(0, 2)
-		t.async(function (t) { t.eq(Event.CAPTURING_PHASE, eventPhase, 'Event.CAPTURING_PHASE == e.eventPhase') }, 0)
+		t.async(function (t) { t.eq(Event.CAPTURING_PHASE, eventPhase, 'Event.CAPTURING_PHASE == e.eventPhase') })
 	})
 })
 </script>

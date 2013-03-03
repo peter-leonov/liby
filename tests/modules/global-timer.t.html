@@ -87,7 +87,7 @@ Tests.test(function (t)
 				GlobalTimer.remove(GlobalTimer.add(callback))
 				GlobalTimer.add(function () { GlobalTimer.clear() })
 				
-				t.async(function () { t.eq(count, 2) }, 500)
+				t.async(500, function () { t.eq(count, 2) })
 			})
 		}
 		
@@ -110,7 +110,7 @@ Tests.test(function (t)
 		
 		GlobalTimer.remove(timer2)
 		
-		t.async(function () { t.like(order, [1, 3, 5, 1, 3, 5, 1, 5, 5, 5]) }, 5000)
+		t.async(5000, function () { t.like(order, [1, 3, 5, 1, 3, 5, 1, 5, 5, 5]) })
 	})
 })
 </script>

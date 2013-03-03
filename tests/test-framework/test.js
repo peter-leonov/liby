@@ -80,8 +80,14 @@ Test.prototype =
 		}
 	},
 	
-	async: function (f, d)
+	async: function (d, f)
 	{
+		if (typeof d != 'number')
+		{
+			f = d
+			d = 0
+		}
+		
 		var w = this.q.wait()
 		this.setStatus('waiting')
 		

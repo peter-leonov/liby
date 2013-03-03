@@ -171,7 +171,7 @@ Tests.test(function (t)
 		function fire () { fired = true }
 		node.onscroll = fire
 		
-		t.async(function (t)
+		t.async(100, function (t)
 		{
 			node.addEventListener('scroll', captures, true)
 			node.addEventListener('scroll', bubbles, false)
@@ -186,8 +186,8 @@ Tests.test(function (t)
 				// hide it here, otherwise scroll event called twice
 				node.scrollTo(0, 0)
 				$id('spacer').style.display = 'none'
-			}, 0)
-		}, 100)
+			})
+		})
 		
 	})
 })

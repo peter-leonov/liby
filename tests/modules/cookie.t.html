@@ -52,8 +52,8 @@ Tests.test(function (t)
 		Cookie.set('expires-one', 'blabla', +new Date() + 3000)
 		t.eq(Cookie.get('expires-one'), 'blabla', 'just after')
 		
-		t.async(function (t) { t.eq(Cookie.get('expires-one'), 'blabla', '"1s later"')  }, 1000)
-		t.async(function (t) { t.eq(Cookie.get('expires-one'), null, '5s late (expired)'); t.done() }, 5000)
+		t.async(1000, function (t) { t.eq(Cookie.get('expires-one'), 'blabla', '"1s later"')  })
+		t.async(5000, function (t) { t.eq(Cookie.get('expires-one'), null, '5s late (expired)'); t.done() })
 		
 		t.wait(10000)
 	})

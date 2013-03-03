@@ -34,7 +34,7 @@ Tests.test(function (t)
 			root.appendChild(node)
 		}
 		t.timeEnd('time')
-		t.async(function () { t.lagEnd('lag') }, wait)
+		t.async(wait, function () { t.lagEnd('lag') })
 	})
 	
 	t.test('via fragment', function (t)
@@ -51,7 +51,7 @@ Tests.test(function (t)
 		}
 		root.appendChild(fragment)
 		t.timeEnd('time')
-		t.async(function () { t.lagEnd('lag') }, wait)
+		t.async(wait, function () { t.lagEnd('lag') })
 	})
 })
 </script>

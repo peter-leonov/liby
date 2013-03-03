@@ -93,7 +93,7 @@ Tests.test(function (t)
 			else
 				t.log('skipping script load error test')
 		}
-		t.async(check, 1500)
+		t.async(1500, check)
 	})
 	
 	t.test('log() and error()', function (t)

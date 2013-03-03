@@ -26,18 +26,17 @@ Tests.test(function (t)
 		window.scrollTo(0, 100)
 		
 		// async for Safari delayed scrollTo()
-		t.async(function (t)
+		t.async(500, function (t)
 		{
 			t.eq(window.pageYOffset, 100, 'pageYOffset')
 			lh.set('blabla')
 			lh.set('')
-			t.async(function (t)
+			
+			t.async(500, function (t)
 			{
 				t.eq(window.pageYOffset, 100, 'pageYOffset')
-			},
-			500)
-		},
-		500)
+			})
+		})
 	})
 })
 </script>
