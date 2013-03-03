@@ -27,10 +27,22 @@ Tests.test(function (t)
 	
 	t.test('simple exception handling', function (t)
 	{
-		var expect = 5
+		t.expect(5)
+		
+		var waitFor = 3
+		function next ()
+		{
+			console.log('next')
+			if (--waitFor > 0)
+				return
+			
+			// give exceptions a chance to be handled
+			window.setTimeout(function () { check() }, 100)
+		}
 		
 		function setTimeout ()
 		{
+			next()
 			// Oops may had been disabled by other async tests
 			// so re-enabling it
 			Oops.enable()
@@ -42,6 +54,7 @@ Tests.test(function (t)
 		
 		function setInterval ()
 		{
+			next()
 			Oops.enable()
 			
 			window.clearInterval(intervalTimer)
@@ -51,6 +64,7 @@ Tests.test(function (t)
 		
 		function addEventListener (e)
 		{
+			next()
 			Oops.enable()
 			
 			t.eq(e.type, 'load', 'event type')
@@ -86,8 +100,11 @@ Tests.test(function (t)
 			t.gte(all.indexOf('setInterval'), 0, 'setInterval()')
 			t.gte(all.indexOf('addEventListener'), 0, 'addEventListener()')
 			t.eq(all.indexOf('removeEventListener'), -1, 'removeEventListener()')
+			
+			t.done()
 		}
-		t.async(1500, check)
+		
+		t.wait(10000)
 	})
 	
 	t.test('log() and error()', function (t)
