@@ -138,6 +138,9 @@ Tests.test(function (t)
 		t.log('clearing Oops cookie')
 		document.cookie = 'Oops=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
 		
+		// somehow fixes a mysterious race condition with cookies in WebKit
+		document.cookie = document.cookie
+		
 		t.mismatch(document.cookie, (/Oops=/), 'Oops cookie cleared')
 		
 		Oops.maybeEnable()
