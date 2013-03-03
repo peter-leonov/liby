@@ -23,6 +23,8 @@
 function $id (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
+	t.mayFail()
+	
 	t.gt($id('plain').scrollWidth, 100, 'plan')
 	t.lte($id('word').scrollWidth, 17, 'word')
 	t.gtlt($id('auto').scrollWidth, 17, 45, 'auto')

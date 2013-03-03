@@ -10,6 +10,8 @@
 function $ (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
+	t.mayFail()
+	
 	var l = window.location
 	
 	function href ()

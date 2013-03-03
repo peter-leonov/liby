@@ -11,6 +11,8 @@
 function $ (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
+	t.mayFail()
+	
 	var l = window.location
 	
 	t.test('hash of only "#" masks "#" char', function (t)
