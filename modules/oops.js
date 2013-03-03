@@ -54,8 +54,11 @@ var Oops =
 	
 	maybeEnable: function ()
 	{
-		if (!/Oops=disabled/.test(document.cookie))
-			this.enable()
+		console.log(document.cookie)
+		if (/Oops=disabled/.test(document.cookie))
+			return
+		
+		this.enable()
 	},
 	
 	enable: function ()
