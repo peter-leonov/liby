@@ -4,36 +4,53 @@
 	<meta name="viewport" content="width=device-width"/>
 	<title>link hash encoding</title>
 	<script src="../test-framework/tests.common.js"></script>
-	
-	<style>
-	#box { position: absolute; top: 175px; left: 25px; z-index: 200; font-size: 15px; }
-	</style>
 </head>
 <body>
 <ul id="box">
-<li><a id="link1" href="#1 2 3">#1 2 3</a></li>
-<li><a id="link2" href="#x  ">#x  </a></li>
-<li><a id="link3" href="#Пётр">#Пётр</a></li>
-<li><a id="link3.1" href="#%D0%9F%D1%91%D1%82%D1%80">#%D0%9F%D1%91%D1%82%D1%80</a></li>
-<li><a id="link4" href="#%3C%3F%3E">#%3C%3F%3E</a></li>
-<li><a id="link5" href="#%">#%</a></li>
-<li><a id="link5" href="#a=1&b=2&c=%26&d=4">#a=1&b=2&c=%26&d=4</a></li>
-<li><a id="link6" href="#1?2">#1?2</a></li>
-<li><a id="link7" href="#,.:\/#!'&quote;@%^&*(){}[]+-=`~">#,.:\/#!'&quote;@%^&*(){}[]+-=`~</a></li>
+<li><a class="test-link" id="link1" href="#1 2 3">#1 2 3</a></li>
+<li><a class="test-link" id="link2" href="#x  ">#x  </a></li>
+<li><a class="test-link" id="link3" href="#Пётр">#Пётр</a></li>
+<li><a class="test-link" id="link3.1" href="#%D0%9F%D1%91%D1%82%D1%80">#%D0%9F%D1%91%D1%82%D1%80</a></li>
+<li><a class="test-link" id="link4" href="#%3C%3F%3E">#%3C%3F%3E</a></li>
+<li><a class="test-link" id="link5" href="#%">#%</a></li>
+<li><a class="test-link" id="link5" href="#a=1&b=2&c=%26&d=4">#a=1&b=2&c=%26&d=4</a></li>
+<li><a class="test-link" id="link6" href="#1?2">#1?2</a></li>
+<li><a class="test-link" id="link7" href="#,.:\/#!'&quote;@%^&*(){}[]+-=`~">#,.:\/#!'&quote;@%^&*(){}[]+-=`~</a></li>
 </ul>
 <script>
 function $ (id) { return document.getElementById(id) }
-Tests.manual()
 Tests.test(function (t)
 {
-	var l = window.location
+	// clean
+	window.location.hash = '#clear'
 	
-	function check ()
+	// click trough
+	var links = document.querySelectorAll('.test-link')
+	var current = 0
+	function next ()
 	{
-		alert(l.hash + '\n' + /#.*$/.exec(l.href))
+		var link = links[current++]
+		if (!link)
+			return t.done()
+		
+		window.setTimeout(function () { link.click() }, 50)
 	}
 	
-	window.onhashchange = check
+	// test every link
+	t.expect(links.length)
+	
+	
+	// finaly, test
+	window.onhashchange = function check ()
+	{
+		t.eq(window.location.hash, /#.*$/.exec(window.location.href)[0])
+		
+		next()
+	}
+	
+	next()
+	
+	t.wait(10000)
 })
 </script>
 </body>
