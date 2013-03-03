@@ -136,4 +136,14 @@ p.offsetPosition = function (root)
 	return {left: left, top: top}
 }
 
+p.on = function (type, f, capture)
+{
+	return this.el.addEventListener(type, f, !!capture)
+}
+
+p.off = function (type, f, capture)
+{
+	return this.el.removeEventListener(type, f, !!capture)
+}
+
 })();
