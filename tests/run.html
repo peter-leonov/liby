@@ -63,7 +63,7 @@ function ready ()
 	function test (uri)
 	{
 		var test = root.add('div', 'test')
-		test.add('a', 'link').attr('href', uri)
+		test.add('a', 'link').attr('href', uri).attr('target', '_blank')
 		test.add('a', 'rerun').on('click', function () { iframe.el.contentWindow.location.reload(true) })
 		var iframe = test.add('iframe', 'runner').attr('src', uri)
 	}
