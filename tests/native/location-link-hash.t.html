@@ -21,6 +21,8 @@
 function $ (id) { return document.getElementById(id) }
 Tests.test(function (t)
 {
+	t.mayFail()
+	
 	// clean
 	window.location.hash = '#clear'
 	
