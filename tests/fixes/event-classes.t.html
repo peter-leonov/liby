@@ -35,15 +35,6 @@ Tests.test(function (t)
 		t.eq(document.createEvent('MouseEvent').customProperty, 'works!', 'MouseEvent.customProperty')
 		t.eq(document.createEvent('KeyboardEvent').customProperty, 'works!', 'KeyboardEvent.customProperty')
 	})
-	
-	t.test('custom preventDefault()', function (t)
-	{
-		Event.prototype.preventDefault = function () { return 'works!' }
-		t.eq(document.createEvent('Event').preventDefault(), 'works!', 'Event.preventDefault()')
-		t.eq(document.createEvent('UIEvent').preventDefault(), 'works!', 'UIEvent.preventDefault()')
-		t.eq(document.createEvent('MouseEvent').preventDefault(), 'works!', 'MouseEvent.preventDefault()')
-		t.eq(document.createEvent('KeyboardEvent').preventDefault(), 'works!', 'KeyboardEvent.preventDefault()')
-	})
 })
 </script>
 </body>
