@@ -106,14 +106,14 @@ InfiniteScroller.prototype =
 	
 	onmoving: function (e)
 	{
-		this.scrollTo(this.startX - e.data.dx)
+		this.scrollTo(this.startX - e.dx)
 	},
 	
 	onmoveend: function (e)
 	{
 		this.nodes.root.classList.remove('grabbing')
 		
-		var ms = e.data.movements.reverse()
+		var ms = e.movements.reverse()
 		if (!ms[3])
 			return
 		
