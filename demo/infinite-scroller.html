@@ -30,7 +30,9 @@
 	
 	#recorder-cursor, .recorder-cursor
 	{
-		position: absolute; z-index: 65535; left: 0; top: -100px; width: 16px; height: 21px;
+		transform: translate(0, 0);
+		pointer-events: none;
+		position: absolute; z-index: 65535; left: 0; top: 0; width: 16px; height: 21px;
 		background: url(../tests/modules/recorder-cursor.png); margin: -3px 0 0 -3px;
 	}
 	</style>
@@ -104,15 +106,12 @@ function start ()
 	player.bind()
 	
 	var cursor = document.getElementById('recorder-cursor')
-	player.onstep = function (n, a)
+	player.onstep = function (n, action)
 	{
-		var p
-		if ((p = a.p))
-		{
-			var style = cursor.style
-			style.left = p[0] + 'px'
-			style.top = p[1] + 'px'
-		}
+		if (!action.p)
+			return
+		let [x, y] = action.p
+		cursor.style.transform = `translate(${x}px, ${y}px)`
 	}
 	
 	// scrollerScript lais in infinite-scroller-script.json
